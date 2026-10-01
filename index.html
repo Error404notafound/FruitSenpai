@@ -2363,6 +2363,7 @@
             onSnapshot, 
             deleteDoc, 
             doc,
+            setDoc,
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { 
@@ -2664,10 +2665,30 @@
             }
         }
 
-        // Monitora o estado de autenticação real do Firebase
-        onAuthStateChanged(auth, (user) => {
+        // Função que salva ou atualiza o perfil do usuário na coleção 'users' do Firestore
+        async function saveUserToFirestore(user) {
+            if (!user || !user.email) return;
+            try {
+                const userDocRef = doc(db, "users", user.uid);
+                const channelName = user.displayName || getNameFromEmail(user.email);
+                await setDoc(userDocRef, {
+                    uid: user.uid,
+                    email: user.email,
+                    channelName: channelName,
+                    photoURL: user.photoURL || null,
+                    lastLogin: serverTimestamp()
+                }, { merge: true });
+                console.log("Usuário salvo no Firestore com sucesso!");
+            } catch (error) {
+                console.error("Erro ao salvar usuário no Firestore:", error);
+            }
+        }
+
+        // Monitora o estado de autenticação real e grava no Firestore
+        onAuthStateChanged(auth, async (user) => {
             if (user && user.email) {
                 updateLoginState(true, user.email);
+                await saveUserToFirestore(user);
             } else {
                 updateLoginState(false, null);
             }
@@ -2733,36 +2754,55 @@
                 btnSubmitAuth.disabled = true;
                 btnSubmitAuth.textContent = "Carregando...";
 
+                let userCredential;
                 if (isRegisterMode) {
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    showToast("Conta criada e conectada com sucesso!");
+                    userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    showToast("Conta criada e salva no banco!");
                 } else {
-                    await signInWithEmailAndPassword(auth, email, password);
+                    userCredential = await signInWithEmailAndPassword(auth, email, password);
                     showToast("Login realizado com sucesso!");
+                }
+
+                if (userCredential && userCredential.user) {
+                    await saveUserToFirestore(userCredential.user);
                 }
                 modalAuth.classList.remove("active");
             } catch (err) {
-                console.warn("Firebase Auth falhou, usando autenticação local:", err);
-                // Fallback elegante caso a API Auth ainda não esteja habilitada no console
-                updateLoginState(true, email);
-                showToast("Conectado com sucesso!");
-                modalAuth.classList.remove("active");
+                console.error("Erro na autenticação:", err);
+                if (err.code === "auth/email-already-in-use") {
+                    alert("Este e-mail já está cadastrado. Alterne para 'Fazer login'.");
+                } else if (err.code === "auth/weak-password") {
+                    alert("A senha precisa ter no mínimo 6 caracteres.");
+                } else if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+                    alert("E-mail ou senha incorretos.");
+                } else {
+                    alert("Erro: " + err.message);
+                }
             } finally {
                 btnSubmitAuth.disabled = false;
                 btnSubmitAuth.textContent = isRegisterMode ? "Criar conta" : "Fazer login";
             }
         });
 
-        // Login com Google via Popup
+        // Login com Google via Popup e salvamento no Firestore
         btnGoogleAuth.addEventListener("click", async () => {
             try {
                 const provider = new GoogleAuthProvider();
-                await signInWithPopup(auth, provider);
+                const result = await signInWithPopup(auth, provider);
+                if (result && result.user) {
+                    await saveUserToFirestore(result.user);
+                }
                 showToast("Conectado com Google!");
                 modalAuth.classList.remove("active");
             } catch (err) {
-                console.warn("Popup do Google indisponível, faça login por e-mail:", err);
-                showToast("Use o login com e-mail e senha.");
+                console.error("Erro no login com Google:", err);
+                if (err.code === "auth/unauthorized-domain") {
+                    alert("Atenção: Adicione 'error404notafound.github.io' em Authentication > Settings > Domínios Autorizados no Console do Firebase.");
+                } else if (err.code === "auth/popup-closed-by-user") {
+                    showToast("Login cancelado pelo usuário.");
+                } else {
+                    alert("Erro no Google: " + err.message);
+                }
             }
         });
 
