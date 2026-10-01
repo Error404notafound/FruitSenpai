@@ -1351,7 +1351,73 @@
             font-weight: 700;
             color: #ffffff;
         }
-        
+/* ==========================================================================
+           13. ESTILOS DA TELA DESLOGADA (ESTILO OFICIAL YOUTUBE 100% SVG)
+           ========================================================================== */
+        .logged-out-top-action {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .logged-out-top-action svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .logged-out-center-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px 24px 40px 24px;
+            flex: 1;
+        }
+
+        .logged-out-door-illustration {
+            width: 220px;
+            height: auto;
+            max-width: 80%;
+            margin-bottom: 24px;
+        }
+
+        .logged-out-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .logged-out-subtitle {
+            font-size: 13.5px;
+            color: var(--yt-text-secondary);
+            line-height: 1.4;
+            max-width: 290px;
+            margin-bottom: 24px;
+        }
+
+        .yt-btn-login-blue {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: filter 0.15s ease;
+        }
+
+        .yt-btn-login-blue:active {
+            filter: brightness(0.85);
+        }
     </style>
 </head>
 <body>
@@ -1684,7 +1750,7 @@
              TELA A2: PAINEL PRINCIPAL "VOCÊ" (ABERTO PELO BOTÃO A1)
              ========================================================================== -->
         <section class="yt-subview" id="viewYou">
-            <!-- Topo da tela Você -->
+            <!-- Topo da tela Você com ícone de busca e engrenagem B -->
             <div class="yt-subview-header">
                 <div class="yt-subview-header-left">
                     <span class="yt-subview-title">Você</span>
@@ -1700,74 +1766,122 @@
                 </div>
             </div>
 
-            <!-- Identificação do Usuário -->
-            <div class="profile-card-header">
-                <div class="profile-avatar-big">E</div>
-                <div class="profile-info">
-                    <h2>Error404notafound</h2>
-                    <!-- Link C (Abre Criar Canal C1) -->
-                    <span class="profile-create-channel-btn" id="btnOpenCreateChannel">
-                        Crie um canal
-                        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </span>
+            <!-- ==========================================
+                 ESTADO 1: USUÁRIO NÃO LOGADO (CAPTURA "A")
+                 ========================================== -->
+            <div id="youLoggedOut" style="display: flex; flex-direction: column; width: 100%;">
+                <!-- Ação superior Fazer Login -->
+                <div class="logged-out-top-action" id="btnTopLogin">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span>Fazer login</span>
+                </div>
+
+                <!-- Conteúdo Central com Ilustração da Porta e Confetes -->
+                <div class="logged-out-center-content">
+                    <svg class="logged-out-door-illustration" viewBox="0 0 260 170" fill="none">
+                        <!-- Feixe de luz saindo da porta -->
+                        <polygon points="120,40 220,15 160,165 60,140" fill="rgba(255,255,255,0.06)" />
+                        <!-- Arco e batente da porta -->
+                        <path d="M90 145 V70 A40 40 0 0 1 170 70 V145 Z" fill="#9e9e9e" />
+                        <!-- Vão iluminado dentro da porta -->
+                        <path d="M96 145 V70 A34 34 0 0 1 164 70 V145 Z" fill="#f5f5f5" />
+                        <!-- Porta entreaberta -->
+                        <path d="M96 145 V70 A34 34 0 0 1 146 54 L138 152 Z" fill="#b0bec5" />
+                        <!-- Maçaneta da porta -->
+                        <circle cx="136" cy="108" r="3.5" fill="#78909c" />
+                        
+                        <!-- Confetes coloridos (100% SVG nativo) -->
+                        <rect x="180" y="45" width="4" height="7" rx="1.5" transform="rotate(25 180 45)" fill="#90caf9" />
+                        <rect x="200" y="55" width="4" height="6" rx="1.5" transform="rotate(-30 200 55)" fill="#f48fb1" />
+                        <rect x="165" y="70" width="3" height="6" rx="1" transform="rotate(15 165 70)" fill="#ce93d8" />
+                        <rect x="195" y="90" width="4" height="7" rx="1.5" transform="rotate(45 195 90)" fill="#80cbc4" />
+                        <circle cx="210" cy="75" r="2.5" fill="#90caf9" />
+                        <circle cx="175" cy="110" r="2" fill="#f48fb1" />
+                        <circle cx="160" cy="90" r="2.5" fill="#ffe082" />
+                        <rect x="180" y="125" width="4" height="6" rx="1" transform="rotate(-15 180 125)" fill="#ce93d8" />
+                        <circle cx="205" cy="135" r="2" fill="#f48fb1" />
+                    </svg>
+
+                    <h2 class="logged-out-title">Você não fez login</h2>
+                    <p class="logged-out-subtitle">Faça login para enviar, salvar e comentar em vídeos</p>
+                    <button class="yt-btn-login-blue" id="btnMainLogin">Fazer login</button>
                 </div>
             </div>
 
-            <!-- Botões de Ação de Conta (D) -->
-            <div class="profile-actions-row">
-                <button class="profile-pill-btn" id="btnOpenAccounts">
-                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-                    Mudar de conta
-                </button>
-                <button class="profile-pill-btn">
-                    <svg viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
-                    Conta do Google
-                </button>
-            </div>
-
-            <!-- Seção Playlists (F) -->
-            <div class="profile-section-title-row">
-                <h3>Playlists</h3>
-                <button class="profile-ver-tudo-btn" id="btnOpenPlaylists">Ver tudo</button>
-            </div>
-            <div class="profile-playlists-carousel">
-                <!-- F2: Assistir Mais Tarde -->
-                <div class="profile-playlist-card" id="cardWatchLater">
-                    <div class="profile-playlist-thumb">
-                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            <!-- ==========================================
+                 ESTADO 2: USUÁRIO LOGADO (PERFIL DINÂMICO)
+                 ========================================== -->
+            <div id="youLoggedIn" style="display: none; flex-direction: column; width: 100%;">
+                <!-- Identificação do Usuário Dinâmica por E-mail -->
+                <div class="profile-card-header">
+                    <div class="profile-avatar-big" id="profileAvatarBig">E</div>
+                    <div class="profile-info">
+                        <h2 id="profileChannelName">Error404notafound</h2>
+                        <div id="profileUserEmail" style="font-size: 11.5px; color: var(--yt-text-secondary); margin-top: 1px;">error404notafound23@gmail.com</div>
+                        <!-- Link C (Abre Criar Canal C1) -->
+                        <span class="profile-create-channel-btn" id="btnOpenCreateChannel">
+                            Crie um canal
+                            <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                        </span>
                     </div>
-                    <div class="profile-playlist-name">Watch later</div>
-                    <div class="profile-playlist-sub">Playlist</div>
                 </div>
-                <!-- F3: Vídeos com Gostei -->
-                <div class="profile-playlist-card" id="cardLikedVideos">
-                    <div class="profile-playlist-thumb">
-                        <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                    </div>
-                    <div class="profile-playlist-name">Vídeos com "Gostei"</div>
-                    <div class="profile-playlist-sub">Playlist</div>
-                </div>
-            </div>
 
-            <!-- Lista de Menus (E - Filmes, etc.) -->
-            <div class="profile-menu-list">
-                <button class="profile-menu-item">
-                    <svg viewBox="0 0 24 24"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
-                    <span>Seus vídeos</span>
-                </button>
-                <!-- Botão E (Abre Filmes E1) -->
-                <button class="profile-menu-item" id="btnOpenMovies">
-                    <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
-                    <span>Filmes</span>
-                </button>
-                <button class="profile-menu-item">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
-                    <span>Ajuda</span>
-                </button>
-                <button class="profile-menu-item">
-                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
-                    <span>Comentários</span>
-                </button>
+                <!-- Botões de Ação de Conta (D) -->
+                <div class="profile-actions-row">
+                    <button class="profile-pill-btn" id="btnOpenAccounts">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        Mudar de conta
+                    </button>
+                    <button class="profile-pill-btn">
+                        <svg viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+                        Conta do Google
+                    </button>
+                </div>
+
+                <!-- Seção Playlists (F) -->
+                <div class="profile-section-title-row">
+                    <h3>Playlists</h3>
+                    <button class="profile-ver-tudo-btn" id="btnOpenPlaylists">Ver tudo</button>
+                </div>
+                <div class="profile-playlists-carousel">
+                    <!-- F2: Assistir Mais Tarde -->
+                    <div class="profile-playlist-card" id="cardWatchLater">
+                        <div class="profile-playlist-thumb">
+                            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        </div>
+                        <div class="profile-playlist-name">Watch later</div>
+                        <div class="profile-playlist-sub">Playlist</div>
+                    </div>
+                    <!-- F3: Vídeos com Gostei -->
+                    <div class="profile-playlist-card" id="cardLikedVideos">
+                        <div class="profile-playlist-thumb">
+                            <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                        </div>
+                        <div class="profile-playlist-name">Vídeos com "Gostei"</div>
+                        <div class="profile-playlist-sub">Playlist</div>
+                    </div>
+                </div>
+
+                <!-- Lista de Menus (E - Filmes, etc.) -->
+                <div class="profile-menu-list">
+                    <button class="profile-menu-item">
+                        <svg viewBox="0 0 24 24"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+                        <span>Seus vídeos</span>
+                    </button>
+                    <!-- Botão E (Abre Filmes E1) -->
+                    <button class="profile-menu-item" id="btnOpenMovies">
+                        <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                        <span>Filmes</span>
+                    </button>
+                    <button class="profile-menu-item">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                        <span>Ajuda</span>
+                    </button>
+                    <button class="profile-menu-item">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                        <span>Comentários</span>
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -2002,22 +2116,26 @@
                 <span class="yt-nav-label">Shorts</span>
             </button>
 
-            <!-- Botão de Criação / Publicação (+) -->
+            <!-- Botão de Criação / Publicação (+) (Ocultado quando deslogado) -->
             <button class="yt-nav-item" id="navCreate" aria-label="Criar ou Adicionar">
                 <div class="yt-nav-create-btn">
                     <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                 </div>
             </button>
 
-            <!-- Inscrições -->
+            <!-- Inscrições (Ocultado quando deslogado) -->
             <button class="yt-nav-item" id="navSubscriptions">
                 <svg viewBox="0 0 24 24"><path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4l-6-3.27v6.53L16 16z"/></svg>
                 <span class="yt-nav-label">Inscrições</span>
             </button>
 
-            <!-- Você / Perfil com Avatar 'E' Roxo Oficial -->
+            <!-- Você / Perfil Dinâmico -->
             <button class="yt-nav-item" id="navYou">
-                <div class="yt-user-avatar-mini" style="background-color: #9c27b0; color: #ffffff; font-weight: 700; font-size: 12px;">
+                <!-- Ícone quando deslogado (Captura "A") -->
+                <svg id="navYouIconLoggedOut" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                
+                <!-- Avatar quando logado -->
+                <div class="yt-user-avatar-mini" id="navYouAvatarLoggedIn" style="display: none; background-color: #9c27b0; color: #ffffff; font-weight: 700; font-size: 12px;">
                     E
                 </div>
                 <span class="yt-nav-label">Você</span>
@@ -2264,7 +2382,7 @@
             });
         });
 
-        // 7. INTERATIVIDADE DO FLUXO DE NAVEGAÇÃO MAPEADO (A1, A2, B, C, D, E, F)
+        // 7. INTERATIVIDADE DO FLUXO DE NAVEGAÇÃO MAPEADO COM ESTADO LOGADO / DESLOGADO
         const feedContainer = document.getElementById("feedContainer");
         const chipsBar = document.getElementById("chipsBar");
         const viewYou = document.getElementById("viewYou");
@@ -2275,6 +2393,113 @@
         const drawerAccounts = document.getElementById("drawerAccounts");
         const btnCloseAccounts = document.getElementById("btnCloseAccounts");
         const playlistPageTitle = document.getElementById("playlistPageTitle");
+
+        // Elementos do Estado de Login
+        const youLoggedOut = document.getElementById("youLoggedOut");
+        const youLoggedIn = document.getElementById("youLoggedIn");
+        const navCreate = document.getElementById("navCreate");
+        const navSubscriptions = document.getElementById("navSubscriptions");
+        const navYouIconLoggedOut = document.getElementById("navYouIconLoggedOut");
+        const navYouAvatarLoggedIn = document.getElementById("navYouAvatarLoggedIn");
+        const btnTopLogin = document.getElementById("btnTopLogin");
+        const btnMainLogin = document.getElementById("btnMainLogin");
+        const profileAvatarBig = document.getElementById("profileAvatarBig");
+        const profileChannelName = document.getElementById("profileChannelName");
+        const profileUserEmail = document.getElementById("profileUserEmail");
+
+        // Estado inicial: Deslogado (conforme a captura "A")
+        let isLoggedIn = false;
+
+        let accounts = [
+            { email: "error404notafound23@gmail.com", customName: "Error404notafound", color: "#9c27b0" },
+            { email: "error404notafound@gmail.com", customName: "Error Not afound", color: "#c2185b" },
+            { email: "kalebmouton999@gmail.com", customName: "Guia de Campo por K.Mouton", color: "#455a64" }
+        ];
+        let currentAccountIndex = 0;
+
+        function getNameFromEmail(email, customName) {
+            if (customName) return customName;
+            const raw = email.split("@")[0];
+            return raw.charAt(0).toUpperCase() + raw.slice(1);
+        }
+
+        // Função que altera entre modo Logado e Deslogado
+        function updateLoginState(logged) {
+            isLoggedIn = logged;
+
+            if (isLoggedIn) {
+                // Modo Logado
+                youLoggedOut.style.display = "none";
+                youLoggedIn.style.display = "flex";
+                navCreate.style.display = "flex";
+                navSubscriptions.style.display = "flex";
+                navYouIconLoggedOut.style.display = "none";
+                navYouAvatarLoggedIn.style.display = "flex";
+
+                // Atualiza dados da conta ativa
+                const active = accounts[currentAccountIndex];
+                const channelName = getNameFromEmail(active.email, active.customName);
+                const initialLetter = channelName.charAt(0).toUpperCase();
+
+                if (profileChannelName) profileChannelName.textContent = channelName;
+                if (profileUserEmail) profileUserEmail.textContent = active.email;
+                if (profileAvatarBig) {
+                    profileAvatarBig.textContent = initialLetter;
+                    profileAvatarBig.style.backgroundColor = active.color;
+                }
+                if (navYouAvatarLoggedIn) {
+                    navYouAvatarLoggedIn.textContent = initialLetter;
+                    navYouAvatarLoggedIn.style.backgroundColor = active.color;
+                }
+            } else {
+                // Modo Deslogado (Captura "A")
+                youLoggedOut.style.display = "flex";
+                youLoggedIn.style.display = "none";
+                navCreate.style.display = "none"; // Oculta botão (+)
+                navSubscriptions.style.display = "none"; // Oculta Inscrições
+                navYouIconLoggedOut.style.display = "block";
+                navYouAvatarLoggedIn.style.display = "none";
+            }
+        }
+
+        // Ação de Fazer Login ao clicar nos botões da tela deslogada
+        function triggerLoginFlow() {
+            const emailInput = prompt("Digite seu e-mail para fazer login:", "error404notafound23@gmail.com");
+            if (emailInput && emailInput.includes("@")) {
+                const foundIndex = accounts.findIndex(a => a.email.toLowerCase() === emailInput.trim().toLowerCase());
+                if (foundIndex !== -1) {
+                    currentAccountIndex = foundIndex;
+                } else {
+                    accounts.push({
+                        email: emailInput.trim().toLowerCase(),
+                        customName: null,
+                        color: "#9c27b0"
+                    });
+                    currentAccountIndex = accounts.length - 1;
+                }
+                updateLoginState(true);
+                showToast("Login realizado com sucesso!");
+            } else if (emailInput) {
+                alert("Por favor, digite um e-mail válido!");
+            }
+        }
+
+        btnTopLogin.addEventListener("click", triggerLoginFlow);
+        btnMainLogin.addEventListener("click", triggerLoginFlow);
+
+        // Ação de Sair da conta (na gaveta de contas D1)
+        const btnLogoutAccount = document.getElementById("btnLogoutAccount");
+        if (btnLogoutAccount) {
+            btnLogoutAccount.addEventListener("click", () => {
+                drawerAccounts.classList.remove("active");
+                updateLoginState(false);
+                showToast("Você saiu da conta.");
+                openScreen(viewYou);
+            });
+        }
+
+        // Inicializa o app no estado deslogado
+        updateLoginState(false);
 
         // Função para alternar telas
         function openScreen(screen) {
