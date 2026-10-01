@@ -1307,7 +1307,312 @@
             <div id="dynamicFirebaseFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
 
         </main>
+<!-- ==========================================================================
+             TELA A2: PAINEL PRINCIPAL "VOCÊ" (ABERTO PELO BOTÃO A1)
+             ========================================================================== -->
+        <section class="yt-subview" id="viewYou">
+            <!-- Topo da tela Você -->
+            <div class="yt-subview-header">
+                <div class="yt-subview-header-left">
+                    <span class="yt-subview-title">Você</span>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </button>
+                    <!-- Botão B (Engrenagem que abre B1 Configurações) -->
+                    <button class="yt-icon-btn" id="btnOpenSettings" aria-label="Configurações">
+                        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                    </button>
+                </div>
+            </div>
 
+            <!-- Identificação do Usuário -->
+            <div class="profile-card-header">
+                <div class="profile-avatar-big">E</div>
+                <div class="profile-info">
+                    <h2>Error404notafound</h2>
+                    <!-- Link C (Abre Criar Canal C1) -->
+                    <span class="profile-create-channel-btn" id="btnOpenCreateChannel">
+                        Crie um canal
+                        <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Botões de Ação de Conta (D) -->
+            <div class="profile-actions-row">
+                <button class="profile-pill-btn" id="btnOpenAccounts">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    Mudar de conta
+                </button>
+                <button class="profile-pill-btn">
+                    <svg viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+                    Conta do Google
+                </button>
+            </div>
+
+            <!-- Seção Playlists (F) -->
+            <div class="profile-section-title-row">
+                <h3>Playlists</h3>
+                <button class="profile-ver-tudo-btn" id="btnOpenPlaylists">Ver tudo</button>
+            </div>
+            <div class="profile-playlists-carousel">
+                <!-- F2: Assistir Mais Tarde -->
+                <div class="profile-playlist-card" id="cardWatchLater">
+                    <div class="profile-playlist-thumb">
+                        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                    </div>
+                    <div class="profile-playlist-name">Watch later</div>
+                    <div class="profile-playlist-sub">Playlist</div>
+                </div>
+                <!-- F3: Vídeos com Gostei -->
+                <div class="profile-playlist-card" id="cardLikedVideos">
+                    <div class="profile-playlist-thumb">
+                        <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                    </div>
+                    <div class="profile-playlist-name">Vídeos com "Gostei"</div>
+                    <div class="profile-playlist-sub">Playlist</div>
+                </div>
+            </div>
+
+            <!-- Lista de Menus (E - Filmes, etc.) -->
+            <div class="profile-menu-list">
+                <button class="profile-menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+                    <span>Seus vídeos</span>
+                </button>
+                <!-- Botão E (Abre Filmes E1) -->
+                <button class="profile-menu-item" id="btnOpenMovies">
+                    <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                    <span>Filmes</span>
+                </button>
+                <button class="profile-menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+                    <span>Ajuda</span>
+                </button>
+                <button class="profile-menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                    <span>Comentários</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA B1: CONFIGURAÇÕES COM SANFONAS B2, B3, B4 (100% SVG)
+             ========================================================================== -->
+        <section class="yt-subview" id="viewSettings">
+            <div class="yt-subview-header">
+                <div class="yt-subview-header-left">
+                    <button class="yt-icon-btn btnBackToYou">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span class="yt-subview-title">Configurações</span>
+                </div>
+            </div>
+
+            <!-- B2: Geral -->
+            <div class="settings-accordion-item">
+                <button class="settings-accordion-header" data-target="accGeral">
+                    <div class="settings-accordion-header-left">
+                        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                        <span>Geral</span>
+                    </div>
+                    <svg class="settings-accordion-arrow" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </button>
+                <div class="settings-accordion-body" id="accGeral">
+                    <div class="settings-switch-row">
+                        <div class="settings-switch-texts">
+                            <h4>Modo restrito</h4>
+                            <p>Ajuda a ocultar vídeos com potencial conteúdo adulto.</p>
+                        </div>
+                        <div class="yt-switch"></div>
+                    </div>
+                    <div class="settings-switch-row">
+                        <div class="settings-switch-texts">
+                            <h4>Prévias de vídeo</h4>
+                            <p>Reproduz prévias no feed inicial.</p>
+                        </div>
+                        <div class="yt-switch active"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B3: Histórico e Privacidade -->
+            <div class="settings-accordion-item">
+                <button class="settings-accordion-header" data-target="accPrivacy">
+                    <div class="settings-accordion-header-left">
+                        <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.896 8.896 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+                        <span>Histórico e privacidade</span>
+                    </div>
+                    <svg class="settings-accordion-arrow" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </button>
+                <div class="settings-accordion-body" id="accPrivacy">
+                    <div class="settings-switch-row">
+                        <div class="settings-switch-texts">
+                            <h4>Manter todas as inscrições particulares</h4>
+                        </div>
+                        <div class="yt-switch active"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B4: Notificações -->
+            <div class="settings-accordion-item">
+                <button class="settings-accordion-header" data-target="accNotif">
+                    <div class="settings-accordion-header-left">
+                        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+                        <span>Notificações</span>
+                    </div>
+                    <svg class="settings-accordion-arrow" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </button>
+                <div class="settings-accordion-body" id="accNotif">
+                    <div class="settings-switch-row">
+                        <div class="settings-switch-texts">
+                            <h4>Receber todos os e-mails</h4>
+                        </div>
+                        <div class="yt-switch"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA C1: CRIAR CANAL
+             ========================================================================== -->
+        <section class="yt-subview" id="viewCreateChannel">
+            <div class="yt-subview-header">
+                <div class="yt-subview-header-left">
+                    <button class="yt-icon-btn btnBackToYou">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span class="yt-subview-title">Criar canal</span>
+                </div>
+            </div>
+            <div style="padding:20px; display:flex; flex-direction:column; gap:16px;">
+                <div class="profile-avatar-big" style="margin: 0 auto;">E</div>
+                <input type="text" class="yt-input" value="Error404notafound" placeholder="Nome">
+                <input type="text" class="yt-input" placeholder="Sobrenome">
+                <p style="font-size:12px; color:var(--yt-text-secondary); line-height:1.4;">
+                    Ao tocar em "Criar canal", você concorda com os Termos de Serviço do YouTube.
+                </p>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                    <button class="profile-pill-btn btnBackToYou" style="flex:none; padding:0 16px;">Cancelar</button>
+                    <button class="yt-btn-primary" style="padding:8px 20px;">Criar canal</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             MODAL D1: MUDAR DE CONTA (GAVETA INFERIOR)
+             ========================================================================== -->
+        <div class="accounts-drawer" id="drawerAccounts">
+            <div class="accounts-sheet">
+                <div style="display:flex; align-items:center; gap:16px; padding:8px 16px 16px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <button class="yt-icon-btn" id="btnCloseAccounts">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                    <h3 style="font-size:16px;">Contas</h3>
+                </div>
+
+                <!-- Conta Ativa -->
+                <div class="account-item-row">
+                    <div class="account-item-left">
+                        <div class="account-avatar-small" style="background:#2e7d32;">E</div>
+                        <div>
+                            <div style="font-weight:600;">Error404notafound</div>
+                            <div style="font-size:11px; color:#aaa;">error404notafound23@gmail.com</div>
+                        </div>
+                    </div>
+                    <svg style="width:20px;height:20px;fill:#3ea6ff" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+
+                <!-- Outras Contas -->
+                <div style="padding:12px 16px 4px 16px; font-size:12px; color:#aaa; font-weight:600;">Outras contas</div>
+                
+                <div class="account-item-row">
+                    <div class="account-item-left">
+                        <div class="account-avatar-small" style="background:#c2185b;">E</div>
+                        <div>
+                            <div style="font-weight:600;">Error Not afound</div>
+                            <div style="font-size:11px; color:#aaa;">error404notafound@gmail.com</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="account-item-row">
+                    <div class="account-item-left">
+                        <div class="account-avatar-small" style="background:#455a64;">K</div>
+                        <div>
+                            <div style="font-weight:600;">Guia de Campo por K.Mouton</div>
+                            <div style="font-size:11px; color:#aaa;">kalebmouton999@gmail.com</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="border-top:1px solid rgba(255,255,255,0.08); margin-top:8px; padding-top:4px;">
+                    <div class="account-item-row">
+                        <div class="account-item-left">
+                            <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            <span style="font-size:13.5px;">Adicionar conta</span>
+                        </div>
+                    </div>
+                    <div class="account-item-row">
+                        <div class="account-item-left">
+                            <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+                            <span style="font-size:13.5px;">Sair</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             TELA E1: FILMES
+             ========================================================================== -->
+        <section class="yt-subview" id="viewMovies">
+            <div class="yt-subview-header">
+                <div class="yt-subview-header-left">
+                    <button class="yt-icon-btn btnBackToYou">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span class="yt-subview-title">Filmes</span>
+                </div>
+            </div>
+            <div style="padding: 16px;">
+                <h3 style="font-size:16px; margin-bottom:12px;">Mais vendidos</h3>
+                <div style="display:flex; gap:12px; overflow-x:auto;">
+                    <div style="width:140px; min-width:140px;">
+                        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+                        <div style="font-weight:700; margin-top:6px;">Obsessão</div>
+                        <div style="font-size:11px; color:#aaa;">Terror • 2026</div>
+                    </div>
+                    <div style="width:140px; min-width:140px;">
+                        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" style="width:100%; height:200px; object-fit:cover; border-radius:8px;">
+                        <div style="font-weight:700; margin-top:6px;">Dia D</div>
+                        <div style="font-size:11px; color:#aaa;">Ficção • 2026</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA F1, F2, F3: PLAYLISTS
+             ========================================================================== -->
+        <section class="yt-subview" id="viewPlaylists">
+            <div class="yt-subview-header">
+                <div class="yt-subview-header-left">
+                    <button class="yt-icon-btn btnBackToYou">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span class="yt-subview-title" id="playlistPageTitle">Playlists</span>
+                </div>
+            </div>
+            <div style="padding: 24px 16px; text-align: center; color: var(--yt-text-secondary);" id="playlistPageContent">
+                Ainda não há vídeos nesta playlist.
+            </div>
+                    </section>
+        
         <!-- ==========================================================================
              BARRA INFERIOR DE NAVEGAÇÃO FIXA (BOTTOM NAVIGATION BAR)
              ========================================================================== -->
@@ -1580,14 +1885,108 @@
             });
         });
 
-        // 7. INTERATIVIDADE DOS ITENS DA BOTTOM BAR
-        document.querySelectorAll(".yt-nav-item:not(#navCreate)").forEach(item => {
-            item.addEventListener("click", () => {
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                item.classList.add("active");
-                const label = item.querySelector(".yt-nav-label")?.textContent;
-                if (label) showToast(`Aba: ${label}`);
+        // 7. INTERATIVIDADE DO FLUXO DE NAVEGAÇÃO MAPEADO (A1, A2, B, C, D, E, F)
+        const feedContainer = document.getElementById("feedContainer");
+        const chipsBar = document.getElementById("chipsBar");
+        const viewYou = document.getElementById("viewYou");
+        const viewSettings = document.getElementById("viewSettings");
+        const viewCreateChannel = document.getElementById("viewCreateChannel");
+        const viewMovies = document.getElementById("viewMovies");
+        const viewPlaylists = document.getElementById("viewPlaylists");
+        const drawerAccounts = document.getElementById("drawerAccounts");
+        const btnCloseAccounts = document.getElementById("btnCloseAccounts");
+        const playlistPageTitle = document.getElementById("playlistPageTitle");
+
+        // Função para alternar telas
+        function openScreen(screen) {
+            feedContainer.style.display = "none";
+            chipsBar.style.display = "none";
+            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
+
+            if (screen === "home") {
+                feedContainer.style.display = "flex";
+                chipsBar.style.display = "flex";
+            } else if (screen) {
+                screen.classList.add("active");
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // A1: Clicar em "Você" abre A2
+        document.getElementById("navYou").addEventListener("click", () => {
+            document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+            document.getElementById("navYou").classList.add("active");
+            openScreen(viewYou);
+        });
+
+        // Clicar em "Início" volta para o Feed
+        document.getElementById("navHome").addEventListener("click", () => {
+            document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+            document.getElementById("navHome").classList.add("active");
+            openScreen("home");
+        });
+
+        // Botões de Voltar (←) voltam para a tela A2 (Você)
+        document.querySelectorAll(".btnBackToYou").forEach(btn => {
+            btn.addEventListener("click", () => openScreen(viewYou));
+        });
+
+        // B: Abre B1 Configurações
+        document.getElementById("btnOpenSettings").addEventListener("click", () => openScreen(viewSettings));
+
+        // C: Abre C1 Criar Canal
+        document.getElementById("btnOpenCreateChannel").addEventListener("click", () => openScreen(viewCreateChannel));
+
+        // D: Mudar de Conta (Abre a gaveta D1)
+        document.getElementById("btnOpenAccounts").addEventListener("click", () => {
+            drawerAccounts.classList.add("active");
+        });
+
+        btnCloseAccounts.addEventListener("click", () => {
+            drawerAccounts.classList.remove("active");
+        });
+
+        drawerAccounts.addEventListener("click", (e) => {
+            if (e.target === drawerAccounts) {
+                drawerAccounts.classList.remove("active");
+            }
+        });
+
+        // E: Abre E1 Filmes
+        document.getElementById("btnOpenMovies").addEventListener("click", () => openScreen(viewMovies));
+
+        // F: Abre F1 Playlists
+        document.getElementById("btnOpenPlaylists").addEventListener("click", () => {
+            playlistPageTitle.textContent = "Playlists";
+            openScreen(viewPlaylists);
+        });
+
+        // F2: Assistir Mais Tarde
+        document.getElementById("cardWatchLater").addEventListener("click", () => {
+            playlistPageTitle.textContent = "Assistir mais tarde";
+            openScreen(viewPlaylists);
+        });
+
+        // F3: Vídeos com Gostei
+        document.getElementById("cardLikedVideos").addEventListener("click", () => {
+            playlistPageTitle.textContent = "Vídeos com 'Gostei'";
+            openScreen(viewPlaylists);
+        });
+
+        // Acordeões de Configurações (B2, B3, B4)
+        document.querySelectorAll(".settings-accordion-header").forEach(header => {
+            header.addEventListener("click", () => {
+                const targetId = header.getAttribute("data-target");
+                const body = document.getElementById(targetId);
+                const arrow = header.querySelector(".settings-accordion-arrow");
+                body.classList.toggle("open");
+                if (arrow) arrow.classList.toggle("rotated");
             });
+        });
+
+        // Switches Liga/Desliga
+        document.querySelectorAll(".yt-switch").forEach(sw => {
+            sw.addEventListener("click", () => sw.classList.toggle("active"));
         });
 
         // Função de escape para prevenir XSS
