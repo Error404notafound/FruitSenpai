@@ -99,36 +99,31 @@
             text-decoration: none;
         }
 
-        .yt-logo-icon {
-            width: 28px;
-            height: 20px;
-            background-color: var(--yt-red);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+        /* Ícone SVG da Pêra Vermelha */
+.fruit-logo-icon {
+    width: 32px;
+    height: 22px;
+    display: block;
+}
 
-        .yt-logo-icon::after {
-            content: '';
-            display: block;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 4.5px 0 4.5px 8px;
-            border-color: transparent transparent transparent #ffffff;
-            margin-left: 1px;
-        }
+/* Caso prefira usar a tag <img> com o arquivo da foto */
+.fruit-logo-img {
+    width: 32px;
+    height: 22px;
+    object-fit: contain;
+}
 
-        .yt-logo-text {
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 19px;
-            letter-spacing: -0.7px;
-            display: flex;
-            align-items: center;
-        }
+/* Tipografia 'FruitSenpai' com o estilo do YouTube */
+.yt-logo-text {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 18.5px;
+    letter-spacing: -0.6px;
+    display: flex;
+    align-items: center;
+    margin-left: 3px;
+    font-family: 'Roboto', sans-serif;
+}
 
         .yt-header-actions {
             display: flex;
@@ -996,25 +991,39 @@
              CABEÇALHO COM LOGO, SINO, BUSCA E EXPLORAR
              ========================================================================== -->
         <header class="yt-header-wrapper">
-            <div class="yt-header">
-                <!-- Logotipo do YouTube -->
-                <div class="yt-logo-area" id="btnLogo">
-                    <div class="yt-logo-icon"></div>
-                    <span class="yt-logo-text">YouTube</span>
-                </div>
+    <div class="yt-header">
+        <!-- Novo Logotipo: Ícone da Fruta na Tela Vermelha + FruitSenpai -->
+        <div class="yt-logo-area" id="btnLogo">
+            <svg class="fruit-logo-icon" viewBox="0 0 100 70">
+                <!-- Fundo vermelho arredondado idêntico à sua imagem -->
+                <rect width="100" height="70" rx="18" fill="#FF0000" />
+                <!-- Silhueta da Pêra/Fruta centralizada em branco -->
+                <path fill="#FFFFFF" d="
+                    M 48 15 
+                    C 44 11 41 13 43 16 
+                    C 45 18 48 20 48 23 
+                    C 49 21 54 13 58 15 
+                    C 60 17 56 22 53 25 
+                    C 51 28 53 32 56 36 
+                    C 62 42 66 49 64 56 
+                    C 62 62 55 64 49 64 
+                    C 41 64 34 60 34 52 
+                    C 34 44 40 37 44 32 
+                    C 46 29 46 25 45 22 
+                    C 44 19 46 16 48 15 Z" />
+            </svg>
+            <span class="yt-logo-text">FruitSenpai</span>
+        </div>
 
-                <!-- Ícones de Ação à Direita -->
-                <div class="yt-header-actions">
-                    <!-- Sino de Notificações com Badge "9+" -->
-                    <button class="yt-icon-btn" aria-label="Notificações" id="btnBell">
-                        <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
-                        <span class="badge-notification">9+</span>
-                    </button>
-
-                    <!-- Ícone de Pesquisa -->
-                    <button class="yt-icon-btn" aria-label="Pesquisar" id="btnSearch">
-                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
-                    </button>
+        <!-- Ações à Direita mantidas intactas -->
+        <div class="yt-header-actions">
+            <button class="yt-icon-btn" aria-label="Notificações" id="btnBell">
+                <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
+                <span class="badge-notification">9+</span>
+            </button>
+            <button class="yt-icon-btn" aria-label="Pesquisar" id="btnSearch">
+                <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+            </button>
                 </div>
             </div>
 
