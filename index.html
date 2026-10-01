@@ -2779,47 +2779,40 @@
             });
         }
 
-        // Navegação de Telas com Ajuste Inteligente do Cabeçalho
+        // Navegação de Telas com Ajuste Inteligente do Cabeçalho Único
+        const headerWrapper = document.querySelector(".yt-header-wrapper");
+
         function openScreen(screen) {
             feedContainer.style.display = "none";
             chipsBar.style.display = "none";
             document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
 
-            // Ajuste do cabeçalho superior: na tela Você, esconde o sino e mostra a engrenagem
-            if (screen === viewYou) {
-                btnBell.style.display = "none";
-                btnSettingsTop.style.display = "flex";
-            } else {
+            // Na tela Inicial (Home): Mostra logotipo, sino 9+ e lupa
+            if (screen === "home") {
+                headerWrapper.style.display = "block";
                 btnBell.style.display = "flex";
                 btnSettingsTop.style.display = "none";
-            }
-
-            if (screen === "home") {
                 feedContainer.style.display = "flex";
                 chipsBar.style.display = "flex";
-            } else if (screen) {
+            } 
+            // Na tela Você (A2): Esconde o sino e exibe apenas 1 lupa e 1 engrenagem (fiel à captura)
+            else if (screen === viewYou) {
+                headerWrapper.style.display = "block";
+                btnBell.style.display = "none";
+                btnSettingsTop.style.display = "flex";
+                viewYou.classList.add("active");
+            } 
+            // Em subtelas (Configurações, Filmes, Playlists): Oculta o topo principal para usar o topo nativo da tela com botão voltar
+            else if (screen) {
+                headerWrapper.style.display = "none";
                 screen.classList.add("active");
             }
+
             window.scrollTo(0, 0);
         }
 
-        // A engrenagem única do cabeçalho superior abre as configurações B1
+        // A engrenagem única do topo abre a tela de Configurações (B1)
         btnSettingsTop.addEventListener("click", () => openScreen(viewSettings));
-
-        // Função para alternar telas
-        function openScreen(screen) {
-            feedContainer.style.display = "none";
-            chipsBar.style.display = "none";
-            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
-
-            if (screen === "home") {
-                feedContainer.style.display = "flex";
-                chipsBar.style.display = "flex";
-            } else if (screen) {
-                screen.classList.add("active");
-            }
-            window.scrollTo(0, 0);
-        }
 
         // A1: Clicar em "Você" abre A2
         document.getElementById("navYou").addEventListener("click", () => {
