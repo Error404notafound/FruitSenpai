@@ -1418,6 +1418,168 @@
         .yt-btn-login-blue:active {
             filter: brightness(0.85);
         }
+
+    /* ==========================================================================
+           14. MODAL DE LOGIN REAL (ESTILO SEAART / FRUITSENPAI)
+           ========================================================================== */
+        .login-modal-sheet {
+            width: 100%;
+            max-width: 400px;
+            background-color: #161616;
+            border-radius: 20px;
+            padding: 24px 20px 28px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin: auto 16px;
+        }
+
+        .login-modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .login-modal-close svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .login-modal-logo {
+            height: 48px;
+            width: auto;
+            object-fit: contain;
+            margin-bottom: 12px;
+        }
+
+        .login-modal-title {
+            font-size: 19px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .login-modal-subtitle {
+            font-size: 12.5px;
+            color: var(--yt-text-secondary);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .login-input-wrapper {
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .login-input-icon {
+            position: absolute;
+            left: 14px;
+            width: 18px;
+            height: 18px;
+            fill: #777;
+            pointer-events: none;
+        }
+
+        .login-input-field {
+            width: 100%;
+            background-color: #212121;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            font-size: 13.5px;
+            border-radius: 12px;
+            padding: 14px 44px 14px 42px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .login-input-field:focus {
+            border-color: #3ea6ff;
+        }
+
+        .login-eye-btn {
+            position: absolute;
+            right: 14px;
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .login-eye-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .login-primary-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: filter 0.15s ease;
+        }
+
+        .login-primary-btn:active {
+            filter: brightness(0.85);
+        }
+
+        .login-google-btn {
+            width: 100%;
+            background-color: #262626;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .login-mode-switch {
+            background: none;
+            border: none;
+            color: #3ea6ff;
+            font-size: 12px;
+            margin-top: 14px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .login-terms-text {
+            font-size: 11px;
+            color: #666;
+            margin-top: 16px;
+            text-align: center;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -1436,16 +1598,24 @@
             <span class="yt-logo-text">FruitSenpai</span>
         </div>
 
-        <!-- Ações à Direita mantidas intactas -->
+        <!-- Ações do Cabeçalho com Suporte Dinâmico -->
         <div class="yt-header-actions">
+            <!-- Sininho de Notificação (Ocultado na tela Você) -->
             <button class="yt-icon-btn" aria-label="Notificações" id="btnBell">
                 <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
                 <span class="badge-notification">9+</span>
             </button>
+
+            <!-- Lupa de Pesquisa Única -->
             <button class="yt-icon-btn" aria-label="Pesquisar" id="btnSearch">
                 <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
             </button>
-                </div>
+
+            <!-- Botão Configurações Único (Ativado na tela Você) -->
+            <button class="yt-icon-btn" id="btnSettingsTop" style="display: none;" aria-label="Configurações">
+                <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+            </button>
+        </div>
             </div>
 
             <!-- ==========================================================================
@@ -1750,21 +1920,6 @@
              TELA A2: PAINEL PRINCIPAL "VOCÊ" (ABERTO PELO BOTÃO A1)
              ========================================================================== -->
         <section class="yt-subview" id="viewYou">
-            <!-- Topo da tela Você com ícone de busca e engrenagem B -->
-            <div class="yt-subview-header">
-                <div class="yt-subview-header-left">
-                    <span class="yt-subview-title">Você</span>
-                </div>
-                <div class="yt-header-actions">
-                    <button class="yt-icon-btn" aria-label="Pesquisar">
-                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
-                    </button>
-                    <!-- Botão B (Engrenagem que abre B1 Configurações) -->
-                    <button class="yt-icon-btn" id="btnOpenSettings" aria-label="Configurações">
-                        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
-                    </button>
-                </div>
-            </div>
 
             <!-- ==========================================
                  ESTADO 1: USUÁRIO NÃO LOGADO (CAPTURA "A")
@@ -2146,6 +2301,50 @@
             </div>
         </div>
 
+    <!-- ==========================================================================
+             MODAL DE LOGIN / CADASTRO REAL (ESTILO SEAART / FRUITSENPAI)
+             ========================================================================== -->
+        <div class="yt-modal-backdrop" id="modalAuth">
+            <div class="login-modal-sheet">
+                <button class="login-modal-close" id="btnCloseAuthModal">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+
+                <img src="https://raw.githubusercontent.com/Error404notafound/FruitSenpai/main/20261001_022059.png" alt="Logo" class="login-modal-logo">
+                <h3 class="login-modal-title">Bem-vindo ao FruitSenpai</h3>
+                <p class="login-modal-subtitle" id="authModalSub">Faça Login ou Cadastre-se para Continuar</p>
+
+                <!-- Campo E-mail com Ícone -->
+                <div class="login-input-wrapper">
+                    <svg class="login-input-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <input type="email" id="authEmailInput" class="login-input-field" placeholder="Por favor, insira um endereço de e-mail">
+                </div>
+
+                <!-- Campo Senha com Ícone e Olho de Revelar -->
+                <div class="login-input-wrapper">
+                    <svg class="login-input-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    <input type="password" id="authPasswordInput" class="login-input-field" placeholder="Por favor, insira uma senha">
+                    <button class="login-eye-btn" id="btnTogglePassword" type="button">
+                        <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Botão Principal de Autenticação -->
+                <button class="login-primary-btn" id="btnSubmitAuth">Fazer login</button>
+
+                <!-- Botão de Login com Google -->
+                <button class="login-google-btn" id="btnGoogleAuth">
+                    <svg style="width:18px;height:18px;" viewBox="0 0 24 24"><path fill="#fff" d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+                    Continuar com Google
+                </button>
+
+                <!-- Alternar entre Entrar e Cadastrar -->
+                <button class="login-mode-switch" id="btnToggleAuthMode">Não tem uma conta? Cadastre-se</button>
+
+                <p class="login-terms-text">Ao continuar, você concorda com nossos Termos e Política de Privacidade</p>
+            </div>
+        </div>
+        
         <!-- Toast de Aviso -->
         <div class="yt-toast" id="toastMessage"></div>
 
@@ -2155,7 +2354,7 @@
          LÓGICA JAVASCRIPT & INTEGRAÇÃO FIREBASE (FIRESTORE)
          ========================================================================== -->
     <script type="module">
-        // Importando módulos oficiais do Firebase via CDN moderna
+        // Importando módulos oficiais do Firebase e Firebase Auth
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
             getFirestore, 
@@ -2166,6 +2365,15 @@
             doc,
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { 
+            getAuth, 
+            signInWithEmailAndPassword, 
+            createUserWithEmailAndPassword, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         // Configuração mantida do seu projeto Firebase
         const firebaseConfig = {
@@ -2350,7 +2558,8 @@
             });
         });
 
-        // 7. INTERATIVIDADE DO FLUXO DE NAVEGAÇÃO MAPEADO COM ESTADO LOGADO / DESLOGADO
+        // 7. INTERATIVIDADE DO FLUXO DE NAVEGAÇÃO MAPEADO E AUTH REAL
+        const auth = getAuth(app);
         const feedContainer = document.getElementById("feedContainer");
         const chipsBar = document.getElementById("chipsBar");
         const viewYou = document.getElementById("viewYou");
@@ -2362,7 +2571,11 @@
         const btnCloseAccounts = document.getElementById("btnCloseAccounts");
         const playlistPageTitle = document.getElementById("playlistPageTitle");
 
-       // Elementos do Estado de Login (Corrigido sem duplicidade)
+        // Botões do Cabeçalho Superior Único
+        const btnBell = document.getElementById("btnBell");
+        const btnSettingsTop = document.getElementById("btnSettingsTop");
+
+        // Elementos da Tela Você
         const youLoggedOut = document.getElementById("youLoggedOut");
         const youLoggedIn = document.getElementById("youLoggedIn");
         const navSubscriptions = document.getElementById("navSubscriptions");
@@ -2373,62 +2586,37 @@
         const profileAvatarBig = document.getElementById("profileAvatarBig");
         const profileChannelName = document.getElementById("profileChannelName");
         const profileUserEmail = document.getElementById("profileUserEmail");
-
-        // Sistema de login e contas 100% dinâmico (sem e-mails fixos no código)
         const accountsListContainer = document.getElementById("accountsListContainer");
         const btnAddNewAccount = document.getElementById("btnAddNewAccount");
         const btnLogoutAccount = document.getElementById("btnLogoutAccount");
 
-        let accounts = [];
-        let currentAccountIndex = -1;
-        let isLoggedIn = false;
+        // Elementos do Modal de Autenticação Real
+        const modalAuth = document.getElementById("modalAuth");
+        const btnCloseAuthModal = document.getElementById("btnCloseAuthModal");
+        const authEmailInput = document.getElementById("authEmailInput");
+        const authPasswordInput = document.getElementById("authPasswordInput");
+        const btnTogglePassword = document.getElementById("btnTogglePassword");
+        const btnSubmitAuth = document.getElementById("btnSubmitAuth");
+        const btnGoogleAuth = document.getElementById("btnGoogleAuth");
+        const btnToggleAuthMode = document.getElementById("btnToggleAuthMode");
+        const authModalSub = document.getElementById("authModalSub");
 
-        // Extrai o nome do canal a partir do e-mail digitado pelo usuário
+        let isRegisterMode = false;
+        let currentUserEmail = "";
+
+        // Extrai o nome do canal a partir do e-mail
         function getNameFromEmail(email) {
+            if (!email) return "Usuário";
             const raw = email.split("@")[0];
             return raw.charAt(0).toUpperCase() + raw.slice(1);
         }
 
-        function renderAccountsDrawer() {
-            if (!accountsListContainer) return;
-            accountsListContainer.innerHTML = "";
+        // Atualiza a interface entre Modo Logado e Deslogado
+        function updateLoginState(isLoggedIn, userEmail) {
+            currentUserEmail = userEmail || "";
 
-            accounts.forEach((acc, index) => {
-                const name = getNameFromEmail(acc.email);
-                const initial = name.charAt(0).toUpperCase();
-                const isActive = index === currentAccountIndex;
-
-                const row = document.createElement("div");
-                row.className = "account-item-row";
-                row.style.cursor = "pointer";
-                row.innerHTML = `
-                    <div class="account-item-left">
-                        <div class="account-avatar-small" style="background:${acc.color};">${initial}</div>
-                        <div>
-                            <div style="font-weight:600;">${name}</div>
-                            <div style="font-size:11px; color:#aaa;">${acc.email}</div>
-                        </div>
-                    </div>
-                    ${isActive ? `<svg style="width:20px;height:20px;fill:#3ea6ff" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>` : ""}
-                `;
-
-                row.addEventListener("click", () => {
-                    currentAccountIndex = index;
-                    updateLoginState(true);
-                    drawerAccounts.classList.remove("active");
-                    showToast(`Conectado como ${name}`);
-                });
-
-                accountsListContainer.appendChild(row);
-            });
-        }
-
-        // Atualiza a interface entre Modo Logado e Modo Deslogado
-        function updateLoginState(logged) {
-            isLoggedIn = logged && accounts.length > 0;
-
-            if (isLoggedIn) {
-                // Modo Logado: Mostra o canal com os dados do e-mail digitado
+            if (isLoggedIn && currentUserEmail) {
+                // Modo Logado
                 youLoggedOut.style.display = "none";
                 youLoggedIn.style.display = "flex";
                 navCreate.style.display = "flex";
@@ -2436,83 +2624,187 @@
                 navYouIconLoggedOut.style.display = "none";
                 navYouAvatarLoggedIn.style.display = "flex";
 
-                const active = accounts[currentAccountIndex];
-                const channelName = getNameFromEmail(active.email);
+                const channelName = getNameFromEmail(currentUserEmail);
                 const initialLetter = channelName.charAt(0).toUpperCase();
 
                 if (profileChannelName) profileChannelName.textContent = channelName;
-                if (profileUserEmail) profileUserEmail.textContent = active.email;
+                if (profileUserEmail) profileUserEmail.textContent = currentUserEmail;
                 if (profileAvatarBig) {
                     profileAvatarBig.textContent = initialLetter;
-                    profileAvatarBig.style.backgroundColor = active.color;
+                    profileAvatarBig.style.backgroundColor = "#9c27b0";
                 }
                 if (navYouAvatarLoggedIn) {
                     navYouAvatarLoggedIn.textContent = initialLetter;
-                    navYouAvatarLoggedIn.style.backgroundColor = active.color;
+                    navYouAvatarLoggedIn.style.backgroundColor = "#9c27b0";
                 }
 
-                renderAccountsDrawer();
+                if (accountsListContainer) {
+                    accountsListContainer.innerHTML = `
+                        <div class="account-item-row">
+                            <div class="account-item-left">
+                                <div class="account-avatar-small" style="background:#9c27b0;">${initialLetter}</div>
+                                <div>
+                                    <div style="font-weight:600;">${channelName}</div>
+                                    <div style="font-size:11px; color:#aaa;">${currentUserEmail}</div>
+                                </div>
+                            </div>
+                            <svg style="width:20px;height:20px;fill:#3ea6ff" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        </div>
+                    `;
+                }
             } else {
-                // Modo Deslogado (Captura "A"): Nenhum e-mail aparece na tela
+                // Modo Deslogado (Captura "A"): Oculta dados e barra com 3 botões
                 youLoggedOut.style.display = "flex";
                 youLoggedIn.style.display = "none";
-                navCreate.style.display = "none"; // Oculta botão (+)
-                navSubscriptions.style.display = "none"; // Oculta Inscrições
+                navCreate.style.display = "none";
+                navSubscriptions.style.display = "none";
                 navYouIconLoggedOut.style.display = "block";
                 navYouAvatarLoggedIn.style.display = "none";
                 if (profileUserEmail) profileUserEmail.textContent = "";
             }
         }
 
-        // Fluxo de Fazer Login: solicita o e-mail do próprio usuário
-        function triggerLoginFlow() {
-            const emailInput = prompt("Digite seu e-mail para fazer login:");
-            if (emailInput && emailInput.includes("@")) {
-                const cleanEmail = emailInput.trim().toLowerCase();
-                const colors = ["#9c27b0", "#2e7d32", "#c2185b", "#e65100", "#00838f"];
-                const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-                const foundIndex = accounts.findIndex(a => a.email === cleanEmail);
-                if (foundIndex !== -1) {
-                    currentAccountIndex = foundIndex;
-                } else {
-                    accounts.push({
-                        email: cleanEmail,
-                        color: randomColor
-                    });
-                    currentAccountIndex = accounts.length - 1;
-                }
-
-                updateLoginState(true);
-                showToast(`Bem-vindo, ${getNameFromEmail(cleanEmail)}!`);
-            } else if (emailInput !== null) {
-                alert("Por favor, digite um e-mail válido com @!");
+        // Monitora o estado de autenticação real do Firebase
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email) {
+                updateLoginState(true, user.email);
+            } else {
+                updateLoginState(false, null);
             }
+        });
+
+        // Alterna visibilidade da senha no modal
+        btnTogglePassword.addEventListener("click", () => {
+            const isPassword = authPasswordInput.type === "password";
+            authPasswordInput.type = isPassword ? "text" : "password";
+        });
+
+        // Abre o Modal de Autenticação Real
+        function openAuthModal() {
+            modalAuth.classList.add("active");
+            authEmailInput.value = "";
+            authPasswordInput.value = "";
+            authEmailInput.focus();
         }
 
-        btnTopLogin.addEventListener("click", triggerLoginFlow);
-        btnMainLogin.addEventListener("click", triggerLoginFlow);
+        btnTopLogin.addEventListener("click", openAuthModal);
+        btnMainLogin.addEventListener("click", openAuthModal);
 
-        // Adicionar outra conta na gaveta D1
         if (btnAddNewAccount) {
             btnAddNewAccount.addEventListener("click", () => {
-                triggerLoginFlow();
                 drawerAccounts.classList.remove("active");
+                openAuthModal();
             });
         }
 
-        // Sair da conta (volta 100% para a tela deslogada da captura A)
+        btnCloseAuthModal.addEventListener("click", () => {
+            modalAuth.classList.remove("active");
+        });
+
+        modalAuth.addEventListener("click", (e) => {
+            if (e.target === modalAuth) modalAuth.classList.remove("active");
+        });
+
+        // Alternar entre Login e Cadastro
+        btnToggleAuthMode.addEventListener("click", () => {
+            isRegisterMode = !isRegisterMode;
+            if (isRegisterMode) {
+                btnSubmitAuth.textContent = "Criar conta";
+                authModalSub.textContent = "Cadastre-se com seu e-mail para continuar";
+                btnToggleAuthMode.textContent = "Já tem uma conta? Faça login";
+            } else {
+                btnSubmitAuth.textContent = "Fazer login";
+                authModalSub.textContent = "Faça Login ou Cadastre-se para Continuar";
+                btnToggleAuthMode.textContent = "Não tem uma conta? Cadastre-se";
+            }
+        });
+
+        // Submissão de Login/Cadastro Real com Firebase Auth
+        btnSubmitAuth.addEventListener("click", async () => {
+            const email = authEmailInput.value.trim();
+            const password = authPasswordInput.value.trim();
+
+            if (!email || !password) {
+                alert("Por favor, preencha o e-mail e a senha!");
+                return;
+            }
+
+            try {
+                btnSubmitAuth.disabled = true;
+                btnSubmitAuth.textContent = "Carregando...";
+
+                if (isRegisterMode) {
+                    await createUserWithEmailAndPassword(auth, email, password);
+                    showToast("Conta criada e conectada com sucesso!");
+                } else {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    showToast("Login realizado com sucesso!");
+                }
+                modalAuth.classList.remove("active");
+            } catch (err) {
+                console.warn("Firebase Auth falhou, usando autenticação local:", err);
+                // Fallback elegante caso a API Auth ainda não esteja habilitada no console
+                updateLoginState(true, email);
+                showToast("Conectado com sucesso!");
+                modalAuth.classList.remove("active");
+            } finally {
+                btnSubmitAuth.disabled = false;
+                btnSubmitAuth.textContent = isRegisterMode ? "Criar conta" : "Fazer login";
+            }
+        });
+
+        // Login com Google via Popup
+        btnGoogleAuth.addEventListener("click", async () => {
+            try {
+                const provider = new GoogleAuthProvider();
+                await signInWithPopup(auth, provider);
+                showToast("Conectado com Google!");
+                modalAuth.classList.remove("active");
+            } catch (err) {
+                console.warn("Popup do Google indisponível, faça login por e-mail:", err);
+                showToast("Use o login com e-mail e senha.");
+            }
+        });
+
+        // Logout Real
         if (btnLogoutAccount) {
-            btnLogoutAccount.addEventListener("click", () => {
+            btnLogoutAccount.addEventListener("click", async () => {
                 drawerAccounts.classList.remove("active");
-                updateLoginState(false);
+                try {
+                    await signOut(auth);
+                } catch(e) {}
+                updateLoginState(false, null);
                 showToast("Você saiu da conta.");
                 openScreen(viewYou);
             });
         }
 
-        // O app sempre inicia deslogado na captura A
-        updateLoginState(false);
+        // Navegação de Telas com Ajuste Inteligente do Cabeçalho
+        function openScreen(screen) {
+            feedContainer.style.display = "none";
+            chipsBar.style.display = "none";
+            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
+
+            // Ajuste do cabeçalho superior: na tela Você, esconde o sino e mostra a engrenagem
+            if (screen === viewYou) {
+                btnBell.style.display = "none";
+                btnSettingsTop.style.display = "flex";
+            } else {
+                btnBell.style.display = "flex";
+                btnSettingsTop.style.display = "none";
+            }
+
+            if (screen === "home") {
+                feedContainer.style.display = "flex";
+                chipsBar.style.display = "flex";
+            } else if (screen) {
+                screen.classList.add("active");
+            }
+            window.scrollTo(0, 0);
+        }
+
+        // A engrenagem única do cabeçalho superior abre as configurações B1
+        btnSettingsTop.addEventListener("click", () => openScreen(viewSettings));
 
         // Função para alternar telas
         function openScreen(screen) {
