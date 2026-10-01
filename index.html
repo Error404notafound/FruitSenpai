@@ -1814,10 +1814,10 @@
             <div id="youLoggedIn" style="display: none; flex-direction: column; width: 100%;">
                 <!-- Identificação do Usuário Dinâmica por E-mail -->
                 <div class="profile-card-header">
-                    <div class="profile-avatar-big" id="profileAvatarBig">E</div>
+                    <div class="profile-avatar-big" id="profileAvatarBig">U</div>
                     <div class="profile-info">
-                        <h2 id="profileChannelName">Error404notafound</h2>
-                        <div id="profileUserEmail" style="font-size: 11.5px; color: var(--yt-text-secondary); margin-top: 1px;">error404notafound23@gmail.com</div>
+                        <h2 id="profileChannelName">Usuário</h2>
+                        <div id="profileUserEmail" style="font-size: 11.5px; color: var(--yt-text-secondary); margin-top: 1px;"></div>
                         <!-- Link C (Abre Criar Canal C1) -->
                         <span class="profile-create-channel-btn" id="btnOpenCreateChannel">
                             Crie um canal
@@ -2002,49 +2002,17 @@
                     <h3 style="font-size:16px;">Contas</h3>
                 </div>
 
-                <!-- Conta Ativa -->
-                <div class="account-item-row">
-                    <div class="account-item-left">
-                        <div class="account-avatar-small" style="background:#2e7d32;">E</div>
-                        <div>
-                            <div style="font-weight:600;">Error404notafound</div>
-                            <div style="font-size:11px; color:#aaa;">error404notafound23@gmail.com</div>
-                        </div>
-                    </div>
-                    <svg style="width:20px;height:20px;fill:#3ea6ff" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                </div>
-
-                <!-- Outras Contas -->
-                <div style="padding:12px 16px 4px 16px; font-size:12px; color:#aaa; font-weight:600;">Outras contas</div>
-                
-                <div class="account-item-row">
-                    <div class="account-item-left">
-                        <div class="account-avatar-small" style="background:#c2185b;">E</div>
-                        <div>
-                            <div style="font-weight:600;">Error Not afound</div>
-                            <div style="font-size:11px; color:#aaa;">error404notafound@gmail.com</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="account-item-row">
-                    <div class="account-item-left">
-                        <div class="account-avatar-small" style="background:#455a64;">K</div>
-                        <div>
-                            <div style="font-weight:600;">Guia de Campo por K.Mouton</div>
-                            <div style="font-size:11px; color:#aaa;">kalebmouton999@gmail.com</div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Lista dinâmica preenchida apenas com as contas que o usuário logar -->
+                <div id="accountsListContainer"></div>
 
                 <div style="border-top:1px solid rgba(255,255,255,0.08); margin-top:8px; padding-top:4px;">
-                    <div class="account-item-row">
+                    <div class="account-item-row" id="btnAddNewAccount" style="cursor: pointer;">
                         <div class="account-item-left">
                             <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                             <span style="font-size:13.5px;">Adicionar conta</span>
                         </div>
                     </div>
-                    <div class="account-item-row">
+                    <div class="account-item-row" id="btnLogoutAccount" style="cursor: pointer;">
                         <div class="account-item-left">
                             <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
                             <span style="font-size:13.5px;">Sair</span>
@@ -2407,28 +2375,61 @@
         const profileChannelName = document.getElementById("profileChannelName");
         const profileUserEmail = document.getElementById("profileUserEmail");
 
-        // Estado inicial: Deslogado (conforme a captura "A")
+        // Sistema de login e contas 100% dinâmico (sem e-mails fixos no código)
+        const accountsListContainer = document.getElementById("accountsListContainer");
+        const btnAddNewAccount = document.getElementById("btnAddNewAccount");
+        const btnLogoutAccount = document.getElementById("btnLogoutAccount");
+
+        let accounts = [];
+        let currentAccountIndex = -1;
         let isLoggedIn = false;
 
-        let accounts = [
-            { email: "error404notafound23@gmail.com", customName: "Error404notafound", color: "#9c27b0" },
-            { email: "error404notafound@gmail.com", customName: "Error Not afound", color: "#c2185b" },
-            { email: "kalebmouton999@gmail.com", customName: "Guia de Campo por K.Mouton", color: "#455a64" }
-        ];
-        let currentAccountIndex = 0;
-
-        function getNameFromEmail(email, customName) {
-            if (customName) return customName;
+        // Extrai o nome do canal a partir do e-mail digitado pelo usuário
+        function getNameFromEmail(email) {
             const raw = email.split("@")[0];
             return raw.charAt(0).toUpperCase() + raw.slice(1);
         }
 
-        // Função que altera entre modo Logado e Deslogado
+        function renderAccountsDrawer() {
+            if (!accountsListContainer) return;
+            accountsListContainer.innerHTML = "";
+
+            accounts.forEach((acc, index) => {
+                const name = getNameFromEmail(acc.email);
+                const initial = name.charAt(0).toUpperCase();
+                const isActive = index === currentAccountIndex;
+
+                const row = document.createElement("div");
+                row.className = "account-item-row";
+                row.style.cursor = "pointer";
+                row.innerHTML = `
+                    <div class="account-item-left">
+                        <div class="account-avatar-small" style="background:${acc.color};">${initial}</div>
+                        <div>
+                            <div style="font-weight:600;">${name}</div>
+                            <div style="font-size:11px; color:#aaa;">${acc.email}</div>
+                        </div>
+                    </div>
+                    ${isActive ? `<svg style="width:20px;height:20px;fill:#3ea6ff" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>` : ""}
+                `;
+
+                row.addEventListener("click", () => {
+                    currentAccountIndex = index;
+                    updateLoginState(true);
+                    drawerAccounts.classList.remove("active");
+                    showToast(`Conectado como ${name}`);
+                });
+
+                accountsListContainer.appendChild(row);
+            });
+        }
+
+        // Atualiza a interface entre Modo Logado e Modo Deslogado
         function updateLoginState(logged) {
-            isLoggedIn = logged;
+            isLoggedIn = logged && accounts.length > 0;
 
             if (isLoggedIn) {
-                // Modo Logado
+                // Modo Logado: Mostra o canal com os dados do e-mail digitado
                 youLoggedOut.style.display = "none";
                 youLoggedIn.style.display = "flex";
                 navCreate.style.display = "flex";
@@ -2436,9 +2437,8 @@
                 navYouIconLoggedOut.style.display = "none";
                 navYouAvatarLoggedIn.style.display = "flex";
 
-                // Atualiza dados da conta ativa
                 const active = accounts[currentAccountIndex];
-                const channelName = getNameFromEmail(active.email, active.customName);
+                const channelName = getNameFromEmail(active.email);
                 const initialLetter = channelName.charAt(0).toUpperCase();
 
                 if (profileChannelName) profileChannelName.textContent = channelName;
@@ -2451,44 +2451,58 @@
                     navYouAvatarLoggedIn.textContent = initialLetter;
                     navYouAvatarLoggedIn.style.backgroundColor = active.color;
                 }
+
+                renderAccountsDrawer();
             } else {
-                // Modo Deslogado (Captura "A")
+                // Modo Deslogado (Captura "A"): Nenhum e-mail aparece na tela
                 youLoggedOut.style.display = "flex";
                 youLoggedIn.style.display = "none";
                 navCreate.style.display = "none"; // Oculta botão (+)
                 navSubscriptions.style.display = "none"; // Oculta Inscrições
                 navYouIconLoggedOut.style.display = "block";
                 navYouAvatarLoggedIn.style.display = "none";
+                if (profileUserEmail) profileUserEmail.textContent = "";
             }
         }
 
-        // Ação de Fazer Login ao clicar nos botões da tela deslogada
+        // Fluxo de Fazer Login: solicita o e-mail do próprio usuário
         function triggerLoginFlow() {
-            const emailInput = prompt("Digite seu e-mail para fazer login:", "error404notafound23@gmail.com");
+            const emailInput = prompt("Digite seu e-mail para fazer login:");
             if (emailInput && emailInput.includes("@")) {
-                const foundIndex = accounts.findIndex(a => a.email.toLowerCase() === emailInput.trim().toLowerCase());
+                const cleanEmail = emailInput.trim().toLowerCase();
+                const colors = ["#9c27b0", "#2e7d32", "#c2185b", "#e65100", "#00838f"];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+                const foundIndex = accounts.findIndex(a => a.email === cleanEmail);
                 if (foundIndex !== -1) {
                     currentAccountIndex = foundIndex;
                 } else {
                     accounts.push({
-                        email: emailInput.trim().toLowerCase(),
-                        customName: null,
-                        color: "#9c27b0"
+                        email: cleanEmail,
+                        color: randomColor
                     });
                     currentAccountIndex = accounts.length - 1;
                 }
+
                 updateLoginState(true);
-                showToast("Login realizado com sucesso!");
-            } else if (emailInput) {
-                alert("Por favor, digite um e-mail válido!");
+                showToast(`Bem-vindo, ${getNameFromEmail(cleanEmail)}!`);
+            } else if (emailInput !== null) {
+                alert("Por favor, digite um e-mail válido com @!");
             }
         }
 
         btnTopLogin.addEventListener("click", triggerLoginFlow);
         btnMainLogin.addEventListener("click", triggerLoginFlow);
 
-        // Ação de Sair da conta (na gaveta de contas D1)
-        const btnLogoutAccount = document.getElementById("btnLogoutAccount");
+        // Adicionar outra conta na gaveta D1
+        if (btnAddNewAccount) {
+            btnAddNewAccount.addEventListener("click", () => {
+                triggerLoginFlow();
+                drawerAccounts.classList.remove("active");
+            });
+        }
+
+        // Sair da conta (volta 100% para a tela deslogada da captura A)
         if (btnLogoutAccount) {
             btnLogoutAccount.addEventListener("click", () => {
                 drawerAccounts.classList.remove("active");
@@ -2498,7 +2512,7 @@
             });
         }
 
-        // Inicializa o app no estado deslogado
+        // O app sempre inicia deslogado na captura A
         updateLoginState(false);
 
         // Função para alternar telas
