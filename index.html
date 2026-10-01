@@ -2362,10 +2362,9 @@
         const btnCloseAccounts = document.getElementById("btnCloseAccounts");
         const playlistPageTitle = document.getElementById("playlistPageTitle");
 
-        // Elementos do Estado de Login
+       // Elementos do Estado de Login (Corrigido sem duplicidade)
         const youLoggedOut = document.getElementById("youLoggedOut");
         const youLoggedIn = document.getElementById("youLoggedIn");
-        const navCreate = document.getElementById("navCreate");
         const navSubscriptions = document.getElementById("navSubscriptions");
         const navYouIconLoggedOut = document.getElementById("navYouIconLoggedOut");
         const navYouAvatarLoggedIn = document.getElementById("navYouAvatarLoggedIn");
@@ -2543,6 +2542,24 @@
             document.getElementById("navHome").classList.add("active");
             openScreen("home");
         });
+
+        // Clicar em "Shorts"
+        document.getElementById("navShorts").addEventListener("click", () => {
+            document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+            document.getElementById("navShorts").classList.add("active");
+            openScreen("home");
+            const shortsShelf = document.querySelector(".yt-shorts-shelf");
+            if (shortsShelf) shortsShelf.scrollIntoView({ behavior: "smooth" });
+        });
+
+        // Clicar em "Inscrições"
+        if (navSubscriptions) {
+            navSubscriptions.addEventListener("click", () => {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                navSubscriptions.classList.add("active");
+                showToast("Aba Inscrições");
+            });
+        }
 
         // Botões de Voltar (←) voltam para a tela A2 (Você)
         document.querySelectorAll(".btnBackToYou").forEach(btn => {
