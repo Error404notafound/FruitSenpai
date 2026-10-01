@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>YouTube Mobile - Fruit Senpai Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           1. VARIÁVEIS DE TEMA (YOUTUBE DARK MODE OFICIAL)
+           ========================================================================== */
+        :root {
+            --yt-bg-main: #0f0f0f;
+            --yt-bg-elevated: #212121;
+            --yt-bg-subtle: #272727;
+            --yt-bg-hover: rgba(255, 255, 255, 0.1);
+            --yt-chip-bg: #272727;
+            --yt-chip-active-bg: #f1f1f1;
+            --yt-chip-active-text: #0f0f0f;
+            --yt-text-primary: #f1f1f1;
+            --yt-text-secondary: #aaaaaa;
+            --yt-red: #ff0000;
+            --yt-picpay-green: #11c76f;
+            --yt-picpay-card: #eafaf1;
+            --yt-border: rgba(255, 255, 255, 0.12);
+            --yt-badge-bg: rgba(0, 0, 0, 0.8);
+            --yt-bottom-nav-h: 52px;
+            --yt-header-h: 48px;
+            --yt-chips-h: 46px;
+            --font-family: 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        /* ==========================================================================
+           2. RESET GERAL E LAYOUT BASE
+           ========================================================================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            background-color: var(--yt-bg-main);
+            color: var(--yt-text-primary);
+            font-family: var(--font-family);
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: hidden;
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            background-color: #050505;
+        }
+
+        /* Container que simula tela mobile de alta fidelidade */
+        #app-viewport {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            background-color: var(--yt-bg-main);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 35px rgba(0, 0, 0, 0.9);
+            padding-bottom: calc(var(--yt-bottom-nav-h) + 15px);
+        }
+
+        /* ==========================================================================
+           3. CABEÇALHO DO APLICATIVO
+           ========================================================================== */
+        .yt-header-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--yt-bg-main);
+        }
+
+        .yt-header {
+            height: var(--yt-header-h);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .yt-logo-area {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .yt-logo-icon {
+            width: 28px;
+            height: 20px;
+            background-color: var(--yt-red);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .yt-logo-icon::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 4.5px 0 4.5px 8px;
+            border-color: transparent transparent transparent #ffffff;
+            margin-left: 1px;
+        }
+
+        .yt-logo-text {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 19px;
+            letter-spacing: -0.7px;
+            display: flex;
+            align-items: center;
+        }
+
+        .yt-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .yt-icon-btn {
+            background: none;
+            border: none;
+            color: var(--yt-text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            position: relative;
+            outline: none;
+        }
+
+        .yt-icon-btn:active {
+            background-color: var(--yt-bg-hover);
+        }
+
+        .yt-icon-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .badge-notification {
+            position: absolute;
+            top: 2px;
+            right: 0px;
+            background-color: #cc0000;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 700;
+            height: 16px;
+            min-width: 16px;
+            padding: 0 3px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--yt-bg-main);
+        }
+
+        /* ==========================================================================
+           4. BARRA DE CHIPS / FILTROS HORIZONTAIS
+           ========================================================================== */
+        .yt-chips-bar {
+            height: var(--yt-chips-h);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 12px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .yt-chips-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .yt-compass-chip {
+            background-color: var(--yt-bg-subtle);
+            border-radius: 8px;
+            height: 32px;
+            width: 38px;
+            min-width: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--yt-text-primary);
+        }
+
+        .yt-chip {
+            background-color: var(--yt-chip-bg);
+            color: var(--yt-text-primary);
+            border: none;
+            height: 32px;
+            padding: 0 12px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+
+        .yt-chip.active {
+            background-color: var(--yt-chip-active-bg);
+            color: var(--yt-chip-active-text);
+        }
+
+        /* ==========================================================================
+           5. FEED PRINCIPAL DE VÍDEOS
+           ========================================================================== */
+        .yt-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .yt-video-card {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .yt-thumbnail-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .yt-thumbnail-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .yt-duration-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background-color: var(--yt-badge-bg);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 5px;
+            border-radius: 4px;
+            letter-spacing: 0.2px;
+        }
+
+        .yt-video-info-row {
+            display: flex;
+            padding: 12px 14px 6px 14px;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .yt-channel-avatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background-color: #333;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .yt-channel-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .yt-video-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .yt-video-title {
+            font-size: 14.5px;
+            font-weight: 500;
+            line-height: 1.35;
+            color: var(--yt-text-primary);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 3px;
+        }
+
+        .yt-video-metadata {
+            font-size: 12px;
+            color: var(--yt-text-secondary);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .yt-more-btn {
+            background: none;
+            border: none;
+            color: var(--yt-text-primary);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            margin-top: -2px;
+        }
+
+        /* ==========================================================================
+           6. CARD PATROCINADO (ANÚNCIO ESTILO PICPAY DO SCREENSHOT)
+           ========================================================================== */
+        .yt-ad-card {
+            width: 100%;
+            background-color: #0f0f0f;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .yt-ad-visual-banner {
+            width: calc(100% - 24px);
+            margin: 10px 12px 6px 12px;
+            background: linear-gradient(135deg, #16b364 0%, #0d8b4b 100%);
+            border-radius: 14px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .yt-ad-top-img-area {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            overflow: hidden;
+            background: #1bb769;
+            display: flex;
+            justify-content: center;
+        }
+
+        .yt-ad-top-img-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        .yt-ad-controls-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 2;
+        }
+
+        .yt-ad-circle-ctrl {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.65);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .yt-ad-white-box {
+            background-color: #ffffff;
+            margin: 0;
+            padding: 18px 20px;
+            border-radius: 0 0 14px 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .yt-ad-texts h3 {
+            color: #0c6a38;
+            font-size: 21px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 2px;
+        }
+
+        .yt-ad-texts p {
+            color: #121212;
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .yt-ad-cta-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #27ae60;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .yt-ad-bottom-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px 14px 14px 14px;
+            gap: 12px;
+        }
+
+        .yt-ad-logo-square {
+            width: 36px;
+            height: 36px;
+            background-color: #11c76f;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 900;
+            font-size: 19px;
+        }
+
+        .yt-ad-meta {
+            flex: 1;
+        }
+
+        .yt-ad-title-label {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .yt-ad-subtext {
+            font-size: 11.5px;
+            color: var(--yt-text-secondary);
+            margin-top: 2px;
+        }
+
+        .yt-ad-badge {
+            font-weight: 700;
+            color: #fff;
+        }
+
+        /* ==========================================================================
+           7. SEÇÃO YOUTUBE MUSIC ("OUVIR NOVAMENTE")
+           ========================================================================== */
+        .yt-section-music {
+            padding: 14px 0 6px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .yt-music-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px 12px 14px;
+        }
+
+        .yt-music-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .yt-music-icon-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+        }
+
+        .yt-music-texts h2 {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .yt-music-texts span {
+            font-size: 11.5px;
+            color: var(--yt-text-secondary);
+        }
+
+        .yt-music-carousel {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 14px 6px 14px;
+            scrollbar-width: none;
+        }
+
+        .yt-music-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .yt-music-card {
+            width: 140px;
+            min-width: 140px;
+            cursor: pointer;
+        }
+
+        .yt-music-cover {
+            width: 140px;
+            height: 140px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #242424;
+            margin-bottom: 6px;
+        }
+
+        .yt-music-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .yt-music-cover-badge {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background-color: rgba(0, 0, 0, 0.75);
+            font-size: 10.5px;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .yt-music-card-title {
+            font-size: 12.5px;
+            font-weight: 500;
+            line-height: 1.25;
+            color: #fff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .yt-music-card-meta {
+            font-size: 11px;
+            color: var(--yt-text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ==========================================================================
+           8. WIDGET DE PESQUISA DE SATISFAÇÃO (SCREENSHOT EPSTEIN)
+           ========================================================================== */
+        .yt-survey-box {
+            background-color: #1a0f08;
+            border: 1px solid #3d2315;
+            margin: 10px 14px;
+            border-radius: 12px;
+            padding: 16px;
+            position: relative;
+        }
+
+        .yt-survey-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .yt-survey-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #fcece3;
+            max-width: 85%;
+            line-height: 1.35;
+        }
+
+        .yt-survey-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .yt-survey-faces {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4px;
+        }
+
+        .yt-survey-option {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #f7d5c0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: transform 0.15s ease;
+        }
+
+        .yt-survey-option:active {
+            transform: scale(1.15);
+        }
+
+        .yt-survey-option svg {
+            width: 34px;
+            height: 34px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+        }
+
+        .yt-survey-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #b58b76;
+            margin-top: 10px;
+            padding: 0 4px;
+        }
+
+        /* ==========================================================================
+           9. SEÇÃO SHORTS (GRADE 2x2 FIEL AOS SCREENSHOTS)
+           ========================================================================== */
+        .yt-shorts-shelf {
+            padding: 14px 14px 8px 14px;
+        }
+
+        .yt-shorts-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .yt-shorts-badge-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yt-shorts-title {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+            flex: 1;
+        }
+
+        .yt-shorts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .yt-short-card {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #212121;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        .yt-short-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .yt-short-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.85) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px 10px 10px 10px;
+        }
+
+        .yt-short-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .yt-short-tag {
+            font-size: 10px;
+            font-weight: 700;
+            background-color: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .yt-short-title-area {
+            color: #ffffff;
+        }
+
+        .yt-short-title-text {
+            font-size: 13.5px;
+            font-weight: 700;
+            line-height: 1.25;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 2px;
+        }
+
+        .yt-short-views-text {
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* ==========================================================================
+           10. BARRA INFERIOR DE NAVEGAÇÃO (BOTTOM NAV BAR)
+           ========================================================================== */
+        .yt-bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: var(--yt-bottom-nav-h);
+            background-color: var(--yt-bg-main);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            z-index: 1000;
+            padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        .yt-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            height: 100%;
+            color: var(--yt-text-primary);
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            gap: 2px;
+        }
+
+        .yt-nav-item svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .yt-nav-label {
+            font-size: 10px;
+            font-weight: 400;
+            color: var(--yt-text-primary);
+        }
+
+        .yt-nav-create-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            cursor: pointer;
+        }
+
+        .yt-nav-create-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .yt-user-avatar-mini {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yt-user-avatar-mini img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ==========================================================================
+           11. MODAL DE CRIAÇÃO / CRUD COM FIREBASE (DRAWER INFERIOR)
+           ========================================================================== */
+        .yt-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .yt-modal-backdrop.active {
+            display: flex;
+        }
+
+        .yt-bottom-sheet {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--yt-bg-elevated);
+            border-radius: 16px 16px 0 0;
+            padding: 20px 18px 28px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: slideUp 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .yt-sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .yt-sheet-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .yt-sheet-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .yt-form-control {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .yt-form-control label {
+            font-size: 12px;
+            color: var(--yt-text-secondary);
+            font-weight: 500;
+        }
+
+        .yt-input {
+            width: 100%;
+            background-color: #121212;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .yt-input:focus {
+            border-color: #3ea6ff;
+        }
+
+        .yt-btn-primary {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 20px;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: filter 0.15s ease;
+        }
+
+        .yt-btn-primary:active {
+            filter: brightness(0.85);
+        }
+
+        /* Lista de itens Firestore adicionados dinamicamente */
+        .firestore-list-container {
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 10px;
+        }
+
+        .firestore-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+
+        .firestore-del-btn {
+            background-color: #cc0000;
+            color: #fff;
+            border: none;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Notificação Toast */
+        .yt-toast {
+            position: fixed;
+            bottom: calc(var(--yt-bottom-nav-h) + 16px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #212121;
+            color: #ffffff;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255,255,255,0.15);
+            z-index: 3000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Container Principal do Dispositivo -->
+    <div id="app-viewport">
+
+        <!-- ==========================================================================
+             CABEÇALHO COM LOGO, SINO, BUSCA E EXPLORAR
+             ========================================================================== -->
+        <header class="yt-header-wrapper">
+            <div class="yt-header">
+                <!-- Logotipo do YouTube -->
+                <div class="yt-logo-area" id="btnLogo">
+                    <div class="yt-logo-icon"></div>
+                    <span class="yt-logo-text">YouTube</span>
+                </div>
+
+                <!-- Ícones de Ação à Direita -->
+                <div class="yt-header-actions">
+                    <!-- Sino de Notificações com Badge "9+" -->
+                    <button class="yt-icon-btn" aria-label="Notificações" id="btnBell">
+                        <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
+                        <span class="badge-notification">9+</span>
+                    </button>
+
+                    <!-- Ícone de Pesquisa -->
+                    <button class="yt-icon-btn" aria-label="Pesquisar" id="btnSearch">
+                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==========================================================================
+                 BARRA DE FILTROS / CHIPS DESLIZÁVEIS
+                 ========================================================================== -->
+            <div class="yt-chips-bar" id="chipsBar">
+                <!-- Bússola / Explorar -->
+                <div class="yt-compass-chip" id="compassChip" title="Explorar">
+                    <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1 1.1-.49 1.1-1.1-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
+                </div>
+                <button class="yt-chip active">Tudo</button>
+                <button class="yt-chip">De Mouton</button>
+                <button class="yt-chip">Indie rock</button>
+                <button class="yt-chip">Metal alternativo</button>
+                <button class="yt-chip">Música</button>
+                <button class="yt-chip">Jogos</button>
+                <button class="yt-chip">Toby Fox</button>
+                <button class="yt-chip">Animações</button>
+            </div>
+        </header>
+
+        <!-- ==========================================================================
+             CORPO PRINCIPAL / FEED DE CONTEÚDO
+             ========================================================================== -->
+        <main class="yt-feed" id="feedContainer">
+
+            <!-- 1. VÍDEO 1: Jerry na piscina [Adult Swim] (Baseado no Screenshot 1 e 5) -->
+            <article class="yt-video-card">
+                <div class="yt-thumbnail-wrapper">
+                    <!-- Imagem simulada fiel ao Jerry deitado na água -->
+                    <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80" alt="Jerry na piscina">
+                    <div class="yt-duration-badge">5:00</div>
+                </div>
+                <div class="yt-video-info-row">
+                    <div class="yt-channel-avatar">
+                        <div style="background:#cc0000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">[as]</div>
+                    </div>
+                    <div class="yt-video-details">
+                        <h2 class="yt-video-title">O encontro de Jerry na piscina | Rick and Morty | Adult Swim Brasil</h2>
+                        <div class="yt-video-metadata">
+                            <span>Adult Swim Brasil</span>
+                            <span>•</span>
+                            <span>31 mil visualizações</span>
+                            <span>•</span>
+                            <span>há 4 dias</span>
+                        </div>
+                    </div>
+                    <button class="yt-more-btn" aria-label="Mais opções">
+                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+            </article>
+
+            <!-- 2. ANÚNCIO PATROCINADO PICPAY (Fiel ao Screenshot 1) -->
+            <section class="yt-ad-card">
+                <div class="yt-ad-visual-banner">
+                    <div class="yt-ad-top-img-area">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=80" alt="PicPay anúncio">
+                        <div class="yt-ad-controls-overlay">
+                            <button class="yt-ad-circle-ctrl" title="Mudo">
+                                <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+                            </button>
+                            <button class="yt-ad-circle-ctrl" title="Legendas">
+                                <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="yt-ad-white-box">
+                        <div class="yt-ad-texts">
+                            <h3>Dinheiro<br>na hora</h3>
+                            <p>e desconto<br>direto no salário.</p>
+                        </div>
+                        <button class="yt-ad-cta-btn">
+                            <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M5 19h14V5H5v14zm10-8h-3v3h-2v-3H7V9h3V6h2v3h3v2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="yt-ad-bottom-bar">
+                    <div class="yt-ad-logo-square">P</div>
+                    <div class="yt-ad-meta">
+                        <div class="yt-ad-title-label">Dinheiro Rápido, aproveite | Banco PicPay</div>
+                        <div class="yt-ad-subtext">
+                            <span class="yt-ad-badge">Patrocinado</span> • 4,5★ • GRÁTIS
+                        </div>
+                    </div>
+                    <button class="yt-more-btn">
+                        <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 3. GRADE DE SHORTS 2x2 (Fiel aos Screenshots 3 e 4) -->
+            <section class="yt-shorts-shelf">
+                <div class="yt-shorts-header">
+                    <div class="yt-shorts-badge-icon">
+                        <svg style="width:22px;height:22px;fill:#ff0000" viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
+                    </div>
+                    <h3 class="yt-shorts-title">Shorts</h3>
+                    <button class="yt-more-btn">
+                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+
+                <div class="yt-shorts-grid">
+                    <!-- Short 1 -->
+                    <div class="yt-short-card">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=80" alt="Short 1">
+                        <div class="yt-short-overlay">
+                            <div class="yt-short-top-bar">
+                                <span class="yt-short-tag">Novo</span>
+                            </div>
+                            <div class="yt-short-title-area">
+                                <div class="yt-short-title-text">SOU AUTISTA? Relato & Experiência</div>
+                                <div class="yt-short-views-text">145 mil visualizações</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Short 2 -->
+                    <div class="yt-short-card">
+                        <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop&q=80" alt="Short 2">
+                        <div class="yt-short-overlay">
+                            <div class="yt-short-top-bar">
+                                <span class="yt-short-tag">Novo</span>
+                            </div>
+                            <div class="yt-short-title-area">
+                                <div class="yt-short-title-text">Spamton core: Deltarune meme</div>
+                                <div class="yt-short-views-text">890 mil visualizações</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Short 3 -->
+                    <div class="yt-short-card">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format&fit=crop&q=80" alt="Short 3">
+                        <div class="yt-short-overlay">
+                            <div class="yt-short-top-bar"></div>
+                            <div class="yt-short-title-area">
+                                <div class="yt-short-title-text">A SKIN POLÊMICA de Rayman Legends!</div>
+                                <div class="yt-short-views-text">320 mil visualizações</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Short 4 -->
+                    <div class="yt-short-card">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80" alt="Short 4">
+                        <div class="yt-short-overlay">
+                            <div class="yt-short-top-bar"></div>
+                            <div class="yt-short-title-area">
+                                <div class="yt-short-title-text">2 types of Ralsei fans...</div>
+                                <div class="yt-short-views-text">512 mil visualizações</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. VÍDEO 2: Arquivos Epstein + Widget de Pesquisa (Fiel ao Screenshot 2) -->
+            <article class="yt-video-card">
+                <div class="yt-thumbnail-wrapper">
+                    <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&auto=format&fit=crop&q=80" alt="Documentário">
+                    <div class="yt-duration-badge">17:24</div>
+                </div>
+                <div class="yt-video-info-row">
+                    <div class="yt-channel-avatar">
+                        <div style="background:#27ae60;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:700;">H</div>
+                    </div>
+                    <div class="yt-video-details">
+                        <h2 class="yt-video-title">Novas imagens Bizarras nos Arquivos Desclassificados</h2>
+                        <div class="yt-video-metadata">
+                            <span>Hector RP</span>
+                            <span>•</span>
+                            <span>779 mil visualizações</span>
+                            <span>•</span>
+                            <span>há 2 semanas</span>
+                        </div>
+                    </div>
+                    <button class="yt-more-btn">
+                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Pesquisa de Satisfação Embutida -->
+                <div class="yt-survey-box" id="surveyBox">
+                    <div class="yt-survey-header">
+                        <div class="yt-survey-title">O vídeo acima é uma boa recomendação para você?</div>
+                        <button class="yt-survey-close" id="closeSurvey" title="Fechar">✕</button>
+                    </div>
+                    <div class="yt-survey-faces">
+                        <!-- Muito Ruim -->
+                        <button class="yt-survey-option" data-rate="1" title="Muito ruim">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M8.5 16c1-1.5 6-1.5 7 0"/></svg>
+                        </button>
+                        <!-- Ruim -->
+                        <button class="yt-survey-option" data-rate="2" title="Ruim">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M9 15c1-.8 5-.8 6 0"/></svg>
+                        </button>
+                        <!-- Neutro -->
+                        <button class="yt-survey-option" data-rate="3" title="Neutro">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M9 15h6"/></svg>
+                        </button>
+                        <!-- Bom -->
+                        <button class="yt-survey-option" data-rate="4" title="Bom">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M8.5 14c1 1.5 6 1.5 7 0"/></svg>
+                        </button>
+                        <!-- Muito Bom -->
+                        <button class="yt-survey-option" data-rate="5" title="Muito bom">
+                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M8 13.5c1 2.5 7 2.5 8 0"/></svg>
+                        </button>
+                    </div>
+                    <div class="yt-survey-labels">
+                        <span>Muito ruim</span>
+                        <span>Muito bom</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 5. SEÇÃO YOUTUBE MUSIC "OUVIR NOVAMENTE" (Fiel ao Screenshot 5) -->
+            <section class="yt-section-music">
+                <div class="yt-music-header">
+                    <div class="yt-music-title-wrap">
+                        <div class="yt-music-icon-circle">
+                            <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        </div>
+                        <div class="yt-music-texts">
+                            <h2>Ouvir novamente ›</h2>
+                            <span>Do YouTube Music</span>
+                        </div>
+                    </div>
+                    <button class="yt-more-btn">
+                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+
+                <div class="yt-music-carousel">
+                    <!-- Faixa 1 -->
+                    <div class="yt-music-card">
+                        <div class="yt-music-cover">
+                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80" alt="Matt Maeson">
+                            <div class="yt-music-cover-badge">1:01</div>
+                        </div>
+                        <div class="yt-music-card-title">Matt Maeson - me and my friends are lonely [legendado PT/BR]</div>
+                        <div class="yt-music-card-meta">Kaleb Mouton</div>
+                    </div>
+
+                    <!-- Faixa 2 -->
+                    <div class="yt-music-card">
+                        <div class="yt-music-cover">
+                            <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&auto=format&fit=crop&q=80" alt="Music Video">
+                            <div class="yt-music-cover-badge">3:42</div>
+                        </div>
+                        <div class="yt-music-card-title">John-Robert - Lie to Me (Official Video)</div>
+                        <div class="yt-music-card-meta">John-Robert</div>
+                    </div>
+
+                    <!-- Faixa 3 -->
+                    <div class="yt-music-card">
+                        <div class="yt-music-cover">
+                            <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80" alt="Music Video 3">
+                            <div class="yt-music-cover-badge">4:15</div>
+                        </div>
+                        <div class="yt-music-card-title">Camellia - Ghost (VIP Mix)</div>
+                        <div class="yt-music-card-meta">Camellia Official</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. VÍDEO 3: DELTARUNE Chapter 5 (Fiel ao Screenshot 4) -->
+            <article class="yt-video-card">
+                <div class="yt-thumbnail-wrapper">
+                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&auto=format&fit=crop&q=80" alt="Deltarune">
+                    <div class="yt-duration-badge">3:13</div>
+                </div>
+                <div class="yt-video-info-row">
+                    <div class="yt-channel-avatar">
+                        <div style="background:#ffffff;color:#000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:700;">🐶</div>
+                    </div>
+                    <div class="yt-video-details">
+                        <h2 class="yt-video-title">34. Flower Man (DELTARUNE Chapter 5 Soundtrack) - Toby Fox & Camellia</h2>
+                        <div class="yt-video-metadata">
+                            <span>Toby Fox e Camellia Official</span>
+                            <span>•</span>
+                            <span>16 mi de visualizações</span>
+                        </div>
+                    </div>
+                    <button class="yt-more-btn">
+                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Contêiner dinâmico para os vídeos/frutas salvos no Firebase -->
+            <div id="dynamicFirebaseFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
+
+        </main>
+
+        <!-- ==========================================================================
+             BARRA INFERIOR DE NAVEGAÇÃO FIXA (BOTTOM NAVIGATION BAR)
+             ========================================================================== -->
+        <nav class="yt-bottom-bar">
+            <!-- Início -->
+            <button class="yt-nav-item active" id="navHome">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                <span class="yt-nav-label">Início</span>
+            </button>
+
+            <!-- Shorts -->
+            <button class="yt-nav-item" id="navShorts">
+                <svg viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
+                <span class="yt-nav-label">Shorts</span>
+            </button>
+
+            <!-- Botão de Criação / Publicação (+) -->
+            <button class="yt-nav-item" id="navCreate" aria-label="Criar ou Adicionar">
+                <div class="yt-nav-create-btn">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </div>
+            </button>
+
+            <!-- Inscrições -->
+            <button class="yt-nav-item" id="navSubscriptions">
+                <svg viewBox="0 0 24 24"><path d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4l-6-3.27v6.53L16 16z"/></svg>
+                <span class="yt-nav-label">Inscrições</span>
+            </button>
+
+            <!-- Você / Perfil -->
+            <button class="yt-nav-item" id="navYou">
+                <div class="yt-user-avatar-mini">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80" alt="Perfil">
+                </div>
+                <span class="yt-nav-label">Você</span>
+            </button>
+        </nav>
+
+        <!-- ==========================================================================
+             DRAWER / MODAL DE ADIÇÃO (CRUD FIREBASE)
+             ========================================================================== -->
+        <div class="yt-modal-backdrop" id="createModal">
+            <div class="yt-bottom-sheet">
+                <div class="yt-sheet-header">
+                    <h3 class="yt-sheet-title">
+                        <span>🍎 Fruit Senpai Studio</span>
+                    </h3>
+                    <button class="yt-sheet-close" id="closeCreateModal">✕</button>
+                </div>
+
+                <div class="yt-form-control">
+                    <label for="fruitInput">Título do Conteúdo / Fruta</label>
+                    <input type="text" id="fruitInput" class="yt-input" placeholder="Ex: Morango Especial ou Gameplay Deltarune...">
+                </div>
+
+                <div class="yt-form-control">
+                    <label for="fruitChannel">Canal / Autor</label>
+                    <input type="text" id="fruitChannel" class="yt-input" placeholder="Ex: Canal Fruit Senpai Oficial" value="Fruit Senpai BR">
+                </div>
+
+                <button class="yt-btn-primary" id="addBtn">Publicar no Firestore</button>
+
+                <!-- Lista de itens gerenciados no Firestore -->
+                <div class="firestore-list-container">
+                    <div style="font-size:12px; color:var(--yt-text-secondary); margin-bottom:8px; font-weight:600;">ITENS NO BANCO DE DADOS:</div>
+                    <ul id="fruitList" style="list-style:none;"></ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast de Aviso -->
+        <div class="yt-toast" id="toastMessage"></div>
+
+    </div>
+
+    <!-- ==========================================================================
+         LÓGICA JAVASCRIPT & INTEGRAÇÃO FIREBASE (FIRESTORE)
+         ========================================================================== -->
+    <script type="module">
+        // Importando módulos oficiais do Firebase via CDN moderna
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            onSnapshot, 
+            deleteDoc, 
+            doc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Configuração mantida do seu projeto Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfV7BZRgfvAfTeJhV2hM9N2NIoL73f_4w",
+            authDomain: "fruitsenpai-e4d37.firebaseapp.com",
+            projectId: "fruitsenpai-e4d37",
+            storageBucket: "fruitsenpai-e4d37.firebasestorage.app",
+            messagingSenderId: "840433045687",
+            appId: "1:840433045687:web:8e0dabec482500b68ffd32"
+        };
+
+        // Inicializa o Firebase e o Firestore
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const frutasColecao = collection(db, "frutas");
+
+        // Elementos do DOM
+        const fruitInput = document.getElementById("fruitInput");
+        const fruitChannel = document.getElementById("fruitChannel");
+        const addBtn = document.getElementById("addBtn");
+        const fruitList = document.getElementById("fruitList");
+        const dynamicFirebaseFeed = document.getElementById("dynamicFirebaseFeed");
+        const createModal = document.getElementById("createModal");
+        const navCreate = document.getElementById("navCreate");
+        const closeCreateModal = document.getElementById("closeCreateModal");
+        const toast = document.getElementById("toastMessage");
+        const surveyBox = document.getElementById("surveyBox");
+        const closeSurvey = document.getElementById("closeSurvey");
+
+        // Função utilitária para exibir alertas no estilo YouTube (Toast)
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = "block";
+            setTimeout(() => {
+                toast.style.display = "none";
+            }, 3000);
+        }
+
+        // 1. ABRIR E FECHAR O MODAL DE CRIAÇÃO (+)
+        navCreate.addEventListener("click", () => {
+            createModal.classList.add("active");
+            fruitInput.focus();
+        });
+
+        closeCreateModal.addEventListener("click", () => {
+            createModal.classList.remove("active");
+        });
+
+        createModal.addEventListener("click", (e) => {
+            if (e.target === createModal) {
+                createModal.classList.remove("active");
+            }
+        });
+
+        // 2. ADICIONAR DADO NO FIREBASE AO CLICAR EM PUBLICAR
+        addBtn.addEventListener("click", async () => {
+            const title = fruitInput.value.trim();
+            const channel = fruitChannel.value.trim() || "Fruit Senpai";
+
+            if (!title) {
+                showToast("Digite um nome ou título!");
+                return;
+            }
+
+            try {
+                addBtn.disabled = true;
+                addBtn.innerText = "Publicando...";
+
+                await addDoc(frutasColecao, {
+                    name: title,
+                    channel: channel,
+                    views: Math.floor(Math.random() * 900 + 10) + " mil",
+                    timeAgo: "agora mesmo",
+                    timestamp: serverTimestamp()
+                });
+
+                fruitInput.value = "";
+                showToast("Conteúdo adicionado ao seu Feed com sucesso!");
+                createModal.classList.remove("active");
+            } catch (error) {
+                console.error("Erro ao salvar:", error);
+                showToast("Erro ao conectar ao Firebase.");
+            } finally {
+                addBtn.disabled = false;
+                addBtn.innerText = "Publicar no Firestore";
+            }
+        });
+
+        // 3. ONSNAPSHOT EM TEMPO REAL: ATUALIZA TANTO O MODAL QUANTO O FEED DE VÍDEOS
+        onSnapshot(frutasColecao, (snapshot) => {
+            fruitList.innerHTML = "";
+            dynamicFirebaseFeed.innerHTML = "";
+
+            if (snapshot.empty) {
+                fruitList.innerHTML = `<li style="font-size:12px;color:#777;padding:4px 0;">Nenhum item salvo ainda.</li>`;
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const item = docSnap.data();
+                const id = docSnap.id;
+
+                // 3.1. Renderiza linha na lista do modal
+                const li = document.createElement("li");
+                li.className = "firestore-item-row";
+                li.innerHTML = `
+                    <span style="font-size:13px;font-weight:500;">${escapeHtml(item.name)}</span>
+                    <button class="firestore-del-btn" data-id="${id}">Excluir</button>
+                `;
+                fruitList.appendChild(li);
+
+                // 3.2. Renderiza card completo de vídeo no feed simulando o YouTube
+                const card = document.createElement("article");
+                card.className = "yt-video-card";
+                card.innerHTML = `
+                    <div class="yt-thumbnail-wrapper">
+                        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=800&auto=format&fit=crop&q=80" alt="Frutas">
+                        <div class="yt-duration-badge">2:14</div>
+                    </div>
+                    <div class="yt-video-info-row">
+                        <div class="yt-channel-avatar">
+                            <div style="background:#ff6b6b;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:700;">🍎</div>
+                        </div>
+                        <div class="yt-video-details">
+                            <h2 class="yt-video-title">${escapeHtml(item.name)}</h2>
+                            <div class="yt-video-metadata">
+                                <span>${escapeHtml(item.channel || "Fruit Senpai")}</span>
+                                <span>•</span>
+                                <span>${item.views || "12 mil"} visualizações</span>
+                                <span>•</span>
+                                <span>${item.timeAgo || "recentemente"}</span>
+                            </div>
+                        </div>
+                        <button class="yt-more-btn firestore-del-btn-card" data-id="${id}" title="Excluir do Firebase">
+                            <svg style="width:20px;height:20px;fill:#ff5555" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        </button>
+                    </div>
+                `;
+                dynamicFirebaseFeed.prepend(card);
+            });
+
+            // 4. AÇÃO DE EXCLUIR ITEM DO FIREBASE
+            document.querySelectorAll(".firestore-del-btn, .firestore-del-btn-card").forEach(btn => {
+                btn.addEventListener("click", async (e) => {
+                    const docId = btn.getAttribute("data-id");
+                    if (confirm("Deseja realmente excluir este item do Firebase?")) {
+                        try {
+                            await deleteDoc(doc(db, "frutas", docId));
+                            showToast("Item excluído com sucesso!");
+                        } catch (err) {
+                            console.error(err);
+                            showToast("Erro ao excluir do banco.");
+                        }
+                    }
+                });
+            });
+        });
+
+        // 5. INTERATIVIDADE DOS CHIPS DE FILTRO
+        document.querySelectorAll(".yt-chip").forEach(chip => {
+            chip.addEventListener("click", () => {
+                document.querySelectorAll(".yt-chip").forEach(c => c.classList.remove("active"));
+                chip.classList.add("active");
+                showToast(`Filtrado por: ${chip.textContent}`);
+            });
+        });
+
+        // 6. INTERATIVIDADE DA PESQUISA DE SATISFAÇÃO
+        closeSurvey.addEventListener("click", () => {
+            surveyBox.style.display = "none";
+        });
+
+        document.querySelectorAll(".yt-survey-option").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const rate = btn.getAttribute("data-rate");
+                showToast("Obrigado pelo seu feedback!");
+                setTimeout(() => {
+                    surveyBox.style.display = "none";
+                }, 500);
+            });
+        });
+
+        // 7. INTERATIVIDADE DOS ITENS DA BOTTOM BAR
+        document.querySelectorAll(".yt-nav-item:not(#navCreate)").forEach(item => {
+            item.addEventListener("click", () => {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                item.classList.add("active");
+                const label = item.querySelector(".yt-nav-label")?.textContent;
+                if (label) showToast(`Aba: ${label}`);
+            });
+        });
+
+        // Função de escape para prevenir XSS
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+  </html>
