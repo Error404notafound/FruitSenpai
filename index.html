@@ -1588,13 +1588,18 @@
             display: none;
             flex-direction: column;
             width: 100%;
-            min-height: 100vh;
+            max-width: 480px;
+            height: 100vh;
+            height: 100dvh;
             background-color: var(--yt-bg-main);
-            position: absolute;
+            position: fixed;
             top: 0;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 2500;
-            padding-bottom: 30px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 40px;
         }
 
         .upload-view-screen.active {
@@ -3471,12 +3476,12 @@
             return raw.charAt(0).toUpperCase() + raw.slice(1);
         }
 
-        // Atualiza a interface entre Modo Logado e Deslogado
         function updateLoginState(isLoggedIn, userEmail) {
             currentUserEmail = userEmail || "";
 
             if (isLoggedIn && currentUserEmail) {
                 // Modo Logado
+                btnBell.style.display = (feedContainer.style.display !== "none") ? "flex" : "none";
                 youLoggedOut.style.display = "none";
                 youLoggedIn.style.display = "flex";
                 navCreate.style.display = "flex";
@@ -3513,7 +3518,8 @@
                     `;
                 }
             } else {
-                // Modo Deslogado (Captura "A"): Oculta dados e barra com 3 botões
+                // Modo Deslogado (Captura "A"): Oculta dados, botões e o sino
+                btnBell.style.display = "none";
                 youLoggedOut.style.display = "flex";
                 youLoggedIn.style.display = "none";
                 navCreate.style.display = "none";
@@ -3686,14 +3692,14 @@
             chipsBar.style.display = "none";
             document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
 
-            // Na tela Inicial (Home): Mostra logotipo, sino 9+ e lupa
+            // Na tela Inicial (Home): Mostra logotipo, lupa e o sino (apenas se logado)
             if (screen === "home") {
                 headerWrapper.style.display = "block";
-                btnBell.style.display = "flex";
+                btnBell.style.display = currentUserEmail ? "flex" : "none";
                 btnSettingsTop.style.display = "none";
                 feedContainer.style.display = "flex";
                 chipsBar.style.display = "flex";
-            } 
+            }
             // Na tela Você (A2): Esconde o sino e exibe apenas 1 lupa e 1 engrenagem (fiel à captura)
             else if (screen === viewYou) {
                 headerWrapper.style.display = "block";
