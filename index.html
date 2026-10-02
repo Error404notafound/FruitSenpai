@@ -2762,97 +2762,6 @@
             <!-- Botão Enviar com espaçamento aprimorado -->
             <button class="upload-submit-btn" id="btnSubmitVideoUpload">Publicar Vídeo / Episódio</button>
         </section>
-            <!-- Pílulas de Áudio: Legendado ou Dublado -->
-            <div style="display:flex; gap:10px; padding:0 16px 14px 16px;">
-                <button type="button" id="btnAudioLegendado" class="upload-expand-btn" style="flex:1; margin:0; background:#3ea6ff; color:#0f0f0f;">Legendado</button>
-                <button type="button" id="btnAudioDublado" class="upload-expand-btn" style="flex:1; margin:0; background:#212121; color:#aaa;">Dublado</button>
-            </div>
-
-            <!-- Linha: Classificação Indicativa (Recurso AnimesOracle) -->
-            <button class="upload-opt-row" id="rowUploadRating">
-                <div class="upload-opt-left">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-                    <div class="upload-opt-texts">
-                        <span class="upload-opt-label">Classificação Indicativa</span>
-                        <span class="upload-opt-value" id="valUploadRating">Livre (L)</span>
-                    </div>
-                </div>
-                <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-            </button>
-
-            <!-- Visibilidade (G) -->
-            <button class="upload-opt-row" id="rowUploadVisibility">
-                <div class="upload-opt-left">
-                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-                    <div class="upload-opt-texts">
-                        <span class="upload-opt-label">Visibilidade</span>
-                        <span class="upload-opt-value" id="valUploadVisibility">Público</span>
-                    </div>
-                </div>
-                <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-            </button>
-
-            <!-- Bloco Oculto que Expande com "Mostrar mais" (A1) -->
-            <div id="uploadExpandedSection" style="display: none; flex-direction: column;">
-                <!-- Descrição / Sinopse -->
-                <div style="padding: 0 16px 14px 16px;">
-                    <textarea id="uploadDescription" class="upload-title-input" rows="3" placeholder="Adicionar descrição ou sinopse da obra..."></textarea>
-                </div>
-
-                <!-- Gêneros da Série -->
-                <div style="padding: 0 16px 14px 16px;">
-                    <input type="text" id="uploadGenresInput" class="upload-title-input" placeholder="Gêneros (Ex: Ação, Aventura, Isekai)">
-                </div>
-
-                <!-- Local -->
-                <button class="upload-opt-row" id="rowUploadLocation">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-value">Local</span>
-                        </div>
-                    </div>
-                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
-
-                <!-- Playlists (D) -->
-                <button class="upload-opt-row" id="rowUploadPlaylists">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-value">Adicionar às playlists</span>
-                        </div>
-                    </div>
-                    <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                </button>
-
-                <!-- Atributos (B / B1) -->
-                <button class="upload-opt-row" id="rowUploadAttributes">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-label">Atributos</span>
-                            <span class="upload-opt-value">Uso de IA, Tags</span>
-                        </div>
-                    </div>
-                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
-            </div>
-
-            <!-- Botão Retrátil Mostrar Mais / Menos -->
-            <button class="upload-expand-btn" id="btnToggleUploadExpand">
-                <span id="txtUploadExpand">Mostrar mais</span>
-                <svg id="iconUploadExpand" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
-            </button>
-
-            <!-- Aviso Legal COPPA -->
-            <p class="upload-coppa-text">
-                O cumprimento da Lei de Proteção da Privacidade On-line das Crianças (COPPA) e/ou outras legislações é um requisito legal, não importa a sua localização. É obrigatório informar se o canal tem conteúdo para crianças. <a href="#">O que é considerado conteúdo para crianças?</a>
-            </p>
-
-            <!-- Botão Enviar Oficial -->
-            <button class="upload-submit-btn" id="btnSubmitVideoUpload">Enviar</button>
-        </section>
 
         <!-- GAVETA BOTTOM SHEET: CLASSIFICAÇÃO INDICATIVA (L, 10, 12, 14, 16, 18) -->
         <div class="accounts-drawer" id="drawerUploadRating">
@@ -3537,11 +3446,11 @@
 
         // 3. ONSNAPSHOT EM TEMPO REAL: ATUALIZA TANTO O MODAL QUANTO O FEED DE VÍDEOS
         onSnapshot(frutasColecao, (snapshot) => {
-            fruitList.innerHTML = "";
+            if (fruitList) fruitList.innerHTML = "";
             dynamicFirebaseFeed.innerHTML = "";
 
             if (snapshot.empty) {
-                fruitList.innerHTML = `<li style="font-size:12px;color:#777;padding:4px 0;">Nenhum item salvo ainda.</li>`;
+                if (fruitList) fruitList.innerHTML = `<li style="font-size:12px;color:#777;padding:4px 0;">Nenhum item salvo ainda.</li>`;
                 return;
             }
 
@@ -3549,14 +3458,16 @@
                 const item = docSnap.data();
                 const id = docSnap.id;
 
-                // 3.1. Renderiza linha na lista do modal
-                const li = document.createElement("li");
-                li.className = "firestore-item-row";
-                li.innerHTML = `
-                    <span style="font-size:13px;font-weight:500;">${escapeHtml(item.name)}</span>
-                    <button class="firestore-del-btn" data-id="${id}">Excluir</button>
-                `;
-                fruitList.appendChild(li);
+                // 3.1. Renderiza linha na lista do modal (se existir)
+                if (fruitList) {
+                    const li = document.createElement("li");
+                    li.className = "firestore-item-row";
+                    li.innerHTML = `
+                        <span style="font-size:13px;font-weight:500;">${escapeHtml(item.name)}</span>
+                        <button class="firestore-del-btn" data-id="${id}">Excluir</button>
+                    `;
+                    fruitList.appendChild(li);
+                }
 
                 // 3.2. Renderiza card completo de vídeo com os recursos do AnimesOracle
                 const card = document.createElement("article");
@@ -3566,42 +3477,20 @@
                 const capaImg = item.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
                 const ratingBadge = item.rating ? `<span class="rating-badge-chip rating-${item.rating}" style="margin-left:4px;">${item.rating}</span>` : "";
 
-                card.innerHTML = `
-                    // Renderiza o badge de duração apenas se existir
-                    const durationBadge = item.duration 
-                        ? `<div class="yt-duration-badge">${escapeHtml(item.duration)}</div>` 
-                        : '';
-                    const adultBadge = item.isAdult 
-                        ? `<span style="background:#cc0000;color:#fff;font-size:10px;font-weight:700;padding:2px 5px;border-radius:3px;margin-left:4px;">+18</span>` 
-                        : '';
+                // Badges definidos de forma segura fora do template string
+                const durationBadge = item.duration 
+                    ? `<div class="yt-duration-badge">${escapeHtml(item.duration)}</div>` 
+                    : '';
+                const adultBadge = item.isAdult 
+                    ? `<span style="background:#cc0000;color:#fff;font-size:10px;font-weight:700;padding:2px 5px;border-radius:3px;margin-left:4px;">+18</span>` 
+                    : '';
 
-                    card.innerHTML = `
-                        <div class="yt-thumbnail-wrapper" style="cursor:pointer;" onclick="window.open('${item.embedUrl || '#'}', '_blank')">
-                            <img src="${capaImg}" alt="${escapeHtml(item.name)}">
-                            <span class="feed-audio-badge ${isLegendado ? 'legendado' : ''}">${audioLabel}</span>
-                            ${durationBadge}
-                        </div>
-                        <div class="yt-video-info-row">
-                            <div class="yt-channel-avatar">
-                                <div style="background:#cc0000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-                                    <svg style="width:18px;height:18px;fill:#ffffff" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                                </div>
-                            </div>
-                            <div class="yt-video-details">
-                                <h2 class="yt-video-title">${escapeHtml(item.name)} ${ratingBadge} ${adultBadge}</h2>
-                                <div class="yt-video-metadata">
-                                    <span>${escapeHtml(item.serieName ? item.serieName + ' • ' + item.channel : item.channel)}</span>
-                                    <span>•</span>
-                                    <span>${escapeHtml(item.contentType || 'Anime')}</span>
-                                    <span>•</span>
-                                    <span>${item.views || "1 visualização"}</span>
-                                </div>
-                            </div>
-                            <button class="yt-more-btn firestore-del-btn-card" data-id="${id}" title="Excluir do Firebase">
-                                <svg style="width:20px;height:20px;fill:#ff5555" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-                            </button>
-                        </div>
-                    `;
+                card.innerHTML = `
+                    <div class="yt-thumbnail-wrapper" style="cursor:pointer;" onclick="window.open('${item.embedUrl || '#'}', '_blank')">
+                        <img src="${capaImg}" alt="${escapeHtml(item.name)}">
+                        <span class="feed-audio-badge ${isLegendado ? 'legendado' : ''}">${audioLabel}</span>
+                        ${durationBadge}
+                    </div>
                     <div class="yt-video-info-row">
                         <div class="yt-channel-avatar">
                             <div style="background:#cc0000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
@@ -3609,9 +3498,11 @@
                             </div>
                         </div>
                         <div class="yt-video-details">
-                            <h2 class="yt-video-title">${escapeHtml(item.name)} ${ratingBadge}</h2>
+                            <h2 class="yt-video-title">${escapeHtml(item.name)} ${ratingBadge} ${adultBadge}</h2>
                             <div class="yt-video-metadata">
                                 <span>${escapeHtml(item.serieName ? item.serieName + ' • ' + item.channel : item.channel)}</span>
+                                <span>•</span>
+                                <span>${escapeHtml(item.contentType || 'Anime')}</span>
                                 <span>•</span>
                                 <span>${item.views || "1 visualização"}</span>
                                 <span>•</span>
@@ -4002,8 +3893,11 @@
             btn.addEventListener("click", () => openScreen(viewYou));
         });
 
-        // B: Abre B1 Configurações
-        document.getElementById("btnOpenSettings").addEventListener("click", () => openScreen(viewSettings));
+        // B: Abre B1 Configurações (protegido contra elemento nulo)
+        const btnOpenSettings = document.getElementById("btnOpenSettings");
+        if (btnOpenSettings) {
+            btnOpenSettings.addEventListener("click", () => openScreen(viewSettings));
+        }
 
         // C: Abre C1 Criar Canal
         document.getElementById("btnOpenCreateChannel").addEventListener("click", () => openScreen(viewCreateChannel));
