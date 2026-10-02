@@ -1588,7 +1588,7 @@
             display: none;
             flex-direction: column;
             width: 100%;
-            max-width: 480px; /* Mantém alinhado ao container central */
+            max-width: 480px;
             height: 100%;
             background-color: var(--yt-bg-main);
             position: fixed;
@@ -1596,9 +1596,50 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 2500;
-            overflow-y: auto; /* Rolagem independente sem vazar o fundo */
+            overflow-y: auto;
             -webkit-overflow-scrolling: touch;
-            padding-bottom: 50px;
+            padding-bottom: 90px; /* Descomprime o final da tela */
+        }
+
+        /* Abas no estilo AnimesOracle (Nova Série vs Episódio) */
+        .upload-mode-selector {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px 6px 16px;
+        }
+
+        .upload-mode-tab {
+            flex: 1;
+            padding: 10px 8px;
+            background-color: #1f1f1f;
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .upload-mode-tab.active {
+            background-color: #7928ca;
+            color: #ffffff;
+            border-color: #a855f7;
+        }
+
+        /* Seletor Dropdown nativo estilizado */
+        .upload-select-input {
+            width: 100%;
+            background-color: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         .upload-view-screen.active {
@@ -1774,15 +1815,15 @@
         .upload-expand-btn {
             background-color: #212121;
             color: #ffffff;
-            border: none;
-            border-radius: 20px;
-            height: 38px;
-            margin: 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            height: 44px;
+            margin: 20px 16px 10px 16px; /* Mais respiro */
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            font-size: 13.5px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
         }
@@ -1807,18 +1848,19 @@
 
         /* Botão Enviar Oficial do YouTube */
         .upload-submit-btn {
-            margin: 10px 16px 20px 16px;
-            height: 42px;
+            margin: 16px 16px 36px 16px; /* Respiro inferior ampliado */
+            height: 48px;
             background-color: #ffffff;
             color: #0f0f0f;
             border: none;
-            border-radius: 21px;
-            font-size: 14px;
+            border-radius: 24px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
             transition: filter 0.15s ease;
         }
 
@@ -2592,7 +2634,13 @@
                 <button class="yt-icon-btn" id="btnBackFromUpload">
                     <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                 </button>
-                <span class="upload-top-title">Adicionar detalhes</span>
+                <span class="upload-top-title">Publicar Conteúdo</span>
+            </div>
+
+            <!-- Alternador estilo AnimesOracle: Nova Série vs Episódio Existente -->
+            <div class="upload-mode-selector">
+                <button type="button" class="upload-mode-tab active" id="tabNewSerie">Postar Nova Série</button>
+                <button type="button" class="upload-mode-tab" id="tabAddEpisode">Adicionar Episódio</button>
             </div>
 
             <!-- Capa do Vídeo com Preview e Botão Lápis ✏ -->
@@ -2612,13 +2660,108 @@
                 </div>
             </div>
 
-            <!-- Inputs Principais: Título, Link Embed e Nome da Série -->
-            <div class="upload-title-box" style="display:flex; flex-direction:column; gap:10px;">
-                <input type="text" id="uploadVideoTitle" class="upload-title-input" placeholder="Crie um título para o episódio (Ex: Episódio 1 - O Início)">
-                <input type="url" id="uploadEmbedUrl" class="upload-title-input" placeholder="Link do vídeo (Embed YouTube, Drive, StreamWish...)">
+            <!-- Campos Básicos do Episódio -->
+            <div class="upload-title-box" style="display:flex; flex-direction:column; gap:12px;">
                 <input type="text" id="uploadSerieName" class="upload-title-input" placeholder="Nome da Série / Anime (Ex: Solo Leveling)">
+                <input type="text" id="uploadVideoTitle" class="upload-title-input" placeholder="Nome do Episódio (Ex: Episódio 1 - O Início)">
+                <input type="url" id="uploadEmbedUrl" class="upload-title-input" placeholder="Link do vídeo (Embed YouTube, Drive, StreamWish...)">
+                
+                <!-- NOVO CAMPO: Duração em minutos (Opcional) -->
+                <input type="text" id="uploadVideoDuration" class="upload-title-input" placeholder="Duração do vídeo (Opcional - Ex: 24:15 ou 15 min)">
             </div>
 
+            <!-- Pílulas de Áudio: Legendado ou Dublado -->
+            <div style="display:flex; gap:10px; padding:6px 16px 14px 16px;">
+                <button type="button" id="btnAudioLegendado" class="upload-expand-btn" style="flex:1; margin:0; background:#3ea6ff; color:#0f0f0f;">Legendado</button>
+                <button type="button" id="btnAudioDublado" class="upload-expand-btn" style="flex:1; margin:0; background:#212121; color:#aaa;">Dublado</button>
+            </div>
+
+            <!-- Linha: Classificação Indicativa -->
+            <button class="upload-opt-row" id="rowUploadRating">
+                <div class="upload-opt-left">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <div class="upload-opt-texts">
+                        <span class="upload-opt-label">Classificação Indicativa</span>
+                        <span class="upload-opt-value" id="valUploadRating">Livre (L)</span>
+                    </div>
+                </div>
+                <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+
+            <!-- Linha: Visibilidade -->
+            <button class="upload-opt-row" id="rowUploadVisibility">
+                <div class="upload-opt-left">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    <div class="upload-opt-texts">
+                        <span class="upload-opt-label">Visibilidade</span>
+                        <span class="upload-opt-value" id="valUploadVisibility">Público</span>
+                    </div>
+                </div>
+                <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+
+            <!-- Bloco Expansível: Opções do AnimesOracle -->
+            <div id="uploadExpandedSection" style="display: none; flex-direction: column; gap: 14px; padding-top: 10px;">
+                <!-- Tipo de Conteúdo (Anime, Filme, Ao Vivo, Cartoon) -->
+                <div style="padding: 0 16px;">
+                    <label style="font-size: 12px; color: var(--yt-text-secondary); display: block; margin-bottom: 6px;">Tipo de Conteúdo:</label>
+                    <select id="uploadContentType" class="upload-select-input">
+                        <option value="Anime">Anime</option>
+                        <option value="Filme">Filme</option>
+                        <option value="Ao Vivo">Ao Vivo</option>
+                        <option value="Cartoon">Cartoon</option>
+                    </select>
+                </div>
+
+                <!-- Checkbox Conteúdo Adulto (+18 - Ecchi/Hentai) -->
+                <div style="padding: 0 16px; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="checkAdultContent" style="width: 18px; height: 18px; accent-color: #ff334b; cursor: pointer;">
+                    <label for="checkAdultContent" style="font-size: 13.5px; font-weight: 500; cursor: pointer;">É Conteúdo Adulto (+18 - Ecchi/Hentai)?</label>
+                </div>
+
+                <!-- Próximo Episódio: Data de Lançamento (Opcional) -->
+                <div style="padding: 0 16px;">
+                    <label style="font-size: 12px; color: var(--yt-text-secondary); display: block; margin-bottom: 6px;">Próximo Episódio (Data de Lançamento - Opcional):</label>
+                    <input type="date" id="uploadNextEpDate" class="upload-title-input" style="border: 1px solid rgba(255,255,255,0.15); padding: 10px; border-radius: 8px;">
+                </div>
+
+                <!-- Descrição / Sinopse -->
+                <div style="padding: 0 16px;">
+                    <textarea id="uploadDescription" class="upload-title-input" rows="3" placeholder="Biografia / Sinopse da série..."></textarea>
+                </div>
+
+                <!-- Gêneros -->
+                <div style="padding: 0 16px;">
+                    <input type="text" id="uploadGenresInput" class="upload-title-input" placeholder="Gêneros (Ex: Ação, Aventura, Fantasia)">
+                </div>
+
+                <!-- Atributos: IA e Tags -->
+                <button class="upload-opt-row" id="rowUploadAttributes">
+                    <div class="upload-opt-left">
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                        <div class="upload-opt-texts">
+                            <span class="upload-opt-label">Atributos</span>
+                            <span class="upload-opt-value">Uso de IA, Tags</span>
+                        </div>
+                    </div>
+                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                </button>
+            </div>
+
+            <!-- Botão Mostrar Mais / Menos -->
+            <button class="upload-expand-btn" id="btnToggleUploadExpand">
+                <span id="txtUploadExpand">Mostrar mais</span>
+                <svg id="iconUploadExpand" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </button>
+
+            <!-- Aviso Legal COPPA -->
+            <p class="upload-coppa-text">
+                O cumprimento da Lei de Proteção da Privacidade On-line das Crianças (COPPA) e/ou outras legislações é um requisito legal, não importa a sua localização. É obrigatório informar se o canal tem conteúdo para crianças. <a href="#">O que é considerado conteúdo para crianças?</a>
+            </p>
+
+            <!-- Botão Enviar com espaçamento aprimorado -->
+            <button class="upload-submit-btn" id="btnSubmitVideoUpload">Publicar Vídeo / Episódio</button>
+        </section>
             <!-- Pílulas de Áudio: Legendado ou Dublado -->
             <div style="display:flex; gap:10px; padding:0 16px 14px 16px;">
                 <button type="button" id="btnAudioLegendado" class="upload-expand-btn" style="flex:1; margin:0; background:#3ea6ff; color:#0f0f0f;">Legendado</button>
@@ -3159,6 +3302,29 @@
         const iconUploadExpand = document.getElementById("iconUploadExpand");
         const btnSubmitVideoUpload = document.getElementById("btnSubmitVideoUpload");
 
+        // ✨ NOVOS CAMPOS ADICIONADOS (Duração + Funções AnimesOracle)
+        const uploadVideoDuration = document.getElementById("uploadVideoDuration");
+        const uploadContentType = document.getElementById("uploadContentType");
+        const checkAdultContent = document.getElementById("checkAdultContent");
+        const uploadNextEpDate = document.getElementById("uploadNextEpDate");
+        const tabNewSerie = document.getElementById("tabNewSerie");
+        const tabAddEpisode = document.getElementById("tabAddEpisode");
+
+        // Alternância inteligente entre "Postar Nova Série" e "Adicionar Episódio Existente"
+        tabNewSerie.addEventListener("click", () => {
+            tabNewSerie.classList.add("active");
+            tabAddEpisode.classList.remove("active");
+            uploadSerieName.placeholder = "Nome da Nova Série / Anime (Ex: Solo Leveling)";
+            uploadVideoTitle.placeholder = "Nome do Primeiro Episódio (Ex: Episódio 1 - O Início)";
+        });
+
+        tabAddEpisode.addEventListener("click", () => {
+            tabAddEpisode.classList.add("active");
+            tabNewSerie.classList.remove("active");
+            uploadSerieName.placeholder = "Buscar / Digite o Nome da Série Existente";
+            uploadVideoTitle.placeholder = "Nome do Episódio (Ex: Episódio 2 - O Grande Desafio)";
+        });
+
         // Subtelas do fluxo de upload
         const viewUploadVisibilityScreen = document.getElementById("viewUploadVisibilityScreen");
         const viewUploadAttributesScreen = document.getElementById("viewUploadAttributesScreen");
@@ -3336,6 +3502,10 @@
                     name: title,
                     embedUrl: embed,
                     serieName: serie,
+                    duration: uploadVideoDuration.value.trim() || null, // Se não preencher, fica sem!
+                    contentType: uploadContentType.value || "Anime",
+                    isAdult: checkAdultContent.checked,
+                    nextEpisodeDate: uploadNextEpDate.value || null,
                     coverUrl: currentUploadSettings.thumbUrl,
                     audioType: currentUploadSettings.audioType,
                     rating: currentUploadSettings.rating,
@@ -3397,11 +3567,41 @@
                 const ratingBadge = item.rating ? `<span class="rating-badge-chip rating-${item.rating}" style="margin-left:4px;">${item.rating}</span>` : "";
 
                 card.innerHTML = `
-                    <div class="yt-thumbnail-wrapper" style="cursor:pointer;" onclick="window.open('${item.embedUrl || '#'}', '_blank')">
-                        <img src="${capaImg}" alt="${escapeHtml(item.name)}">
-                        <span class="feed-audio-badge ${isLegendado ? 'legendado' : ''}">${audioLabel}</span>
-                        <div class="yt-duration-badge">Vídeo</div>
-                    </div>
+                    // Renderiza o badge de duração apenas se existir
+                    const durationBadge = item.duration 
+                        ? `<div class="yt-duration-badge">${escapeHtml(item.duration)}</div>` 
+                        : '';
+                    const adultBadge = item.isAdult 
+                        ? `<span style="background:#cc0000;color:#fff;font-size:10px;font-weight:700;padding:2px 5px;border-radius:3px;margin-left:4px;">+18</span>` 
+                        : '';
+
+                    card.innerHTML = `
+                        <div class="yt-thumbnail-wrapper" style="cursor:pointer;" onclick="window.open('${item.embedUrl || '#'}', '_blank')">
+                            <img src="${capaImg}" alt="${escapeHtml(item.name)}">
+                            <span class="feed-audio-badge ${isLegendado ? 'legendado' : ''}">${audioLabel}</span>
+                            ${durationBadge}
+                        </div>
+                        <div class="yt-video-info-row">
+                            <div class="yt-channel-avatar">
+                                <div style="background:#cc0000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                                    <svg style="width:18px;height:18px;fill:#ffffff" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                                </div>
+                            </div>
+                            <div class="yt-video-details">
+                                <h2 class="yt-video-title">${escapeHtml(item.name)} ${ratingBadge} ${adultBadge}</h2>
+                                <div class="yt-video-metadata">
+                                    <span>${escapeHtml(item.serieName ? item.serieName + ' • ' + item.channel : item.channel)}</span>
+                                    <span>•</span>
+                                    <span>${escapeHtml(item.contentType || 'Anime')}</span>
+                                    <span>•</span>
+                                    <span>${item.views || "1 visualização"}</span>
+                                </div>
+                            </div>
+                            <button class="yt-more-btn firestore-del-btn-card" data-id="${id}" title="Excluir do Firebase">
+                                <svg style="width:20px;height:20px;fill:#ff5555" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                            </button>
+                        </div>
+                    `;
                     <div class="yt-video-info-row">
                         <div class="yt-channel-avatar">
                             <div style="background:#cc0000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
