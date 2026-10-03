@@ -1632,6 +1632,117 @@
             overflow: hidden;
         }
 
+        /* Container dos 2 botões sobrepostos na capa (Criar Série / Postar Episódio) */
+        .upload-tabs-container {
+            display: flex;
+            gap: 10px;
+            padding: 10px 16px 14px 16px;
+            background-color: var(--yt-bg-main);
+        }
+
+        .upload-tab-btn {
+            flex: 1;
+            height: 44px;
+            border-radius: 22px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background-color: rgba(39, 39, 39, 0.85);
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .upload-tab-btn span {
+            font-size: 13.5px;
+            font-weight: 600;
+            line-height: 1.1;
+        }
+
+        .upload-tab-btn small {
+            font-size: 9.5px;
+            color: var(--yt-text-secondary);
+            margin-top: 1px;
+        }
+
+        .upload-tab-btn.active {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+            border-color: #3ea6ff;
+        }
+
+        .upload-tab-btn.active small {
+            color: rgba(15, 15, 15, 0.8);
+        }
+
+        /* Badge azul ao lado do nome do canal quando em 'Postar episódio' */
+        .channel-mode-badge {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 14px;
+            display: none;
+            margin-left: auto;
+        }
+
+        /* Botões seletores Legendado / Dublado (Fiel à captura 3) */
+        .audio-type-row {
+            display: flex;
+            gap: 10px;
+            padding: 4px 16px 14px 16px;
+        }
+
+        .audio-type-pill {
+            flex: 1;
+            height: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background-color: #212121;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .audio-type-pill.active {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+            border-color: #3ea6ff;
+        }
+
+        /* Lista de sugestões de busca de séries */
+        .series-autocomplete-list {
+            background-color: #212121;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            margin: -6px 16px 12px 16px;
+            max-height: 140px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .series-autocomplete-item {
+            padding: 10px 14px;
+            font-size: 13.5px;
+            color: #ffffff;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .series-autocomplete-item:hover, .series-autocomplete-item:active {
+            background-color: #333333;
+            color: #3ea6ff;
+        }
+
         .upload-thumb-area img {
             width: 100%;
             height: 100%;
@@ -2585,7 +2696,7 @@
         </nav>
 
         <!-- ==========================================================================
-             TELA PRINCIPAL DE POSTAGEM: ADICIONAR DETALHES (CAPTURA A & A1)
+             TELA PRINCIPAL DE POSTAGEM: ADICIONAR DETALHES (COM ABAS DE SÉRIE & EPISÓDIO)
              ========================================================================== -->
         <section class="upload-view-screen" id="viewUploadDetails">
             <!-- Topo com botão voltar -->
@@ -2604,6 +2715,17 @@
                 </button>
             </div>
 
+            <!-- OS 2 BOTÕES DE MODO (CRIAR SÉRIE / POSTAR EPISÓDIO) FIÉIS ÀS CAPTURAS 1 E 2 -->
+            <div class="upload-tabs-container">
+                <button class="upload-tab-btn active" id="tabCreateSeries">
+                    <span>Criar Série</span>
+                </button>
+                <button class="upload-tab-btn" id="tabPostEpisode">
+                    <span>Postar episódio</span>
+                    <small>a série existente</small>
+                </button>
+            </div>
+
             <!-- Canal Ativo do Usuário -->
             <div class="upload-channel-row">
                 <div class="upload-channel-avatar" id="uploadChannelAvatar">E</div>
@@ -2611,12 +2733,65 @@
                     <div class="upload-channel-name" id="uploadChannelName">Error404notafound</div>
                     <div class="upload-channel-handle" id="uploadChannelHandle">@error404notafound</div>
                 </div>
+                <div class="channel-mode-badge" id="badgeEpisodeMode">Postar episódio</div>
             </div>
 
-            <!-- Título do Vídeo -->
-            <div class="upload-title-box">
-                <input type="text" id="uploadVideoTitle" class="upload-title-input" placeholder="Crie um título (insira uma @ para mencionar um canal)">
+            <!-- ==========================================================
+                 MODO 1: CAMPOS DE CRIAR SÉRIE
+                 ========================================================== -->
+            <div id="modeCreateSeriesContainer" style="display: flex; flex-direction: column;">
+                <div class="upload-title-box">
+                    <input type="text" id="uploadSeriesName" class="upload-title-input" placeholder="Crie um título (insira uma @ para mencionar um canal)">
+                </div>
+
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadSeriesSynopsis" class="upload-title-input" placeholder="Biografia/Sinopse da série...">
+                </div>
+
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadSeriesGenres" class="upload-title-input" placeholder="Gêneros (ex: Ação, Aventura, Fantasia)">
+                </div>
             </div>
+
+            <!-- ==========================================================
+                 MODO 2: CAMPOS DE POSTAR EPISÓDIO (FIEL À CAPTURA 3)
+                 ========================================================== -->
+            <div id="modePostEpisodeContainer" style="display: none; flex-direction: column;">
+                <div class="upload-title-box">
+                    <input type="text" id="uploadSearchSeries" class="upload-title-input" placeholder="Buscar o nome da série (digite o nome da série)">
+                </div>
+                <div class="series-autocomplete-list" id="seriesSuggestionsList"></div>
+
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeTitle" class="upload-title-input" placeholder="Digite o nome do episódio (ex: episódio 2 - o grande...)">
+                </div>
+
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeCover" class="upload-title-input" placeholder="Capa do episódio (link URL da imagem)">
+                </div>
+
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeVideoUrl" class="upload-title-input" placeholder="Link do Vídeo (Embed YouTube/Drive/Outros)">
+                </div>
+
+                <!-- Botões Legendado / Dublado (Fiel à captura 3) -->
+                <div class="audio-type-row">
+                    <button class="audio-type-pill active" id="btnAudioLegendado" type="button">Legendado</button>
+                    <button class="audio-type-pill" id="btnAudioDublado" type="button">Dublado</button>
+                </div>
+            </div>
+
+            <!-- Classificação Indicativa -->
+            <button class="upload-opt-row" id="rowUploadRating">
+                <div class="upload-opt-left">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <div class="upload-opt-texts">
+                        <span class="upload-opt-label">Classificação Indicativa</span>
+                        <span class="upload-opt-value" id="valUploadRating">Livre (L)</span>
+                    </div>
+                </div>
+                <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
 
             <!-- Visibilidade (G) -->
             <button class="upload-opt-row" id="rowUploadVisibility">
@@ -2655,62 +2830,17 @@
                     <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
                 </button>
 
-                <!-- Local -->
-                <button class="upload-opt-row" id="rowUploadLocation">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-value">Local</span>
-                        </div>
-                    </div>
-                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
+                <!-- Data de Lançamento (Próximo Episódio) -->
+                <div class="upload-title-box" style="padding-top: 10px;">
+                    <label style="font-size: 12px; color: var(--yt-text-secondary); display: block; margin-bottom: 4px;">Data do próximo episódio (opcional):</label>
+                    <input type="date" id="uploadNextEpDate" class="upload-title-input" style="color-scheme: dark;">
+                </div>
 
-                <!-- Playlists (D) -->
-                <button class="upload-opt-row" id="rowUploadPlaylists">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-value">Adicionar às playlists</span>
-                        </div>
-                    </div>
-                    <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                </button>
-
-                <!-- Promoção paga e marcas (i) -->
-                <button class="upload-opt-row" id="rowUploadPaidPromo">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-label">Promoção paga e marcas</span>
-                        </div>
-                    </div>
-                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
-
-                <!-- Comunidade (C / C1) -->
-                <button class="upload-opt-row" id="rowUploadCommunity">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-label">Comunidade</span>
-                            <span class="upload-opt-value">Colaborações, Comentários, Remix</span>
-                        </div>
-                    </div>
-                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
-
-                <!-- Atributos (B / B1) -->
-                <button class="upload-opt-row" id="rowUploadAttributes">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-label">Atributos</span>
-                            <span class="upload-opt-value">Uso de IA, Tags</span>
-                        </div>
-                    </div>
-                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
+                <!-- Checkbox +18 -->
+                <div style="padding: 10px 16px; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" id="uploadIsAdult" style="width: 18px; height: 18px; accent-color: #3ea6ff; cursor: pointer;">
+                    <label for="uploadIsAdult" style="font-size: 13.5px; color: #ffffff; cursor: pointer;">É Conteúdo Adulto (+18 - Ecchi/Hentai)?</label>
+                </div>
             </div>
 
             <!-- Botão Retrátil Mostrar Mais / Menos -->
@@ -3122,7 +3252,7 @@
         }
 
         // ==========================================================================
-        // FLUXO COMPLETO DE POSTAGEM DO YOUTUBE (TELA A, SUBTELAS B, C, D, F, G, H)
+        // FLUXO INTEGRADO: CRIAR SÉRIE E POSTAR EPISÓDIO NO MESMO LUGAR
         // ==========================================================================
         const viewUploadDetails = document.getElementById("viewUploadDetails");
         const btnBackFromUpload = document.getElementById("btnBackFromUpload");
@@ -3131,56 +3261,99 @@
         const uploadChannelAvatar = document.getElementById("uploadChannelAvatar");
         const uploadChannelName = document.getElementById("uploadChannelName");
         const uploadChannelHandle = document.getElementById("uploadChannelHandle");
-        const uploadVideoTitle = document.getElementById("uploadVideoTitle");
         const uploadExpandedSection = document.getElementById("uploadExpandedSection");
         const btnToggleUploadExpand = document.getElementById("btnToggleUploadExpand");
         const txtUploadExpand = document.getElementById("txtUploadExpand");
         const iconUploadExpand = document.getElementById("iconUploadExpand");
         const btnSubmitVideoUpload = document.getElementById("btnSubmitVideoUpload");
 
-        // Subtelas do fluxo de upload
-        const viewUploadVisibilityScreen = document.getElementById("viewUploadVisibilityScreen");
-        const viewUploadAudienceScreen = document.getElementById("viewUploadAudienceScreen");
-        const viewUploadAttributesScreen = document.getElementById("viewUploadAttributesScreen");
-        const viewUploadIaScreen = document.getElementById("viewUploadIaScreen");
-        const viewUploadCommunityScreen = document.getElementById("viewUploadCommunityScreen");
-        const viewUploadRemixScreen = document.getElementById("viewUploadRemixScreen");
-        const viewUploadCommentsScreen = document.getElementById("viewUploadCommentsScreen");
-        const viewUploadPaidPromoScreen = document.getElementById("viewUploadPaidPromoScreen");
-        const drawerUploadPlaylists = document.getElementById("drawerUploadPlaylists");
-        const btnCloseUploadPlaylists = document.getElementById("btnCloseUploadPlaylists");
+        // Elementos dos 2 Botões Superiores
+        const tabCreateSeries = document.getElementById("tabCreateSeries");
+        const tabPostEpisode = document.getElementById("tabPostEpisode");
+        const modeCreateSeriesContainer = document.getElementById("modeCreateSeriesContainer");
+        const modePostEpisodeContainer = document.getElementById("modePostEpisodeContainer");
+        const badgeEpisodeMode = document.getElementById("badgeEpisodeMode");
 
-        // Valores das configurações de postagem
+        // Campos do Modo 1: Criar Série
+        const uploadSeriesName = document.getElementById("uploadSeriesName");
+        const uploadSeriesSynopsis = document.getElementById("uploadSeriesSynopsis");
+        const uploadSeriesGenres = document.getElementById("uploadSeriesGenres");
+
+        // Campos do Modo 2: Postar Episódio
+        const uploadSearchSeries = document.getElementById("uploadSearchSeries");
+        const seriesSuggestionsList = document.getElementById("seriesSuggestionsList");
+        const uploadEpisodeTitle = document.getElementById("uploadEpisodeTitle");
+        const uploadEpisodeCover = document.getElementById("uploadEpisodeCover");
+        const uploadEpisodeVideoUrl = document.getElementById("uploadEpisodeVideoUrl");
+        const btnAudioLegendado = document.getElementById("btnAudioLegendado");
+        const btnAudioDublado = document.getElementById("btnAudioDublado");
+
+        // Configurações globais
+        let currentUploadMode = "series"; // "series" ou "episode"
+        let currentAudioType = "Legendado";
+        let selectedSeriesId = null;
+        let availableSeriesList = [];
+
         let currentUploadSettings = {
             visibility: "Público",
             audience: "Não é conteúdo para crianças",
-            iaUsage: "Não",
-            remix: "Permitir remixagem de áudio e vídeo",
-            comments: "Ativados",
-            paidPromo: "Não",
-            tags: ["macaco", "vaca"],
+            rating: "Livre (L)",
             thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80"
         };
 
-        // 1. O botão (+) da barra inferior abre a tela oficial de upload
-        navCreate.addEventListener("click", () => {
-            // Sincroniza dados com o usuário logado
-            if (currentUserEmail) {
-                const name = getNameFromEmail(currentUserEmail);
-                uploadChannelName.textContent = name;
-                uploadChannelHandle.textContent = "@" + name.toLowerCase().replace(/\s+/g, '');
-                uploadChannelAvatar.textContent = name.charAt(0).toUpperCase();
-            }
-            viewUploadDetails.classList.add("active");
-            uploadVideoTitle.focus();
+        // Alternância entre as abas 'Criar Série' e 'Postar Episódio'
+        tabCreateSeries.addEventListener("click", () => {
+            currentUploadMode = "series";
+            tabCreateSeries.classList.add("active");
+            tabPostEpisode.classList.remove("active");
+            modeCreateSeriesContainer.style.display = "flex";
+            modePostEpisodeContainer.style.display = "none";
+            badgeEpisodeMode.style.display = "none";
+            uploadSeriesName.focus();
         });
 
-        // Voltar da tela principal de upload
+        tabPostEpisode.addEventListener("click", () => {
+            currentUploadMode = "episode";
+            tabPostEpisode.classList.add("active");
+            tabCreateSeries.classList.remove("active");
+            modeCreateSeriesContainer.style.display = "none";
+            modePostEpisodeContainer.style.display = "flex";
+            badgeEpisodeMode.style.display = "block";
+            loadSeriesFromFirestore();
+            uploadSearchSeries.focus();
+        });
+
+        // Alternância Legendado / Dublado
+        btnAudioLegendado.addEventListener("click", () => {
+            currentAudioType = "Legendado";
+            btnAudioLegendado.classList.add("active");
+            btnAudioDublado.classList.remove("active");
+        });
+
+        btnAudioDublado.addEventListener("click", () => {
+            currentAudioType = "Dublado";
+            btnAudioDublado.classList.add("active");
+            btnAudioLegendado.classList.remove("active");
+        });
+
+        // 1. O botão (+) da barra inferior abre a tela oficial de postagem
+        navCreate.addEventListener("click", () => {
+            if (!currentUserEmail) {
+                openAuthModal();
+                return;
+            }
+            const name = getNameFromEmail(currentUserEmail);
+            uploadChannelName.textContent = name;
+            uploadChannelHandle.textContent = "@" + name.toLowerCase().replace(/\s+/g, '');
+            uploadChannelAvatar.textContent = name.charAt(0).toUpperCase();
+            viewUploadDetails.classList.add("active");
+        });
+
         btnBackFromUpload.addEventListener("click", () => {
             viewUploadDetails.classList.remove("active");
         });
 
-        // Alternar "Mostrar mais" / "Mostrar menos" (A1)
+        // Alternar "Mostrar mais" / "Mostrar menos"
         btnToggleUploadExpand.addEventListener("click", () => {
             const isExpanded = uploadExpandedSection.style.display === "flex";
             uploadExpandedSection.style.display = isExpanded ? "none" : "flex";
@@ -3197,18 +3370,12 @@
             }
         });
 
-        // Navegação para as Subtelas
+        // Subtelas existentes
+        const viewUploadVisibilityScreen = document.getElementById("viewUploadVisibilityScreen");
+        const viewUploadAudienceScreen = document.getElementById("viewUploadAudienceScreen");
         document.getElementById("rowUploadVisibility").addEventListener("click", () => viewUploadVisibilityScreen.classList.add("active"));
         document.getElementById("rowUploadAudience").addEventListener("click", () => viewUploadAudienceScreen.classList.add("active"));
-        document.getElementById("rowUploadAttributes").addEventListener("click", () => viewUploadAttributesScreen.classList.add("active"));
-        document.getElementById("rowUploadIaNotice").addEventListener("click", () => viewUploadIaScreen.classList.add("active"));
-        document.getElementById("rowUploadCommunity").addEventListener("click", () => viewUploadCommunityScreen.classList.add("active"));
-        document.getElementById("rowUploadRemixSetting").addEventListener("click", () => viewUploadRemixScreen.classList.add("active"));
-        document.getElementById("rowUploadCommentsSetting").addEventListener("click", () => viewUploadCommentsScreen.classList.add("active"));
-        document.getElementById("rowUploadPaidPromo").addEventListener("click", () => viewUploadPaidPromoScreen.classList.add("active"));
-        document.getElementById("rowUploadPlaylists").addEventListener("click", () => drawerUploadPlaylists.classList.add("active"));
 
-        // Botões de Voltar das subtelas
         document.querySelectorAll(".btnBackToUploadMain").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 const parentScreen = e.target.closest(".upload-view-screen");
@@ -3216,12 +3383,7 @@
             });
         });
 
-        document.getElementById("btnBackToAttributes").addEventListener("click", () => viewUploadIaScreen.classList.remove("active"));
-        document.getElementById("btnBackToCommunity").addEventListener("click", () => viewUploadRemixScreen.classList.remove("active"));
-        document.getElementById("btnBackToCommunityFromComments").addEventListener("click", () => viewUploadCommentsScreen.classList.remove("active"));
-        btnCloseUploadPlaylists.addEventListener("click", () => drawerUploadPlaylists.classList.remove("active"));
-
-        // Seleção de Visibilidade (G)
+        // Seleção de Visibilidade
         document.querySelectorAll("#viewUploadVisibilityScreen .upload-radio-item").forEach(item => {
             item.addEventListener("click", () => {
                 document.querySelectorAll("#viewUploadVisibilityScreen .upload-radio-item").forEach(r => r.classList.remove("selected"));
@@ -3232,7 +3394,7 @@
             });
         });
 
-        // Seleção de Público (COPPA) (F)
+        // Seleção de Público (COPPA)
         document.getElementById("optKidYes").addEventListener("click", () => {
             document.getElementById("optKidYes").classList.add("selected");
             document.getElementById("optKidNo").classList.remove("selected");
@@ -3249,78 +3411,144 @@
             viewUploadAudienceScreen.classList.remove("active");
         });
 
-        // Gerenciador de Tags (B2)
-        const uploadTagsList = document.getElementById("uploadTagsList");
-        const uploadNewTagInput = document.getElementById("uploadNewTagInput");
-
-        function renderTags() {
-            uploadTagsList.innerHTML = "";
-            currentUploadSettings.tags.forEach((tag, idx) => {
-                const pill = document.createElement("div");
-                pill.className = "tag-pill";
-                pill.innerHTML = `<span>${tag}</span><span class="tag-pill-remove" data-idx="${idx}">✕</span>`;
-                uploadTagsList.appendChild(pill);
-            });
-
-            document.querySelectorAll(".tag-pill-remove").forEach(del => {
-                del.addEventListener("click", () => {
-                    const i = del.getAttribute("data-idx");
-                    currentUploadSettings.tags.splice(i, 1);
-                    renderTags();
+        // Carregar séries para pesquisa rápida no modo "Postar episódio"
+        async function loadSeriesFromFirestore() {
+            try {
+                const snap = await onSnapshot(collection(db, "series"), (snapshot) => {
+                    availableSeriesList = [];
+                    snapshot.forEach(docSnap => {
+                        availableSeriesList.push({ id: docSnap.id, ...docSnap.data() });
+                    });
                 });
-            });
+            } catch (e) {
+                console.error("Erro ao carregar séries:", e);
+            }
         }
 
-        uploadNewTagInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === ",") {
-                e.preventDefault();
-                const val = uploadNewTagInput.value.trim().replace(",", "");
-                if (val && !currentUploadSettings.tags.includes(val)) {
-                    currentUploadSettings.tags.push(val);
-                    uploadNewTagInput.value = "";
-                    renderTags();
-                }
-            }
-        });
-        renderTags();
+        uploadSearchSeries.addEventListener("input", () => {
+            const query = uploadSearchSeries.value.toLowerCase().trim();
+            seriesSuggestionsList.innerHTML = "";
 
-        // 2. ENVIAR VÍDEO COMPLETO PARA O FIREBASE FIRESTORE
-        btnSubmitVideoUpload.addEventListener("click", async () => {
-            const title = uploadVideoTitle.value.trim();
-            const channel = uploadChannelName.textContent || "Fruit Senpai";
-
-            if (!title) {
-                alert("Por favor, crie um título para o seu vídeo!");
-                uploadVideoTitle.focus();
+            if (!query) {
+                seriesSuggestionsList.style.display = "none";
                 return;
             }
+
+            const matches = availableSeriesList.filter(s => s.title && s.title.toLowerCase().includes(query));
+
+            if (matches.length === 0) {
+                seriesSuggestionsList.innerHTML = `<div class="series-autocomplete-item" style="color:var(--yt-text-secondary);">Nenhuma série encontrada</div>`;
+            } else {
+                matches.forEach(s => {
+                    const row = document.createElement("div");
+                    row.className = "series-autocomplete-item";
+                    row.textContent = s.title;
+                    row.addEventListener("click", () => {
+                        selectedSeriesId = s.id;
+                        uploadSearchSeries.value = s.title;
+                        seriesSuggestionsList.style.display = "none";
+                    });
+                    seriesSuggestionsList.appendChild(row);
+                });
+            }
+            seriesSuggestionsList.style.display = "block";
+        });
+
+        // 2. ENVIAR CONTEÚDO (CRIA SÉRIE OU ADICIONA EPISÓDIO CONFORME A ABA ATIVA)
+        btnSubmitVideoUpload.addEventListener("click", async () => {
+            const isAdult = document.getElementById("uploadIsAdult").checked;
+            const nextEpDate = document.getElementById("uploadNextEpDate").value;
 
             try {
                 btnSubmitVideoUpload.disabled = true;
                 btnSubmitVideoUpload.textContent = "Enviando...";
 
-                await addDoc(frutasColecao, {
-                    name: title,
-                    channel: channel,
-                    views: "1 visualização",
-                    timeAgo: "agora mesmo",
-                    visibility: currentUploadSettings.visibility,
-                    audience: currentUploadSettings.audience,
-                    iaUsage: currentUploadSettings.iaUsage,
-                    remix: currentUploadSettings.remix,
-                    comments: currentUploadSettings.comments,
-                    tags: currentUploadSettings.tags,
-                    thumbUrl: currentUploadSettings.thumbUrl,
-                    timestamp: serverTimestamp()
-                });
+                if (currentUploadMode === "series") {
+                    // MODO 1: CRIAR SÉRIE
+                    const sName = uploadSeriesName.value.trim();
+                    const sSynopsis = uploadSeriesSynopsis.value.trim();
+                    const sGenres = uploadSeriesGenres.value.trim();
 
-                uploadVideoTitle.value = "";
+                    if (!sName) {
+                        alert("Por favor, preencha o nome da série!");
+                        uploadSeriesName.focus();
+                        return;
+                    }
+
+                    // Grava no Firestore na coleção 'series'
+                    await addDoc(collection(db, "series"), {
+                        title: sName,
+                        coverUrl: currentUploadSettings.thumbUrl,
+                        synopsis: sSynopsis,
+                        genres: sGenres ? sGenres.split(",").map(g => g.trim()) : [],
+                        visibility: currentUploadSettings.visibility,
+                        isAdult: isAdult,
+                        nextEpDate: nextEpDate || null,
+                        author: currentUserEmail,
+                        episodes: [],
+                        createdAt: serverTimestamp()
+                    });
+
+                    // Cria o card de exibição no feed principal do FruitSenpai
+                    await addDoc(frutasColecao, {
+                        name: sName,
+                        channel: getNameFromEmail(currentUserEmail),
+                        views: "1 visualização",
+                        timeAgo: "agora mesmo",
+                        thumbUrl: currentUploadSettings.thumbUrl,
+                        timestamp: serverTimestamp()
+                    });
+
+                    uploadSeriesName.value = "";
+                    uploadSeriesSynopsis.value = "";
+                    uploadSeriesGenres.value = "";
+                    showToast("Série criada com sucesso!");
+
+                } else {
+                    // MODO 2: POSTAR EPISÓDIO EM SÉRIE EXISTENTE
+                    const epTitle = uploadEpisodeTitle.value.trim();
+                    const epCover = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
+                    const epVideoUrl = uploadEpisodeVideoUrl.value.trim();
+
+                    if (!selectedSeriesId && !uploadSearchSeries.value.trim()) {
+                        alert("Por favor, selecione ou digite a série correspondente!");
+                        uploadSearchSeries.focus();
+                        return;
+                    }
+
+                    if (!epTitle) {
+                        alert("Por favor, digite o nome do episódio!");
+                        uploadEpisodeTitle.focus();
+                        return;
+                    }
+
+                    const seriesName = uploadSearchSeries.value.trim();
+
+                    // Adiciona na coleção do feed principal
+                    await addDoc(frutasColecao, {
+                        name: `${seriesName} - ${epTitle} (${currentAudioType})`,
+                        channel: getNameFromEmail(currentUserEmail),
+                        views: "1 visualização",
+                        timeAgo: "agora mesmo",
+                        thumbUrl: epCover,
+                        videoUrl: epVideoUrl,
+                        audioType: currentAudioType,
+                        timestamp: serverTimestamp()
+                    });
+
+                    uploadEpisodeTitle.value = "";
+                    uploadEpisodeCover.value = "";
+                    uploadEpisodeVideoUrl.value = "";
+                    uploadSearchSeries.value = "";
+                    selectedSeriesId = null;
+                    showToast("Episódio adicionado com sucesso!");
+                }
+
                 viewUploadDetails.classList.remove("active");
-                showToast("Vídeo enviado com sucesso!");
                 openScreen("home");
-            } catch (error) {
-                console.error("Erro ao enviar vídeo para o Firestore:", error);
-                showToast("Erro ao publicar o vídeo no banco.");
+            } catch (err) {
+                console.error("Erro ao enviar:", err);
+                showToast("Erro ao publicar.");
             } finally {
                 btnSubmitVideoUpload.disabled = false;
                 btnSubmitVideoUpload.textContent = "Enviar";
