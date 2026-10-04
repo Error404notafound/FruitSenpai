@@ -3999,16 +3999,19 @@
                     const epTagsRaw = uploadEpisodeTags.value.trim();
                     const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
 
-                    // Adiciona na coleção do feed principal com duração e tags
+                    const epDuration = uploadEpisodeDuration ? uploadEpisodeDuration.value.trim() : "24:00";
+                    const epTagsRaw = uploadEpisodeTags ? uploadEpisodeTags.value.trim() : "";
+                    const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
+
+                    // Salva com a foto, título do episódio, nome da série (canal) e o tempo
                     await addDoc(frutasColecao, {
-                        name: `${seriesName} - ${epTitle} (${currentAudioType})`,
-                        channel: getNameFromEmail(currentUserEmail),
+                        name: epTitle,
+                        channel: seriesName || getNameFromEmail(currentUserEmail),
                         viewsCount: 0,
-                        views: "1 visualização",
                         timeAgo: "agora mesmo",
                         thumbUrl: epCover,
                         videoUrl: epVideoUrl,
-                        duration: epDuration,
+                        duration: epDuration || "24:00",
                         tags: epTagsList,
                         audioType: currentAudioType,
                         timestamp: serverTimestamp()
@@ -4017,8 +4020,8 @@
                     uploadEpisodeTitle.value = "";
                     uploadEpisodeCover.value = "";
                     uploadEpisodeVideoUrl.value = "";
-                    uploadEpisodeDuration.value = "";
-                    uploadEpisodeTags.value = "";
+                    if (uploadEpisodeDuration) uploadEpisodeDuration.value = "";
+                    if (uploadEpisodeTags) uploadEpisodeTags.value = "";
                     uploadSearchSeries.value = "";
                     selectedSeriesId = null;
                     showToast("Episódio adicionado com sucesso!");
@@ -4035,35 +4038,20 @@
             }
         });
 
-        // 3. ONSNAPSHOT EM TEMPO REAL: ATUALIZA TANTO O MODAL QUANTO O FEED DE VÍDEOS
+        // 3. ONSNAPSHOT EM TEMPO REAL: ATUALIZA O FEED DE VÍDEOS
         onSnapshot(frutasColecao, (snapshot) => {
-            fruitList.innerHTML = "";
             dynamicFirebaseFeed.innerHTML = "";
-
-            if (snapshot.empty) {
-                fruitList.innerHTML = `<li style="font-size:12px;color:#777;padding:4px 0;">Nenhum item salvo ainda.</li>`;
-                return;
-            }
 
             snapshot.forEach((docSnap) => {
                 const item = docSnap.data();
                 const id = docSnap.id;
 
-                // 3.1. Renderiza linha na lista do modal
-                const li = document.createElement("li");
-                li.className = "firestore-item-row";
-                li.innerHTML = `
-                    <span style="font-size:13px;font-weight:500;">${escapeHtml(item.name)}</span>
-                    <button class="firestore-del-btn" data-id="${id}">Excluir</button>
-                `;
-                fruitList.appendChild(li);
-
-                // 3.2. Renderiza card completo com capa real, duração e clique para abrir
+                // Renderiza o card com Foto, Nome do Episódio, Nome da Série (Canal), Views e Duração
                 const card = document.createElement("article");
                 card.className = "yt-video-card";
                 card.innerHTML = `
                     <div class="yt-thumbnail-wrapper" style="cursor:pointer;">
-                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa do Episódio">
                         <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                     </div>
                     <div class="yt-video-info-row">
@@ -4088,18 +4076,19 @@
                     </div>
                 `;
 
-                // Abre o player completo ao clicar na capa ou no título
+                // Abre a tela de reprodução ao clicar no card
                 card.querySelector(".yt-thumbnail-wrapper").addEventListener("click", () => openWatchScreen(item, id));
                 card.querySelector(".yt-video-details").addEventListener("click", () => openWatchScreen(item, id));
 
                 dynamicFirebaseFeed.prepend(card);
             });
 
-            // 4. AÇÃO DE EXCLUIR ITEM DO FIREBASE
-            document.querySelectorAll(".firestore-del-btn, .firestore-del-btn-card").forEach(btn => {
+            // Ação de excluir o card do feed
+            document.querySelectorAll(".firestore-del-btn-card").forEach(btn => {
                 btn.addEventListener("click", async (e) => {
+                    e.stopPropagation();
                     const docId = btn.getAttribute("data-id");
-                    if (confirm("Deseja realmente excluir este item do Firebase?")) {
+                    if (confirm("Deseja realmente excluir este episódio?")) {
                         try {
                             await deleteDoc(doc(db, "frutas", docId));
                             showToast("Item excluído com sucesso!");
