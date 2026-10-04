@@ -2022,8 +2022,18 @@
             display: none;
             flex-direction: column;
             width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            height: 100dvh;
             background-color: var(--yt-bg-main);
-            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2200;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 30px;
         }
 
         .yt-watch-screen.active {
@@ -2637,7 +2647,6 @@
             <div id="watchRelatedFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
         </section>
 
-        </main>
 <!-- ==========================================================================
              TELA A2: PAINEL PRINCIPAL "VOCÊ" (ABERTO PELO BOTÃO A1)
              ========================================================================== -->
@@ -4077,9 +4086,11 @@
                     </div>
                 `;
 
-                // Abre a tela de reprodução ao clicar no card
-                card.querySelector(".yt-thumbnail-wrapper").addEventListener("click", () => openWatchScreen(item, id));
-                card.querySelector(".yt-video-details").addEventListener("click", () => openWatchScreen(item, id));
+                // Abre a tela de reprodução ao clicar em qualquer lugar do card (exceto na lixeira)
+                card.addEventListener("click", (e) => {
+                    if (e.target.closest(".firestore-del-btn-card")) return;
+                    openWatchScreen(item, id);
+                });
 
                 dynamicFirebaseFeed.prepend(card);
             });
@@ -4529,9 +4540,12 @@
         const watchVideoTitle = document.getElementById("watchVideoTitle");
         const watchViewsCount = document.getElementById("watchViewsCount");
         const watchLikesCount = document.getElementById("watchLikesCount");
+        const watchChannelName = document.getElementById("watchChannelName");
+        const watchChannelAvatar = document.getElementById("watchChannelAvatar");
         const btnWatchLike = document.getElementById("btnWatchLike");
         const btnWatchDislike = document.getElementById("btnWatchDislike");
         const btnWatchKebab = document.getElementById("btnWatchKebab");
+        const btnBackFromWatch = document.getElementById("btnBackFromWatch");
 
         const drawerVideoKebab = document.getElementById("drawerVideoKebab");
         const drawerSavePlaylist = document.getElementById("drawerSavePlaylist");
@@ -4541,30 +4555,25 @@
 
         function openWatchScreen(videoData, videoId) {
             currentWatchVideoId = videoId;
-            feedContainer.style.display = "none";
-            chipsBar.style.display = "none";
-            headerWrapper.style.display = "none";
-            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
             viewWatchVideo.classList.add("active");
 
-            watchVideoTitle.textContent = videoData.name || "Vídeo sem título";
-            watchChannelName.textContent = videoData.channel || "Fruit Senpai";
-            watchChannelAvatar.textContent = (videoData.channel || "F").charAt(0).toUpperCase();
-            watchViewsCount.textContent = `${videoData.viewsCount || 0} visualizações`;
-            watchLikesCount.textContent = videoData.likesCount || 0;
+            if (watchVideoTitle) watchVideoTitle.textContent = videoData.name || "Vídeo sem título";
+            if (watchChannelName) watchChannelName.textContent = videoData.channel || "Fruit Senpai";
+            if (watchChannelAvatar) watchChannelAvatar.textContent = (videoData.channel || "F").charAt(0).toUpperCase();
+            if (watchViewsCount) watchViewsCount.textContent = `${videoData.viewsCount || 0} visualizações`;
+            if (watchLikesCount) watchLikesCount.textContent = videoData.likesCount || 0;
 
             let srcUrl = videoData.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ";
             if (srcUrl.includes("watch?v=")) srcUrl = srcUrl.replace("watch?v=", "embed/");
-            watchIframe.src = srcUrl;
+            if (srcUrl.includes("youtu.be/")) srcUrl = srcUrl.replace("youtu.be/", "www.youtube.com/embed/");
+            if (watchIframe) watchIframe.src = srcUrl;
 
             // Botão voltar do topo da tela de reprodução
-            const btnBackWatch = document.getElementById("btnBackFromWatch");
-            if (btnBackWatch) {
-                btnBackWatch.onclick = () => {
+            if (btnBackFromWatch) {
+                btnBackFromWatch.onclick = () => {
                     viewWatchVideo.classList.remove("active");
-                    watchIframe.src = "";
+                    if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                    openScreen("home");
                 };
             }
 
