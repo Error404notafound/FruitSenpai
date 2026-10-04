@@ -2577,9 +2577,6 @@
                 </div>
             </article>
 
-            <!-- Contêiner dinâmico para os vídeos/frutas salvos no Firebase -->
-            <div id="dynamicFirebaseFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
-
             <!-- TELA DE REPRODUÇÃO DO VÍDEO (WATCH SCREEN) -->
             <section class="yt-watch-screen" id="viewWatchVideo">
                 <div class="yt-player-box" id="watchPlayerBox">
@@ -3994,10 +3991,6 @@
                     }
 
                     const seriesName = uploadSearchSeries.value.trim();
-
-                    const epDuration = uploadEpisodeDuration.value.trim() || "24:00";
-                    const epTagsRaw = uploadEpisodeTags.value.trim();
-                    const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
 
                     const epDuration = uploadEpisodeDuration ? uploadEpisodeDuration.value.trim() : "24:00";
                     const epTagsRaw = uploadEpisodeTags ? uploadEpisodeTags.value.trim() : "";
