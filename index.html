@@ -2017,7 +2017,231 @@
             color: #aaa;
         }
 
-    
+        /* TELA DE REPRODUÇÃO (WATCH), COMENTÁRIOS E GAVETAS */
+        .yt-watch-screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            background-color: var(--yt-bg-main);
+            min-height: 100vh;
+        }
+
+        .yt-watch-screen.active {
+            display: flex;
+        }
+
+        .yt-player-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #000000;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .yt-player-box iframe, 
+        .yt-player-box video {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .yt-watch-details {
+            padding: 12px 14px 6px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .yt-watch-title {
+            font-size: 17px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #ffffff;
+        }
+
+        .yt-watch-meta-row {
+            font-size: 12px;
+            color: var(--yt-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .yt-watch-actions-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding: 4px 14px 12px 14px;
+        }
+
+        .yt-channel-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .yt-btn-subscribe {
+            background-color: #ffffff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 18px;
+            height: 36px;
+            padding: 0 14px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .yt-pill-group {
+            display: flex;
+            align-items: center;
+            background-color: #272727;
+            border-radius: 18px;
+            height: 36px;
+        }
+
+        .yt-pill-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 12.5px;
+            font-weight: 600;
+            height: 100%;
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .yt-pill-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .yt-pill-divider {
+            width: 1px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .yt-comments-snippet-box {
+            background-color: #212121;
+            border-radius: 12px;
+            margin: 0 14px 12px 14px;
+            padding: 10px 12px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .yt-comments-snippet-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .yt-comment-input-fake {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        .yt-center-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 3500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .yt-center-modal-backdrop.active {
+            display: flex;
+        }
+
+        .yt-center-dialog {
+            width: 100%;
+            max-width: 340px;
+            background-color: #212121;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .yt-comments-drawer-content {
+            display: flex;
+            flex-direction: column;
+            height: 70vh;
+            max-height: 70vh;
+        }
+
+        .yt-comments-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .yt-comment-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .yt-comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #00897b;
+            color: #ffffff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .yt-comment-texts {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .yt-comment-user {
+            font-size: 11.5px;
+            color: #aaaaaa;
+        }
+
+        .yt-comment-body {
+            font-size: 13px;
+            color: #ffffff;
+            line-height: 1.35;
+        }
+
+        .yt-comment-input-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -2352,6 +2576,58 @@
 
             <!-- Contêiner dinâmico para os vídeos/frutas salvos no Firebase -->
             <div id="dynamicFirebaseFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
+
+            <!-- TELA DE REPRODUÇÃO DO VÍDEO (WATCH SCREEN) -->
+            <section class="yt-watch-screen" id="viewWatchVideo">
+                <div class="yt-player-box" id="watchPlayerBox">
+                    <iframe id="watchIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                </div>
+
+                <div class="yt-watch-details">
+                    <h1 class="yt-watch-title" id="watchVideoTitle">Título do Vídeo</h1>
+                    <div class="yt-watch-meta-row">
+                        <span id="watchViewsCount">0 visualizações</span>
+                        <span>•</span>
+                        <span id="watchTimeAgo">agora</span>
+                    </div>
+                </div>
+
+                <div class="yt-watch-actions-bar">
+                    <div class="yt-channel-pill">
+                        <div class="yt-channel-avatar" id="watchChannelAvatar">E</div>
+                        <span style="font-weight:700; font-size:13px;" id="watchChannelName">Canal</span>
+                        <button class="yt-btn-subscribe" id="btnSubscribe">Inscrever-se</button>
+                    </div>
+
+                    <div class="yt-pill-group">
+                        <button class="yt-pill-btn" id="btnWatchLike">
+                            <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                            <span id="watchLikesCount">0</span>
+                        </button>
+                        <div class="yt-pill-divider"></div>
+                        <button class="yt-pill-btn" id="btnWatchDislike">
+                            <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                        </button>
+                    </div>
+
+                    <button class="yt-icon-btn" id="btnWatchKebab" style="background:#272727; padding:8px;">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+
+                <div class="yt-comments-snippet-box" id="btnOpenComments">
+                    <div class="yt-comments-snippet-header">
+                        <span>Comentários</span>
+                        <span style="color:#aaa; font-weight:400;" id="watchCommentsCount">0</span>
+                    </div>
+                    <div class="yt-comment-input-fake">
+                        <div class="account-avatar-small" style="width:24px; height:24px; font-size:11px; background:#00897b;">U</div>
+                        <span>Adicione um comentário...</span>
+                    </div>
+                </div>
+
+                <div id="watchRelatedFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
+            </section>
 
         </main>
 <!-- ==========================================================================
@@ -3162,6 +3438,104 @@
                 <div style="display:flex; gap:10px; justify-content: flex-end; margin-top: 4px;">
                     <button type="button" class="profile-pill-btn" id="btnCancelEditThumb" style="flex:none; padding: 0 16px;">Cancelar</button>
                     <button type="button" class="yt-btn-primary" id="btnConfirmEditThumb" style="padding: 8px 22px;">Concluído</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA: MENU KEBAB (...) DO VÍDEO -->
+        <div class="accounts-drawer" id="drawerVideoKebab">
+            <div class="accounts-sheet" style="padding: 10px 0 20px 0;">
+                <div class="account-item-row" id="btnKebabSave">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span style="font-size:14.5px;">Salvar</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnKebabReport">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                        <span style="font-size:14.5px;">Denunciar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA: SALVAR EM... (PLAYLISTS EXISTENTES) -->
+        <div class="accounts-drawer" id="drawerSavePlaylist">
+            <div class="accounts-sheet" style="padding: 14px 16px 24px 16px; gap:12px;">
+                <h3 style="font-size:16px; font-weight:700;">Salvar em...</h3>
+                <div id="userPlaylistsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+                <button class="profile-pill-btn" id="btnOpenNewPlaylistModal" style="background:#272727; height:40px;">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    <span>Nova playlist</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- MODAL CENTRAL: NOVA PLAYLIST -->
+        <div class="yt-center-modal-backdrop" id="modalNewPlaylist">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:18px; font-weight:700; color:#fff;">Nova playlist</h3>
+                <input type="text" id="inputNewPlaylistTitle" class="yt-input" placeholder="Escolha um título">
+                
+                <div class="yt-input" id="btnSelectPlaylistVis" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                    <div>
+                        <div style="font-size:10.5px; color:#aaa;">Visibilidade</div>
+                        <div id="txtPlaylistVisVal" style="font-size:13px; font-weight:600;">Particular</div>
+                    </div>
+                    <svg style="width:18px;height:18px;fill:#fff" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+                    <button class="profile-pill-btn" id="btnCancelNewPlaylist" style="flex:none; padding:0 14px;">Cancelar</button>
+                    <button class="yt-btn-primary" id="btnCreateNewPlaylist" style="padding:8px 20px;">Criar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA: ESCOLHER VISIBILIDADE DA PLAYLIST -->
+        <div class="accounts-drawer" id="drawerPlaylistVis">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <h4 style="padding: 0 16px 10px 16px; font-size:15px;">Visibilidade</h4>
+                <div class="account-item-row optPlaylistVis" data-vis="Pública">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                        <div><div>Pública</div><small style="color:#aaa;">Todos podem pesquisar e ver</small></div>
+                    </div>
+                </div>
+                <div class="account-item-row optPlaylistVis" data-vis="Não listada">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                        <div><div>Não listada</div><small style="color:#aaa;">Todos com o link podem ver</small></div>
+                    </div>
+                </div>
+                <div class="account-item-row optPlaylistVis" data-vis="Particular">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <div><div>Particular</div><small style="color:#aaa;">Só você pode ver</small></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA: COMENTÁRIOS DO VÍDEO -->
+        <div class="accounts-drawer" id="drawerComments">
+            <div class="accounts-sheet yt-comments-drawer-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <h3 style="font-size:16px;">Comentários</h3>
+                        <span id="txtCommentsDrawerTotal" style="color:#aaa; font-size:13px;">0</span>
+                    </div>
+                    <button class="yt-icon-btn" id="btnCloseCommentsDrawer">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+
+                <div class="yt-comments-list" id="watchCommentsListContainer"></div>
+
+                <div class="yt-comment-input-bar">
+                    <input type="text" id="inputNewCommentText" class="yt-input" placeholder="Adicione um comentário...">
+                    <button class="yt-btn-primary" id="btnSendComment" style="padding:8px 16px; flex-shrink:0;">Enviar</button>
                 </div>
             </div>
         </div>
@@ -4122,6 +4496,179 @@
         // Switches Liga/Desliga
         document.querySelectorAll(".yt-switch").forEach(sw => {
             sw.addEventListener("click", () => sw.classList.toggle("active"));
+        });
+
+        // ==========================================================================
+        // LÓGICA DO PLAYER, CRONÔMETRO DE 2 MIN, COMENTÁRIOS E PASTA MÃE
+        // ==========================================================================
+        let currentWatchVideoId = null;
+        let watchInvisibleTimer = null;
+        let selectedPlaylistVisibility = "Particular";
+
+        const viewWatchVideo = document.getElementById("viewWatchVideo");
+        const watchIframe = document.getElementById("watchIframe");
+        const watchVideoTitle = document.getElementById("watchVideoTitle");
+        const watchViewsCount = document.getElementById("watchViewsCount");
+        const watchLikesCount = document.getElementById("watchLikesCount");
+        const btnWatchLike = document.getElementById("btnWatchLike");
+        const btnWatchDislike = document.getElementById("btnWatchDislike");
+        const btnWatchKebab = document.getElementById("btnWatchKebab");
+
+        const drawerVideoKebab = document.getElementById("drawerVideoKebab");
+        const drawerSavePlaylist = document.getElementById("drawerSavePlaylist");
+        const modalNewPlaylist = document.getElementById("modalNewPlaylist");
+        const drawerPlaylistVis = document.getElementById("drawerPlaylistVis");
+        const drawerComments = document.getElementById("drawerComments");
+
+        function openWatchScreen(videoData, videoId) {
+            currentWatchVideoId = videoId;
+            openScreen(null);
+            headerWrapper.style.display = "none";
+            viewWatchVideo.classList.add("active");
+
+            watchVideoTitle.textContent = videoData.name || "Vídeo sem título";
+            watchViewsCount.textContent = `${videoData.viewsCount || 0} visualizações`;
+            watchLikesCount.textContent = videoData.likesCount || 0;
+
+            let srcUrl = videoData.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ";
+            if (srcUrl.includes("watch?v=")) srcUrl = srcUrl.replace("watch?v=", "embed/");
+            watchIframe.src = srcUrl;
+
+            // 🟢 CRONÔMETRO INVISÍVEL: Se passar mais de 2 minutos (120000ms), conta visualização
+            if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+            watchInvisibleTimer = setTimeout(async () => {
+                try {
+                    const videoRef = doc(db, "frutas", currentWatchVideoId);
+                    const newCount = (videoData.viewsCount || 0) + 1;
+                    await setDoc(videoRef, { viewsCount: newCount }, { merge: true });
+                    watchViewsCount.textContent = `${newCount} visualizações`;
+                } catch(e) { console.error("Erro no cronômetro:", e); }
+            }, 120000);
+
+            loadCommentsRealtime(videoId);
+        }
+
+        btnWatchLike.addEventListener("click", async () => {
+            if (!currentUserEmail) return openAuthModal();
+            try {
+                const videoRef = doc(db, "frutas", currentWatchVideoId);
+                const currentLikes = parseInt(watchLikesCount.textContent) || 0;
+                await setDoc(videoRef, { likesCount: currentLikes + 1 }, { merge: true });
+                watchLikesCount.textContent = currentLikes + 1;
+                showToast("Adicionado aos vídeos com Gostei");
+            } catch(e) { console.error(e); }
+        });
+
+        btnWatchDislike.addEventListener("click", () => {
+            showToast("Feedback registrado.");
+        });
+
+        btnWatchKebab.addEventListener("click", () => drawerVideoKebab.classList.add("active"));
+        document.getElementById("btnKebabSave").addEventListener("click", () => {
+            drawerVideoKebab.classList.remove("active");
+            loadUserPlaylists();
+            drawerSavePlaylist.classList.add("active");
+        });
+
+        document.getElementById("btnOpenNewPlaylistModal").addEventListener("click", () => {
+            drawerSavePlaylist.classList.remove("active");
+            modalNewPlaylist.classList.add("active");
+        });
+
+        document.getElementById("btnCancelNewPlaylist").addEventListener("click", () => modalNewPlaylist.classList.remove("active"));
+
+        document.getElementById("btnSelectPlaylistVis").addEventListener("click", () => drawerPlaylistVis.classList.add("active"));
+        document.querySelectorAll(".optPlaylistVis").forEach(opt => {
+            opt.addEventListener("click", () => {
+                selectedPlaylistVisibility = opt.getAttribute("data-vis");
+                document.getElementById("txtPlaylistVisVal").textContent = selectedPlaylistVisibility;
+                drawerPlaylistVis.classList.remove("active");
+            });
+        });
+
+        document.getElementById("btnCreateNewPlaylist").addEventListener("click", async () => {
+            const title = document.getElementById("inputNewPlaylistTitle").value.trim();
+            if (!title) return alert("Digite o título da playlist");
+
+            try {
+                await addDoc(collection(db, "playlists"), {
+                    title: title,
+                    visibility: selectedPlaylistVisibility,
+                    user: currentUserEmail,
+                    videos: [currentWatchVideoId],
+                    createdAt: serverTimestamp()
+                });
+                modalNewPlaylist.classList.remove("active");
+                document.getElementById("inputNewPlaylistTitle").value = "";
+                showToast("Playlist criada.");
+            } catch(e) { console.error(e); }
+        });
+
+        async function loadUserPlaylists() {
+            const container = document.getElementById("userPlaylistsList");
+            container.innerHTML = "";
+            onSnapshot(collection(db, "playlists"), (snap) => {
+                container.innerHTML = "";
+                snap.forEach(docSnap => {
+                    const pl = docSnap.data();
+                    if (pl.user === currentUserEmail) {
+                        const row = document.createElement("div");
+                        row.className = "account-item-row";
+                        row.innerHTML = `<div><div style="font-weight:600;">${escapeHtml(pl.title)}</div><small style="color:#aaa;">${pl.visibility}</small></div>`;
+                        row.addEventListener("click", () => {
+                            showToast(`Salvo em ${pl.title}`);
+                            drawerSavePlaylist.classList.remove("active");
+                        });
+                        container.appendChild(row);
+                    }
+                });
+            });
+        }
+
+        document.getElementById("btnOpenComments").addEventListener("click", () => drawerComments.classList.add("active"));
+        document.getElementById("btnCloseCommentsDrawer").addEventListener("click", () => drawerComments.classList.remove("active"));
+
+        function loadCommentsRealtime(videoId) {
+            const commentsContainer = document.getElementById("watchCommentsListContainer");
+            const counterPreview = document.getElementById("watchCommentsCount");
+            const counterDrawer = document.getElementById("txtCommentsDrawerTotal");
+
+            onSnapshot(collection(db, `frutas/${videoId}/comments`), (snap) => {
+                commentsContainer.innerHTML = "";
+                const total = snap.size;
+                counterPreview.textContent = total;
+                counterDrawer.textContent = total;
+
+                snap.forEach(docSnap => {
+                    const c = docSnap.data();
+                    const row = document.createElement("div");
+                    row.className = "yt-comment-row";
+                    row.innerHTML = `
+                        <div class="yt-comment-avatar">${(c.user || "U").charAt(0).toUpperCase()}</div>
+                        <div class="yt-comment-texts">
+                            <span class="yt-comment-user">@${escapeHtml(c.user ? c.user.split('@')[0] : 'usuario')}</span>
+                            <span class="yt-comment-body">${escapeHtml(c.text)}</span>
+                        </div>
+                    `;
+                    commentsContainer.appendChild(row);
+                });
+            });
+        }
+
+        document.getElementById("btnSendComment").addEventListener("click", async () => {
+            const input = document.getElementById("inputNewCommentText");
+            const text = input.value.trim();
+            if (!text || !currentWatchVideoId) return;
+            if (!currentUserEmail) return openAuthModal();
+
+            try {
+                await addDoc(collection(db, `frutas/${currentWatchVideoId}/comments`), {
+                    text: text,
+                    user: currentUserEmail,
+                    createdAt: serverTimestamp()
+                });
+                input.value = "";
+            } catch(e) { console.error(e); }
         });
 
         // Função de escape para prevenir XSS
