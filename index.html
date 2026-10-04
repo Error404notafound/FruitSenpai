@@ -4471,8 +4471,9 @@
             btn.addEventListener("click", () => openScreen(viewYou));
         });
 
-        // B: Abre B1 Configurações
-        document.getElementById("btnOpenSettings").addEventListener("click", () => openScreen(viewSettings));
+        // B: Abre B1 Configurações (Uso do ?. evita travar o restante do código)
+document.getElementById("btnOpenSettings")?.addEventListener("click", () => openScreen(viewSettings));
+
 
         // C: Abre C1 Criar Canal
         document.getElementById("btnOpenCreateChannel").addEventListener("click", () => openScreen(viewCreateChannel));
