@@ -2025,19 +2025,19 @@
             max-width: 480px;
             height: 100vh;
             height: 100dvh;
-            background-color: var(--yt-bg-main);
+            background-color: #0f0f0f;
             position: fixed;
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 2200;
+            z-index: 9999; /* Fica acima de absolutamente tudo */
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             padding-bottom: 30px;
         }
 
         .yt-watch-screen.active {
-            display: flex;
+            display: flex !important;
         }
 
         .yt-player-box {
@@ -4086,11 +4086,12 @@
                     </div>
                 `;
 
-                // Abre a tela de reprodução ao clicar em qualquer lugar do card (exceto na lixeira)
-                card.addEventListener("click", (e) => {
+                // Clique direto garantido em qualquer parte do card
+                card.style.cursor = "pointer";
+                card.onclick = (e) => {
                     if (e.target.closest(".firestore-del-btn-card")) return;
                     openWatchScreen(item, id);
-                });
+                };
 
                 dynamicFirebaseFeed.prepend(card);
             });
@@ -4553,9 +4554,12 @@
         const drawerPlaylistVis = document.getElementById("drawerPlaylistVis");
         const drawerComments = document.getElementById("drawerComments");
 
-        function openWatchScreen(videoData, videoId) {
+        window.openWatchScreen = function(videoData, videoId) {
             currentWatchVideoId = videoId;
+
+            // Força a exibição imediata
             viewWatchVideo.classList.add("active");
+            viewWatchVideo.style.display = "flex";
 
             if (watchVideoTitle) watchVideoTitle.textContent = videoData.name || "Vídeo sem título";
             if (watchChannelName) watchChannelName.textContent = videoData.channel || "Fruit Senpai";
@@ -4568,10 +4572,14 @@
             if (srcUrl.includes("youtu.be/")) srcUrl = srcUrl.replace("youtu.be/", "www.youtube.com/embed/");
             if (watchIframe) watchIframe.src = srcUrl;
 
+            // Rola a tela de reprodução para o topo
+            viewWatchVideo.scrollTop = 0;
+
             // Botão voltar do topo da tela de reprodução
             if (btnBackFromWatch) {
                 btnBackFromWatch.onclick = () => {
                     viewWatchVideo.classList.remove("active");
+                    viewWatchVideo.style.display = "none";
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
                 };
@@ -4584,13 +4592,15 @@
                     const videoRef = doc(db, "frutas", currentWatchVideoId);
                     const newCount = (videoData.viewsCount || 0) + 1;
                     await setDoc(videoRef, { viewsCount: newCount }, { merge: true });
-                    watchViewsCount.textContent = `${newCount} visualizações`;
+                    if (watchViewsCount) watchViewsCount.textContent = `${newCount} visualizações`;
                 } catch(e) { console.error("Erro no cronômetro:", e); }
             }, 120000);
 
-            loadCommentsRealtime(videoId);
-            window.scrollTo(0, 0);
-        }
+            try {
+                loadCommentsRealtime(videoId);
+            } catch(e) { console.error("Erro ao carregar comentários:", e); }
+        };
+        const openWatchScreen = window.openWatchScreen;
 
         btnWatchLike.addEventListener("click", async () => {
             if (!currentUserEmail) return openAuthModal();
