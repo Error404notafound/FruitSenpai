@@ -2576,58 +2576,66 @@
                     </button>
                 </div>
             </article>
+        </main>
 
-            <!-- TELA DE REPRODUÇÃO DO VÍDEO (WATCH SCREEN) -->
-            <section class="yt-watch-screen" id="viewWatchVideo">
-                <div class="yt-player-box" id="watchPlayerBox">
-                    <iframe id="watchIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <!-- TELA DE REPRODUÇÃO DO VÍDEO (COLOCADA FORA DO FEED) -->
+        <section class="yt-watch-screen" id="viewWatchVideo">
+            <div style="height:48px; display:flex; align-items:center; padding:0 16px; background:#0f0f0f; position:sticky; top:0; z-index:60;">
+                <button class="yt-icon-btn" id="btnBackFromWatch" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                </button>
+                <span style="font-size:16px; font-weight:700; margin-left:16px;">Reproduzindo</span>
+            </div>
+
+            <div class="yt-player-box" id="watchPlayerBox">
+                <iframe id="watchIframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
+
+            <div class="yt-watch-details">
+                <h1 class="yt-watch-title" id="watchVideoTitle">Título do Vídeo</h1>
+                <div class="yt-watch-meta-row">
+                    <span id="watchViewsCount">0 visualizações</span>
+                    <span>•</span>
+                    <span id="watchTimeAgo">agora</span>
+                </div>
+            </div>
+
+            <div class="yt-watch-actions-bar">
+                <div class="yt-channel-pill">
+                    <div class="yt-channel-avatar" id="watchChannelAvatar">E</div>
+                    <span style="font-weight:700; font-size:13px;" id="watchChannelName">Canal</span>
+                    <button class="yt-btn-subscribe" id="btnSubscribe">Inscrever-se</button>
                 </div>
 
-                <div class="yt-watch-details">
-                    <h1 class="yt-watch-title" id="watchVideoTitle">Título do Vídeo</h1>
-                    <div class="yt-watch-meta-row">
-                        <span id="watchViewsCount">0 visualizações</span>
-                        <span>•</span>
-                        <span id="watchTimeAgo">agora</span>
-                    </div>
-                </div>
-
-                <div class="yt-watch-actions-bar">
-                    <div class="yt-channel-pill">
-                        <div class="yt-channel-avatar" id="watchChannelAvatar">E</div>
-                        <span style="font-weight:700; font-size:13px;" id="watchChannelName">Canal</span>
-                        <button class="yt-btn-subscribe" id="btnSubscribe">Inscrever-se</button>
-                    </div>
-
-                    <div class="yt-pill-group">
-                        <button class="yt-pill-btn" id="btnWatchLike">
-                            <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
-                            <span id="watchLikesCount">0</span>
-                        </button>
-                        <div class="yt-pill-divider"></div>
-                        <button class="yt-pill-btn" id="btnWatchDislike">
-                            <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
-                        </button>
-                    </div>
-
-                    <button class="yt-icon-btn" id="btnWatchKebab" style="background:#272727; padding:8px;">
-                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                <div class="yt-pill-group">
+                    <button class="yt-pill-btn" id="btnWatchLike">
+                        <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                        <span id="watchLikesCount">0</span>
+                    </button>
+                    <div class="yt-pill-divider"></div>
+                    <button class="yt-pill-btn" id="btnWatchDislike">
+                        <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
                     </button>
                 </div>
 
-                <div class="yt-comments-snippet-box" id="btnOpenComments">
-                    <div class="yt-comments-snippet-header">
-                        <span>Comentários</span>
-                        <span style="color:#aaa; font-weight:400;" id="watchCommentsCount">0</span>
-                    </div>
-                    <div class="yt-comment-input-fake">
-                        <div class="account-avatar-small" style="width:24px; height:24px; font-size:11px; background:#00897b;">U</div>
-                        <span>Adicione um comentário...</span>
-                    </div>
-                </div>
+                <button class="yt-icon-btn" id="btnWatchKebab" style="background:#272727; padding:8px;">
+                    <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </button>
+            </div>
 
-                <div id="watchRelatedFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
-            </section>
+            <div class="yt-comments-snippet-box" id="btnOpenComments">
+                <div class="yt-comments-snippet-header">
+                    <span>Comentários</span>
+                    <span style="color:#aaa; font-weight:400;" id="watchCommentsCount">0</span>
+                </div>
+                <div class="yt-comment-input-fake">
+                    <div class="account-avatar-small" style="width:24px; height:24px; font-size:11px; background:#00897b;">U</div>
+                    <span>Adicione um comentário...</span>
+                </div>
+            </div>
+
+            <div id="watchRelatedFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
+        </section>
 
         </main>
 <!-- ==========================================================================
@@ -4533,17 +4541,32 @@
 
         function openWatchScreen(videoData, videoId) {
             currentWatchVideoId = videoId;
-            openScreen(null);
+            feedContainer.style.display = "none";
+            chipsBar.style.display = "none";
             headerWrapper.style.display = "none";
+            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
             viewWatchVideo.classList.add("active");
 
             watchVideoTitle.textContent = videoData.name || "Vídeo sem título";
+            watchChannelName.textContent = videoData.channel || "Fruit Senpai";
+            watchChannelAvatar.textContent = (videoData.channel || "F").charAt(0).toUpperCase();
             watchViewsCount.textContent = `${videoData.viewsCount || 0} visualizações`;
             watchLikesCount.textContent = videoData.likesCount || 0;
 
             let srcUrl = videoData.videoUrl || "https://www.youtube.com/embed/dQw4w9WgXcQ";
             if (srcUrl.includes("watch?v=")) srcUrl = srcUrl.replace("watch?v=", "embed/");
             watchIframe.src = srcUrl;
+
+            // Botão voltar do topo da tela de reprodução
+            const btnBackWatch = document.getElementById("btnBackFromWatch");
+            if (btnBackWatch) {
+                btnBackWatch.onclick = () => {
+                    viewWatchVideo.classList.remove("active");
+                    watchIframe.src = "";
+                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+                    openScreen("home");
+                };
+            }
 
             // 🟢 CRONÔMETRO INVISÍVEL: Se passar mais de 2 minutos (120000ms), conta visualização
             if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
@@ -4557,6 +4580,7 @@
             }, 120000);
 
             loadCommentsRealtime(videoId);
+            window.scrollTo(0, 0);
         }
 
         btnWatchLike.addEventListener("click", async () => {
