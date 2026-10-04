@@ -2331,6 +2331,9 @@
                 </div>
             </article>
 
+            <!-- VÍDEOS POSTADOS CAEM AQUI NO LUGAR DO "X" -->
+            <div id="dynamicFirebaseFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
+
             <!-- 2. ANÚNCIO PATROCINADO PICPAY (Fiel ao Screenshot 1) -->
             <section class="yt-ad-card">
                 <div class="yt-ad-visual-banner">
@@ -3056,6 +3059,16 @@
                     <input type="text" id="uploadEpisodeVideoUrl" class="upload-title-input" placeholder="Link do Vídeo (Embed YouTube/Drive/Outros)">
                 </div>
 
+                <!-- Duração opcional -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeDuration" class="upload-title-input" placeholder="Duração do vídeo (opcional, ex: 24:00 ou 12 min)">
+                </div>
+
+                <!-- Tags do episódio -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeTags" class="upload-title-input" placeholder="Tags (separadas por vírgula, ex: ação, anime, luta)">
+                </div>
+
                 <!-- Botões Legendado / Dublado (Fiel à captura 3) -->
                 <div class="audio-type-row">
                     <button class="audio-type-pill active" id="btnAudioLegendado" type="button">Legendado</button>
@@ -3684,6 +3697,8 @@
         const uploadEpisodeTitle = document.getElementById("uploadEpisodeTitle");
         const uploadEpisodeCover = document.getElementById("uploadEpisodeCover");
         const uploadEpisodeVideoUrl = document.getElementById("uploadEpisodeVideoUrl");
+        const uploadEpisodeDuration = document.getElementById("uploadEpisodeDuration");
+        const uploadEpisodeTags = document.getElementById("uploadEpisodeTags");
         const btnAudioLegendado = document.getElementById("btnAudioLegendado");
         const btnAudioDublado = document.getElementById("btnAudioDublado");
 
@@ -3980,14 +3995,21 @@
 
                     const seriesName = uploadSearchSeries.value.trim();
 
-                    // Adiciona na coleção do feed principal
+                    const epDuration = uploadEpisodeDuration.value.trim() || "24:00";
+                    const epTagsRaw = uploadEpisodeTags.value.trim();
+                    const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
+
+                    // Adiciona na coleção do feed principal com duração e tags
                     await addDoc(frutasColecao, {
                         name: `${seriesName} - ${epTitle} (${currentAudioType})`,
                         channel: getNameFromEmail(currentUserEmail),
+                        viewsCount: 0,
                         views: "1 visualização",
                         timeAgo: "agora mesmo",
                         thumbUrl: epCover,
                         videoUrl: epVideoUrl,
+                        duration: epDuration,
+                        tags: epTagsList,
                         audioType: currentAudioType,
                         timestamp: serverTimestamp()
                     });
@@ -3995,6 +4017,8 @@
                     uploadEpisodeTitle.value = "";
                     uploadEpisodeCover.value = "";
                     uploadEpisodeVideoUrl.value = "";
+                    uploadEpisodeDuration.value = "";
+                    uploadEpisodeTags.value = "";
                     uploadSearchSeries.value = "";
                     selectedSeriesId = null;
                     showToast("Episódio adicionado com sucesso!");
@@ -4034,26 +4058,26 @@
                 `;
                 fruitList.appendChild(li);
 
-                // 3.2. Renderiza card completo de vídeo no feed simulando o YouTube
+                // 3.2. Renderiza card completo com capa real, duração e clique para abrir
                 const card = document.createElement("article");
                 card.className = "yt-video-card";
                 card.innerHTML = `
-                    <div class="yt-thumbnail-wrapper">
-                        <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=800&auto=format&fit=crop&q=80" alt="Frutas">
-                        <div class="yt-duration-badge">2:14</div>
+                    <div class="yt-thumbnail-wrapper" style="cursor:pointer;">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
+                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                     </div>
                     <div class="yt-video-info-row">
                         <div class="yt-channel-avatar">
-                            <div style="background:#cc0000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-                                <svg style="width:18px;height:18px;fill:#ffffff" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                            <div style="background:#cc0000;color:#fff;font-weight:700;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+                                ${(item.channel || "F").charAt(0).toUpperCase()}
                             </div>
                         </div>
-                        <div class="yt-video-details">
+                        <div class="yt-video-details" style="cursor:pointer;">
                             <h2 class="yt-video-title">${escapeHtml(item.name)}</h2>
                             <div class="yt-video-metadata">
                                 <span>${escapeHtml(item.channel || "Fruit Senpai")}</span>
                                 <span>•</span>
-                                <span>${item.views || "12 mil"} visualizações</span>
+                                <span>${item.viewsCount || 0} visualizações</span>
                                 <span>•</span>
                                 <span>${item.timeAgo || "recentemente"}</span>
                             </div>
@@ -4063,6 +4087,11 @@
                         </button>
                     </div>
                 `;
+
+                // Abre o player completo ao clicar na capa ou no título
+                card.querySelector(".yt-thumbnail-wrapper").addEventListener("click", () => openWatchScreen(item, id));
+                card.querySelector(".yt-video-details").addEventListener("click", () => openWatchScreen(item, id));
+
                 dynamicFirebaseFeed.prepend(card);
             });
 
