@@ -1889,6 +1889,8 @@
             border: none;
             border-radius: 20px;
             height: 38px;
+            min-height: 38px;
+            width: calc(100% - 32px);
             margin: 12px 16px;
             display: flex;
             align-items: center;
@@ -1897,6 +1899,7 @@
             font-size: 13.5px;
             font-weight: 600;
             cursor: pointer;
+            flex-shrink: 0; /* Impede de comprimir */
         }
 
         .upload-expand-btn svg {
@@ -1919,12 +1922,14 @@
 
         /* Botão Enviar Oficial do YouTube */
         .upload-submit-btn {
-            margin: 10px 16px 20px 16px;
-            height: 42px;
+            margin: 10px 16px 24px 16px;
+            height: 44px;
+            min-height: 44px;
+            width: calc(100% - 32px);
             background-color: #ffffff;
             color: #0f0f0f;
             border: none;
-            border-radius: 21px;
+            border-radius: 22px;
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
@@ -1932,6 +1937,7 @@
             align-items: center;
             justify-content: center;
             transition: filter 0.15s ease;
+            flex-shrink: 0; /* Impede de comprimir */
         }
 
         .upload-submit-btn:active {
@@ -2715,14 +2721,13 @@
                 </button>
             </div>
 
-            <!-- OS 2 BOTÕES DE MODO (CRIAR SÉRIE / POSTAR EPISÓDIO) FIÉIS ÀS CAPTURAS 1 E 2 -->
+            <!-- OS 2 BOTÕES DE MODO (CRIAR SÉRIE / POSTAR EPISÓDIO) -->
             <div class="upload-tabs-container">
                 <button class="upload-tab-btn active" id="tabCreateSeries">
                     <span>Criar Série</span>
                 </button>
                 <button class="upload-tab-btn" id="tabPostEpisode">
                     <span>Postar episódio</span>
-                    <small>a série existente</small>
                 </button>
             </div>
 
@@ -2733,7 +2738,6 @@
                     <div class="upload-channel-name" id="uploadChannelName">Error404notafound</div>
                     <div class="upload-channel-handle" id="uploadChannelHandle">@error404notafound</div>
                 </div>
-                <div class="channel-mode-badge" id="badgeEpisodeMode">Postar episódio</div>
             </div>
 
             <!-- ==========================================================
@@ -3272,7 +3276,6 @@
         const tabPostEpisode = document.getElementById("tabPostEpisode");
         const modeCreateSeriesContainer = document.getElementById("modeCreateSeriesContainer");
         const modePostEpisodeContainer = document.getElementById("modePostEpisodeContainer");
-        const badgeEpisodeMode = document.getElementById("badgeEpisodeMode");
 
         // Campos do Modo 1: Criar Série
         const uploadSeriesName = document.getElementById("uploadSeriesName");
@@ -3308,7 +3311,6 @@
             tabPostEpisode.classList.remove("active");
             modeCreateSeriesContainer.style.display = "flex";
             modePostEpisodeContainer.style.display = "none";
-            badgeEpisodeMode.style.display = "none";
             uploadSeriesName.focus();
         });
 
@@ -3318,9 +3320,21 @@
             tabCreateSeries.classList.remove("active");
             modeCreateSeriesContainer.style.display = "none";
             modePostEpisodeContainer.style.display = "flex";
-            badgeEpisodeMode.style.display = "block";
             loadSeriesFromFirestore();
             uploadSearchSeries.focus();
+        });
+
+        // 🟢 ATUALIZAÇÃO AUTOMÁTICA DA CAPA AO DIGITAR/COLAR A URL
+        uploadEpisodeCover.addEventListener("input", (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                uploadVideoThumb.src = url;
+                currentUploadSettings.thumbUrl = url;
+            } else {
+                // Imagem padrão caso o campo seja apagado
+                uploadVideoThumb.src = "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80";
+                currentUploadSettings.thumbUrl = uploadVideoThumb.src;
+            }
         });
 
         // Alternância Legendado / Dublado
