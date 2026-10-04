@@ -1307,7 +1307,7 @@
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.7);
-            z-index: 2100;
+            z-index: 3100;
             display: none;
             align-items: flex-end;
             justify-content: center;
@@ -1627,9 +1627,11 @@
         .upload-thumb-area {
             width: 100%;
             aspect-ratio: 16 / 9;
+            min-height: 200px;
             background-color: #212121;
             position: relative;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         /* Container dos 2 botões sobrepostos na capa (Criar Série / Postar Episódio) */
