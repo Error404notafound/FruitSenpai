@@ -3142,7 +3142,27 @@
                 <button class="upload-submit-btn" id="btnCloseUploadPlaylists" style="margin-top: 6px;">Concluído</button>
             </div>
         </div>
+<!-- GAVETA INFERIOR: ALTERAR CAPA / MINIATURA PELO LÁPIS -->
+        <div class="accounts-drawer" id="drawerEditThumb">
+            <div class="accounts-sheet" style="padding: 16px 18px 24px 18px; gap: 14px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="font-size:16px; font-weight:700; color:#fff;">Alterar miniatura</h3>
+                    <button class="yt-icon-btn" id="btnCloseEditThumb">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
 
+                <div class="yt-form-control">
+                    <label style="color:var(--yt-text-secondary); font-size:12px;">Link (URL) da imagem:</label>
+                    <input type="url" id="inputThumbModalUrl" class="yt-input" placeholder="Cole o link da foto aqui...">
+                </div>
+
+                <div style="display:flex; gap:10px; justify-content: flex-end; margin-top: 4px;">
+                    <button type="button" class="profile-pill-btn" id="btnCancelEditThumb" style="flex:none; padding: 0 16px;">Cancelar</button>
+                    <button type="button" class="yt-btn-primary" id="btnConfirmEditThumb" style="padding: 8px 22px;">Concluído</button>
+                </div>
+            </div>
+        </div>
     <!-- ==========================================================================
              MODAL DE LOGIN / CADASTRO REAL (ESTILO SEAART / FRUITSENPAI)
              ========================================================================== -->
@@ -3375,12 +3395,58 @@
             iconUploadExpand.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
         });
 
-        // Editar capa/miniatura
+        // Elementos do Modal do Lápis
+        const drawerEditThumb = document.getElementById("drawerEditThumb");
+        const inputThumbModalUrl = document.getElementById("inputThumbModalUrl");
+        const btnCloseEditThumb = document.getElementById("btnCloseEditThumb");
+        const btnCancelEditThumb = document.getElementById("btnCancelEditThumb");
+        const btnConfirmEditThumb = document.getElementById("btnConfirmEditThumb");
+
+        // 1. Ao clicar no lápis, abre o campo de URL
         btnEditUploadThumb.addEventListener("click", () => {
-            const newUrl = prompt("Insira a URL da imagem da miniatura:", currentUploadSettings.thumbUrl);
-            if (newUrl && newUrl.trim()) {
-                currentUploadSettings.thumbUrl = newUrl.trim();
+            // Puxa a URL atual (seja a que já estiver na tela ou no input de episódio)
+            inputThumbModalUrl.value = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
+            drawerEditThumb.classList.add("active");
+            inputThumbModalUrl.focus();
+        });
+
+        // 2. Pré-visualização instantânea enquanto digita ou cola a URL no campo
+        inputThumbModalUrl.addEventListener("input", (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                uploadVideoThumb.src = url;
+            }
+        });
+
+        // 3. Confirmar alteração
+        btnConfirmEditThumb.addEventListener("click", () => {
+            const url = inputThumbModalUrl.value.trim();
+            if (url) {
+                currentUploadSettings.thumbUrl = url;
+                uploadVideoThumb.src = url;
+                // Sincroniza também com o campo do episódio se estiver nele
+                if (uploadEpisodeCover) {
+                    uploadEpisodeCover.value = url;
+                }
+            }
+            drawerEditThumb.classList.remove("active");
+        });
+
+        // 4. Fechar ou Cancelar
+        btnCloseEditThumb.addEventListener("click", () => {
+            uploadVideoThumb.src = currentUploadSettings.thumbUrl; // Restaura se não confirmou
+            drawerEditThumb.classList.remove("active");
+        });
+
+        btnCancelEditThumb.addEventListener("click", () => {
+            uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+            drawerEditThumb.classList.remove("active");
+        });
+
+        drawerEditThumb.addEventListener("click", (e) => {
+            if (e.target === drawerEditThumb) {
                 uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+                drawerEditThumb.classList.remove("active");
             }
         });
 
