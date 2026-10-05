@@ -2083,9 +2083,10 @@
             align-items: center;
             gap: 10px;
             overflow-x: auto;
+            overflow-y: hidden;
             white-space: nowrap;
             scrollbar-width: none;
-            padding: 6px 14px 12px 14px;
+            padding: 8px 14px 12px 14px;
             -webkit-overflow-scrolling: touch;
         }
 
@@ -2101,25 +2102,37 @@
         }
 
         #watchChannelAvatar {
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
-            max-width: 36px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
+            width: 36px !important;
+            height: 36px !important;
+            min-width: 36px !important;
+            max-width: 36px !important;
+            min-height: 36px !important;
+            max-height: 36px !important;
+            aspect-ratio: 1 / 1 !important;
+            border-radius: 50% !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
             background-color: #272727;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
         }
 
         #watchChannelAvatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 50% !important;
+            display: block !important;
+        }
+
+        #watchChannelName {
+            font-weight: 700;
+            font-size: 13.5px;
+            color: #ffffff;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-right: 4px;
         }
 
         .yt-btn-subscribe {
@@ -2159,6 +2172,10 @@
             gap: 6px;
             cursor: pointer;
             white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        #btnWatchKebab {
             flex-shrink: 0;
         }
 
@@ -2661,9 +2678,9 @@
 
     <div class="yt-watch-actions-bar">
         <div class="yt-channel-pill">
-            <!-- Avatar redondo preparado para receber a foto da Série -->
-            <div class="yt-channel-avatar" id="watchChannelAvatar" style="overflow:hidden; display:flex; align-items:center; justify-content:center;"></div>
-            <span style="font-weight:700; font-size:13px;" id="watchChannelName">Série</span>
+            <!-- Avatar redondo com travas dimensionais controladas via CSS -->
+            <div class="yt-channel-avatar" id="watchChannelAvatar"></div>
+            <span id="watchChannelName">Série</span>
             <button class="yt-btn-subscribe" id="btnSubscribe">Inscrever-se</button>
         </div>
 
@@ -4627,11 +4644,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
             if (watchChannelName) watchChannelName.textContent = seriesLabel;
 
-            // Foto redonda oficial da Série
+            // Foto redonda oficial da Série com estilo inline reforçado
             if (watchChannelAvatar) {
                 const coverImg = videoData.seriesCover || videoData.thumbUrl || "";
                 if (coverImg) {
-                    watchChannelAvatar.innerHTML = `<img src="${escapeHtml(coverImg)}" alt="${escapeHtml(seriesLabel)}">`;
+                    watchChannelAvatar.innerHTML = `<img src="${escapeHtml(coverImg)}" alt="${escapeHtml(seriesLabel)}" style="width:100% !important; height:100% !important; object-fit:cover !important; border-radius:50% !important; display:block !important;">`;
                 } else {
                     watchChannelAvatar.textContent = seriesLabel.charAt(0).toUpperCase();
                 }
@@ -4682,18 +4699,33 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             if (!container) return;
             container.innerHTML = "";
 
-            const targetSeries = (videoData.channel || "").trim();
+            // Normaliza o nome da série ignorando referências ao login do autor
+            const targetSeries = ((videoData.channel && !videoData.channel.includes("@") && videoData.channel !== "Error404notafound") 
+                ? videoData.channel 
+                : (videoData.name ? videoData.name.split(" - ")[0].trim() : "")).toLowerCase().trim();
+
+            const currentTitleNorm = (videoData.name || "").toLowerCase().trim();
 
             onSnapshot(frutasColecao, (snapshot) => {
                 container.innerHTML = "";
                 const relatedList = [];
 
                 snapshot.forEach((d) => {
-                    if (d.id !== videoId) {
-                        const itemData = d.data();
-                        if (itemData.channel && itemData.channel.trim() === targetSeries) {
-                            relatedList.push({ id: d.id, ...itemData });
-                        }
+                    // Ignora o documento ativo pelo ID
+                    if (d.id === videoId) return;
+
+                    const itemData = d.data();
+                    const itemTitleNorm = (itemData.name || "").toLowerCase().trim();
+
+                    // Ignora duplicatas com o mesmo título do episódio ativo
+                    if (currentTitleNorm && itemTitleNorm === currentTitleNorm) return;
+
+                    const epSeries = ((itemData.channel && !itemData.channel.includes("@") && itemData.channel !== "Error404notafound") 
+                        ? itemData.channel 
+                        : (itemData.name ? itemData.name.split(" - ")[0].trim() : "")).toLowerCase().trim();
+
+                    if (targetSeries && epSeries && epSeries === targetSeries) {
+                        relatedList.push({ id: d.id, ...itemData, resolvedSeries: itemData.channel || videoData.channel || "Série" });
                     }
                 });
 
@@ -4712,16 +4744,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                             <div class="yt-duration-badge">${escapeHtml(ep.duration || "24:00")}</div>
                         </div>
                         <div class="yt-video-info-row">
-                            <div class="yt-channel-avatar">
+                            <div class="yt-channel-avatar" style="width:36px; height:36px; min-width:36px; border-radius:50%; overflow:hidden;">
                                 ${(ep.seriesCover || ep.thumbUrl)
-                                    ? `<img src="${escapeHtml(ep.seriesCover || ep.thumbUrl)}" alt="Capa" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
-                                    : `<div style="background:#cc0000;color:#fff;font-weight:700;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${(ep.channel || "S").charAt(0).toUpperCase()}</div>`
+                                    ? `<img src="${escapeHtml(ep.seriesCover || ep.thumbUrl)}" alt="Capa" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">`
+                                    : `<div style="background:#cc0000;color:#fff;font-weight:700;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${(ep.resolvedSeries || "S").charAt(0).toUpperCase()}</div>`
                                 }
                             </div>
                             <div class="yt-video-details">
                                 <h2 class="yt-video-title">${escapeHtml(ep.name)}</h2>
                                 <div class="yt-video-metadata">
-                                    <span>${escapeHtml((ep.channel && !ep.channel.includes("@") && ep.channel !== "Error404notafound") ? ep.channel : (ep.name ? ep.name.split(" - ")[0].trim() : "Série"))}</span>
+                                    <span>${escapeHtml(ep.resolvedSeries || "Série")}</span>
                                     <span>•</span>
                                     <span>${ep.viewsCount || 0} visualizações</span>
                                     <span>•</span>
