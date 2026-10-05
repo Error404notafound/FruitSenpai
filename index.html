@@ -234,7 +234,7 @@
             display: flex;
             flex-direction: column;
             gap: 22px;
-            padding: 10px 0 24px 0;
+            padding: 10px 0 95px 0;
             background-color: #000000;
         }
 
@@ -710,16 +710,24 @@
         .fs-poster-title {
             font-size: 11px;
             font-weight: 600;
-            color: #fff;
-            margin-top: 5px;
+            color: #ffffff;
+            margin-top: 6px;
+            width: 100%;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            display: block;
         }
 
         .fs-poster-genre {
             font-size: 9.5px;
-            color: #777;
+            color: #888888;
+            margin-top: 2px;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
         }
 
         .fs-ranked-card {
@@ -3648,7 +3656,7 @@
                 </div>
             </section>
 
-            <!-- 11. SEÇÃO: ANIMES MAIS RECENTES (COM 1 ÚNICO GÊNERO, TRUNCAMENTO E DIRECIONAMENTO PARA O CANAL) -->
+            <!-- 11. SEÇÃO: ANIMES MAIS RECENTES (DINÂMICO PELO FIREBASE FIRESTORE) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
@@ -3658,33 +3666,7 @@
                     <button class="fs-link-more">Tudo</button>
                 </div>
 
-                <div class="fs-carousel">
-                    <div class="fs-poster-card fs-open-channel-btn" data-series="Dark Summoner to dekiru ka">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="Dark Summoner"></div>
-                        <div class="fs-poster-title" title="Dark Summoner to dekiru ka">Dark Summoner t...</div>
-                        <div class="fs-poster-genre">Adulto</div>
-                    </div>
-                    <div class="fs-poster-card fs-open-channel-btn" data-series="Cowboy Bebop">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Cowboy Bebop"></div>
-                        <div class="fs-poster-title" title="Cowboy Bebop">Cowboy Bebop...</div>
-                        <div class="fs-poster-genre">Aventura</div>
-                    </div>
-                    <div class="fs-poster-card fs-open-channel-btn" data-series="Overgeared">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Overgeared"></div>
-                        <div class="fs-poster-title" title="Overgeared">Overgeared</div>
-                        <div class="fs-poster-genre">Aventura</div>
-                    </div>
-                    <div class="fs-poster-card fs-open-channel-btn" data-series="Ganbare! Nakamura">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Ganbare"></div>
-                        <div class="fs-poster-title" title="Ganbare! Nakamura">Ganbare!...</div>
-                        <div class="fs-poster-genre">Comédia</div>
-                    </div>
-                    <div class="fs-poster-card fs-open-channel-btn" data-series="Deatte 5-byou de Battle">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="Deatte"></div>
-                        <div class="fs-poster-title" title="Deatte 5-byou de Battle">Deatte 5-by...</div>
-                        <div class="fs-poster-genre">Drama</div>
-                    </div>
-                </div>
+                <div class="fs-carousel" id="recentAnimesCarousel"></div>
             </section>
 
         </main>
@@ -6693,15 +6675,73 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Ativa o clique nos cards da seção "Animes mais recentes" para abrir o canal da série
-        document.querySelectorAll(".fs-open-channel-btn").forEach(card => {
-            card.addEventListener("click", () => {
-                const sName = card.getAttribute("data-series");
-                if (sName) {
-                    openSeriesChannel(sName);
+        // Carrega em tempo real as séries criadas no Firebase para a seção 'Animes mais recentes'
+        const recentAnimesCarousel = document.getElementById("recentAnimesCarousel");
+
+        function loadRecentSeriesFromFirestore() {
+            if (!recentAnimesCarousel) return;
+
+            onSnapshot(collection(db, "series"), (snapshot) => {
+                const seriesList = [];
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    if (!data.isAdult) {
+                        seriesList.push({ id: docSnap.id, ...data });
+                    }
+                });
+
+                seriesList.sort((a, b) => {
+                    const timeA = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
+                    const timeB = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
+                    return timeB - timeA;
+                });
+
+                recentAnimesCarousel.innerHTML = "";
+
+                if (seriesList.length === 0) {
+                    const defaultSeries = [
+                        { title: "Dark Summoner to dekiru ka", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Adulto"] },
+                        { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Aventura"] },
+                        { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Aventura"] },
+                        { title: "Ganbare! Nakamura", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Comédia"] },
+                        { title: "Deatte 5-byou de Battle", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama"] }
+                    ];
+
+                    defaultSeries.forEach((item) => {
+                        renderSingleSeriesCard(item);
+                    });
+                } else {
+                    seriesList.forEach((item) => {
+                        renderSingleSeriesCard(item);
+                    });
                 }
             });
-        });
+        }
+
+        function renderSingleSeriesCard(item) {
+            const seriesTitle = item.title || "Série";
+            const singleGenre = (Array.isArray(item.genres) && item.genres.length > 0) ? item.genres[0] : (item.genre || "Anime");
+            const seriesCover = item.coverUrl || item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
+
+            const card = document.createElement("div");
+            card.className = "fs-poster-card";
+            card.innerHTML = `
+                <div class="fs-poster-thumb">
+                    <img src="${escapeHtml(seriesCover)}" alt="${escapeHtml(seriesTitle)}">
+                </div>
+                <div class="fs-poster-title" title="${escapeHtml(seriesTitle)}">${escapeHtml(seriesTitle)}</div>
+                <div class="fs-poster-genre">${escapeHtml(singleGenre)}</div>
+            `;
+
+            card.addEventListener("click", () => {
+                openSeriesChannel(seriesTitle);
+            });
+
+            recentAnimesCarousel.appendChild(card);
+        }
+
+        loadRecentSeriesFromFirestore();
     </script>
 </body>
   </html>
