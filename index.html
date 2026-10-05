@@ -2081,16 +2081,45 @@
         .yt-watch-actions-bar {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             overflow-x: auto;
+            white-space: nowrap;
             scrollbar-width: none;
-            padding: 4px 14px 12px 14px;
+            padding: 6px 14px 12px 14px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .yt-watch-actions-bar::-webkit-scrollbar {
+            display: none;
         }
 
         .yt-channel-pill {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        #watchChannelAvatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            max-width: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            background-color: #272727;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #watchChannelAvatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
         }
 
         .yt-btn-subscribe {
@@ -2099,10 +2128,12 @@
             border: none;
             border-radius: 18px;
             height: 36px;
-            padding: 0 14px;
+            padding: 0 16px;
             font-size: 13px;
             font-weight: 700;
             cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .yt-pill-group {
@@ -2111,6 +2142,8 @@
             background-color: #272727;
             border-radius: 18px;
             height: 36px;
+            flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .yt-pill-btn {
@@ -2125,6 +2158,8 @@
             align-items: center;
             gap: 6px;
             cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .yt-pill-btn svg {
@@ -4584,15 +4619,21 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             openScreen(viewWatchVideo);
 
             if (watchVideoTitle) watchVideoTitle.textContent = videoData.name || "Vídeo sem título";
-            if (watchChannelName) watchChannelName.textContent = videoData.channel || "Série";
             
-            // Foto redonda da Série postada
+            // Prioriza o nome da série mesmo que o documento tenha salvo o login do usuário
+            let seriesLabel = (videoData.channel && !videoData.channel.includes("@") && videoData.channel !== "Error404notafound") 
+                ? videoData.channel 
+                : (videoData.name ? videoData.name.split(" - ")[0].trim() : "Série");
+
+            if (watchChannelName) watchChannelName.textContent = seriesLabel;
+
+            // Foto redonda oficial da Série
             if (watchChannelAvatar) {
-                const coverImg = videoData.seriesCover || videoData.thumbUrl;
+                const coverImg = videoData.seriesCover || videoData.thumbUrl || "";
                 if (coverImg) {
-                    watchChannelAvatar.innerHTML = `<img src="${escapeHtml(coverImg)}" alt="${escapeHtml(videoData.channel || 'Série')}" style="width:100%; height:100%; object-fit:cover; border-radius:50%; display:block;">`;
+                    watchChannelAvatar.innerHTML = `<img src="${escapeHtml(coverImg)}" alt="${escapeHtml(seriesLabel)}">`;
                 } else {
-                    watchChannelAvatar.textContent = (videoData.channel || "S").charAt(0).toUpperCase();
+                    watchChannelAvatar.textContent = seriesLabel.charAt(0).toUpperCase();
                 }
             }
 
@@ -4672,15 +4713,15 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         </div>
                         <div class="yt-video-info-row">
                             <div class="yt-channel-avatar">
-                                ${ep.seriesCover 
-                                    ? `<img src="${escapeHtml(ep.seriesCover)}" alt="Capa" style="width:100%;height:100%;object-fit:cover;">`
+                                ${(ep.seriesCover || ep.thumbUrl)
+                                    ? `<img src="${escapeHtml(ep.seriesCover || ep.thumbUrl)}" alt="Capa" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`
                                     : `<div style="background:#cc0000;color:#fff;font-weight:700;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">${(ep.channel || "S").charAt(0).toUpperCase()}</div>`
                                 }
                             </div>
                             <div class="yt-video-details">
                                 <h2 class="yt-video-title">${escapeHtml(ep.name)}</h2>
                                 <div class="yt-video-metadata">
-                                    <span>${escapeHtml(ep.channel || "Série")}</span>
+                                    <span>${escapeHtml((ep.channel && !ep.channel.includes("@") && ep.channel !== "Error404notafound") ? ep.channel : (ep.name ? ep.name.split(" - ")[0].trim() : "Série"))}</span>
                                     <span>•</span>
                                     <span>${ep.viewsCount || 0} visualizações</span>
                                     <span>•</span>
