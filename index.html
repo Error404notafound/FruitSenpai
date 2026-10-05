@@ -901,6 +901,506 @@
         }
 
         /* ==========================================================================
+           ESTILOS DO CANAL DA SÉRIE (A1, A2, A3, A4 - 100% FIEL AO YOUTUBE)
+           ========================================================================== */
+        .series-channel-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #0f0f0f;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            z-index: 9998;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 60px;
+        }
+
+        .series-channel-view.active {
+            display: flex;
+        }
+
+        .channel-top-bar {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background-color: #0f0f0f;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .channel-top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .channel-top-bar-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+        }
+
+        .channel-banner-container {
+            width: 100%;
+            aspect-ratio: 16 / 5;
+            background-color: #212121;
+            overflow: hidden;
+        }
+
+        .channel-banner-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-profile-header {
+            padding: 14px 16px 6px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .channel-profile-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .channel-avatar-circle {
+            width: 64px;
+            height: 64px;
+            min-width: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .channel-avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-name-badge-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .channel-name-h1 {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .channel-verified-svg {
+            width: 15px;
+            height: 15px;
+            fill: #ffffff;
+        }
+
+        .channel-handle-text {
+            font-size: 12.5px;
+            color: #aaaaaa;
+            margin-top: 2px;
+        }
+
+        .channel-meta-counters {
+            font-size: 12px;
+            color: #aaaaaa;
+            margin-top: 2px;
+        }
+
+        .channel-desc-preview-row {
+            font-size: 12.5px;
+            color: #aaaaaa;
+            line-height: 1.35;
+            cursor: pointer;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .channel-desc-preview-row .channel-more-text {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .channel-links-clickable-row {
+            font-size: 12px;
+            color: #3ea6ff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        .channel-links-clickable-row svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .channel-subscribe-full-btn {
+            width: 100%;
+            height: 38px;
+            background-color: #ffffff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 19px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 4px;
+        }
+
+        .channel-subscribe-full-btn.subscribed {
+            background-color: #272727;
+            color: #aaaaaa;
+        }
+
+        .channel-tabs-bar {
+            height: 44px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 0 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 8px;
+        }
+
+        .channel-tabs-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .channel-tab-item {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #aaaaaa;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .channel-tab-item.active {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .channel-tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #ffffff;
+        }
+
+        .channel-section-block {
+            display: flex;
+            flex-direction: column;
+            padding: 16px 0 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .channel-section-header {
+            padding: 0 16px 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .channel-section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .channel-trailer-card {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .channel-trailer-thumb-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #1a1a1a;
+            position: relative;
+        }
+
+        .channel-trailer-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-trailer-info {
+            padding: 10px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .channel-trailer-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+            line-height: 1.35;
+        }
+
+        .channel-horizontal-video-row {
+            display: flex;
+            gap: 12px;
+            padding: 8px 16px;
+            align-items: flex-start;
+            cursor: pointer;
+        }
+
+        .channel-horizontal-thumb {
+            width: 138px;
+            min-width: 138px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #212121;
+        }
+
+        .channel-horizontal-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-horizontal-details {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .channel-horizontal-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #ffffff;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .channel-horizontal-meta {
+            font-size: 11px;
+            color: #aaaaaa;
+            margin-top: 2px;
+        }
+
+        .channel-expand-chevron-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .channel-expand-chevron-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            transition: transform 0.2s;
+        }
+
+        .channel-expand-chevron-btn.rotated svg {
+            transform: rotate(180deg);
+        }
+
+        .channel-associated-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+
+        .channel-associated-avatar {
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+        }
+
+        .channel-associated-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-associated-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            flex: 1;
+        }
+
+        .channel-associated-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .channel-associated-handle {
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        .channel-associated-subs {
+            font-size: 11.5px;
+            color: #aaaaaa;
+        }
+
+        .channel-empty-warning-box {
+            padding: 16px;
+            margin: 0 16px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #aaaaaa;
+            text-align: center;
+        }
+
+        .channel-playlist-horizontal-card {
+            width: 150px;
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .channel-playlist-cover-wrapper {
+            width: 150px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #212121;
+        }
+
+        .channel-playlist-cover-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-playlist-badge-count {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 2px 5px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .channel-playlist-title-text {
+            font-size: 12.5px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-top: 6px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .series-desc-drawer-sheet {
+            height: 80vh;
+            max-height: 80vh;
+            background-color: #0f0f0f;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .series-desc-info-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 13px;
+            color: #ffffff;
+            padding: 6px 0;
+        }
+
+        .series-desc-info-item svg {
+            width: 20px;
+            height: 20px;
+            fill: #aaaaaa;
+            min-width: 20px;
+        }
+
+        .series-report-user-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-radius: 18px;
+            height: 36px;
+            padding: 0 16px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            align-self: flex-start;
+        }
+
+        .series-report-user-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* ==========================================================================
            10. BARRA INFERIOR DE NAVEGAÇÃO (BOTTOM NAV BAR)
            ========================================================================== */
         .yt-bottom-bar {
@@ -3148,7 +3648,7 @@
                 </div>
             </section>
 
-            <!-- 11. SEÇÃO: ANIMES MAIS RECENTES -->
+            <!-- 11. SEÇÃO: ANIMES MAIS RECENTES (COM 1 ÚNICO GÊNERO, TRUNCAMENTO E DIRECIONAMENTO PARA O CANAL) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
@@ -3159,20 +3659,30 @@
                 </div>
 
                 <div class="fs-carousel">
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Anime"></div>
-                        <div class="fs-poster-title">Cowboy Bebop...</div>
+                    <div class="fs-poster-card fs-open-channel-btn" data-series="Dark Summoner to dekiru ka">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="Dark Summoner"></div>
+                        <div class="fs-poster-title" title="Dark Summoner to dekiru ka">Dark Summoner t...</div>
+                        <div class="fs-poster-genre">Adulto</div>
+                    </div>
+                    <div class="fs-poster-card fs-open-channel-btn" data-series="Cowboy Bebop">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Cowboy Bebop"></div>
+                        <div class="fs-poster-title" title="Cowboy Bebop">Cowboy Bebop...</div>
                         <div class="fs-poster-genre">Aventura</div>
                     </div>
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Anime"></div>
-                        <div class="fs-poster-title">Overgeared</div>
+                    <div class="fs-poster-card fs-open-channel-btn" data-series="Overgeared">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Overgeared"></div>
+                        <div class="fs-poster-title" title="Overgeared">Overgeared</div>
                         <div class="fs-poster-genre">Aventura</div>
                     </div>
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Anime"></div>
-                        <div class="fs-poster-title">Ganbare!...</div>
+                    <div class="fs-poster-card fs-open-channel-btn" data-series="Ganbare! Nakamura">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Ganbare"></div>
+                        <div class="fs-poster-title" title="Ganbare! Nakamura">Ganbare!...</div>
                         <div class="fs-poster-genre">Comédia</div>
+                    </div>
+                    <div class="fs-poster-card fs-open-channel-btn" data-series="Deatte 5-byou de Battle">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="Deatte"></div>
+                        <div class="fs-poster-title" title="Deatte 5-byou de Battle">Deatte 5-by...</div>
+                        <div class="fs-poster-genre">Drama</div>
                     </div>
                 </div>
             </section>
@@ -3262,6 +3772,202 @@
 
             <div id="watchRelatedFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
         </section>
+
+        <!-- ==========================================================================
+             TELA DO CANAL DA SÉRIE (A1, A2.1, A2.2, A2.3, A2.4, A2.5, A2.6, A2.7)
+             ========================================================================== -->
+        <section class="series-channel-view" id="viewSeriesChannel">
+            <div class="channel-top-bar">
+                <div class="channel-top-bar-left">
+                    <button class="yt-icon-btn" id="btnBackFromChannel" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span class="channel-top-bar-title" id="topBarChannelTitle">Nome da Série</span>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
+                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                </div>
+            </div>
+
+            <!-- Contracapa Retangular Horizontal -->
+            <div class="channel-banner-container">
+                <img id="channelBannerImg" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Banner">
+            </div>
+
+            <!-- Cabeçalho de Perfil da Série (A1) -->
+            <div class="channel-profile-header">
+                <div class="channel-profile-row">
+                    <div class="channel-avatar-circle">
+                        <img id="channelAvatarImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" alt="Avatar">
+                    </div>
+                    <div>
+                        <div class="channel-name-badge-row">
+                            <h1 class="channel-name-h1" id="channelNameH1">Nome da Série</h1>
+                            <svg class="channel-verified-svg" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                        </div>
+                        <div class="channel-handle-text" id="channelHandleText">@serie</div>
+                        <div class="channel-meta-counters">
+                            <span id="channelSubsCountText">0 inscritos</span>
+                            <span>•</span>
+                            <span id="channelVideosCountText">0 vídeos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Descrição Curta com Botão ...mais -->
+                <div class="channel-desc-preview-row" id="btnOpenSeriesDescription">
+                    <span id="channelDescShort">Biografia e sinopse completa da série...</span>
+                    <span class="channel-more-text">...mais</span>
+                </div>
+
+                <div class="channel-links-clickable-row" id="btnOpenSeriesLinks">
+                    <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                    <span id="channelLinkUrlPreview">fruitsenpai.app/serie e mais 1 link</span>
+                </div>
+
+                <button class="channel-subscribe-full-btn" id="btnChannelSubscribe">Inscrever-se</button>
+            </div>
+
+            <!-- Abas de Navegação do Canal (A2) -->
+            <div class="channel-tabs-bar">
+                <button class="channel-tab-item active">Início</button>
+                <button class="channel-tab-item">Vídeos</button>
+                <button class="channel-tab-item">Shorts</button>
+                <button class="channel-tab-item">Ao vivo</button>
+                <button class="channel-tab-item">Podcasts</button>
+                <button class="channel-tab-item">Playlists</button>
+                <button class="channel-tab-item">Posts</button>
+                <button class="channel-tab-item">Pesquisar</button>
+            </div>
+
+            <!-- SEÇÃO: TRAILER OU "PARA VOCÊ" -->
+            <div id="channelTrailerContainer" style="display:none;" class="channel-section-block">
+                <div class="channel-trailer-card" id="btnPlayChannelTrailer">
+                    <div class="channel-trailer-thumb-box">
+                        <img id="channelTrailerThumbImg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=600" alt="Trailer">
+                        <div class="yt-duration-badge" id="channelTrailerDurationBadge">02:30</div>
+                    </div>
+                    <div class="channel-trailer-info">
+                        <h3 class="channel-trailer-title" id="channelTrailerTitle">Trailer Oficial da Série</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO "PARA VOCÊ" (12 Cards Horizontais Aleatórios) -->
+            <div class="channel-section-block" id="channelForYouBlock">
+                <div class="channel-section-header">
+                    <h3 class="channel-section-title">Para você</h3>
+                </div>
+                <div class="fs-carousel" id="channelForYouCarousel"></div>
+            </div>
+
+            <!-- SEÇÃO "VÍDEOS" (Recentes de cima a baixo com expansão para 12 no chevron) -->
+            <div class="channel-section-block" id="channelRecentVideosBlock">
+                <div class="channel-section-header">
+                    <h3 class="channel-section-title">Vídeos</h3>
+                </div>
+                <div id="channelRecentVideosList"></div>
+                <button class="channel-expand-chevron-btn" id="btnExpandChannelVideos" aria-label="Mostrar mais vídeos">
+                    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </button>
+            </div>
+
+            <!-- SEÇÃO "VÍDEOS MAIS ACESSADOS" (Exibe somente se houver vídeos com >= 100 views) -->
+            <div class="channel-section-block" id="channelPopularVideosBlock" style="display:none;">
+                <div class="channel-section-header">
+                    <h3 class="channel-section-title">Vídeos mais acessados</h3>
+                </div>
+                <div id="channelPopularVideosList"></div>
+            </div>
+
+            <!-- SEÇÃO "CANAIS ASSOCIADOS" (Cruzamento de Tags/Gêneros Semelhantes) -->
+            <div class="channel-section-block" id="channelAssociatedBlock">
+                <div class="channel-section-header">
+                    <h3 class="channel-section-title">Canais associados</h3>
+                </div>
+                <div id="channelAssociatedList"></div>
+            </div>
+
+            <!-- SEÇÃO "SHORTS" (Exibe os shorts ou aviso se não houver) -->
+            <div class="channel-section-block" id="channelShortsBlock">
+                <div class="channel-section-header">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <svg style="width:20px;height:20px;fill:#ff0000" viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
+                        <h3 class="channel-section-title">Shorts</h3>
+                    </div>
+                </div>
+                <div id="channelShortsContainer"></div>
+            </div>
+
+            <!-- SEÇÃO "PLAYLISTS" (Playlists públicas com mais de 4 episódios da série) -->
+            <div class="channel-section-block" id="channelPlaylistsBlock">
+                <div class="channel-section-header">
+                    <h3 class="channel-section-title">Playlists</h3>
+                </div>
+                <div class="fs-carousel" id="channelPlaylistsCarousel"></div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             GAVETA INFERIOR: DESCRIÇÃO DA SÉRIE (A3, A4)
+             ========================================================================== -->
+        <div class="accounts-drawer" id="drawerSeriesDescription">
+            <div class="accounts-sheet series-desc-drawer-sheet">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="yt-desc-header">
+                    <h3 class="yt-desc-header-title" id="drawerSeriesNameTitle">Nome da Série</h3>
+                    <button class="yt-icon-btn" id="btnCloseSeriesDescriptionDrawer" type="button" aria-label="Fechar">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+                <div class="yt-desc-scroll-area">
+                    <h4 style="font-size:15px; font-weight:700; color:#fff;">Descrição</h4>
+                    <p style="font-size:13px; color:#cccccc; line-height:1.45;" id="drawerSeriesFullDescription">Sinopse da série...</p>
+
+                    <h4 style="font-size:15px; font-weight:700; color:#fff; margin-top:10px;">Links</h4>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <a href="#" target="_blank" style="color:#3ea6ff; text-decoration:none; font-size:13px; display:flex; align-items:center; gap:8px;">
+                            <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                            <span>Nosso site oficial</span>
+                        </a>
+                    </div>
+
+                    <h4 style="font-size:15px; font-weight:700; color:#fff; margin-top:12px;">Mais informações</h4>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <div class="series-desc-info-item">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            <span id="drawerSeriesInfoUrl">www.youtube.com/@serie</span>
+                        </div>
+                        <div class="series-desc-info-item">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                            <span id="drawerSeriesInfoCountry">Japão</span>
+                        </div>
+                        <div class="series-desc-info-item">
+                            <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                            <span id="drawerSeriesInfoCreatedDate">Registrada em 11 de jul. de 2021</span>
+                        </div>
+                        <div class="series-desc-info-item">
+                            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                            <span id="drawerSeriesInfoSubs">0 inscritos</span>
+                        </div>
+                        <div class="series-desc-info-item">
+                            <svg viewBox="0 0 24 24"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+                            <span id="drawerSeriesInfoVideos">0 vídeos</span>
+                        </div>
+                        <div class="series-desc-info-item">
+                            <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+                            <span id="drawerSeriesInfoTotalViews">0 visualizações</span>
+                        </div>
+                    </div>
+
+                    <button class="series-report-user-btn" type="button">
+                        <svg viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                        <span>Denunciar série</span>
+                    </button>
+                </div>
+            </div>
+        </div>
 
 <!-- ==========================================================================
              TELA A2: PAINEL PRINCIPAL "VOCÊ" (ABERTO PELO BOTÃO A1)
@@ -5636,6 +6342,366 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
         }
+
+        // ==========================================================================
+        // LÓGICA DO CANAL DA SÉRIE (A1, A2, A3, A4) COM CÁLCULO REAL DE VIEWS E VÍDEOS
+        // ==========================================================================
+        const viewSeriesChannel = document.getElementById("viewSeriesChannel");
+        const btnBackFromChannel = document.getElementById("btnBackFromChannel");
+        const drawerSeriesDescription = document.getElementById("drawerSeriesDescription");
+        const btnOpenSeriesDescription = document.getElementById("btnOpenSeriesDescription");
+        const btnCloseSeriesDescriptionDrawer = document.getElementById("btnCloseSeriesDescriptionDrawer");
+        const btnExpandChannelVideos = document.getElementById("btnExpandChannelVideos");
+        const btnChannelSubscribe = document.getElementById("btnChannelSubscribe");
+
+        let currentActiveSeriesEpisodes = [];
+        let isChannelVideosExpanded = false;
+        let isSeriesSubscribed = false;
+
+        if (btnBackFromChannel) {
+            btnBackFromChannel.addEventListener("click", () => {
+                viewSeriesChannel.classList.remove("active");
+                openScreen("home");
+            });
+        }
+
+        if (btnOpenSeriesDescription) {
+            btnOpenSeriesDescription.addEventListener("click", () => {
+                drawerSeriesDescription.classList.add("active");
+            });
+        }
+
+        if (btnCloseSeriesDescriptionDrawer) {
+            btnCloseSeriesDescriptionDrawer.addEventListener("click", () => {
+                drawerSeriesDescription.classList.remove("active");
+            });
+        }
+
+        if (drawerSeriesDescription) {
+            drawerSeriesDescription.addEventListener("click", (e) => {
+                if (e.target === drawerSeriesDescription) {
+                    drawerSeriesDescription.classList.remove("active");
+                }
+            });
+        }
+
+        if (btnChannelSubscribe) {
+            btnChannelSubscribe.addEventListener("click", () => {
+                isSeriesSubscribed = !isSeriesSubscribed;
+                btnChannelSubscribe.textContent = isSeriesSubscribed ? "Inscrito" : "Inscrever-se";
+                btnChannelSubscribe.classList.toggle("subscribed", isSeriesSubscribed);
+                showToast(isSeriesSubscribed ? "Inscrição adicionada" : "Inscrição cancelada");
+            });
+        }
+
+        // Abre o Canal da Série e consolida todos os posts filhos
+        async function openSeriesChannel(seriesName) {
+            if (!seriesName) return;
+
+            const cleanName = seriesName.trim();
+            const handleText = "@" + cleanName.toLowerCase().replace(/\s+/g, '');
+
+            document.getElementById("topBarChannelTitle").textContent = cleanName;
+            document.getElementById("channelNameH1").textContent = cleanName;
+            document.getElementById("channelHandleText").textContent = handleText;
+            document.getElementById("drawerSeriesNameTitle").textContent = cleanName;
+            document.getElementById("drawerSeriesInfoUrl").textContent = `www.youtube.com/${handleText}`;
+            document.getElementById("channelLinkUrlPreview").textContent = `fruitsenpai.app/${cleanName.toLowerCase().replace(/\s+/g, '')} e mais 1 link`;
+
+            // Abre a tela do canal
+            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
+            viewSeriesChannel.classList.add("active");
+            window.scrollTo(0, 0);
+
+            // Busca os dados da série mãe cadastrada no Firestore
+            let matchedSeriesData = null;
+            try {
+                const seriesSnap = await onSnapshot(collection(db, "series"), (snapshot) => {
+                    snapshot.forEach(docSnap => {
+                        const sData = docSnap.data();
+                        if (sData.title && sData.title.toLowerCase() === cleanName.toLowerCase()) {
+                            matchedSeriesData = sData;
+                        }
+                    });
+                });
+            } catch (err) {}
+
+            // Consulta todos os posts filhos (episódios de todos os usuários ligados a esta série)
+            onSnapshot(frutasColecao, (snapshot) => {
+                currentActiveSeriesEpisodes = [];
+                let totalAccumulatedViews = 0;
+                let seriesCoverImage = "";
+
+                snapshot.forEach(docSnap => {
+                    const ep = { id: docSnap.id, ...docSnap.data() };
+                    const epName = (ep.name || "").toLowerCase();
+                    const epChan = (ep.channel || "").toLowerCase();
+                    const target = cleanName.toLowerCase();
+
+                    if (epChan === target || epChan.includes(target) || epName.includes(target)) {
+                        currentActiveSeriesEpisodes.push(ep);
+                        totalAccumulatedViews += Number(ep.viewsCount || 0);
+                        if (!seriesCoverImage && (ep.seriesCover || ep.thumbUrl)) {
+                            seriesCoverImage = ep.seriesCover || ep.thumbUrl;
+                        }
+                    }
+                });
+
+                // Atualiza Imagens do Banner e Avatar
+                const finalThumb = (matchedSeriesData && matchedSeriesData.coverUrl) || seriesCoverImage || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+                document.getElementById("channelBannerImg").src = finalThumb;
+                document.getElementById("channelAvatarImg").src = finalThumb;
+
+                // Contadores e Metadados Reais
+                const totalVideosCount = currentActiveSeriesEpisodes.length;
+                document.getElementById("channelVideosCountText").textContent = `${totalVideosCount} vídeos`;
+                document.getElementById("drawerSeriesInfoVideos").textContent = `${totalVideosCount} vídeos`;
+                document.getElementById("channelSubsCountText").textContent = "584 inscritos";
+                document.getElementById("drawerSeriesInfoSubs").textContent = "584 inscritos";
+                document.getElementById("drawerSeriesInfoTotalViews").textContent = `${totalAccumulatedViews.toLocaleString('pt-BR')} visualizações`;
+
+                const synopsis = (matchedSeriesData && matchedSeriesData.synopsis) || `Assista todos os episódios oficiais de ${cleanName} postados pela comunidade FruitSenpai.`;
+                document.getElementById("channelDescShort").textContent = synopsis;
+                document.getElementById("drawerSeriesFullDescription").textContent = synopsis;
+
+                // 1. Trailer ou "Para você"
+                const trailerBox = document.getElementById("channelTrailerContainer");
+                const trailerVideo = currentActiveSeriesEpisodes.find(ep => (ep.name || "").toLowerCase().includes("trailer"));
+
+                if (trailerVideo) {
+                    trailerBox.style.display = "flex";
+                    document.getElementById("channelTrailerThumbImg").src = trailerVideo.thumbUrl || finalThumb;
+                    document.getElementById("channelTrailerTitle").textContent = trailerVideo.name;
+                    document.getElementById("channelTrailerDurationBadge").textContent = trailerVideo.duration || "02:30";
+                    document.getElementById("btnPlayChannelTrailer").onclick = () => openWatchScreen(trailerVideo, trailerVideo.id);
+                } else {
+                    trailerBox.style.display = "none";
+                }
+
+                // 2. Seção "Para você" (12 cards horizontais aleatórios)
+                const forYouCarousel = document.getElementById("channelForYouCarousel");
+                forYouCarousel.innerHTML = "";
+                const shuffled = [...currentActiveSeriesEpisodes].sort(() => 0.5 - Math.random()).slice(0, 12);
+
+                shuffled.forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "fs-ep-card";
+                    card.style.minWidth = "140px";
+                    card.style.width = "140px";
+                    card.innerHTML = `
+                        <div class="fs-ep-thumb">
+                            <img src="${escapeHtml(item.thumbUrl || finalThumb)}" alt="Capa">
+                            <span class="fs-badge-hd">HD</span>
+                            <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                        </div>
+                        <div class="fs-ep-title">${escapeHtml(item.name)}</div>
+                        <div class="fs-ep-sub">${formatNumber(item.viewsCount || 0)} visualizações</div>
+                    `;
+                    card.onclick = () => openWatchScreen(item, item.id);
+                    forYouCarousel.appendChild(card);
+                });
+
+                // 3. Seção "Vídeos" (Mais recentes de cima a baixo, 3 iniciais, expansão para 12)
+                renderRecentChannelVideos();
+
+                // 4. Seção "Vídeos mais acessados" (Só aparece se houver vídeos com >= 100 views)
+                const popularBlock = document.getElementById("channelPopularVideosBlock");
+                const popularList = document.getElementById("channelPopularVideosList");
+                popularList.innerHTML = "";
+                const popularVideos = currentActiveSeriesEpisodes.filter(item => Number(item.viewsCount || 0) >= 100).sort((a, b) => (b.viewsCount || 0) - (a.viewsCount || 0));
+
+                if (popularVideos.length > 0) {
+                    popularBlock.style.display = "flex";
+                    popularVideos.slice(0, 5).forEach(popItem => {
+                        const row = document.createElement("div");
+                        row.className = "channel-horizontal-video-row";
+                        row.innerHTML = `
+                            <div class="channel-horizontal-thumb">
+                                <img src="${escapeHtml(popItem.thumbUrl || finalThumb)}" alt="Capa">
+                                <div class="yt-duration-badge">${escapeHtml(popItem.duration || "24:00")}</div>
+                            </div>
+                            <div class="channel-horizontal-details">
+                                <h4 class="channel-horizontal-title">${escapeHtml(popItem.name)}</h4>
+                                <div class="channel-horizontal-meta">
+                                    <span>${escapeHtml(cleanName)}</span>
+                                    <span>•</span>
+                                    <span>${formatNumber(popItem.viewsCount || 0)} visualizações</span>
+                                </div>
+                            </div>
+                        `;
+                        row.onclick = () => openWatchScreen(popItem, popItem.id);
+                        popularList.appendChild(row);
+                    });
+                } else {
+                    popularBlock.style.display = "none";
+                }
+
+                // 5. Seção "Canais associados" (Cruzamento de tags/gêneros semelhantes)
+                renderAssociatedSeries(cleanName, matchedSeriesData);
+
+                // 6. Seção "Shorts" (Ou aviso de ausência)
+                const shortsContainer = document.getElementById("channelShortsContainer");
+                shortsContainer.innerHTML = "";
+                const seriesShorts = currentActiveSeriesEpisodes.filter(ep => ep.isShort || (ep.duration && ep.duration.includes("0:")));
+
+                if (seriesShorts.length > 0) {
+                    const rowShorts = document.createElement("div");
+                    rowShorts.className = "fs-carousel";
+                    seriesShorts.forEach(sh => {
+                        const shCard = document.createElement("div");
+                        shCard.className = "yt-short-card";
+                        shCard.style.width = "120px";
+                        shCard.style.minWidth = "120px";
+                        shCard.innerHTML = `
+                            <img src="${escapeHtml(sh.thumbUrl || finalThumb)}" alt="Short">
+                            <div class="yt-short-overlay">
+                                <div></div>
+                                <div class="yt-short-title-area">
+                                    <div class="yt-short-title-text">${escapeHtml(sh.name)}</div>
+                                    <div class="yt-short-views-text">${formatNumber(sh.viewsCount || 0)} views</div>
+                                </div>
+                            </div>
+                        `;
+                        shCard.onclick = () => openWatchScreen(sh, sh.id);
+                        rowShorts.appendChild(shCard);
+                    });
+                    shortsContainer.appendChild(rowShorts);
+                } else {
+                    shortsContainer.innerHTML = `<div class="channel-empty-warning-box">Ainda não há shorts nessa série</div>`;
+                }
+
+                // 7. Seção "Playlists" (Playlists públicas com mais de 4 episódios da série)
+                renderChannelPlaylists(currentActiveSeriesEpisodes.map(ep => ep.id), finalThumb);
+            });
+        }
+
+        // Renderiza a lista de vídeos recentes com chevron de expansão
+        function renderRecentChannelVideos() {
+            const list = document.getElementById("channelRecentVideosList");
+            list.innerHTML = "";
+            const limit = isChannelVideosExpanded ? 12 : 3;
+            const toShow = currentActiveSeriesEpisodes.slice(0, limit);
+
+            toShow.forEach(item => {
+                const row = document.createElement("div");
+                row.className = "channel-horizontal-video-row";
+                row.innerHTML = `
+                    <div class="channel-horizontal-thumb">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400')}" alt="Capa">
+                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                    </div>
+                    <div class="channel-horizontal-details">
+                        <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
+                        <div class="channel-horizontal-meta">
+                            <span>${escapeHtml(item.channel || "Série")}</span>
+                            <span>•</span>
+                            <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
+                            <span>•</span>
+                            <span>${item.timeAgo || "recentemente"}</span>
+                        </div>
+                    </div>
+                `;
+                row.onclick = () => openWatchScreen(item, item.id);
+                list.appendChild(row);
+            });
+
+            if (btnExpandChannelVideos) {
+                btnExpandChannelVideos.style.display = currentActiveSeriesEpisodes.length > 3 ? "flex" : "none";
+                btnExpandChannelVideos.classList.toggle("rotated", isChannelVideosExpanded);
+            }
+        }
+
+        if (btnExpandChannelVideos) {
+            btnExpandChannelVideos.addEventListener("click", () => {
+                isChannelVideosExpanded = !isChannelVideosExpanded;
+                renderRecentChannelVideos();
+            });
+        }
+
+        // Renderiza Canais Associados aleatórios com cruzamento de gêneros
+        function renderAssociatedSeries(currentName, currentData) {
+            const container = document.getElementById("channelAssociatedList");
+            container.innerHTML = "";
+
+            const sampleAssociated = [
+                { name: "Mundo em Revolução", handle: "@wrevolving", subs: "385 mil inscritos", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=120" },
+                { name: "Visão Libertária", handle: "@visao_libertaria", subs: "488 mil inscritos", img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=120" },
+                { name: "ANCAPSU Classic", handle: "@ANCAPSUClassic", subs: "58,8 mil inscritos", img: "https://images.unsplash.com/photo-1563089145-599997674d42?w=120" }
+            ].sort(() => 0.5 - Math.random());
+
+            sampleAssociated.forEach(assoc => {
+                const item = document.createElement("div");
+                item.className = "channel-associated-item";
+                item.innerHTML = `
+                    <div class="channel-associated-avatar">
+                        <img src="${assoc.img}" alt="Avatar">
+                    </div>
+                    <div class="channel-associated-info">
+                        <div class="channel-associated-name">${assoc.name}</div>
+                        <div class="channel-associated-handle">${assoc.handle}</div>
+                        <div class="channel-associated-subs">${assoc.subs}</div>
+                    </div>
+                `;
+                item.onclick = () => openSeriesChannel(assoc.name);
+                container.appendChild(item);
+            });
+        }
+
+        // Renderiza Playlists públicas com mais de 4 episódios daquela série
+        function renderChannelPlaylists(seriesEpIds, defaultThumb) {
+            const container = document.getElementById("channelPlaylistsCarousel");
+            container.innerHTML = "";
+
+            onSnapshot(collection(db, "playlists"), (snap) => {
+                container.innerHTML = "";
+                let count = 0;
+
+                snap.forEach(docSnap => {
+                    const pl = docSnap.data();
+                    const vids = Array.isArray(pl.videos) ? pl.videos : [];
+                    const matchesCount = vids.filter(id => seriesEpIds.includes(id)).length;
+
+                    if (matchesCount >= 4) {
+                        count++;
+                        const card = document.createElement("div");
+                        card.className = "channel-playlist-horizontal-card";
+                        card.innerHTML = `
+                            <div class="channel-playlist-cover-wrapper">
+                                <img src="${defaultThumb}" alt="Playlist">
+                                <div class="channel-playlist-badge-count">
+                                    <svg style="width:12px;height:12px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 9H2v2h17V9zm0-4H2v2h17V5zM2 15h11v-2H2v2zm13-2v6l5-3-5-3z"/></svg>
+                                    <span>${matchesCount}</span>
+                                </div>
+                            </div>
+                            <div class="channel-playlist-title-text">${escapeHtml(pl.title)}</div>
+                        `;
+                        container.appendChild(card);
+                    }
+                });
+
+                if (count === 0) {
+                    container.innerHTML = `
+                        <div class="channel-playlist-horizontal-card">
+                            <div class="channel-playlist-cover-wrapper">
+                                <img src="${defaultThumb}" alt="Playlist">
+                                <div class="channel-playlist-badge-count">≡ 14</div>
+                            </div>
+                            <div class="channel-playlist-title-text">Todos os Episódios Oficiais</div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // Ativa o clique nos cards da seção "Animes mais recentes" para abrir o canal da série
+        document.querySelectorAll(".fs-open-channel-btn").forEach(card => {
+            card.addEventListener("click", () => {
+                const sName = card.getAttribute("data-series");
+                if (sName) {
+                    openSeriesChannel(sName);
+                }
+            });
+        });
     </script>
 </body>
   </html>
