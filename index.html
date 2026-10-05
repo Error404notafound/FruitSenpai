@@ -228,532 +228,676 @@
         }
 
         /* ==========================================================================
-           5. FEED PRINCIPAL DE VÍDEOS
+           5. NOVO FEED REESTRUTURADO (FRUITSENPAI ANIME EDITION)
            ========================================================================== */
         .yt-feed {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 22px;
+            padding: 10px 0 24px 0;
+            background-color: #000000;
         }
 
-        .yt-video-card {
+        .fs-section-header {
             display: flex;
-            flex-direction: column;
-            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            margin-bottom: 12px;
         }
 
-        .yt-thumbnail-wrapper {
-            width: 100%;
+        .fs-section-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fs-red-bar {
+            width: 3.5px;
+            height: 14px;
+            background-color: #e50914;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        .fs-section-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+        }
+
+        .fs-badge-pill {
+            background-color: #272111;
+            color: #f59e0b;
+            font-size: 9.5px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .fs-link-more {
+            color: #888888;
+            font-size: 11.5px;
+            font-weight: 500;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .fs-hero-banner {
+            margin: 0 14px;
+            border-radius: 16px;
             aspect-ratio: 16 / 9;
-            background-color: #1a1a1a;
             position: relative;
             overflow: hidden;
+            background: #181818;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        .fs-hero-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fs-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 16px;
+        }
+
+        .fs-hero-genre {
+            font-size: 12px;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 2px;
+        }
+
+        .fs-hero-genre span {
+            color: #ffffff;
+            margin-left: 4px;
+        }
+
+        .fs-hero-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .fs-hero-dots {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .fs-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.35);
+        }
+
+        .fs-dot.active {
+            background-color: #ffffff;
+            width: 14px;
+            border-radius: 3px;
+        }
+
+        .fs-btn-surprise {
+            border: 1px solid rgba(255, 60, 60, 0.4);
+            background: rgba(30, 10, 10, 0.6);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 5px 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
             cursor: pointer;
         }
 
-        .yt-thumbnail-wrapper img {
+        .fs-carousel {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 0 14px;
+            scrollbar-width: none;
+        }
+
+        .fs-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .fs-ep-card {
+            min-width: 120px;
+            width: 120px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .fs-ep-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: #202020;
+        }
+
+        .fs-ep-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fs-badge-date {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(0,0,0,0.7);
+            color: #bbb;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .fs-badge-hd {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0,0,0,0.7);
+            color: #bbb;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .fs-ep-title {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fs-ep-sub {
+            font-size: 10px;
+            color: #777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fs-grid-2col {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 10px;
+            padding: 0 14px;
+        }
+
+        .fs-video-card-mini {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .fs-video-card-mini .yt-thumbnail-wrapper {
+            border-radius: 8px;
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: #181818;
+        }
+
+        .fs-video-card-mini .yt-thumbnail-wrapper img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        .yt-duration-badge {
+        .fs-badge-age {
             position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background-color: var(--yt-badge-bg);
-            color: #ffffff;
-            font-size: 11px;
+            bottom: 6px;
+            left: 6px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #bbb;
+            font-size: 9px;
             font-weight: 600;
             padding: 2px 5px;
-            border-radius: 4px;
-            letter-spacing: 0.2px;
+            border-radius: 3px;
         }
 
-        .yt-video-info-row {
+        .fs-video-info-mini {
             display: flex;
-            padding: 12px 14px 6px 14px;
-            gap: 12px;
+            gap: 8px;
+            margin-top: 6px;
             align-items: flex-start;
         }
 
-        .yt-channel-avatar {
-            width: 36px;
-            height: 36px;
-            min-width: 36px;
+        .fs-channel-avatar-mini {
+            width: 24px;
+            height: 24px;
+            min-width: 24px;
             border-radius: 50%;
-            background-color: #333;
             overflow: hidden;
-            cursor: pointer;
+            background: #252525;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: #fff;
         }
 
-        .yt-channel-avatar img {
+        .fs-channel-avatar-mini img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .yt-video-details {
+        .fs-video-details-mini {
             flex: 1;
             min-width: 0;
         }
 
-        .yt-video-title {
-            font-size: 14.5px;
-            font-weight: 500;
-            line-height: 1.35;
-            color: var(--yt-text-primary);
+        .fs-video-title-mini {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #ffffff;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-            margin-bottom: 3px;
-        }
-
-        .yt-video-metadata {
-            font-size: 12px;
-            color: var(--yt-text-secondary);
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .yt-more-btn {
-            background: none;
-            border: none;
-            color: var(--yt-text-primary);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 50%;
-            margin-top: -2px;
-        }
-
-        /* ==========================================================================
-           6. CARD PATROCINADO (ANÚNCIO ESTILO PICPAY DO SCREENSHOT)
-           ========================================================================== */
-        .yt-ad-card {
-            width: 100%;
-            background-color: #0f0f0f;
-            display: flex;
-            flex-direction: column;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .yt-ad-visual-banner {
-            width: calc(100% - 24px);
-            margin: 10px 12px 6px 12px;
-            background: linear-gradient(135deg, #16b364 0%, #0d8b4b 100%);
-            border-radius: 14px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .yt-ad-top-img-area {
-            position: relative;
-            width: 100%;
-            height: 160px;
-            overflow: hidden;
-            background: #1bb769;
-            display: flex;
-            justify-content: center;
-        }
-
-        .yt-ad-top-img-area img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-        }
-
-        .yt-ad-controls-overlay {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 2;
-        }
-
-        .yt-ad-circle-ctrl {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.65);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-
-        .yt-ad-white-box {
-            background-color: #ffffff;
-            margin: 0;
-            padding: 18px 20px;
-            border-radius: 0 0 14px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            position: relative;
-        }
-
-        .yt-ad-texts h3 {
-            color: #0c6a38;
-            font-size: 21px;
-            font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.25;
             margin-bottom: 2px;
         }
 
-        .yt-ad-texts p {
-            color: #121212;
-            font-size: 17px;
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        .yt-ad-cta-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background-color: #27ae60;
+        .fs-video-meta-mini {
+            font-size: 10px;
+            color: #777;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            flex-direction: column;
         }
 
-        .yt-ad-bottom-bar {
-            display: flex;
-            align-items: center;
-            padding: 10px 14px 14px 14px;
-            gap: 12px;
+        .fs-sushi-banner {
+            margin: 0 14px 12px 14px;
+            background: #141414;
+            border-radius: 14px;
+            padding: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .yt-ad-logo-square {
-            width: 36px;
-            height: 36px;
-            background-color: #11c76f;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 900;
-            font-size: 19px;
-        }
-
-        .yt-ad-meta {
-            flex: 1;
-        }
-
-        .yt-ad-title-label {
-            font-size: 13.5px;
-            font-weight: 600;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .yt-ad-subtext {
-            font-size: 11.5px;
-            color: var(--yt-text-secondary);
-            margin-top: 2px;
-        }
-
-        .yt-ad-badge {
-            font-weight: 700;
-            color: #fff;
-        }
-
-        /* ==========================================================================
-           7. SEÇÃO YOUTUBE MUSIC ("OUVIR NOVAMENTE")
-           ========================================================================== */
-        .yt-section-music {
-            padding: 14px 0 6px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .yt-music-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 14px 12px 14px;
-        }
-
-        .yt-music-title-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .yt-music-icon-circle {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: #333333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-        }
-
-        .yt-music-texts h2 {
-            font-size: 16px;
+        .fs-sushi-top {
+            color: #e50914;
+            font-size: 10.5px;
             font-weight: 700;
             display: flex;
             align-items: center;
             gap: 6px;
-        }
-
-        .yt-music-texts span {
-            font-size: 11.5px;
-            color: var(--yt-text-secondary);
-        }
-
-        .yt-music-carousel {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            padding: 0 14px 6px 14px;
-            scrollbar-width: none;
-        }
-
-        .yt-music-carousel::-webkit-scrollbar {
-            display: none;
-        }
-
-        .yt-music-card {
-            width: 140px;
-            min-width: 140px;
-            cursor: pointer;
-        }
-
-        .yt-music-cover {
-            width: 140px;
-            height: 140px;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            background-color: #242424;
             margin-bottom: 6px;
         }
 
-        .yt-music-cover img {
+        .fs-sushi-h2 {
+            font-size: 15px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            margin-bottom: 4px;
+        }
+
+        .fs-sushi-sub {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.35;
+            margin-bottom: 12px;
+        }
+
+        .fs-sushi-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .fs-btn-red {
+            background-color: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: 6px 14px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .fs-btn-dark {
+            background-color: #242424;
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: 6px 14px;
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .fs-community-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 0 14px;
+        }
+
+        .fs-community-card {
+            background: #141414;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+
+        .fs-community-cover {
+            width: 100%;
+            height: 60px;
+            position: relative;
+            background: #222;
+        }
+
+        .fs-community-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .yt-music-cover-badge {
+        .fs-community-icon {
             position: absolute;
-            bottom: 6px;
-            right: 6px;
-            background-color: rgba(0, 0, 0, 0.75);
-            font-size: 10.5px;
+            bottom: -10px;
+            left: 10px;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            border: 2px solid #141414;
+            overflow: hidden;
+            background: #333;
+        }
+
+        .fs-community-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fs-community-info {
+            padding: 14px 10px 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .fs-community-name {
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .fs-community-desc {
+            font-size: 10px;
+            color: #777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fs-community-stats {
+            font-size: 9.5px;
+            color: #e50914;
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .fs-poster-card {
+            width: 100px;
+            min-width: 100px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .fs-poster-thumb {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: #1c1c1c;
+        }
+
+        .fs-poster-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fs-badge-trend {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            background: rgba(230, 81, 0, 0.85);
+            color: #fff;
+            font-size: 8.5px;
+            font-weight: 700;
             padding: 2px 4px;
             border-radius: 3px;
         }
 
-        .yt-music-card-title {
-            font-size: 12.5px;
-            font-weight: 500;
-            line-height: 1.25;
-            color: #fff;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .yt-music-card-meta {
+        .fs-poster-title {
             font-size: 11px;
-            color: var(--yt-text-secondary);
-            margin-top: 2px;
+            font-weight: 600;
+            color: #fff;
+            margin-top: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* ==========================================================================
-           8. WIDGET DE PESQUISA DE SATISFAÇÃO (SCREENSHOT EPSTEIN)
-           ========================================================================== */
-        .yt-survey-box {
-            background-color: #1a0f08;
-            border: 1px solid #3d2315;
-            margin: 10px 14px;
-            border-radius: 12px;
-            padding: 16px;
-            position: relative;
+        .fs-poster-genre {
+            font-size: 9.5px;
+            color: #777;
         }
 
-        .yt-survey-header {
+        .fs-ranked-card {
             display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 18px;
-        }
-
-        .yt-survey-title {
-            font-size: 14px;
-            font-weight: 500;
-            color: #fcece3;
-            max-width: 85%;
-            line-height: 1.35;
-        }
-
-        .yt-survey-close {
-            background: none;
-            border: none;
-            color: #aaa;
+            align-items: flex-end;
+            min-width: 160px;
             cursor: pointer;
-            font-size: 18px;
         }
 
-        .yt-survey-faces {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 4px;
+        .fs-rank-num {
+            font-size: 84px;
+            font-weight: 900;
+            line-height: 0.75;
+            margin-right: -14px;
+            z-index: 2;
+            color: transparent;
+            -webkit-text-stroke: 1.5px #3a3a3a;
+            font-family: 'Roboto', sans-serif;
+            user-select: none;
         }
 
-        .yt-survey-option {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #f7d5c0;
+        .fs-ranked-card .fs-poster-thumb {
+            width: 100px;
+            z-index: 1;
+        }
+
+        .fs-collection-card {
+            width: 130px;
+            min-width: 130px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            transition: transform 0.15s ease;
+            cursor: pointer;
         }
 
-        .yt-survey-option:active {
-            transform: scale(1.15);
-        }
-
-        .yt-survey-option svg {
-            width: 34px;
-            height: 34px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 1.8;
-        }
-
-        .yt-survey-labels {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: #b58b76;
-            margin-top: 10px;
-            padding: 0 4px;
-        }
-
-        /* ==========================================================================
-           9. SEÇÃO SHORTS (GRADE 2x2 FIEL AOS SCREENSHOTS)
-           ========================================================================== */
-        .yt-shorts-shelf {
-            padding: 14px 14px 8px 14px;
-        }
-
-        .yt-shorts-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 14px;
-        }
-
-        .yt-shorts-badge-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .yt-shorts-title {
-            font-size: 18px;
-            font-weight: 700;
-            letter-spacing: -0.2px;
-            flex: 1;
-        }
-
-        .yt-shorts-grid {
+        .fs-collection-grid-thumb {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            overflow: hidden;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 2px;
+            background: #1e1e1e;
         }
 
-        .yt-short-card {
-            position: relative;
-            aspect-ratio: 9 / 16;
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: #212121;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-        }
-
-        .yt-short-card img {
+        .fs-collection-grid-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .yt-short-overlay {
+        .fs-collection-name {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .fs-collection-author-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 3px;
+        }
+
+        .fs-collection-author-avatar {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #444;
+            overflow: hidden;
+        }
+
+        .fs-collection-author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fs-collection-author-name {
+            font-size: 9.5px;
+            color: #888;
+        }
+
+        .fs-adult-section-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fs-adult-content-blurred {
+            filter: blur(14px);
+            pointer-events: none;
+            user-select: none;
+            transition: filter 0.3s ease;
+        }
+
+        .fs-adult-modal-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.85) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 16px;
+        }
+
+        .fs-adult-card {
+            width: 100%;
+            max-width: 280px;
+            background: rgba(22, 22, 22, 0.95);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            padding: 8px 10px 10px 10px;
-        }
-
-        .yt-short-top-bar {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        .yt-short-tag {
-            font-size: 10px;
-            font-weight: 700;
-            background-color: rgba(0,0,0,0.6);
-            color: #fff;
-            padding: 2px 6px;
-            border-radius: 4px;
+        .fs-hentai-logo {
+            font-size: 14px;
+            font-weight: 900;
+            color: #ff3366;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .yt-short-title-area {
-            color: #ffffff;
-        }
-
-        .yt-short-title-text {
+        .fs-adult-h4 {
             font-size: 13.5px;
             font-weight: 700;
-            line-height: 1.25;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            margin-bottom: 2px;
+            color: #fff;
+            margin-bottom: 4px;
         }
 
-        .yt-short-views-text {
+        .fs-adult-p {
             font-size: 11px;
-            color: rgba(255,255,255,0.8);
+            color: #aaa;
+            margin-bottom: 14px;
+            line-height: 1.35;
+        }
+
+        .fs-btn-show-adult {
+            width: 100%;
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 18px;
+            height: 34px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .fs-adult-checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-size: 10px;
+            color: #777;
+        }
+
+        .fs-history-msg {
+            padding: 0 14px;
+            font-size: 11.5px;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .fs-history-msg b {
+            color: #fff;
+            cursor: pointer;
         }
 
         /* ==========================================================================
@@ -2620,278 +2764,419 @@
              ========================================================================== -->
         <main class="yt-feed" id="feedContainer">
 
-            <!-- 1. VÍDEO 1: Jerry na piscina [Adult Swim] (Baseado no Screenshot 1 e 5) -->
-            <article class="yt-video-card">
-                <div class="yt-thumbnail-wrapper">
-                    <!-- Imagem simulada fiel ao Jerry deitado na água -->
-                    <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80" alt="Jerry na piscina">
-                    <div class="yt-duration-badge">5:00</div>
-                </div>
-                <div class="yt-video-info-row">
-                    <div class="yt-channel-avatar">
-                        <div style="background:#cc0000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;">[as]</div>
-                    </div>
-                    <div class="yt-video-details">
-                        <h2 class="yt-video-title">O encontro de Jerry na piscina | Rick and Morty | Adult Swim Brasil</h2>
-                        <div class="yt-video-metadata">
-                            <span>Adult Swim Brasil</span>
-                            <span>•</span>
-                            <span>31 mil visualizações</span>
-                            <span>•</span>
-                            <span>há 4 dias</span>
-                        </div>
-                    </div>
-                    <button class="yt-more-btn" aria-label="Mais opções">
-                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    </button>
-                </div>
-            </article>
-
-            <!-- VÍDEOS POSTADOS CAEM AQUI NO LUGAR DO "X" -->
-            <div id="dynamicFirebaseFeed" style="display:flex; flex-direction:column; gap:16px;"></div>
-
-            <!-- 2. ANÚNCIO PATROCINADO PICPAY (Fiel ao Screenshot 1) -->
-            <section class="yt-ad-card">
-                <div class="yt-ad-visual-banner">
-                    <div class="yt-ad-top-img-area">
-                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=80" alt="PicPay anúncio">
-                        <div class="yt-ad-controls-overlay">
-                            <button class="yt-ad-circle-ctrl" title="Mudo">
-                                <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-                            </button>
-                            <button class="yt-ad-circle-ctrl" title="Legendas">
-                                <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="yt-ad-white-box">
-                        <div class="yt-ad-texts">
-                            <h3>Dinheiro<br>na hora</h3>
-                            <p>e desconto<br>direto no salário.</p>
-                        </div>
-                        <button class="yt-ad-cta-btn">
-                            <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M5 19h14V5H5v14zm10-8h-3v3h-2v-3H7V9h3V6h2v3h3v2z"/></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="yt-ad-bottom-bar">
-                    <div class="yt-ad-logo-square">P</div>
-                    <div class="yt-ad-meta">
-                        <div class="yt-ad-title-label">Dinheiro Rápido, aproveite | Banco PicPay</div>
-                        <div class="yt-ad-subtext">
-                            <span class="yt-ad-badge">Patrocinado</span> • 4,5★ • GRÁTIS
-                        </div>
-                    </div>
-                    <button class="yt-more-btn">
-                        <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    </button>
-                </div>
-            </section>
-
-            <!-- 3. GRADE DE SHORTS 2x2 (Fiel aos Screenshots 3 e 4) -->
-            <section class="yt-shorts-shelf">
-                <div class="yt-shorts-header">
-                    <div class="yt-shorts-badge-icon">
-                        <svg style="width:22px;height:22px;fill:#ff0000" viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
-                    </div>
-                    <h3 class="yt-shorts-title">Shorts</h3>
-                    <button class="yt-more-btn">
-                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    </button>
-                </div>
-
-                <div class="yt-shorts-grid">
-                    <!-- Short 1 -->
-                    <div class="yt-short-card">
-                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=80" alt="Short 1">
-                        <div class="yt-short-overlay">
-                            <div class="yt-short-top-bar">
-                                <span class="yt-short-tag">Novo</span>
-                            </div>
-                            <div class="yt-short-title-area">
-                                <div class="yt-short-title-text">SOU AUTISTA? Relato & Experiência</div>
-                                <div class="yt-short-views-text">145 mil visualizações</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Short 2 -->
-                    <div class="yt-short-card">
-                        <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=500&auto=format&fit=crop&q=80" alt="Short 2">
-                        <div class="yt-short-overlay">
-                            <div class="yt-short-top-bar">
-                                <span class="yt-short-tag">Novo</span>
-                            </div>
-                            <div class="yt-short-title-area">
-                                <div class="yt-short-title-text">Spamton core: Deltarune meme</div>
-                                <div class="yt-short-views-text">890 mil visualizações</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Short 3 -->
-                    <div class="yt-short-card">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format&fit=crop&q=80" alt="Short 3">
-                        <div class="yt-short-overlay">
-                            <div class="yt-short-top-bar"></div>
-                            <div class="yt-short-title-area">
-                                <div class="yt-short-title-text">A SKIN POLÊMICA de Rayman Legends!</div>
-                                <div class="yt-short-views-text">320 mil visualizações</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Short 4 -->
-                    <div class="yt-short-card">
-                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=80" alt="Short 4">
-                        <div class="yt-short-overlay">
-                            <div class="yt-short-top-bar"></div>
-                            <div class="yt-short-title-area">
-                                <div class="yt-short-title-text">2 types of Ralsei fans...</div>
-                                <div class="yt-short-views-text">512 mil visualizações</div>
-                            </div>
-                        </div>
+            <!-- 1. HERO BANNER PRINCIPAL (KUSURIYA 2) -->
+            <section class="fs-hero-banner" id="heroBannerMain">
+                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80" alt="Kusuriya 2">
+                <div class="fs-hero-overlay">
+                    <div class="fs-hero-genre">Anime <span>| Drama</span></div>
+                    <h2 class="fs-hero-title">KUSURIYA 2</h2>
+                    <div class="fs-hero-dots">
+                        <span class="fs-dot active"></span>
+                        <span class="fs-dot"></span>
+                        <span class="fs-dot"></span>
+                        <span class="fs-dot"></span>
                     </div>
                 </div>
             </section>
 
-            <!-- 4. VÍDEO 2: Arquivos Epstein + Widget de Pesquisa (Fiel ao Screenshot 2) -->
-            <article class="yt-video-card">
-                <div class="yt-thumbnail-wrapper">
-                    <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=800&auto=format&fit=crop&q=80" alt="Documentário">
-                    <div class="yt-duration-badge">17:24</div>
-                </div>
-                <div class="yt-video-info-row">
-                    <div class="yt-channel-avatar">
-                        <div style="background:#27ae60;width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:700;">H</div>
+            <!-- 2. SEÇÃO: NOVOS EPISÓDIOS -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Novos episódios</h3>
+                        <button class="fs-link-more" style="margin-left:4px;">Tudo</button>
                     </div>
-                    <div class="yt-video-details">
-                        <h2 class="yt-video-title">Novas imagens Bizarras nos Arquivos Desclassificados</h2>
-                        <div class="yt-video-metadata">
-                            <span>Hector RP</span>
-                            <span>•</span>
-                            <span>779 mil visualizações</span>
-                            <span>•</span>
-                            <span>há 2 semanas</span>
-                        </div>
-                    </div>
-                    <button class="yt-more-btn">
-                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    <button class="fs-btn-surprise" id="btnSurpriseMe">
+                        <svg style="width:12px;height:12px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        <span>Surpreenda-me</span>
                     </button>
                 </div>
 
-                <!-- Pesquisa de Satisfação Embutida -->
-                <div class="yt-survey-box" id="surveyBox">
-                    <div class="yt-survey-header">
-                        <div class="yt-survey-title">O vídeo acima é uma boa recomendação para você?</div>
-                        <button class="yt-survey-close" id="closeSurvey" title="Fechar">✕</button>
-                    </div>
-                    <div class="yt-survey-faces">
-                        <!-- Muito Ruim -->
-                        <button class="yt-survey-option" data-rate="1" title="Muito ruim">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M8.5 16c1-1.5 6-1.5 7 0"/></svg>
-                        </button>
-                        <!-- Ruim -->
-                        <button class="yt-survey-option" data-rate="2" title="Ruim">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M9 15c1-.8 5-.8 6 0"/></svg>
-                        </button>
-                        <!-- Neutro -->
-                        <button class="yt-survey-option" data-rate="3" title="Neutro">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M9 15h6"/></svg>
-                        </button>
-                        <!-- Bom -->
-                        <button class="yt-survey-option" data-rate="4" title="Bom">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M8.5 14c1 1.5 6 1.5 7 0"/></svg>
-                        </button>
-                        <!-- Muito Bom -->
-                        <button class="yt-survey-option" data-rate="5" title="Muito bom">
-                            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 9.5h.01M16 9.5h.01M8 13.5c1 2.5 7 2.5 8 0"/></svg>
-                        </button>
-                    </div>
-                    <div class="yt-survey-labels">
-                        <span>Muito ruim</span>
-                        <span>Muito bom</span>
-                    </div>
-                </div>
-            </article>
-
-            <!-- 5. SEÇÃO YOUTUBE MUSIC "OUVIR NOVAMENTE" (Fiel ao Screenshot 5) -->
-            <section class="yt-section-music">
-                <div class="yt-music-header">
-                    <div class="yt-music-title-wrap">
-                        <div class="yt-music-icon-circle">
-                            <svg style="width:18px;height:18px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                <div class="fs-carousel">
+                    <div class="fs-ep-card">
+                        <div class="fs-ep-thumb">
+                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Ep">
+                            <span class="fs-badge-date">02 Out</span>
+                            <span class="fs-badge-hd">HD</span>
                         </div>
-                        <div class="yt-music-texts">
-                            <h2>Ouvir novamente ›</h2>
-                            <span>Do YouTube Music</span>
-                        </div>
-                    </div>
-                    <button class="yt-more-btn">
-                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    </button>
-                </div>
-
-                <div class="yt-music-carousel">
-                    <!-- Faixa 1 -->
-                    <div class="yt-music-card">
-                        <div class="yt-music-cover">
-                            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&auto=format&fit=crop&q=80" alt="Matt Maeson">
-                            <div class="yt-music-cover-badge">1:01</div>
-                        </div>
-                        <div class="yt-music-card-title">Matt Maeson - me and my friends are lonely [legendado PT/BR]</div>
-                        <div class="yt-music-card-meta">Kaleb Mouton</div>
+                        <div class="fs-ep-title">Cowboy Bebop...</div>
+                        <div class="fs-ep-sub">1ª Temporada | 26º Episódio</div>
                     </div>
 
-                    <!-- Faixa 2 -->
-                    <div class="yt-music-card">
-                        <div class="yt-music-cover">
-                            <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&auto=format&fit=crop&q=80" alt="Music Video">
-                            <div class="yt-music-cover-badge">3:42</div>
+                    <div class="fs-ep-card">
+                        <div class="fs-ep-thumb">
+                            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Ep">
+                            <span class="fs-badge-date">02 Out</span>
+                            <span class="fs-badge-hd">HD</span>
                         </div>
-                        <div class="yt-music-card-title">John-Robert - Lie to Me (Official Video)</div>
-                        <div class="yt-music-card-meta">John-Robert</div>
+                        <div class="fs-ep-title">Cowboy Bebop...</div>
+                        <div class="fs-ep-sub">1ª Temporada | 25º Episódio</div>
                     </div>
 
-                    <!-- Faixa 3 -->
-                    <div class="yt-music-card">
-                        <div class="yt-music-cover">
-                            <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&auto=format&fit=crop&q=80" alt="Music Video 3">
-                            <div class="yt-music-cover-badge">4:15</div>
+                    <div class="fs-ep-card">
+                        <div class="fs-ep-thumb">
+                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" alt="Ep">
+                            <span class="fs-badge-date">02 Out</span>
+                            <span class="fs-badge-hd">HD</span>
                         </div>
-                        <div class="yt-music-card-title">Camellia - Ghost (VIP Mix)</div>
-                        <div class="yt-music-card-meta">Camellia Official</div>
+                        <div class="fs-ep-title">Cowboy Bebop...</div>
+                        <div class="fs-ep-sub">1ª Temporada | 24º Episódio</div>
+                    </div>
+
+                    <div class="fs-ep-card">
+                        <div class="fs-ep-thumb">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="Ep">
+                            <span class="fs-badge-date">02 Out</span>
+                            <span class="fs-badge-hd">HD</span>
+                        </div>
+                        <div class="fs-ep-title">Cowboy Bebop...</div>
+                        <div class="fs-ep-sub">1ª Temporada | 22º Episódio</div>
                     </div>
                 </div>
             </section>
 
-            <!-- 6. VÍDEO 3: DELTARUNE Chapter 5 (Fiel ao Screenshot 4) -->
-            <article class="yt-video-card">
-                <div class="yt-thumbnail-wrapper">
-                    <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&auto=format&fit=crop&q=80" alt="Deltarune">
-                    <div class="yt-duration-badge">3:13</div>
-                </div>
-                <div class="yt-video-info-row">
-                    <div class="yt-channel-avatar">
-                        <!-- 🟢 DEPOIS -->
-<div style="background:#ffffff;color:#000;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-    <svg style="width:20px;height:20px;fill:#000000" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-</div>
+            <!-- 3. SEÇÃO: "PARA VOCÊ" (GRID 2 COLUNAS DO YOUTUBE) -->
+            <section>
+                <div class="fs-section-header" style="margin-bottom: 8px;">
+                    <div class="fs-section-title-wrap">
+                        <h3 class="fs-section-title" style="font-size:13.5px; color:#aaa;">Para você</h3>
                     </div>
-                    <div class="yt-video-details">
-                        <h2 class="yt-video-title">34. Flower Man (DELTARUNE Chapter 5 Soundtrack) - Toby Fox & Camellia</h2>
-                        <div class="yt-video-metadata">
-                            <span>Toby Fox e Camellia Official</span>
-                            <span>•</span>
-                            <span>16 mi de visualizações</span>
+                </div>
+
+                <!-- OS VÍDEOS POSTADOS PELO FIREBASE CAEM AQUI NO GRID DE 2 COLUNAS -->
+                <div class="fs-grid-2col" id="dynamicFirebaseFeed"></div>
+
+                <!-- Cards Estáticos Fiscais do Grid 2 Colunas -->
+                <div class="fs-grid-2col" style="margin-top: 10px;">
+                    <!-- Card 1 -->
+                    <article class="fs-video-card-mini">
+                        <div class="yt-thumbnail-wrapper">
+                            <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500" alt="Ep 1">
+                            <span class="fs-badge-age">18+</span>
+                            <div class="yt-duration-badge">42:55</div>
+                        </div>
+                        <div class="fs-video-info-mini">
+                            <div class="fs-channel-avatar-mini" style="background:#8b5cf6;">K</div>
+                            <div class="fs-video-details-mini">
+                                <h4 class="fs-video-title-mini">“Difícil, Intocável” | Episódio 1 | Kira Medvedeva</h4>
+                                <div class="fs-video-meta-mini">
+                                    <span>KION</span>
+                                    <span>219 mil visualizações • há 12 dias</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="fs-video-card-mini">
+                        <div class="yt-thumbnail-wrapper">
+                            <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=500" alt="Video">
+                            <span class="fs-badge-age">12+</span>
+                            <div class="yt-duration-badge">35:29</div>
+                        </div>
+                        <div class="fs-video-info-mini">
+                            <div class="fs-channel-avatar-mini" style="background:#f59e0b;">H</div>
+                            <div class="fs-video-details-mini">
+                                <h4 class="fs-video-title-mini">Peguei o número de telefone do noivo e encontrei...</h4>
+                                <div class="fs-video-meta-mini">
+                                    <span>Histórias da Vida</span>
+                                    <span>8,32 mil • há 13 horas</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- 4. SEÇÃO: COMUNIDADE SUSHI -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Comunidade Sushi</h3>
+                    </div>
+                    <button class="fs-link-more">Explorar</button>
+                </div>
+
+                <div class="fs-sushi-banner">
+                    <div class="fs-sushi-top">
+                        <svg style="width:12px;height:12px;fill:currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <span>COMUNIDADE SUSHI</span>
+                    </div>
+                    <h3 class="fs-sushi-h2">Encontre pessoas que acompanham o mesmo que você.</h3>
+                    <p class="fs-sushi-sub">Entre nos grupos, publique recomendações e converse sobre os episódios do momento.</p>
+                    <div class="fs-sushi-actions">
+                        <button class="fs-btn-red">Ver grupos</button>
+                        <button class="fs-btn-dark">Abrir comunidade</button>
+                    </div>
+                </div>
+
+                <div class="fs-community-grid">
+                    <div class="fs-community-card">
+                        <div class="fs-community-cover">
+                            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Cover">
+                            <div class="fs-community-icon"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100" alt="Icon"></div>
+                        </div>
+                        <div class="fs-community-info">
+                            <div class="fs-community-name">TROPINHA DE RELANCE</div>
+                            <div class="fs-community-desc">bem vindos ao tropinhas de relance...</div>
+                            <div class="fs-community-stats">👥 53 membros • 27 publicações</div>
                         </div>
                     </div>
-                    <button class="yt-more-btn">
-                        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                    </button>
+
+                    <div class="fs-community-card">
+                        <div class="fs-community-cover">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="Cover">
+                            <div class="fs-community-icon"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=100" alt="Icon"></div>
+                        </div>
+                        <div class="fs-community-info">
+                            <div class="fs-community-name">OG fans do Sushi</div>
+                            <div class="fs-community-desc">Amamos o Baka, e seu site lindo</div>
+                            <div class="fs-community-stats">👥 44 membros • 151 publicações</div>
+                        </div>
+                    </div>
                 </div>
-            </article>
+            </section>
+
+            <!-- 5. SEÇÃO: EM ALTA - TOP 5 -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Em Alta - Top 5</h3>
+                        <span class="fs-badge-pill">⚡ ÚLTIMOS 3 DIAS</span>
+                    </div>
+                </div>
+
+                <div class="fs-carousel">
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb">
+                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="AOT">
+                            <span class="fs-badge-trend">🔥 MAIS QUENTE</span>
+                        </div>
+                        <div class="fs-poster-title">Attack on Titan...</div>
+                        <div class="fs-poster-genre">Shōnen</div>
+                    </div>
+
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb">
+                            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Bleach">
+                            <span class="fs-badge-trend" style="background:#f59e0b;">🔥 EM ALTA</span>
+                        </div>
+                        <div class="fs-poster-title">Bleach (Dublado)</div>
+                        <div class="fs-poster-genre">Super Poder</div>
+                    </div>
+
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb">
+                            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="One Piece">
+                            <span class="fs-badge-trend" style="background:#f59e0b;">🔥 EM ALTA</span>
+                        </div>
+                        <div class="fs-poster-title">One Piece...</div>
+                        <div class="fs-poster-genre">Shōnen</div>
+                    </div>
+
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb">
+                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" alt="Kusuriya">
+                            <span class="fs-badge-trend" style="background:#f59e0b;">🔥 EM ALTA</span>
+                        </div>
+                        <div class="fs-poster-title">Kusuriya no...</div>
+                        <div class="fs-poster-genre">Mistério</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. SEÇÃO: SEU HISTÓRICO -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Seu histórico</h3>
+                    </div>
+                    <button class="fs-link-more">Tudo</button>
+                </div>
+                <div class="fs-history-msg">
+                    Para exibir seu histórico de animes é necessário estar conectado ʕ•́ᴥ•̀ʔ <b onclick="openAuthModal()">Conecte-se</b> ou <b onclick="openAuthModal()">Registrar</b>
+                </div>
+            </section>
+
+            <!-- 7. SEÇÃO: MAIS ASSISTIDOS (COM NÚMEROS 1, 2, 3) -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Mais assistidos</h3>
+                    </div>
+                    <button class="fs-link-more">Tudo</button>
+                </div>
+
+                <div class="fs-carousel">
+                    <div class="fs-ranked-card">
+                        <div class="fs-rank-num">1</div>
+                        <div class="fs-poster-thumb">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="1">
+                        </div>
+                    </div>
+
+                    <div class="fs-ranked-card">
+                        <div class="fs-rank-num">2</div>
+                        <div class="fs-poster-thumb">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="2">
+                        </div>
+                    </div>
+
+                    <div class="fs-ranked-card">
+                        <div class="fs-rank-num">3</div>
+                        <div class="fs-poster-thumb">
+                            <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400" alt="3">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. SEÇÃO: COLEÇÕES EM ALTA -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Coleções em alta</h3>
+                    </div>
+                    <button class="fs-link-more">Tudo</button>
+                </div>
+
+                <div class="fs-carousel">
+                    <div class="fs-collection-card">
+                        <div class="fs-collection-grid-thumb">
+                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" alt="Thumb">
+                            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200" alt="Thumb">
+                            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=200" alt="Thumb">
+                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200" alt="Thumb">
+                        </div>
+                        <div class="fs-collection-name">series no estilo d...</div>
+                        <div class="fs-collection-author-row">
+                            <div class="fs-collection-author-avatar"></div>
+                            <span class="fs-collection-author-name">nobi • 7 títulos</span>
+                        </div>
+                    </div>
+
+                    <div class="fs-collection-card">
+                        <div class="fs-collection-grid-thumb">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200" alt="Thumb">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200" alt="Thumb">
+                            <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=200" alt="Thumb">
+                            <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=200" alt="Thumb">
+                        </div>
+                        <div class="fs-collection-name">obras primas (ro...</div>
+                        <div class="fs-collection-author-row">
+                            <div class="fs-collection-author-avatar"></div>
+                            <span class="fs-collection-author-name">crosswz • 9 títulos</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. SEÇÃO: FILMES MAIS RECENTES -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Filmes mais recentes</h3>
+                    </div>
+                    <button class="fs-link-more">Tudo</button>
+                </div>
+
+                <div class="fs-carousel">
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Filme"></div>
+                        <div class="fs-poster-title">Seishun Buta...</div>
+                        <div class="fs-poster-genre">Comédia</div>
+                    </div>
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Filme"></div>
+                        <div class="fs-poster-title">Sayonara no Asa...</div>
+                        <div class="fs-poster-genre">Drama</div>
+                    </div>
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Filme"></div>
+                        <div class="fs-poster-title">Vidas ao Vento...</div>
+                        <div class="fs-poster-genre">Drama</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. SEÇÃO: HENTAIS MAIS RECENTES (+18 COM BLUR E MODAL) -->
+            <section class="fs-adult-section-wrapper">
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Hentais mais recentes</h3>
+                    </div>
+                    <button class="fs-link-more">Tudo</button>
+                </div>
+
+                <div class="fs-carousel fs-adult-content-blurred" id="adultContentRow">
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" alt="H"></div>
+                        <div class="fs-poster-title">Overflow 2</div>
+                        <div class="fs-poster-genre">Adulto</div>
+                    </div>
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="H"></div>
+                        <div class="fs-poster-title">Mankitsu Happening</div>
+                        <div class="fs-poster-genre">Adulto</div>
+                    </div>
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="H"></div>
+                        <div class="fs-poster-title">Kanojo x Kanojo</div>
+                        <div class="fs-poster-genre">Adulto</div>
+                    </div>
+                </div>
+
+                <div class="fs-adult-modal-overlay" id="adultModalOverlay">
+                    <div class="fs-adult-card">
+                        <div class="fs-hentai-logo">🌴 HENTAILÂNDIA</div>
+                        <h4 class="fs-adult-h4">Conteúdo adulto :3</h4>
+                        <p class="fs-adult-p">Tem um conteúdo +18 aqui do HentaiLândia :3</p>
+                        <button class="fs-btn-show-adult" id="btnRevealAdultContent">Mostrar conteúdo duvidoso</button>
+                        <label class="fs-adult-checkbox-row">
+                            <input type="checkbox" id="chkDontShowAdultWarning">
+                            <span>Não mostrar este aviso novamente</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 11. SEÇÃO: ANIMES MAIS RECENTES -->
+            <section>
+                <div class="fs-section-header">
+                    <div class="fs-section-title-wrap">
+                        <span class="fs-red-bar"></span>
+                        <h3 class="fs-section-title">Animes mais recentes</h3>
+                    </div>
+                    <button class="fs-link-more">Tudo</button>
+                </div>
+
+                <div class="fs-carousel">
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Anime"></div>
+                        <div class="fs-poster-title">Cowboy Bebop...</div>
+                        <div class="fs-poster-genre">Aventura</div>
+                    </div>
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Anime"></div>
+                        <div class="fs-poster-title">Overgeared</div>
+                        <div class="fs-poster-genre">Aventura</div>
+                    </div>
+                    <div class="fs-poster-card">
+                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Anime"></div>
+                        <div class="fs-poster-title">Ganbare!...</div>
+                        <div class="fs-poster-genre">Comédia</div>
+                    </div>
+                </div>
+            </section>
+
         </main>
 
         <!-- TELA DE REPRODUÇÃO DO VÍDEO (COLOCADA FORA DO FEED) -->
@@ -4491,46 +4776,40 @@
             }
         });
 
-        // 3. ONSNAPSHOT EM TEMPO REAL: ATUALIZA O FEED DE VÍDEOS
+        // 3. ONSNAPSHOT EM TEMPO REAL: RENDERIZA OS UPLOADS NO GRID 2 COLUNAS DO NOVO FEED
         onSnapshot(frutasColecao, (snapshot) => {
+            if (!dynamicFirebaseFeed) return;
             dynamicFirebaseFeed.innerHTML = "";
 
             snapshot.forEach((docSnap) => {
                 const item = docSnap.data();
                 const id = docSnap.id;
 
-                // Renderiza o card com Foto, Nome do Episódio, Nome da Série (Canal), Views e Duração
                 const card = document.createElement("article");
-                card.className = "yt-video-card";
+                card.className = "fs-video-card-mini";
                 card.innerHTML = `
                     <div class="yt-thumbnail-wrapper" style="cursor:pointer;">
-                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa do Episódio">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
+                        <span class="fs-badge-age">${item.isAdult ? "18+" : "12+"}</span>
                         <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                     </div>
-                    <div class="yt-video-info-row">
-                        <div class="yt-channel-avatar">
-                            <div style="background:#cc0000;color:#fff;font-weight:700;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-                                ${(item.channel || "F").charAt(0).toUpperCase()}
-                            </div>
+                    <div class="fs-video-info-mini">
+                        <div class="fs-channel-avatar-mini" style="background:#cc0000;">
+                            ${(item.channel || "F").charAt(0).toUpperCase()}
                         </div>
-                        <div class="yt-video-details" style="cursor:pointer;">
-                            <h2 class="yt-video-title">${escapeHtml(item.name)}</h2>
-                            <div class="yt-video-metadata">
+                        <div class="fs-video-details-mini" style="cursor:pointer;">
+                            <h4 class="fs-video-title-mini">${escapeHtml(item.name)}</h4>
+                            <div class="fs-video-meta-mini">
                                 <span>${escapeHtml(item.channel || "Fruit Senpai")}</span>
-                                <span>•</span>
-                                <span>${item.viewsCount || 0} visualizações</span>
-                                <span>•</span>
-                                <span>${item.timeAgo || "recentemente"}</span>
+                                <span>${formatNumber(item.viewsCount || 0)} • ${item.timeAgo || "agora"}</span>
                             </div>
                         </div>
-                        <button class="yt-more-btn firestore-del-btn-card" data-id="${id}" title="Excluir do Firebase">
-                            <svg style="width:20px;height:20px;fill:#ff5555" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        <button class="yt-more-btn firestore-del-btn-card" data-id="${id}" title="Excluir">
+                            <svg style="width:16px;height:16px;fill:#888" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                         </button>
                     </div>
                 `;
 
-                // Clique direto garantido em qualquer parte do card
-                card.style.cursor = "pointer";
                 card.onclick = (e) => {
                     if (e.target.closest(".firestore-del-btn-card")) return;
                     openWatchScreen(item, id);
@@ -4539,23 +4818,34 @@
                 dynamicFirebaseFeed.prepend(card);
             });
 
-            // Ação de excluir o card do feed
             document.querySelectorAll(".firestore-del-btn-card").forEach(btn => {
                 btn.addEventListener("click", async (e) => {
                     e.stopPropagation();
                     const docId = btn.getAttribute("data-id");
-                    if (confirm("Deseja realmente excluir este episódio?")) {
+                    if (confirm("Deseja excluir este vídeo?")) {
                         try {
                             await deleteDoc(doc(db, "frutas", docId));
-                            showToast("Item excluído com sucesso!");
+                            showToast("Vídeo excluído.");
                         } catch (err) {
                             console.error(err);
-                            showToast("Erro ao excluir do banco.");
                         }
                     }
                 });
             });
         });
+
+        // 4. INTERATIVIDADE DO AVISO ADULTO (+18) COM DESFOQUE (BLUR)
+        const btnRevealAdult = document.getElementById("btnRevealAdultContent");
+        const adultModalOverlay = document.getElementById("adultModalOverlay");
+        const adultContentRow = document.getElementById("adultContentRow");
+
+        if (btnRevealAdult && adultModalOverlay && adultContentRow) {
+            btnRevealAdult.addEventListener("click", () => {
+                adultContentRow.classList.remove("fs-adult-content-blurred");
+                adultModalOverlay.style.display = "none";
+                showToast("Conteúdo +18 exibido.");
+            });
+        }
 
         // 5. INTERATIVIDADE DOS CHIPS DE FILTRO
         document.querySelectorAll(".yt-chip").forEach(chip => {
@@ -4563,21 +4853,6 @@
                 document.querySelectorAll(".yt-chip").forEach(c => c.classList.remove("active"));
                 chip.classList.add("active");
                 showToast(`Filtrado por: ${chip.textContent}`);
-            });
-        });
-
-        // 6. INTERATIVIDADE DA PESQUISA DE SATISFAÇÃO
-        closeSurvey.addEventListener("click", () => {
-            surveyBox.style.display = "none";
-        });
-
-        document.querySelectorAll(".yt-survey-option").forEach(btn => {
-            btn.addEventListener("click", () => {
-                const rate = btn.getAttribute("data-rate");
-                showToast("Obrigado pelo seu feedback!");
-                setTimeout(() => {
-                    surveyBox.style.display = "none";
-                }, 500);
             });
         });
 
