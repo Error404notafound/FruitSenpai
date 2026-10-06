@@ -6747,7 +6747,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         // Carrega em tempo real as séries normais em 'Animes mais recentes' e as marcadas como adultas (+18) em 'Hentais mais recentes'
         const recentAnimesCarousel = document.getElementById("recentAnimesCarousel");
-        const adultContentRow = document.getElementById("adultContentRow");
 
         function loadRecentSeriesFromFirestore() {
             onSnapshot(collection(db, "series"), (snapshot) => {
