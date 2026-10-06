@@ -3612,23 +3612,7 @@
                     <button class="fs-link-more">Tudo</button>
                 </div>
 
-                <div class="fs-carousel fs-adult-content-blurred" id="adultContentRow">
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" alt="H"></div>
-                        <div class="fs-poster-title">Overflow 2</div>
-                        <div class="fs-poster-genre">Adulto</div>
-                    </div>
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="H"></div>
-                        <div class="fs-poster-title">Mankitsu Happening</div>
-                        <div class="fs-poster-genre">Adulto</div>
-                    </div>
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="H"></div>
-                        <div class="fs-poster-title">Kanojo x Kanojo</div>
-                        <div class="fs-poster-genre">Adulto</div>
-                    </div>
-                </div>
+                <div class="fs-carousel fs-adult-content-blurred" id="adultContentRow"></div>
 
                 <div class="fs-adult-modal-overlay" id="adultModalOverlay">
                     <div class="fs-adult-card">
@@ -6753,53 +6737,84 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Carrega em tempo real as séries criadas no Firebase para a seção 'Animes mais recentes'
+        // Carrega em tempo real as séries normais em 'Animes mais recentes' e as marcadas como adultas (+18) em 'Hentais mais recentes'
         const recentAnimesCarousel = document.getElementById("recentAnimesCarousel");
+        const adultContentRow = document.getElementById("adultContentRow");
 
         function loadRecentSeriesFromFirestore() {
-            if (!recentAnimesCarousel) return;
-
             onSnapshot(collection(db, "series"), (snapshot) => {
-                const seriesList = [];
+                const regularSeriesList = [];
+                const adultSeriesList = [];
 
                 snapshot.forEach((docSnap) => {
                     const data = docSnap.data();
-                    if (!data.isAdult) {
-                        seriesList.push({ id: docSnap.id, ...data });
+                    if (data.isAdult === true) {
+                        adultSeriesList.push({ id: docSnap.id, ...data });
+                    } else {
+                        regularSeriesList.push({ id: docSnap.id, ...data });
                     }
                 });
 
-                seriesList.sort((a, b) => {
+                // Ordena ambas as listas para que as criadas mais recentemente apareçam primeiro
+                const sortByDateDesc = (a, b) => {
                     const timeA = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
                     const timeB = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
                     return timeB - timeA;
-                });
+                };
 
-                recentAnimesCarousel.innerHTML = "";
+                regularSeriesList.sort(sortByDateDesc);
+                adultSeriesList.sort(sortByDateDesc);
 
-                if (seriesList.length === 0) {
-                    const defaultSeries = [
-                        { title: "Dark Summoner to dekiru ka", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Adulto"] },
-                        { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Aventura"] },
-                        { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Aventura"] },
-                        { title: "Ganbare! Nakamura", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Comédia"] },
-                        { title: "Deatte 5-byou de Battle", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama"] }
-                    ];
+                // 1. Renderiza a seção 'Animes mais recentes'
+                if (recentAnimesCarousel) {
+                    recentAnimesCarousel.innerHTML = "";
 
-                    defaultSeries.forEach((item) => {
-                        renderSingleSeriesCard(item);
-                    });
-                } else {
-                    seriesList.forEach((item) => {
-                        renderSingleSeriesCard(item);
-                    });
+                    if (regularSeriesList.length === 0) {
+                        const defaultSeries = [
+                            { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Aventura"] },
+                            { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Aventura"] },
+                            { title: "Ganbare! Nakamura", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Comédia"] },
+                            { title: "Deatte 5-byou de Battle", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama"] }
+                        ];
+
+                        defaultSeries.forEach((item) => {
+                            renderSingleSeriesCard(item, recentAnimesCarousel);
+                        });
+                    } else {
+                        regularSeriesList.forEach((item) => {
+                            renderSingleSeriesCard(item, recentAnimesCarousel);
+                        });
+                    }
+                }
+
+                // 2. Renderiza a seção 'Hentais mais recentes' com as séries marcadas como conteúdo adulto
+                if (adultContentRow) {
+                    adultContentRow.innerHTML = "";
+
+                    if (adultSeriesList.length === 0) {
+                        const defaultAdultSeries = [
+                            { title: "Overflow 2", coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400", genres: ["Adulto"] },
+                            { title: "Mankitsu Happening", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Adulto"] },
+                            { title: "Kanojo x Kanojo", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Adulto"] }
+                        ];
+
+                        defaultAdultSeries.forEach((item) => {
+                            renderSingleSeriesCard(item, adultContentRow);
+                        });
+                    } else {
+                        adultSeriesList.forEach((item) => {
+                            renderSingleSeriesCard(item, adultContentRow);
+                        });
+                    }
                 }
             });
         }
 
-        function renderSingleSeriesCard(item) {
+        function renderSingleSeriesCard(item, targetContainer) {
+            if (!targetContainer) return;
+
             const seriesTitle = item.title || "Série";
-            const singleGenre = (Array.isArray(item.genres) && item.genres.length > 0) ? item.genres[0] : (item.genre || "Anime");
+            const singleGenre = (Array.isArray(item.genres) && item.genres.length > 0) ? item.genres[0] : (item.genre || (item.isAdult ? "Adulto" : "Anime"));
             const seriesCover = item.coverUrl || item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
 
             const card = document.createElement("div");
@@ -6816,7 +6831,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 openSeriesChannel(seriesTitle);
             });
 
-            recentAnimesCarousel.appendChild(card);
+            targetContainer.appendChild(card);
         }
 
         loadRecentSeriesFromFirestore();
