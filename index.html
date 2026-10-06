@@ -1445,6 +1445,120 @@
             fill: currentColor;
         }
 
+        /* Abas de Conteúdo do Canal da Série */
+        .channel-tab-pane {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .channel-tab-pane.active {
+            display: flex;
+        }
+
+        /* Filtros de Pílulas da Aba Vídeos (Mais recentes, Em alta, Mais antigos) */
+        .channel-chips-filter-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px 8px 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .channel-chips-filter-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .channel-chip-pill {
+            background-color: #272727;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .channel-chip-pill.active {
+            background-color: #ffffff;
+            color: #0f0f0f;
+            font-weight: 700;
+        }
+
+        /* Grade de 2 Colunas da Aba Shorts/Reels (Fiel à captura 3) */
+        .channel-shorts-tab-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 10px;
+            padding: 12px 14px 24px 14px;
+        }
+
+        .channel-short-grid-card {
+            position: relative;
+            aspect-ratio: 9 / 16;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #212121;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .channel-short-grid-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .channel-short-grid-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.9) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px 10px 10px 10px;
+        }
+
+        .channel-short-grid-top {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .channel-short-kebab-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        .channel-short-kebab-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
+        .channel-short-grid-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 3px;
+        }
+
+        .channel-short-grid-views {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
         /* ==========================================================================
            10. BARRA INFERIOR DE NAVEGAÇÃO (BOTTOM NAV BAR)
            ========================================================================== */
@@ -3793,81 +3907,95 @@
 
             <!-- Abas de Navegação do Canal (A2) -->
             <div class="channel-tabs-bar">
-                <button class="channel-tab-item active">Início</button>
-                <button class="channel-tab-item">Vídeos</button>
-                <button class="channel-tab-item">Shorts</button>
-                <button class="channel-tab-item">Ao vivo</button>
-                <button class="channel-tab-item">Podcasts</button>
-                <button class="channel-tab-item">Playlists</button>
-                <button class="channel-tab-item">Posts</button>
+                <button class="channel-tab-item active" id="tabChannelNavInicio">Início</button>
+                <button class="channel-tab-item" id="tabChannelNavVideos">Vídeos</button>
+                <button class="channel-tab-item" id="tabChannelNavShorts">Shorts</button>
                 <button class="channel-tab-item">Pesquisar</button>
             </div>
 
-            <!-- SEÇÃO: TRAILER OU "PARA VOCÊ" -->
-            <div id="channelTrailerContainer" style="display:none;" class="channel-section-block">
-                <div class="channel-trailer-card" id="btnPlayChannelTrailer">
-                    <div class="channel-trailer-thumb-box">
-                        <img id="channelTrailerThumbImg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=600" alt="Trailer">
-                        <div class="yt-duration-badge" id="channelTrailerDurationBadge">02:30</div>
-                    </div>
-                    <div class="channel-trailer-info">
-                        <h3 class="channel-trailer-title" id="channelTrailerTitle">Trailer Oficial da Série</h3>
-                    </div>
-                </div>
-            </div>
-
-            <!-- SEÇÃO "PARA VOCÊ" (12 Cards Horizontais Aleatórios) -->
-            <div class="channel-section-block" id="channelForYouBlock">
-                <div class="channel-section-header">
-                    <h3 class="channel-section-title">Para você</h3>
-                </div>
-                <div class="fs-carousel" id="channelForYouCarousel"></div>
-            </div>
-
-            <!-- SEÇÃO "VÍDEOS" (Recentes de cima a baixo com expansão para 12 no chevron) -->
-            <div class="channel-section-block" id="channelRecentVideosBlock">
-                <div class="channel-section-header">
-                    <h3 class="channel-section-title">Vídeos</h3>
-                </div>
-                <div id="channelRecentVideosList"></div>
-                <button class="channel-expand-chevron-btn" id="btnExpandChannelVideos" aria-label="Mostrar mais vídeos">
-                    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
-                </button>
-            </div>
-
-            <!-- SEÇÃO "VÍDEOS MAIS ACESSADOS" (Exibe somente se houver vídeos com >= 100 views) -->
-            <div class="channel-section-block" id="channelPopularVideosBlock" style="display:none;">
-                <div class="channel-section-header">
-                    <h3 class="channel-section-title">Vídeos mais acessados</h3>
-                </div>
-                <div id="channelPopularVideosList"></div>
-            </div>
-
-            <!-- SEÇÃO "CANAIS ASSOCIADOS" (Cruzamento de Tags/Gêneros Semelhantes) -->
-            <div class="channel-section-block" id="channelAssociatedBlock">
-                <div class="channel-section-header">
-                    <h3 class="channel-section-title">Canais associados</h3>
-                </div>
-                <div id="channelAssociatedList"></div>
-            </div>
-
-            <!-- SEÇÃO "SHORTS" (Exibe os shorts ou aviso se não houver) -->
-            <div class="channel-section-block" id="channelShortsBlock">
-                <div class="channel-section-header">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <svg style="width:20px;height:20px;fill:#ff0000" viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
-                        <h3 class="channel-section-title">Shorts</h3>
+            <!-- PAINEL DA ABA 1: INÍCIO -->
+            <div class="channel-tab-pane active" id="paneChannelInicio">
+                <!-- Trailer (se houver) -->
+                <div id="channelTrailerContainer" style="display:none;" class="channel-section-block">
+                    <div class="channel-trailer-card" id="btnPlayChannelTrailer">
+                        <div class="channel-trailer-thumb-box">
+                            <img id="channelTrailerThumbImg" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=600" alt="Trailer">
+                            <div class="yt-duration-badge" id="channelTrailerDurationBadge">02:30</div>
+                        </div>
+                        <div class="channel-trailer-info">
+                            <h3 class="channel-trailer-title" id="channelTrailerTitle">Trailer Oficial da Série</h3>
+                        </div>
                     </div>
                 </div>
-                <div id="channelShortsContainer"></div>
+
+                <!-- Seção Para você (12 Cards Horizontais Aleatórios) -->
+                <div class="channel-section-block" id="channelForYouBlock">
+                    <div class="channel-section-header">
+                        <h3 class="channel-section-title">Para você</h3>
+                    </div>
+                    <div class="fs-carousel" id="channelForYouCarousel"></div>
+                </div>
+
+                <!-- Seção Vídeos Recentes -->
+                <div class="channel-section-block" id="channelRecentVideosBlock">
+                    <div class="channel-section-header">
+                        <h3 class="channel-section-title">Vídeos</h3>
+                    </div>
+                    <div id="channelRecentVideosList"></div>
+                    <button class="channel-expand-chevron-btn" id="btnExpandChannelVideos" aria-label="Mostrar mais vídeos">
+                        <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Seção Vídeos Mais Acessados (>= 100 views) -->
+                <div class="channel-section-block" id="channelPopularVideosBlock" style="display:none;">
+                    <div class="channel-section-header">
+                        <h3 class="channel-section-title">Vídeos mais acessados</h3>
+                    </div>
+                    <div id="channelPopularVideosList"></div>
+                </div>
+
+                <!-- Seção Canais Associados -->
+                <div class="channel-section-block" id="channelAssociatedBlock">
+                    <div class="channel-section-header">
+                        <h3 class="channel-section-title">Canais associados</h3>
+                    </div>
+                    <div id="channelAssociatedList"></div>
+                </div>
+
+                <!-- Seção Shorts do Início -->
+                <div class="channel-section-block" id="channelShortsBlock">
+                    <div class="channel-section-header">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <svg style="width:20px;height:20px;fill:#ff0000" viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
+                            <h3 class="channel-section-title">Shorts</h3>
+                        </div>
+                    </div>
+                    <div id="channelShortsContainer"></div>
+                </div>
+
+                <!-- Seção Playlists -->
+                <div class="channel-section-block" id="channelPlaylistsBlock">
+                    <div class="channel-section-header">
+                        <h3 class="channel-section-title">Playlists</h3>
+                    </div>
+                    <div class="fs-carousel" id="channelPlaylistsCarousel"></div>
+                </div>
             </div>
 
-            <!-- SEÇÃO "PLAYLISTS" (Playlists públicas com mais de 4 episódios da série) -->
-            <div class="channel-section-block" id="channelPlaylistsBlock">
-                <div class="channel-section-header">
-                    <h3 class="channel-section-title">Playlists</h3>
+            <!-- PAINEL DA ABA 2: VÍDEOS (FIEL À CAPTURA 4) -->
+            <div class="channel-tab-pane" id="paneChannelVideos">
+                <div class="channel-chips-filter-row">
+                    <button class="channel-chip-pill active" id="chipSortRecent">Mais recentes</button>
+                    <button class="channel-chip-pill" id="chipSortPopular">Em alta</button>
+                    <button class="channel-chip-pill" id="chipSortOldest">Mais antigos</button>
                 </div>
-                <div class="fs-carousel" id="channelPlaylistsCarousel"></div>
+                <div id="channelAllVideosFullList" style="display:flex; flex-direction:column; padding-top:6px;"></div>
+            </div>
+
+            <!-- PAINEL DA ABA 3: SHORTS / REELS (FIEL À CAPTURA 3) -->
+            <div class="channel-tab-pane" id="paneChannelShorts">
+                <div class="channel-shorts-tab-grid" id="channelAllShortsFullGrid"></div>
             </div>
         </section>
 
@@ -4428,6 +4556,18 @@
                     <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
                 </button>
 
+                <!-- Tipo de Conteúdo (Ao vivo, Série, Filme, Trailer, Reels) -->
+                <button class="upload-opt-row" id="rowUploadContentType" type="button">
+                    <div class="upload-opt-left">
+                        <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                        <div class="upload-opt-texts">
+                            <span class="upload-opt-label">Tipo de conteúdo</span>
+                            <span class="upload-opt-value" id="valUploadContentType">Série</span>
+                        </div>
+                    </div>
+                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                </button>
+
                 <!-- Data de Lançamento (Próximo Episódio) -->
                 <div class="upload-title-box" style="padding-top: 10px;">
                     <label style="font-size: 12px; color: var(--yt-text-secondary); display: block; margin-bottom: 4px;">Data do próximo episódio (opcional):</label>
@@ -4710,6 +4850,33 @@
                 <div class="upload-radio-texts"><h4>Não</h4></div>
             </div>
         </section>
+
+        <!-- GAVETA: ESCOLHER TIPO DE CONTEÚDO (AO VIVO, SÉRIE, FILME, TRAILER, REELS) -->
+        <div class="accounts-drawer" id="drawerUploadContentType">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0 16px 12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <h3 style="font-size:16px; font-weight:700;">Tipo de conteúdo</h3>
+                    <button class="yt-icon-btn" id="btnCloseUploadContentType">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+                <div class="account-item-row optUploadContentType" data-type="Ao vivo">
+                    <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Ao vivo</span></div>
+                </div>
+                <div class="account-item-row optUploadContentType" data-type="Série">
+                    <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Série</span></div>
+                </div>
+                <div class="account-item-row optUploadContentType" data-type="Filme">
+                    <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Filme</span></div>
+                </div>
+                <div class="account-item-row optUploadContentType" data-type="Trailer">
+                    <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Trailer</span></div>
+                </div>
+                <div class="account-item-row optUploadContentType" data-type="Reels">
+                    <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Reels</span></div>
+                </div>
+            </div>
+        </div>
 
         <!-- GAVETA: ESCOLHER FAIXA ETÁRIA (CLASSIFICAÇÃO INDICATIVA) -->
         <div class="accounts-drawer" id="drawerUploadRating">
@@ -5362,6 +5529,33 @@
             seriesSuggestionsList.style.display = "block";
         });
 
+        // Configuração do Tipo de Conteúdo (Ao vivo, Série, Filme, Trailer, Reels)
+        const drawerUploadContentType = document.getElementById("drawerUploadContentType");
+        const btnCloseUploadContentType = document.getElementById("btnCloseUploadContentType");
+        const rowUploadContentType = document.getElementById("rowUploadContentType");
+        const valUploadContentType = document.getElementById("valUploadContentType");
+        let selectedContentType = "Série";
+
+        if (rowUploadContentType) {
+            rowUploadContentType.addEventListener("click", () => {
+                drawerUploadContentType.classList.add("active");
+            });
+        }
+
+        if (btnCloseUploadContentType) {
+            btnCloseUploadContentType.addEventListener("click", () => {
+                drawerUploadContentType.classList.remove("active");
+            });
+        }
+
+        document.querySelectorAll(".optUploadContentType").forEach(opt => {
+            opt.addEventListener("click", () => {
+                selectedContentType = opt.getAttribute("data-type");
+                if (valUploadContentType) valUploadContentType.textContent = selectedContentType;
+                drawerUploadContentType.classList.remove("active");
+            });
+        });
+
         // Configuração da Gaveta de Classificação Indicativa (Faixa Etária)
         const drawerUploadRating = document.getElementById("drawerUploadRating");
         const btnCloseUploadRating = document.getElementById("btnCloseUploadRating");
@@ -5391,7 +5585,7 @@
             });
         });
 
-        // 2. ENVIAR CONTEÚDO (APENAS EPISÓDIOS VÃO PARA O 'PARA VOCÊ', CAPAS DE SÉRIE VÃO PARA 'ANIMES RECENTES')
+        // 2. ENVIAR CONTEÚDO (COM TIPO DE CONTEÚDO VINCULADO À SÉRIE MÃE)
         btnSubmitVideoUpload.addEventListener("click", async () => {
             const isAdult = document.getElementById("uploadIsAdult").checked;
             const nextEpDate = document.getElementById("uploadNextEpDate").value;
@@ -5423,13 +5617,14 @@
                         visibility: currentUploadSettings.visibility,
                         isAdult: isAdult,
                         ratingBadge: selectedAgeBadge || "12+",
+                        contentType: selectedContentType || "Série",
                         nextEpDate: nextEpDate || null,
                         author: currentUserEmail,
                         episodes: [],
                         createdAt: serverTimestamp()
                     });
 
-                    // Se o usuário adicionou o link do primeiro episódio, inaugura ele na lista de episódios
+                    // Se o usuário colocou o link do primeiro episódio, inaugura ele na lista de episódios
                     if (firstEpUrl) {
                         await addDoc(frutasColecao, {
                             name: `${sName} - Episódio 1`,
@@ -5442,7 +5637,7 @@
                             duration: "24:00",
                             ratingBadge: selectedAgeBadge || "12+",
                             isAdult: isAdult,
-                            contentType: "episode",
+                            contentType: selectedContentType || "Série",
                             timestamp: serverTimestamp()
                         });
                     }
@@ -5454,7 +5649,7 @@
                     showToast("Série criada com sucesso!");
 
                 } else {
-                    // MODO 2: POSTAR EPISÓDIO (ESTE SIM VAI PARA O 'PARA VOCÊ')
+                    // MODO 2: POSTAR EPISÓDIO / REELS / TRAILER (VINCULADO AO NOME DA SÉRIE MÃE)
                     const epTitle = uploadEpisodeTitle.value.trim();
                     const epCover = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
                     const epVideoUrl = uploadEpisodeVideoUrl.value.trim();
@@ -5495,7 +5690,7 @@
                         audioType: currentAudioType,
                         ratingBadge: selectedAgeBadge || "12+",
                         isAdult: isAdult,
-                        contentType: "episode",
+                        contentType: selectedContentType || "Série",
                         timestamp: serverTimestamp()
                     });
 
@@ -5506,7 +5701,7 @@
                     if (uploadEpisodeTags) uploadEpisodeTags.value = "";
                     uploadSearchSeries.value = "";
                     selectedSeriesId = null;
-                    showToast("Episódio publicado com sucesso!");
+                    showToast(`${selectedContentType} publicado com sucesso!`);
                 }
 
                 viewUploadDetails.classList.remove("active");
@@ -5519,6 +5714,7 @@
                 btnSubmitVideoUpload.textContent = "Enviar";
             }
         });
+                    
 
         // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (4 LINHAS X 2 COLUNAS), MAIS RECENTES NO TOPO
         onSnapshot(frutasColecao, (snapshot) => {
@@ -6516,9 +6712,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 document.getElementById("channelDescShort").textContent = synopsis;
                 document.getElementById("drawerSeriesFullDescription").textContent = synopsis;
 
-                // 1. Trailer ou "Para você"
+                // 1. Trailer oficial (marcado como Trailer no tipo de conteúdo ou com nome 'trailer')
                 const trailerBox = document.getElementById("channelTrailerContainer");
-                const trailerVideo = currentActiveSeriesEpisodes.find(ep => (ep.name || "").toLowerCase().includes("trailer"));
+                const trailerVideo = currentActiveSeriesEpisodes.find(ep => ep.contentType === "Trailer" || (ep.name || "").toLowerCase().includes("trailer"));
 
                 if (trailerVideo) {
                     trailerBox.style.display = "flex";
@@ -6529,6 +6725,35 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 } else {
                     trailerBox.style.display = "none";
                 }
+
+                // Configuração das Abas do Canal (Início, Vídeos, Shorts)
+                const tabInicio = document.getElementById("tabChannelNavInicio");
+                const tabVideos = document.getElementById("tabChannelNavVideos");
+                const tabShorts = document.getElementById("tabChannelNavShorts");
+                const paneInicio = document.getElementById("paneChannelInicio");
+                const paneVideos = document.getElementById("paneChannelVideos");
+                const paneShorts = document.getElementById("paneChannelShorts");
+
+                function activateChannelTab(activeTab, activePane) {
+                    [tabInicio, tabVideos, tabShorts].forEach(t => t.classList.remove("active"));
+                    [paneInicio, paneVideos, paneShorts].forEach(p => p.classList.remove("active"));
+                    activeTab.classList.add("active");
+                    activePane.classList.add("active");
+                }
+
+                if (tabInicio) tabInicio.onclick = () => activateChannelTab(tabInicio, paneInicio);
+                if (tabVideos) tabVideos.onclick = () => activateChannelTab(tabVideos, paneVideos);
+                if (tabShorts) tabShorts.onclick = () => activateChannelTab(tabShorts, paneShorts);
+
+                // Separa os posts da série entre Vídeos normais e Reels/Shorts
+                const seriesVideosList = currentActiveSeriesEpisodes.filter(ep => ep.contentType !== "Reels" && ep.contentType !== "Trailer");
+                const seriesShortsList = currentActiveSeriesEpisodes.filter(ep => ep.contentType === "Reels" || ep.isShort || (ep.duration && ep.duration.includes("0:")));
+
+                // Renderiza a Aba 'Vídeos' com Filtros (Mais recentes, Em alta, Mais antigos)
+                renderFullVideosTab(seriesVideosList, finalThumb, cleanName);
+
+                // Renderiza a Aba 'Shorts' com Grid de 2 Colunas e Kebab (Fiel à captura 3)
+                renderFullShortsTab(seriesShortsList, finalThumb);
 
                 // 2. Seção "Para você" (12 cards horizontais aleatórios)
                 const forYouCarousel = document.getElementById("channelForYouCarousel");
@@ -6839,6 +7064,150 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
 
             targetContainer.appendChild(card);
+        }
+
+        // Renderiza a aba completa de 'Vídeos' com ordenação por Mais recentes, Em alta e Mais antigos
+        function renderFullVideosTab(videos, defaultThumb, seriesName) {
+            const container = document.getElementById("channelAllVideosFullList");
+            const chipRecent = document.getElementById("chipSortRecent");
+            const chipPopular = document.getElementById("chipSortPopular");
+            const chipOldest = document.getElementById("chipSortOldest");
+
+            if (!container) return;
+
+            let currentSortMode = "recent";
+
+            function displaySortedVideos() {
+                container.innerHTML = "";
+
+                let sorted = [...videos];
+                if (currentSortMode === "recent") {
+                    sorted.sort((a, b) => ((b.timestamp && b.timestamp.seconds) || 0) - ((a.timestamp && a.timestamp.seconds) || 0));
+                } else if (currentSortMode === "popular") {
+                    sorted.sort((a, b) => Number(b.viewsCount || 0) - Number(a.viewsCount || 0));
+                } else if (currentSortMode === "oldest") {
+                    sorted.sort((a, b) => ((a.timestamp && a.timestamp.seconds) || 0) - ((b.timestamp && b.timestamp.seconds) || 0));
+                }
+
+                if (sorted.length === 0) {
+                    container.innerHTML = `<div style="padding:24px 16px; font-size:13px; color:#aaa; text-align:center;">Nenhum vídeo publicado nesta série ainda.</div>`;
+                    return;
+                }
+
+                sorted.forEach(item => {
+                    const row = document.createElement("div");
+                    row.className = "channel-horizontal-video-row";
+                    row.innerHTML = `
+                        <div class="channel-horizontal-thumb">
+                            <img src="${escapeHtml(item.thumbUrl || defaultThumb)}" alt="Capa">
+                            <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                        </div>
+                        <div class="channel-horizontal-details">
+                            <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
+                            <div class="channel-horizontal-meta">
+                                <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
+                                <span>•</span>
+                                <span>${item.timeAgo || "recentemente"}</span>
+                            </div>
+                        </div>
+                        <button class="fs-kebab-btn-mini btnVideoRowKebab" type="button" aria-label="Mais opções">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    `;
+
+                    row.onclick = (e) => {
+                        if (e.target.closest(".btnVideoRowKebab")) return;
+                        openWatchScreen(item, item.id);
+                    };
+
+                    const kebab = row.querySelector(".btnVideoRowKebab");
+                    if (kebab) {
+                        kebab.onclick = (e) => {
+                            e.stopPropagation();
+                            currentWatchVideoId = item.id;
+                            drawerVideoKebab.classList.add("active");
+                        };
+                    }
+
+                    container.appendChild(row);
+                });
+            }
+
+            if (chipRecent) {
+                chipRecent.onclick = () => {
+                    [chipRecent, chipPopular, chipOldest].forEach(c => c.classList.remove("active"));
+                    chipRecent.classList.add("active");
+                    currentSortMode = "recent";
+                    displaySortedVideos();
+                };
+            }
+
+            if (chipPopular) {
+                chipPopular.onclick = () => {
+                    [chipRecent, chipPopular, chipOldest].forEach(c => c.classList.remove("active"));
+                    chipPopular.classList.add("active");
+                    currentSortMode = "popular";
+                    displaySortedVideos();
+                };
+            }
+
+            if (chipOldest) {
+                chipOldest.onclick = () => {
+                    [chipRecent, chipPopular, chipOldest].forEach(c => c.classList.remove("active"));
+                    chipOldest.classList.add("active");
+                    currentSortMode = "oldest";
+                    displaySortedVideos();
+                };
+            }
+
+            displaySortedVideos();
+        }
+
+        // Renderiza a aba completa de 'Shorts' com grade de 2 colunas e 3 pontinhos (Fiel à captura 3)
+        function renderFullShortsTab(shorts, defaultThumb) {
+            const grid = document.getElementById("channelAllShortsFullGrid");
+            if (!grid) return;
+            grid.innerHTML = "";
+
+            if (shorts.length === 0) {
+                grid.innerHTML = `<div style="grid-column: span 2; padding:30px 16px; font-size:13px; color:#aaa; text-align:center;">Ainda não há shorts nessa série.</div>`;
+                return;
+            }
+
+            shorts.forEach(sh => {
+                const card = document.createElement("div");
+                card.className = "channel-short-grid-card";
+                card.innerHTML = `
+                    <img src="${escapeHtml(sh.thumbUrl || defaultThumb)}" alt="Short">
+                    <div class="channel-short-grid-overlay">
+                        <div class="channel-short-grid-top">
+                            <button class="channel-short-kebab-btn btnShortKebab" type="button" aria-label="Opções">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
+                        </div>
+                        <div>
+                            <div class="channel-short-grid-title">${escapeHtml(sh.name)}</div>
+                            <div class="channel-short-grid-views">${formatNumber(sh.viewsCount || 0)} visualizações</div>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = (e) => {
+                    if (e.target.closest(".btnShortKebab")) return;
+                    openWatchScreen(sh, sh.id);
+                };
+
+                const kebab = card.querySelector(".btnShortKebab");
+                if (kebab) {
+                    kebab.onclick = (e) => {
+                        e.stopPropagation();
+                        currentWatchVideoId = sh.id;
+                        drawerVideoKebab.classList.add("active");
+                    };
+                }
+
+                grid.appendChild(card);
+            });
         }
 
         loadRecentSeriesFromFirestore();
