@@ -477,12 +477,13 @@
             position: absolute;
             bottom: 6px;
             left: 6px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #bbb;
-            font-size: 9px;
-            font-weight: 600;
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+            font-size: 9.5px;
+            font-weight: 700;
             padding: 2px 5px;
             border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         .fs-video-info-mini {
@@ -490,12 +491,13 @@
             gap: 8px;
             margin-top: 6px;
             align-items: flex-start;
+            position: relative;
         }
 
         .fs-channel-avatar-mini {
-            width: 24px;
-            height: 24px;
-            min-width: 24px;
+            width: 26px;
+            height: 26px;
+            min-width: 26px;
             border-radius: 50%;
             overflow: hidden;
             background: #252525;
@@ -504,7 +506,7 @@
             justify-content: center;
             font-size: 10px;
             font-weight: 700;
-            color: #fff;
+            color: #ffffff;
         }
 
         .fs-channel-avatar-mini img {
@@ -516,6 +518,7 @@
         .fs-video-details-mini {
             flex: 1;
             min-width: 0;
+            padding-right: 2px;
         }
 
         .fs-video-title-mini {
@@ -532,9 +535,35 @@
 
         .fs-video-meta-mini {
             font-size: 10px;
-            color: #777;
+            color: #aaaaaa;
             display: flex;
             flex-direction: column;
+            gap: 1px;
+        }
+
+        /* Botão Kebab (3 pontinhos verticais) oficial do YouTube sem caixas brancas */
+        .fs-kebab-btn-mini {
+            background: none !important;
+            border: none !important;
+            color: #ffffff !important;
+            cursor: pointer;
+            padding: 2px 0 0 4px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            outline: none;
+            box-shadow: none !important;
+        }
+
+        .fs-kebab-btn-mini svg {
+            width: 14px;
+            height: 14px;
+            fill: #ffffff;
+            opacity: 0.85;
+        }
+
+        .fs-kebab-btn-mini:active svg {
+            opacity: 1;
         }
 
         .fs-sushi-banner {
@@ -3344,7 +3373,7 @@
                 </div>
             </section>
 
-            <!-- 3. SEÇÃO: "PARA VOCÊ" (GRID 2 COLUNAS DO YOUTUBE) -->
+            <!-- 3. SEÇÃO: "PARA VOCÊ" (LIMITADO A 4 LINHAS X 2 COLUNAS = 8 EPISÓDIOS MAIS RECENTES) -->
             <section>
                 <div class="fs-section-header" style="margin-bottom: 8px;">
                     <div class="fs-section-title-wrap">
@@ -3352,49 +3381,8 @@
                     </div>
                 </div>
 
-                <!-- OS VÍDEOS POSTADOS PELO FIREBASE CAEM AQUI NO GRID DE 2 COLUNAS -->
+                <!-- OS EPISÓDIOS POSTADOS CAEM AQUI EM ATÉ 8 ITENS (4 LINHAS X 2 COLUNAS) -->
                 <div class="fs-grid-2col" id="dynamicFirebaseFeed"></div>
-
-                <!-- Cards Estáticos Fiscais do Grid 2 Colunas -->
-                <div class="fs-grid-2col" style="margin-top: 10px;">
-                    <!-- Card 1 -->
-                    <article class="fs-video-card-mini">
-                        <div class="yt-thumbnail-wrapper">
-                            <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500" alt="Ep 1">
-                            <span class="fs-badge-age">18+</span>
-                            <div class="yt-duration-badge">42:55</div>
-                        </div>
-                        <div class="fs-video-info-mini">
-                            <div class="fs-channel-avatar-mini" style="background:#8b5cf6;">K</div>
-                            <div class="fs-video-details-mini">
-                                <h4 class="fs-video-title-mini">“Difícil, Intocável” | Episódio 1 | Kira Medvedeva</h4>
-                                <div class="fs-video-meta-mini">
-                                    <span>KION</span>
-                                    <span>219 mil visualizações • há 12 dias</span>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-
-                    <!-- Card 2 -->
-                    <article class="fs-video-card-mini">
-                        <div class="yt-thumbnail-wrapper">
-                            <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=500" alt="Video">
-                            <span class="fs-badge-age">12+</span>
-                            <div class="yt-duration-badge">35:29</div>
-                        </div>
-                        <div class="fs-video-info-mini">
-                            <div class="fs-channel-avatar-mini" style="background:#f59e0b;">H</div>
-                            <div class="fs-video-details-mini">
-                                <h4 class="fs-video-title-mini">Peguei o número de telefone do noivo e encontrei...</h4>
-                                <div class="fs-video-meta-mini">
-                                    <span>Histórias da Vida</span>
-                                    <span>8,32 mil • há 13 horas</span>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
-                </div>
             </section>
 
             <!-- 4. SEÇÃO: COMUNIDADE SUSHI -->
@@ -4354,6 +4342,11 @@
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadSeriesGenres" class="upload-title-input" placeholder="Gêneros (ex: Ação, Aventura, Fantasia)">
                 </div>
+
+                <!-- LINHA PARA INAUGURAR O PRIMEIRO EPISÓDIO -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Adicionar o primeiro episódio (Link Embed/Drive/YouTube, opcional)">
+                </div>
             </div>
 
             <!-- ==========================================================
@@ -4725,6 +4718,36 @@
                 <div class="upload-radio-texts"><h4>Não</h4></div>
             </div>
         </section>
+
+        <!-- GAVETA: ESCOLHER FAIXA ETÁRIA (CLASSIFICAÇÃO INDICATIVA) -->
+        <div class="accounts-drawer" id="drawerUploadRating">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0 16px 12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <h3 style="font-size:16px; font-weight:700;">Classificação Indicativa</h3>
+                    <button class="yt-icon-btn" id="btnCloseUploadRating">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+                <div class="account-item-row optUploadRating" data-rating="Livre (L)" data-badge="L">
+                    <div class="account-item-left"><span style="font-weight:600;">Livre (L)</span></div>
+                </div>
+                <div class="account-item-row optUploadRating" data-rating="10+" data-badge="10+">
+                    <div class="account-item-left"><span style="font-weight:600;">10 anos (10+)</span></div>
+                </div>
+                <div class="account-item-row optUploadRating" data-rating="12+" data-badge="12+">
+                    <div class="account-item-left"><span style="font-weight:600;">12 anos (12+)</span></div>
+                </div>
+                <div class="account-item-row optUploadRating" data-rating="14+" data-badge="14+">
+                    <div class="account-item-left"><span style="font-weight:600;">14 anos (14+)</span></div>
+                </div>
+                <div class="account-item-row optUploadRating" data-rating="16+" data-badge="16+">
+                    <div class="account-item-left"><span style="font-weight:600;">16 anos (16+)</span></div>
+                </div>
+                <div class="account-item-row optUploadRating" data-rating="18+" data-badge="18+">
+                    <div class="account-item-left"><span style="font-weight:600; color:#ff4444;">Conteúdo Adulto (18+)</span></div>
+                </div>
+            </div>
+        </div>
 
         <!-- ==========================================================================
              GAVETA INFERIOR D: ADICIONAR ÀS PLAYLISTS
@@ -5347,7 +5370,36 @@
             seriesSuggestionsList.style.display = "block";
         });
 
-        // 2. ENVIAR CONTEÚDO (CRIA SÉRIE OU ADICIONA EPISÓDIO CONFORME A ABA ATIVA)
+        // Configuração da Gaveta de Classificação Indicativa (Faixa Etária)
+        const drawerUploadRating = document.getElementById("drawerUploadRating");
+        const btnCloseUploadRating = document.getElementById("btnCloseUploadRating");
+        const rowUploadRating = document.getElementById("rowUploadRating");
+        const valUploadRating = document.getElementById("valUploadRating");
+        let selectedAgeBadge = "12+";
+
+        if (rowUploadRating) {
+            rowUploadRating.addEventListener("click", () => {
+                drawerUploadRating.classList.add("active");
+            });
+        }
+
+        if (btnCloseUploadRating) {
+            btnCloseUploadRating.addEventListener("click", () => {
+                drawerUploadRating.classList.remove("active");
+            });
+        }
+
+        document.querySelectorAll(".optUploadRating").forEach(opt => {
+            opt.addEventListener("click", () => {
+                const ratingLabel = opt.getAttribute("data-rating");
+                selectedAgeBadge = opt.getAttribute("data-badge");
+                currentUploadSettings.rating = ratingLabel;
+                if (valUploadRating) valUploadRating.textContent = ratingLabel;
+                drawerUploadRating.classList.remove("active");
+            });
+        });
+
+        // 2. ENVIAR CONTEÚDO (APENAS EPISÓDIOS VÃO PARA O 'PARA VOCÊ', CAPAS DE SÉRIE VÃO PARA 'ANIMES RECENTES')
         btnSubmitVideoUpload.addEventListener("click", async () => {
             const isAdult = document.getElementById("uploadIsAdult").checked;
             const nextEpDate = document.getElementById("uploadNextEpDate").value;
@@ -5361,6 +5413,8 @@
                     const sName = uploadSeriesName.value.trim();
                     const sSynopsis = uploadSeriesSynopsis.value.trim();
                     const sGenres = uploadSeriesGenres.value.trim();
+                    const firstEpUrlInput = document.getElementById("uploadFirstEpisodeUrl");
+                    const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
 
                     if (!sName) {
                         alert("Por favor, preencha o nome da série!");
@@ -5368,37 +5422,47 @@
                         return;
                     }
 
-                    // Grava no Firestore na coleção 'series'
+                    // Grava a Série mãe no banco (Vai para 'Animes mais recentes')
                     await addDoc(collection(db, "series"), {
                         title: sName,
                         coverUrl: currentUploadSettings.thumbUrl,
                         synopsis: sSynopsis,
-                        genres: sGenres ? sGenres.split(",").map(g => g.trim()) : [],
+                        genres: sGenres ? sGenres.split(",").map(g => g.trim()) : ["Anime"],
                         visibility: currentUploadSettings.visibility,
                         isAdult: isAdult,
+                        ratingBadge: selectedAgeBadge || "12+",
                         nextEpDate: nextEpDate || null,
                         author: currentUserEmail,
                         episodes: [],
                         createdAt: serverTimestamp()
                     });
 
-                    // Cria o card de exibição no feed principal do FruitSenpai
-                    await addDoc(frutasColecao, {
-                        name: sName,
-                        channel: getNameFromEmail(currentUserEmail),
-                        views: "1 visualização",
-                        timeAgo: "agora mesmo",
-                        thumbUrl: currentUploadSettings.thumbUrl,
-                        timestamp: serverTimestamp()
-                    });
+                    // Se o usuário adicionou o link do primeiro episódio, inaugura ele na lista de episódios
+                    if (firstEpUrl) {
+                        await addDoc(frutasColecao, {
+                            name: `${sName} - Episódio 1`,
+                            channel: sName,
+                            seriesCover: currentUploadSettings.thumbUrl,
+                            viewsCount: 0,
+                            timeAgo: "agora mesmo",
+                            thumbUrl: currentUploadSettings.thumbUrl,
+                            videoUrl: firstEpUrl,
+                            duration: "24:00",
+                            ratingBadge: selectedAgeBadge || "12+",
+                            isAdult: isAdult,
+                            contentType: "episode",
+                            timestamp: serverTimestamp()
+                        });
+                    }
 
                     uploadSeriesName.value = "";
                     uploadSeriesSynopsis.value = "";
                     uploadSeriesGenres.value = "";
+                    if (firstEpUrlInput) firstEpUrlInput.value = "";
                     showToast("Série criada com sucesso!");
 
                 } else {
-                    // MODO 2: POSTAR EPISÓDIO EM SÉRIE EXISTENTE
+                    // MODO 2: POSTAR EPISÓDIO (ESTE SIM VAI PARA O 'PARA VOCÊ')
                     const epTitle = uploadEpisodeTitle.value.trim();
                     const epCover = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
                     const epVideoUrl = uploadEpisodeVideoUrl.value.trim();
@@ -5416,19 +5480,16 @@
                     }
 
                     const seriesName = uploadSearchSeries.value.trim();
-
-                    const epDuration = uploadEpisodeDuration ? uploadEpisodeDuration.value.trim() : "24:00";
+                    const epDuration = uploadEpisodeDuration && uploadEpisodeDuration.value.trim() ? uploadEpisodeDuration.value.trim() : "24:00";
                     const epTagsRaw = uploadEpisodeTags ? uploadEpisodeTags.value.trim() : "";
                     const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
 
-                    // Localiza a capa da série mãe
                     let seriesPhoto = "";
                     const matchedSeries = availableSeriesList.find(s => s.id === selectedSeriesId || (s.title && s.title.toLowerCase() === seriesName.toLowerCase()));
                     if (matchedSeries && matchedSeries.coverUrl) {
                         seriesPhoto = matchedSeries.coverUrl;
                     }
 
-                    // Salva com foto da série, título, canal com nome da série e URL real
                     await addDoc(frutasColecao, {
                         name: epTitle,
                         channel: seriesName,
@@ -5437,9 +5498,12 @@
                         timeAgo: "agora mesmo",
                         thumbUrl: epCover,
                         videoUrl: epVideoUrl,
-                        duration: epDuration || "24:00",
+                        duration: epDuration,
                         tags: epTagsList,
                         audioType: currentAudioType,
+                        ratingBadge: selectedAgeBadge || "12+",
+                        isAdult: isAdult,
+                        contentType: "episode",
                         timestamp: serverTimestamp()
                     });
 
@@ -5450,7 +5514,7 @@
                     if (uploadEpisodeTags) uploadEpisodeTags.value = "";
                     uploadSearchSeries.value = "";
                     selectedSeriesId = null;
-                    showToast("Episódio adicionado com sucesso!");
+                    showToast("Episódio publicado com sucesso!");
                 }
 
                 viewUploadDetails.classList.remove("active");
@@ -5464,21 +5528,40 @@
             }
         });
 
-        // 3. ONSNAPSHOT EM TEMPO REAL: RENDERIZA OS UPLOADS NO GRID 2 COLUNAS DO NOVO FEED
+        // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (4 LINHAS X 2 COLUNAS), MAIS RECENTES NO TOPO
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
             dynamicFirebaseFeed.innerHTML = "";
 
+            const episodeList = [];
+
             snapshot.forEach((docSnap) => {
                 const item = docSnap.data();
-                const id = docSnap.id;
+                // Exibe no 'Para você' somente itens que são episódios reais (com link de vídeo ou contentType episode)
+                if (item.videoUrl || item.contentType === "episode") {
+                    episodeList.push({ id: docSnap.id, ...item });
+                }
+            });
 
+            // Ordena os mais recentes primeiro
+            episodeList.sort((a, b) => {
+                const timeA = a.timestamp && a.timestamp.seconds ? a.timestamp.seconds : 0;
+                const timeB = b.timestamp && b.timestamp.seconds ? b.timestamp.seconds : 0;
+                return timeB - timeA;
+            });
+
+            // Limite exato de 8 vídeos (4 linhas de 2 colunas)
+            const top8Episodes = episodeList.slice(0, 8);
+
+            top8Episodes.forEach((item) => {
                 const card = document.createElement("article");
                 card.className = "fs-video-card-mini";
+                const ageRating = item.ratingBadge || (item.isAdult ? "18+" : "12+");
+
                 card.innerHTML = `
                     <div class="yt-thumbnail-wrapper" style="cursor:pointer;">
                         <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
-                        <span class="fs-badge-age">${item.isAdult ? "18+" : "12+"}</span>
+                        <span class="fs-badge-age">${escapeHtml(ageRating)}</span>
                         <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                     </div>
                     <div class="fs-video-info-mini">
@@ -5489,39 +5572,34 @@
                             <h4 class="fs-video-title-mini">${escapeHtml(item.name)}</h4>
                             <div class="fs-video-meta-mini">
                                 <span>${escapeHtml(item.channel || "Fruit Senpai")}</span>
-                                <span>${formatNumber(item.viewsCount || 0)} • ${item.timeAgo || "agora"}</span>
+                                <span>${formatNumber(item.viewsCount || 0)} visualizações • ${item.timeAgo || "agora"}</span>
                             </div>
                         </div>
-                        <button class="yt-more-btn firestore-del-btn-card" data-id="${id}" title="Excluir">
-                            <svg style="width:16px;height:16px;fill:#888" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        <button class="fs-kebab-btn-mini btnOpenVideoOptions" data-id="${item.id}" type="button" aria-label="Mais opções">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                         </button>
                     </div>
                 `;
 
+                // Clique no card abre o player do vídeo
                 card.onclick = (e) => {
-                    if (e.target.closest(".firestore-del-btn-card")) return;
-                    openWatchScreen(item, id);
+                    if (e.target.closest(".btnOpenVideoOptions")) return;
+                    openWatchScreen(item, item.id);
                 };
 
-                dynamicFirebaseFeed.prepend(card);
-            });
+                // Clique no botão kebab abre as opções sem abrir o vídeo
+                const kebabBtn = card.querySelector(".btnOpenVideoOptions");
+                if (kebabBtn) {
+                    kebabBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        currentWatchVideoId = item.id;
+                        drawerVideoKebab.classList.add("active");
+                    };
+                }
 
-            document.querySelectorAll(".firestore-del-btn-card").forEach(btn => {
-                btn.addEventListener("click", async (e) => {
-                    e.stopPropagation();
-                    const docId = btn.getAttribute("data-id");
-                    if (confirm("Deseja excluir este vídeo?")) {
-                        try {
-                            await deleteDoc(doc(db, "frutas", docId));
-                            showToast("Vídeo excluído.");
-                        } catch (err) {
-                            console.error(err);
-                        }
-                    }
-                });
+                dynamicFirebaseFeed.appendChild(card);
             });
         });
-
         // 4. INTERATIVIDADE DO AVISO ADULTO (+18) COM DESFOQUE (BLUR)
         const btnRevealAdult = document.getElementById("btnRevealAdultContent");
         const adultModalOverlay = document.getElementById("adultModalOverlay");
