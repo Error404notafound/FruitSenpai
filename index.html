@@ -4447,9 +4447,12 @@
                     <input type="text" id="uploadSeriesGenres" class="upload-title-input" placeholder="Gêneros (ex: Ação, Aventura, Fantasia)">
                 </div>
 
-                <!-- LINHA PARA INAUGURAR O PRIMEIRO EPISÓDIO -->
+                <!-- LINHAS PARA INAUGURAR O PRIMEIRO EPISÓDIO COM CAPA HORIZONTAL SEPARADA -->
                 <div class="upload-title-box" style="padding-top: 0;">
-                    <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Adicionar o primeiro episódio (Link Embed/Drive/YouTube, opcional)">
+                    <input type="text" id="uploadFirstEpisodeCover" class="upload-title-input" placeholder="Capa do 1º episódio (Link da imagem horizontal, opcional)">
+                </div>
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Link do 1º episódio (Embed/Drive/YouTube, opcional)">
                 </div>
             </div>
 
@@ -5579,11 +5582,13 @@
                 btnSubmitVideoUpload.textContent = "Enviando...";
 
                 if (currentUploadMode === "series") {
-                    // MODO 1: CRIAR SÉRIE
+                    // MODO 1: CRIAR SÉRIE (CAPA VERTICAL VAI PARA OS CARROSSÉIS E ABRE O CANAL)
                     const sName = uploadSeriesName.value.trim();
                     const sSynopsis = uploadSeriesSynopsis.value.trim();
                     const sGenres = uploadSeriesGenres.value.trim();
+                    const firstEpCoverInput = document.getElementById("uploadFirstEpisodeCover");
                     const firstEpUrlInput = document.getElementById("uploadFirstEpisodeUrl");
+                    const firstEpCover = firstEpCoverInput ? firstEpCoverInput.value.trim() : "";
                     const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
 
                     if (!sName) {
@@ -5592,7 +5597,7 @@
                         return;
                     }
 
-                    // Grava a Série mãe no banco (Vai para 'Animes mais recentes')
+                    // Grava a Série mãe no banco (Card vertical para 'Filmes/Animes mais recentes')
                     await addDoc(collection(db, "series"), {
                         title: sName,
                         coverUrl: currentUploadSettings.thumbUrl,
@@ -5608,7 +5613,7 @@
                         createdAt: serverTimestamp()
                     });
 
-                    // Se o usuário colocou o link do primeiro episódio, inaugura ele na lista de episódios
+                    // Se o usuário adicionou o link do primeiro episódio, gera o card horizontal no 'Para você'
                     if (firstEpUrl) {
                         await addDoc(frutasColecao, {
                             name: `${sName} - Episódio 1`,
@@ -5616,12 +5621,12 @@
                             seriesCover: currentUploadSettings.thumbUrl,
                             viewsCount: 0,
                             timeAgo: "agora mesmo",
-                            thumbUrl: currentUploadSettings.thumbUrl,
+                            thumbUrl: firstEpCover || currentUploadSettings.thumbUrl,
                             videoUrl: firstEpUrl,
                             duration: "24:00",
                             ratingBadge: selectedAgeBadge || "12+",
                             isAdult: isAdult,
-                            contentType: selectedContentType || "Série",
+                            contentType: "episode",
                             timestamp: serverTimestamp()
                         });
                     }
@@ -5629,6 +5634,7 @@
                     uploadSeriesName.value = "";
                     uploadSeriesSynopsis.value = "";
                     uploadSeriesGenres.value = "";
+                    if (firstEpCoverInput) firstEpCoverInput.value = "";
                     if (firstEpUrlInput) firstEpUrlInput.value = "";
                     showToast("Série criada com sucesso!");
 
@@ -6954,7 +6960,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Carrega em tempo real 'Animes mais recentes', 'Hentais mais recentes' (+18) e 'Filmes mais recentes' (Filme)
+        // Carrega em tempo real 'Animes mais recentes', 'Hentais mais recentes' e 'Filmes mais recentes' sem duplicidade
         const recentAnimesCarousel = document.getElementById("recentAnimesCarousel");
         const recentMoviesCarousel = document.getElementById("recentMoviesCarousel");
 
@@ -6975,99 +6981,88 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     }
                 });
 
-                // Também busca filmes postados diretamente pelo formulário de episódios/vídeos
-                onSnapshot(frutasColecao, (frutasSnap) => {
-                    const allMoviesList = [...moviesSeriesList];
+                // Ordena todas as listas para que as séries criadas mais recentemente fiquem no topo
+                const sortByDateDesc = (a, b) => {
+                    const timeA = (a.createdAt && a.createdAt.seconds) || (a.timestamp && a.timestamp.seconds) || 0;
+                    const timeB = (b.createdAt && b.createdAt.seconds) || (b.timestamp && b.timestamp.seconds) || 0;
+                    return timeB - timeA;
+                };
 
-                    frutasSnap.forEach((docSnap) => {
-                        const item = { id: docSnap.id, ...docSnap.data() };
-                        if (item.contentType === "Filme") {
-                            allMoviesList.push(item);
-                        }
-                    });
+                regularSeriesList.sort(sortByDateDesc);
+                adultSeriesList.sort(sortByDateDesc);
+                moviesSeriesList.sort(sortByDateDesc);
 
-                    // Ordena todas as listas para que os mais recentes fiquem no início
-                    const sortByDateDesc = (a, b) => {
-                        const timeA = (a.createdAt && a.createdAt.seconds) || (a.timestamp && a.timestamp.seconds) || 0;
-                        const timeB = (b.createdAt && b.createdAt.seconds) || (b.timestamp && b.timestamp.seconds) || 0;
-                        return timeB - timeA;
-                    };
+                // 1. Renderiza a seção 'Animes mais recentes'
+                if (recentAnimesCarousel) {
+                    recentAnimesCarousel.innerHTML = "";
 
-                    regularSeriesList.sort(sortByDateDesc);
-                    adultSeriesList.sort(sortByDateDesc);
-                    allMoviesList.sort(sortByDateDesc);
+                    if (regularSeriesList.length === 0) {
+                        const defaultSeries = [
+                            { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Aventura"] },
+                            { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Aventura"] },
+                            { title: "Ganbare! Nakamura", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Comédia"] },
+                            { title: "Deatte 5-byou de Battle", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama"] }
+                        ];
 
-                    // 1. Renderiza a seção 'Animes mais recentes'
-                    if (recentAnimesCarousel) {
-                        recentAnimesCarousel.innerHTML = "";
-
-                        if (regularSeriesList.length === 0) {
-                            const defaultSeries = [
-                                { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Aventura"] },
-                                { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Aventura"] },
-                                { title: "Ganbare! Nakamura", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Comédia"] },
-                                { title: "Deatte 5-byou de Battle", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama"] }
-                            ];
-
-                            defaultSeries.forEach((item) => {
-                                renderSingleSeriesCard(item, recentAnimesCarousel);
-                            });
-                        } else {
-                            regularSeriesList.forEach((item) => {
-                                renderSingleSeriesCard(item, recentAnimesCarousel);
-                            });
-                        }
+                        defaultSeries.forEach((item) => {
+                            renderSingleSeriesCard(item, recentAnimesCarousel);
+                        });
+                    } else {
+                        regularSeriesList.forEach((item) => {
+                            renderSingleSeriesCard(item, recentAnimesCarousel);
+                        });
                     }
+                }
 
-                    // 2. Renderiza a seção 'Hentais mais recentes' com as séries marcadas como conteúdo adulto
-                    if (adultContentRow) {
-                        adultContentRow.innerHTML = "";
+                // 2. Renderiza a seção 'Hentais mais recentes' (+18)
+                if (adultContentRow) {
+                    adultContentRow.innerHTML = "";
 
-                        if (adultSeriesList.length === 0) {
-                            const defaultAdultSeries = [
-                                { title: "Overflow 2", coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400", genres: ["Adulto"] },
-                                { title: "Mankitsu Happening", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Adulto"] },
-                                { title: "Kanojo x Kanojo", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Adulto"] }
-                            ];
+                    if (adultSeriesList.length === 0) {
+                        const defaultAdultSeries = [
+                            { title: "Overflow 2", coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400", genres: ["Adulto"] },
+                            { title: "Mankitsu Happening", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Adulto"] },
+                            { title: "Kanojo x Kanojo", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Adulto"] }
+                        ];
 
-                            defaultAdultSeries.forEach((item) => {
-                                renderSingleSeriesCard(item, adultContentRow);
-                            });
-                        } else {
-                            adultSeriesList.forEach((item) => {
-                                renderSingleSeriesCard(item, adultContentRow);
-                            });
-                        }
+                        defaultAdultSeries.forEach((item) => {
+                            renderSingleSeriesCard(item, adultContentRow);
+                        });
+                    } else {
+                        adultSeriesList.forEach((item) => {
+                            renderSingleSeriesCard(item, adultContentRow);
+                        });
                     }
+                }
 
-                    // 3. Renderiza a seção 'Filmes mais recentes' com os conteúdos marcados como 'Filme'
-                    if (recentMoviesCarousel) {
-                        recentMoviesCarousel.innerHTML = "";
+                // 3. Renderiza a seção 'Filmes mais recentes' (1 único card vertical por filme que sempre abre o canal)
+                if (recentMoviesCarousel) {
+                    recentMoviesCarousel.innerHTML = "";
 
-                        if (allMoviesList.length === 0) {
-                            const defaultMovies = [
-                                { title: "Seishun Buta Yarou", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Comédia"] },
-                                { title: "Sayonara no Asa ni", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Drama"] },
-                                { title: "Vidas ao Vento", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Drama"] }
-                            ];
+                    if (moviesSeriesList.length === 0) {
+                        const defaultMovies = [
+                            { title: "Seishun Buta Yarou", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Comédia"] },
+                            { title: "Sayonara no Asa ni", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Drama"] },
+                            { title: "Vidas ao Vento", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Drama"] }
+                        ];
 
-                            defaultMovies.forEach((item) => {
-                                renderSingleSeriesCard(item, recentMoviesCarousel);
-                            });
-                        } else {
-                            allMoviesList.forEach((item) => {
-                                renderSingleSeriesCard(item, recentMoviesCarousel);
-                            });
-                        }
+                        defaultMovies.forEach((item) => {
+                            renderSingleSeriesCard(item, recentMoviesCarousel);
+                        });
+                    } else {
+                        moviesSeriesList.forEach((item) => {
+                            renderSingleSeriesCard(item, recentMoviesCarousel);
+                        });
                     }
-                });
+                }
             });
         }
 
+        // Renderiza card vertical nos carrosséis: abre SEMPRE o Canal da Série
         function renderSingleSeriesCard(item, targetContainer) {
             if (!targetContainer) return;
 
-            const seriesTitle = item.title || item.name || "Filme";
+            const seriesTitle = item.title || item.name || "Série";
             const singleGenre = (Array.isArray(item.genres) && item.genres.length > 0) ? item.genres[0] : (item.genre || (item.contentType === "Filme" ? "Filme" : (item.isAdult ? "Adulto" : "Anime")));
             const seriesCover = item.coverUrl || item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
 
@@ -7082,17 +7077,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             `;
 
             card.addEventListener("click", () => {
-                if (item.videoUrl) {
-                    openWatchScreen(item, item.id);
-                } else {
-                    openSeriesChannel(seriesTitle);
-                }
+                openSeriesChannel(seriesTitle);
             });
 
             targetContainer.appendChild(card);
         }
-
-        loadRecentSeriesFromFirestore();
 
         // Renderiza a aba completa de 'Vídeos' com ordenação por Mais recentes, Em alta e Mais antigos
         function renderFullVideosTab(videos, defaultThumb, seriesName) {
