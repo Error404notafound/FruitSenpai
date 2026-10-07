@@ -3695,7 +3695,7 @@
                 </div>
             </section>
 
-            <!-- 9. SEÇÃO: FILMES MAIS RECENTES -->
+            <!-- 9. SEÇÃO: FILMES MAIS RECENTES (DINÂMICO PELO FIREBASE FIRESTORE) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
@@ -3705,23 +3705,7 @@
                     <button class="fs-link-more">Tudo</button>
                 </div>
 
-                <div class="fs-carousel">
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Filme"></div>
-                        <div class="fs-poster-title">Seishun Buta...</div>
-                        <div class="fs-poster-genre">Comédia</div>
-                    </div>
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Filme"></div>
-                        <div class="fs-poster-title">Sayonara no Asa...</div>
-                        <div class="fs-poster-genre">Drama</div>
-                    </div>
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Filme"></div>
-                        <div class="fs-poster-title">Vidas ao Vento...</div>
-                        <div class="fs-poster-genre">Drama</div>
-                    </div>
-                </div>
+                <div class="fs-carousel" id="recentMoviesCarousel"></div>
             </section>
 
             <!-- 10. SEÇÃO: HENTAIS MAIS RECENTES (+18 COM BLUR E MODAL) -->
@@ -6970,83 +6954,121 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Carrega em tempo real as séries normais em 'Animes mais recentes' e as marcadas como adultas (+18) em 'Hentais mais recentes'
+        // Carrega em tempo real 'Animes mais recentes', 'Hentais mais recentes' (+18) e 'Filmes mais recentes' (Filme)
         const recentAnimesCarousel = document.getElementById("recentAnimesCarousel");
+        const recentMoviesCarousel = document.getElementById("recentMoviesCarousel");
 
         function loadRecentSeriesFromFirestore() {
             onSnapshot(collection(db, "series"), (snapshot) => {
                 const regularSeriesList = [];
                 const adultSeriesList = [];
+                const moviesSeriesList = [];
 
                 snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    if (data.isAdult === true) {
-                        adultSeriesList.push({ id: docSnap.id, ...data });
+                    const data = { id: docSnap.id, ...docSnap.data() };
+                    if (data.contentType === "Filme") {
+                        moviesSeriesList.push(data);
+                    } else if (data.isAdult === true) {
+                        adultSeriesList.push(data);
                     } else {
-                        regularSeriesList.push({ id: docSnap.id, ...data });
+                        regularSeriesList.push(data);
                     }
                 });
 
-                // Ordena ambas as listas para que as criadas mais recentemente apareçam primeiro
-                const sortByDateDesc = (a, b) => {
-                    const timeA = a.createdAt && a.createdAt.seconds ? a.createdAt.seconds : 0;
-                    const timeB = b.createdAt && b.createdAt.seconds ? b.createdAt.seconds : 0;
-                    return timeB - timeA;
-                };
+                // Também busca filmes postados diretamente pelo formulário de episódios/vídeos
+                onSnapshot(frutasColecao, (frutasSnap) => {
+                    const allMoviesList = [...moviesSeriesList];
 
-                regularSeriesList.sort(sortByDateDesc);
-                adultSeriesList.sort(sortByDateDesc);
+                    frutasSnap.forEach((docSnap) => {
+                        const item = { id: docSnap.id, ...docSnap.data() };
+                        if (item.contentType === "Filme") {
+                            allMoviesList.push(item);
+                        }
+                    });
 
-                // 1. Renderiza a seção 'Animes mais recentes'
-                if (recentAnimesCarousel) {
-                    recentAnimesCarousel.innerHTML = "";
+                    // Ordena todas as listas para que os mais recentes fiquem no início
+                    const sortByDateDesc = (a, b) => {
+                        const timeA = (a.createdAt && a.createdAt.seconds) || (a.timestamp && a.timestamp.seconds) || 0;
+                        const timeB = (b.createdAt && b.createdAt.seconds) || (b.timestamp && b.timestamp.seconds) || 0;
+                        return timeB - timeA;
+                    };
 
-                    if (regularSeriesList.length === 0) {
-                        const defaultSeries = [
-                            { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Aventura"] },
-                            { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Aventura"] },
-                            { title: "Ganbare! Nakamura", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Comédia"] },
-                            { title: "Deatte 5-byou de Battle", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama"] }
-                        ];
+                    regularSeriesList.sort(sortByDateDesc);
+                    adultSeriesList.sort(sortByDateDesc);
+                    allMoviesList.sort(sortByDateDesc);
 
-                        defaultSeries.forEach((item) => {
-                            renderSingleSeriesCard(item, recentAnimesCarousel);
-                        });
-                    } else {
-                        regularSeriesList.forEach((item) => {
-                            renderSingleSeriesCard(item, recentAnimesCarousel);
-                        });
+                    // 1. Renderiza a seção 'Animes mais recentes'
+                    if (recentAnimesCarousel) {
+                        recentAnimesCarousel.innerHTML = "";
+
+                        if (regularSeriesList.length === 0) {
+                            const defaultSeries = [
+                                { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Aventura"] },
+                                { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Aventura"] },
+                                { title: "Ganbare! Nakamura", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Comédia"] },
+                                { title: "Deatte 5-byou de Battle", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama"] }
+                            ];
+
+                            defaultSeries.forEach((item) => {
+                                renderSingleSeriesCard(item, recentAnimesCarousel);
+                            });
+                        } else {
+                            regularSeriesList.forEach((item) => {
+                                renderSingleSeriesCard(item, recentAnimesCarousel);
+                            });
+                        }
                     }
-                }
 
-                // 2. Renderiza a seção 'Hentais mais recentes' com as séries marcadas como conteúdo adulto
-                if (adultContentRow) {
-                    adultContentRow.innerHTML = "";
+                    // 2. Renderiza a seção 'Hentais mais recentes' com as séries marcadas como conteúdo adulto
+                    if (adultContentRow) {
+                        adultContentRow.innerHTML = "";
 
-                    if (adultSeriesList.length === 0) {
-                        const defaultAdultSeries = [
-                            { title: "Overflow 2", coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400", genres: ["Adulto"] },
-                            { title: "Mankitsu Happening", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Adulto"] },
-                            { title: "Kanojo x Kanojo", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Adulto"] }
-                        ];
+                        if (adultSeriesList.length === 0) {
+                            const defaultAdultSeries = [
+                                { title: "Overflow 2", coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400", genres: ["Adulto"] },
+                                { title: "Mankitsu Happening", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Adulto"] },
+                                { title: "Kanojo x Kanojo", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Adulto"] }
+                            ];
 
-                        defaultAdultSeries.forEach((item) => {
-                            renderSingleSeriesCard(item, adultContentRow);
-                        });
-                    } else {
-                        adultSeriesList.forEach((item) => {
-                            renderSingleSeriesCard(item, adultContentRow);
-                        });
+                            defaultAdultSeries.forEach((item) => {
+                                renderSingleSeriesCard(item, adultContentRow);
+                            });
+                        } else {
+                            adultSeriesList.forEach((item) => {
+                                renderSingleSeriesCard(item, adultContentRow);
+                            });
+                        }
                     }
-                }
+
+                    // 3. Renderiza a seção 'Filmes mais recentes' com os conteúdos marcados como 'Filme'
+                    if (recentMoviesCarousel) {
+                        recentMoviesCarousel.innerHTML = "";
+
+                        if (allMoviesList.length === 0) {
+                            const defaultMovies = [
+                                { title: "Seishun Buta Yarou", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Comédia"] },
+                                { title: "Sayonara no Asa ni", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Drama"] },
+                                { title: "Vidas ao Vento", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Drama"] }
+                            ];
+
+                            defaultMovies.forEach((item) => {
+                                renderSingleSeriesCard(item, recentMoviesCarousel);
+                            });
+                        } else {
+                            allMoviesList.forEach((item) => {
+                                renderSingleSeriesCard(item, recentMoviesCarousel);
+                            });
+                        }
+                    }
+                });
             });
         }
 
         function renderSingleSeriesCard(item, targetContainer) {
             if (!targetContainer) return;
 
-            const seriesTitle = item.title || "Série";
-            const singleGenre = (Array.isArray(item.genres) && item.genres.length > 0) ? item.genres[0] : (item.genre || (item.isAdult ? "Adulto" : "Anime"));
+            const seriesTitle = item.title || item.name || "Filme";
+            const singleGenre = (Array.isArray(item.genres) && item.genres.length > 0) ? item.genres[0] : (item.genre || (item.contentType === "Filme" ? "Filme" : (item.isAdult ? "Adulto" : "Anime")));
             const seriesCover = item.coverUrl || item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
 
             const card = document.createElement("div");
@@ -7060,11 +7082,17 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             `;
 
             card.addEventListener("click", () => {
-                openSeriesChannel(seriesTitle);
+                if (item.videoUrl) {
+                    openWatchScreen(item, item.id);
+                } else {
+                    openSeriesChannel(seriesTitle);
+                }
             });
 
             targetContainer.appendChild(card);
         }
+
+        loadRecentSeriesFromFirestore();
 
         // Renderiza a aba completa de 'Vídeos' com ordenação por Mais recentes, Em alta e Mais antigos
         function renderFullVideosTab(videos, defaultThumb, seriesName) {
