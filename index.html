@@ -495,6 +495,26 @@
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
+        /* Badge de Duração do Vídeo (Canto Inferior Direito da Capa) */
+        .yt-duration-badge {
+            position: absolute;
+            bottom: 4px !important;
+            right: 4px !important;
+            background-color: rgba(0, 0, 0, 0.85) !important;
+            color: #ffffff !important;
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            padding: 2px 4px !important;
+            border-radius: 4px !important;
+            letter-spacing: 0.2px !important;
+            z-index: 5 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            line-height: 1 !important;
+            pointer-events: none !important;
+        }
+
         .fs-video-info-mini {
             display: flex;
             gap: 8px;
@@ -6805,15 +6825,22 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             } catch(e) { console.error(e); }
         });
 
-        // Função de escape para prevenir XSS
+        // Função de escape para prevenir XSS com conversão segura de tipo
         function escapeHtml(text) {
-            if (!text) return "";
-            return text
+            if (!text && text !== 0) return "";
+            return String(text)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
                 .replace(/"/g, "&quot;")
                 .replace(/'/g, "&#039;");
+        }
+
+        // Garante a formatação do tempo do vídeo no badge
+        function formatDurationBadge(duration) {
+            if (!duration) return "24:00";
+            const clean = String(duration).trim();
+            return clean ? clean : "24:00";
         }
 
         // ==========================================================================
@@ -7194,7 +7221,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         <div class="fs-ep-thumb">
                             <img src="${escapeHtml(item.thumbUrl || finalThumb)}" alt="Capa">
                             <span class="fs-badge-hd">HD</span>
-                            <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                            <div class="yt-duration-badge">${escapeHtml(formatDurationBadge(item.duration))}</div>
                         </div>
                         <div class="fs-ep-title" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
                         <div class="fs-ep-meta-row">
@@ -7304,21 +7331,21 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             const toShow = currentActiveSeriesEpisodes.slice(0, limit);
 
             toShow.forEach(item => {
-                const row = document.createElement("div");
-                row.className = "channel-horizontal-video-row";
-                row.innerHTML = `
-                    <div class="channel-horizontal-thumb">
-                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400')}" alt="Capa">
-                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
-                    </div>
-                    <div class="channel-horizontal-details">
-                        <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
-                        <div class="channel-horizontal-meta">
-                            <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
-                            <span>•</span>
-                            <span>${formatTimeAgo(item.timestamp)}</span>
+                    const row = document.createElement("div");
+                    row.className = "channel-horizontal-video-row";
+                    row.innerHTML = `
+                        <div class="channel-horizontal-thumb">
+                            <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400')}" alt="Capa">
+                            <div class="yt-duration-badge">${escapeHtml(formatDurationBadge(item.duration))}</div>
                         </div>
-                    </div>
+                        <div class="channel-horizontal-details">
+                            <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
+                            <div class="channel-horizontal-meta">
+                                <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
+                                <span>•</span>
+                                <span>${formatTimeAgo(item.timestamp)}</span>
+                            </div>
+                        </div>
                     <button class="fs-kebab-btn-mini btnChannelRowKebabItem" type="button" aria-label="Mais opções">
                         <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                     </button>
