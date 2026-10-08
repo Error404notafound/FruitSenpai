@@ -1133,17 +1133,24 @@
             margin-top: 8px;
         }
 
-        .channel-tabs-bar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .channel-tabs-container-row {
+        /* Trilho Único de Rolagem Horizontal (Abas + Cápsula Deslizando Juntos) */
+        .channel-tabs-bar {
+            height: 44px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 18px;
+            padding: 0 16px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             margin-top: 6px;
-            padding-right: 12px;
+            -webkit-overflow-scrolling: touch;
+            width: 100%;
+        }
+
+        .channel-tabs-bar::-webkit-scrollbar {
+            display: none;
         }
 
         .channel-tab-item {
@@ -1155,9 +1162,25 @@
             cursor: pointer;
             padding: 10px 0;
             position: relative;
+            flex-shrink: 0;
         }
 
-        /* Cápsula de Ações do Canal da Série (Print A) */
+        .channel-tab-item.active {
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .channel-tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #ffffff;
+        }
+
+        /* Cápsula de Ações da Série dentro do trilho único arrastável */
         .channel-action-capsule {
             display: flex;
             align-items: center;
@@ -1167,6 +1190,8 @@
             padding: 0 10px;
             gap: 12px;
             flex-shrink: 0;
+            margin-left: 6px;
+            margin-right: 8px;
         }
 
         .channel-action-capsule-btn {
@@ -1178,6 +1203,7 @@
             align-items: center;
             justify-content: center;
             padding: 0;
+            flex-shrink: 0;
         }
 
         .channel-action-capsule-btn svg {
@@ -3931,16 +3957,14 @@
                 <button class="channel-subscribe-full-btn" id="btnChannelSubscribe">Inscrever-se</button>
             </div>
 
-            <!-- Abas de Navegação do Canal com Cápsula de Ações (Print A) -->
-            <div class="channel-tabs-container-row">
-                <div class="channel-tabs-bar" style="border-bottom:none; margin-top:0;">
-                    <button class="channel-tab-item active" id="tabChannelNavInicio">Início</button>
-                    <button class="channel-tab-item" id="tabChannelNavVideos">Vídeos</button>
-                    <button class="channel-tab-item" id="tabChannelNavShorts">Shorts</button>
-                    <button class="channel-tab-item">Pesquisar</button>
-                </div>
+            <!-- Abas de Navegação e Cápsula de Ações Deslizando Juntas no Mesmo Trilho -->
+            <div class="channel-tabs-bar">
+                <button class="channel-tab-item active" id="tabChannelNavInicio">Início</button>
+                <button class="channel-tab-item" id="tabChannelNavVideos">Vídeos</button>
+                <button class="channel-tab-item" id="tabChannelNavShorts">Shorts</button>
+                <button class="channel-tab-item">Pesquisar</button>
 
-                <!-- Cápsula de Ações da Série (👍 👎 ↗ ✨ ...) -->
+                <!-- Cápsula de Ações da Série (👍 👎 ↗ ✨ ...) que desliza junto sem sobreposição -->
                 <div class="channel-action-capsule">
                     <button class="channel-action-capsule-btn" id="btnChannelLike" aria-label="Gostei">
                         <svg viewBox="0 0 24 24"><path d="M18.77,11h-4.23l1.52-4.94C16.38,5.03,15.54,4,14.38,4c-0.58,0-1.14,0.24-1.52,0.65L7,11H3v10h4h1h9.43c1.06,0,1.98-0.67,2.19-1.61l1.34-6C21.23,12.15,20.18,11,18.77,11z M7,20H4v-8h3V20z M19.98,13.17l-1.34,6C18.54,19.65,18.03,20,17.43,20H8v-8.61l5.6-6.06C13.79,5.12,14.08,5,14.38,5c0.26,0,0.5,0.11,0.63,0.3c0.07,0.1,0.15,0.26,0.09,0.47l-1.52,4.94L13.18,12h1.35h4.23c0.41,0,0.8,0.17,1.03,0.46C19.92,12.61,20.05,12.86,19.98,13.17z"/></svg>
