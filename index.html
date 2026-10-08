@@ -1542,6 +1542,95 @@
             fill: currentColor;
         }
 
+        /* Snackbar Flutuante Oficial com Capa do Anime (Prints E e D2) */
+        .yt-custom-snackbar {
+            position: fixed;
+            bottom: calc(var(--yt-bottom-nav-h) + 16px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f1f1f1;
+            color: #0f0f0f;
+            padding: 6px 14px 6px 6px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75);
+            z-index: 12000;
+            width: calc(100% - 32px);
+            max-width: 448px;
+            animation: slideUp 0.2s ease-out;
+        }
+
+        .yt-custom-snackbar.active {
+            display: flex;
+        }
+
+        .yt-custom-snackbar img {
+            width: 52px;
+            height: 34px;
+            object-fit: cover;
+            border-radius: 4px;
+            flex-shrink: 0;
+            background-color: #212121;
+        }
+
+        /* Ícone de Salvar / Bookmark alternável */
+        .playlist-bookmark-check-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .playlist-bookmark-check-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        .playlist-bookmark-check-btn.saved svg {
+            fill: #ffffff;
+        }
+
+        .playlist-bookmark-check-btn:not(.saved) svg {
+            fill: none;
+            stroke: #ffffff;
+            stroke-width: 2;
+        }
+
+        /* Força a capa da série a caber no card horizontal das playlists da tela Você (Print F) */
+        .profile-playlist-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 20%;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .profile-playlist-badge-count {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+        }
+
         /* Abas de Conteúdo do Canal da Série */
         .channel-tab-pane {
             display: none;
@@ -4165,30 +4254,51 @@
             </div>
         </div>
 
-        <!-- GAVETA PRINT B: MENU DE OPÇÕES DA SÉRIE (SALVAR E DENUNCIAR) -->
+        <!-- GAVETA PRINT B: MENU DE OPÇÕES DA SÉRIE (FIEL AO PRINT B) -->
         <div class="accounts-drawer" id="drawerSeriesKebab">
-            <div class="accounts-sheet" style="padding: 10px 0 20px 0;">
-                <div class="account-item-row" id="btnSeriesKebabSave">
+            <div class="accounts-sheet" style="padding: 8px 0 20px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnSeriesSaveWatchLater">
                     <div class="account-item-left">
-                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
-                        <span style="font-size:14.5px;">Salvar</span>
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        <span style="font-size:14.5px;">Salvar em "Assistir mais tarde"</span>
                     </div>
                 </div>
-                <div class="account-item-row" id="btnSeriesKebabReport">
+                <div class="account-item-row" id="btnSeriesSaveToPlaylist">
                     <div class="account-item-left">
-                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
-                        <span style="font-size:14.5px;">Denunciar</span>
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span style="font-size:14.5px;">Salvar na playlist</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- GAVETA PRINT C: SALVAR EM... (PLAYLISTS DE SÉRIES) -->
+        <!-- GAVETA PRINT C: SALVAR EM... COM WATCH LATER E PLAYLISTS EM ORDEM ALFABÉTICA -->
         <div class="accounts-drawer" id="drawerSeriesSavePlaylist">
             <div class="accounts-sheet" style="padding: 14px 16px 24px 16px; gap:12px;">
-                <h3 style="font-size:16px; font-weight:700;">Salvar em...</h3>
+                <div class="yt-sheet-drag-handle"></div>
+                <h3 style="font-size:16px; font-weight:700; color:#fff;">Salvar em...</h3>
+
+                <!-- Item Fixo: Watch later (Prints C e D) -->
+                <div class="account-item-row" id="rowSaveSeriesWatchLaterItem" style="padding: 10px 0;">
+                    <div class="account-item-left">
+                        <div id="thumbWatchLaterPreviewBox" style="width:40px; height:26px; border-radius:4px; overflow:hidden; background:#333; display:flex; align-items:center; justify-content:center;">
+                            <svg style="width:18px;height:18px;fill:#aaa" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-weight:600; font-size:14px; color:#fff;">Watch later</div>
+                            <small style="color:#aaa;">Particular</small>
+                        </div>
+                    </div>
+                    <button class="playlist-bookmark-check-btn" id="btnCheckWatchLater" type="button">
+                        <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Lista dinâmica de Playlists do usuário em ordem alfabética -->
                 <div id="userSeriesPlaylistsList" style="display:flex; flex-direction:column; gap:8px;"></div>
-                <button class="profile-pill-btn" id="btnOpenNewSeriesPlaylistModal" style="background:#272727; height:40px;">
+
+                <button class="profile-pill-btn" id="btnOpenNewSeriesPlaylistModal" style="background:#272727; height:42px; border-radius:21px; width:100%;">
                     <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                     <span>Nova playlist</span>
                 </button>
@@ -5384,8 +5494,14 @@
             </div>
         </div>
         
-        <!-- Toast de Aviso -->
+        <!-- Toast de Aviso Padrão -->
         <div class="yt-toast" id="toastMessage"></div>
+
+        <!-- Snackbar Flutuante Oficial com Capa do Anime (Prints E e D2) -->
+        <div class="yt-custom-snackbar" id="customCoverSnackbar">
+            <img id="customSnackbarCoverImg" src="" alt="Capa">
+            <span id="customSnackbarMessageText">Salvo em Watch later</span>
+        </div>
 
     </div>
 
@@ -6913,23 +7029,58 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Clique no Kebab do Canal (Print A -> Print B)
+        // Elementos dos Prints B, C, D, D1, D2, E e F
+        const btnSeriesSaveWatchLater = document.getElementById("btnSeriesSaveWatchLater");
+        const btnSeriesSaveToPlaylist = document.getElementById("btnSeriesSaveToPlaylist");
+        const rowSaveSeriesWatchLaterItem = document.getElementById("rowSaveSeriesWatchLaterItem");
+        const btnCheckWatchLater = document.getElementById("btnCheckWatchLater");
+        const thumbWatchLaterPreviewBox = document.getElementById("thumbWatchLaterPreviewBox");
+        const customCoverSnackbar = document.getElementById("customCoverSnackbar");
+        const customSnackbarCoverImg = document.getElementById("customSnackbarCoverImg");
+        const customSnackbarMessageText = document.getElementById("customSnackbarMessageText");
+
+        let currentSeriesCoverForSnackbar = "";
+        let snackbarTimeout = null;
+
+        // Exibe o Snackbar Oficial flutuante com a capa do anime (Prints E e D2)
+        function showCoverSnackbar(message, coverUrl) {
+            if (!customCoverSnackbar) return;
+            const finalImg = coverUrl || currentSeriesCoverForSnackbar || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+            customSnackbarCoverImg.src = finalImg;
+            customSnackbarMessageText.textContent = message;
+            customCoverSnackbar.classList.add("active");
+
+            if (snackbarTimeout) clearTimeout(snackbarTimeout);
+            snackbarTimeout = setTimeout(() => {
+                customCoverSnackbar.classList.remove("active");
+            }, 3000);
+        }
+
+        // Clique no Kebab do Canal da Série (Print A -> Abre Print B)
         if (btnChannelKebab) {
             btnChannelKebab.addEventListener("click", () => {
                 drawerSeriesKebab.classList.add("active");
             });
         }
 
-        // Fechar gaveta B ao clicar fora
         if (drawerSeriesKebab) {
             drawerSeriesKebab.addEventListener("click", (e) => {
                 if (e.target === drawerSeriesKebab) drawerSeriesKebab.classList.remove("active");
             });
         }
 
-        // Clique em Salvar no Menu Kebab (Print B -> Print C)
-        if (btnSeriesKebabSave) {
-            btnSeriesKebabSave.addEventListener("click", () => {
+        // Print B -> Opção 1: Salvar diretamente em "Assistir mais tarde"
+        if (btnSeriesSaveWatchLater) {
+            btnSeriesSaveWatchLater.addEventListener("click", async () => {
+                drawerSeriesKebab.classList.remove("active");
+                if (!currentUserEmail) return openAuthModal();
+                await toggleSeriesWatchLater();
+            });
+        }
+
+        // Print B -> Opção 2: Salvar na playlist (Abre Print C)
+        if (btnSeriesSaveToPlaylist) {
+            btnSeriesSaveToPlaylist.addEventListener("click", () => {
                 drawerSeriesKebab.classList.remove("active");
                 if (!currentUserEmail) return openAuthModal();
                 loadUserSeriesPlaylists();
@@ -6937,21 +7088,64 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        if (btnSeriesKebabReport) {
-            btnSeriesKebabReport.addEventListener("click", () => {
-                drawerSeriesKebab.classList.remove("active");
-                showToast("Denúncia enviada para análise.");
-            });
-        }
-
-        // Fechar gaveta C ao clicar fora
         if (drawerSeriesSavePlaylist) {
             drawerSeriesSavePlaylist.addEventListener("click", (e) => {
                 if (e.target === drawerSeriesSavePlaylist) drawerSeriesSavePlaylist.classList.remove("active");
             });
         }
 
-        // Clique em Nova Playlist em Print C -> Abre Modal Print D
+        // Alterna a série dentro do "Watch later"
+        async function toggleSeriesWatchLater() {
+            try {
+                const userWatchLaterRef = doc(db, "series_playlists", `watch_later_${currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_')}`);
+                const snap = await getDoc(userWatchLaterRef);
+                let list = [];
+                let isSaved = false;
+
+                if (snap.exists()) {
+                    const data = snap.data();
+                    list = Array.isArray(data.series) ? [...data.series] : [];
+                }
+
+                if (!list.includes(currentActiveSeriesName)) {
+                    list.push(currentActiveSeriesName);
+                    isSaved = true;
+                } else {
+                    list = list.filter(s => s !== currentActiveSeriesName);
+                    isSaved = false;
+                }
+
+                await setDoc(userWatchLaterRef, {
+                    title: "Watch later",
+                    visibility: "Particular",
+                    user: currentUserEmail,
+                    series: list,
+                    coverUrl: currentSeriesCoverForSnackbar,
+                    type: "series",
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                if (btnCheckWatchLater) {
+                    btnCheckWatchLater.classList.toggle("saved", isSaved);
+                }
+
+                if (isSaved) {
+                    showCoverSnackbar("Salvo em Watch later", currentSeriesCoverForSnackbar);
+                } else {
+                    showCoverSnackbar("Removido de Watch later", currentSeriesCoverForSnackbar);
+                }
+            } catch (err) {
+                console.error("Erro no Watch later:", err);
+            }
+        }
+
+        if (rowSaveSeriesWatchLaterItem) {
+            rowSaveSeriesWatchLaterItem.addEventListener("click", async () => {
+                await toggleSeriesWatchLater();
+            });
+        }
+
+        // Clique em Nova Playlist em Print C -> Abre Modal Print D1
         if (btnOpenNewSeriesPlaylistModal) {
             btnOpenNewSeriesPlaylistModal.addEventListener("click", () => {
                 drawerSeriesSavePlaylist.classList.remove("active");
@@ -6968,14 +7162,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Clique no seletor de visibilidade em Print D -> Abre gaveta Print E
         if (btnSelectSeriesPlaylistVis) {
             btnSelectSeriesPlaylistVis.addEventListener("click", () => {
                 drawerSeriesPlaylistVis.classList.add("active");
             });
         }
 
-        // Seleção de visibilidade em Print E
         document.querySelectorAll(".optSeriesPlaylistVis").forEach(opt => {
             opt.addEventListener("click", () => {
                 selectedSeriesPlaylistVisibility = opt.getAttribute("data-vis");
@@ -6990,7 +7182,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Criar Nova Playlist de Séries no Firebase (Print D)
+        // Criar Nova Playlist de Séries no Firebase (Print D1 -> Mostra Print D2)
         if (btnCreateNewSeriesPlaylist) {
             btnCreateNewSeriesPlaylist.addEventListener("click", async () => {
                 const title = inputNewSeriesPlaylistTitle.value.trim();
@@ -7005,54 +7197,150 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         visibility: selectedSeriesPlaylistVisibility,
                         user: currentUserEmail,
                         series: [currentActiveSeriesName],
+                        coverUrl: currentSeriesCoverForSnackbar,
                         type: "series",
                         createdAt: serverTimestamp()
                     });
                     modalNewSeriesPlaylist.classList.remove("active");
-                    showToast(`Série salva na playlist ${title}`);
+                    showCoverSnackbar("Playlist criada", currentSeriesCoverForSnackbar);
+                    refreshUserChannelPlaylists();
                 } catch(err) {
                     console.error("Erro ao criar playlist de série:", err);
                 }
             });
         }
 
-        // Carrega apenas as playlists criadas especificamente para séries (Print C)
-        function loadUserSeriesPlaylists() {
+        // Carrega as playlists em ordem alfabética no Print C
+        async function loadUserSeriesPlaylists() {
             if (!userSeriesPlaylistsList) return;
             userSeriesPlaylistsList.innerHTML = "";
 
+            // Verifica status do Watch later
+            try {
+                const userWatchLaterRef = doc(db, "series_playlists", `watch_later_${currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_')}`);
+                const snap = await getDoc(userWatchLaterRef);
+                if (snap.exists() && btnCheckWatchLater) {
+                    const data = snap.data();
+                    const list = Array.isArray(data.series) ? data.series : [];
+                    btnCheckWatchLater.classList.toggle("saved", list.includes(currentActiveSeriesName));
+                    if (data.coverUrl && thumbWatchLaterPreviewBox) {
+                        thumbWatchLaterPreviewBox.innerHTML = `<img src="${escapeHtml(data.coverUrl)}" style="width:100%;height:100%;object-fit:cover;">`;
+                    }
+                } else if (btnCheckWatchLater) {
+                    btnCheckWatchLater.classList.remove("saved");
+                }
+            } catch (e) {}
+
             onSnapshot(collection(db, "series_playlists"), (snap) => {
                 userSeriesPlaylistsList.innerHTML = "";
+                const userPlaylists = [];
 
                 snap.forEach(docSnap => {
-                    const pl = docSnap.data();
-                    if (pl.user === currentUserEmail) {
-                        const row = document.createElement("div");
-                        row.className = "account-item-row";
-                        row.innerHTML = `
-                            <div>
-                                <div style="font-weight:600; font-size:14px;">${escapeHtml(pl.title)}</div>
-                                <small style="color:#aaa;">${escapeHtml(pl.visibility)} • Playlist de Séries</small>
-                            </div>
-                        `;
-                        row.addEventListener("click", async () => {
-                            try {
-                                const playlistRef = doc(db, "series_playlists", docSnap.id);
-                                const list = Array.isArray(pl.series) ? [...pl.series] : [];
-                                if (!list.includes(currentActiveSeriesName)) {
-                                    list.push(currentActiveSeriesName);
-                                    await setDoc(playlistRef, { series: list }, { merge: true });
-                                    showToast(`Série salva em ${pl.title}`);
-                                } else {
-                                    showToast(`Esta série já está em ${pl.title}`);
-                                }
-                                drawerSeriesSavePlaylist.classList.remove("active");
-                            } catch(e) {
-                                console.error(e);
-                            }
-                        });
-                        userSeriesPlaylistsList.appendChild(row);
+                    const pl = { id: docSnap.id, ...docSnap.data() };
+                    if (pl.user === currentUserEmail && !pl.id.startsWith("watch_later_")) {
+                        userPlaylists.push(pl);
                     }
+                });
+
+                // ORDEM ALFABÉTICA
+                userPlaylists.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+
+                userPlaylists.forEach(pl => {
+                    const seriesArray = Array.isArray(pl.series) ? pl.series : [];
+                    const isAlreadySaved = seriesArray.includes(currentActiveSeriesName);
+
+                    const row = document.createElement("div");
+                    row.className = "account-item-row";
+                    row.style.padding = "10px 0";
+                    row.innerHTML = `
+                        <div class="account-item-left">
+                            <div style="width:40px; height:26px; border-radius:4px; overflow:hidden; background:#272727; flex-shrink:0;">
+                                <img src="${escapeHtml(pl.coverUrl || currentSeriesCoverForSnackbar || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200')}" style="width:100%;height:100%;object-fit:cover;">
+                            </div>
+                            <div>
+                                <div style="font-weight:600; font-size:14px; color:#fff;">${escapeHtml(pl.title)}</div>
+                                <small style="color:#aaa;">${escapeHtml(pl.visibility || "Particular")}</small>
+                            </div>
+                        </div>
+                        <button class="playlist-bookmark-check-btn ${isAlreadySaved ? 'saved' : ''}" type="button">
+                            <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        </button>
+                    `;
+
+                    row.onclick = async () => {
+                        try {
+                            const playlistRef = doc(db, "series_playlists", pl.id);
+                            let updatedList = [...seriesArray];
+                            let nowSaved = false;
+
+                            if (!updatedList.includes(currentActiveSeriesName)) {
+                                updatedList.push(currentActiveSeriesName);
+                                nowSaved = true;
+                            } else {
+                                updatedList = updatedList.filter(s => s !== currentActiveSeriesName);
+                                nowSaved = false;
+                            }
+
+                            await setDoc(playlistRef, {
+                                series: updatedList,
+                                coverUrl: currentSeriesCoverForSnackbar || pl.coverUrl,
+                                updatedAt: serverTimestamp()
+                            }, { merge: true });
+
+                            row.querySelector(".playlist-bookmark-check-btn").classList.toggle("saved", nowSaved);
+
+                            if (nowSaved) {
+                                showCoverSnackbar(`Salvo em ${pl.title}`, currentSeriesCoverForSnackbar);
+                            } else {
+                                showCoverSnackbar(`Removido de ${pl.title}`, currentSeriesCoverForSnackbar);
+                            }
+
+                            refreshUserChannelPlaylists();
+                        } catch (err) {
+                            console.error(err);
+                        }
+                    };
+
+                    userSeriesPlaylistsList.appendChild(row);
+                });
+            });
+        }
+
+        // Atualiza as playlists salvas no perfil "Você" (Print F) forçando a homogeneidade horizontal
+        function refreshUserChannelPlaylists() {
+            const profileCarousel = document.querySelector(".profile-playlists-carousel");
+            if (!profileCarousel) return;
+
+            onSnapshot(collection(db, "series_playlists"), (snap) => {
+                const userLists = [];
+                snap.forEach(docSnap => {
+                    const pl = { id: docSnap.id, ...docSnap.data() };
+                    if (pl.user === currentUserEmail) {
+                        userLists.push(pl);
+                    }
+                });
+
+                if (userLists.length === 0) return;
+
+                profileCarousel.innerHTML = "";
+
+                userLists.forEach(pl => {
+                    const count = Array.isArray(pl.series) ? pl.series.length : 0;
+                    const card = document.createElement("div");
+                    card.className = "profile-playlist-card";
+                    card.innerHTML = `
+                        <div class="profile-playlist-thumb" style="position:relative; width:140px; height:80px; overflow:hidden;">
+                            ${pl.coverUrl ? `<img src="${escapeHtml(pl.coverUrl)}" alt="Capa">` : `<svg style="width:28px;height:28px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`}
+                            <div class="profile-playlist-badge-count">≡ ${count}</div>
+                        </div>
+                        <div class="profile-playlist-name">${escapeHtml(pl.title)}</div>
+                        <div class="profile-playlist-sub">${escapeHtml(pl.visibility || "Particular")} • Playlist</div>
+                    `;
+                    card.onclick = () => {
+                        playlistPageTitle.textContent = pl.title;
+                        openScreen(viewPlaylists);
+                    };
+                    profileCarousel.appendChild(card);
                 });
             });
         }
@@ -7147,8 +7435,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     }
                 });
 
-                // Atualiza Imagens do Banner e Avatar
+                // Atualiza Imagens do Banner e Avatar e salva para o Snackbar Oficial (Print E e D2)
                 const finalThumb = (matchedSeriesData && matchedSeriesData.coverUrl) || seriesCoverImage || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+                currentSeriesCoverForSnackbar = finalThumb;
                 document.getElementById("channelBannerImg").src = finalThumb;
                 document.getElementById("channelAvatarImg").src = finalThumb;
 
