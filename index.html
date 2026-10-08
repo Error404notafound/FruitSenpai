@@ -1137,6 +1137,15 @@
             display: none;
         }
 
+        .channel-tabs-container-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 6px;
+            padding-right: 12px;
+        }
+
         .channel-tab-item {
             font-size: 13.5px;
             font-weight: 500;
@@ -1146,6 +1155,39 @@
             cursor: pointer;
             padding: 10px 0;
             position: relative;
+        }
+
+        /* Cápsula de Ações do Canal da Série (Print A) */
+        .channel-action-capsule {
+            display: flex;
+            align-items: center;
+            background-color: #272727;
+            border-radius: 18px;
+            height: 32px;
+            padding: 0 10px;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .channel-action-capsule-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .channel-action-capsule-btn svg {
+            width: 17px;
+            height: 17px;
+            fill: #ffffff;
+        }
+
+        .channel-action-capsule-btn:active svg {
+            transform: scale(1.15);
         }
 
         .channel-tab-item.active {
@@ -3889,12 +3931,33 @@
                 <button class="channel-subscribe-full-btn" id="btnChannelSubscribe">Inscrever-se</button>
             </div>
 
-            <!-- Abas de Navegação do Canal (A2) -->
-            <div class="channel-tabs-bar">
-                <button class="channel-tab-item active" id="tabChannelNavInicio">Início</button>
-                <button class="channel-tab-item" id="tabChannelNavVideos">Vídeos</button>
-                <button class="channel-tab-item" id="tabChannelNavShorts">Shorts</button>
-                <button class="channel-tab-item">Pesquisar</button>
+            <!-- Abas de Navegação do Canal com Cápsula de Ações (Print A) -->
+            <div class="channel-tabs-container-row">
+                <div class="channel-tabs-bar" style="border-bottom:none; margin-top:0;">
+                    <button class="channel-tab-item active" id="tabChannelNavInicio">Início</button>
+                    <button class="channel-tab-item" id="tabChannelNavVideos">Vídeos</button>
+                    <button class="channel-tab-item" id="tabChannelNavShorts">Shorts</button>
+                    <button class="channel-tab-item">Pesquisar</button>
+                </div>
+
+                <!-- Cápsula de Ações da Série (👍 👎 ↗ ✨ ...) -->
+                <div class="channel-action-capsule">
+                    <button class="channel-action-capsule-btn" id="btnChannelLike" aria-label="Gostei">
+                        <svg viewBox="0 0 24 24"><path d="M18.77,11h-4.23l1.52-4.94C16.38,5.03,15.54,4,14.38,4c-0.58,0-1.14,0.24-1.52,0.65L7,11H3v10h4h1h9.43c1.06,0,1.98-0.67,2.19-1.61l1.34-6C21.23,12.15,20.18,11,18.77,11z M7,20H4v-8h3V20z M19.98,13.17l-1.34,6C18.54,19.65,18.03,20,17.43,20H8v-8.61l5.6-6.06C13.79,5.12,14.08,5,14.38,5c0.26,0,0.5,0.11,0.63,0.3c0.07,0.1,0.15,0.26,0.09,0.47l-1.52,4.94L13.18,12h1.35h4.23c0.41,0,0.8,0.17,1.03,0.46C19.92,12.61,20.05,12.86,19.98,13.17z"/></svg>
+                    </button>
+                    <button class="channel-action-capsule-btn" id="btnChannelDislike" aria-label="Não gostei">
+                        <svg viewBox="0 0 24 24"><path d="M17,4h-1H6.57C5.5,4,4.59,4.67,4.38,5.61l-1.34,6C2.77,12.85,3.82,14,5.23,14h4.23l-1.52,4.94C7.62,19.97,8.46,21,9.62,21c0.58,0,1.14-0.24,1.52-0.65L17,14h4V4H17z M10.4,19.67C10.21,19.88,9.92,20,9.62,20c-0.26,0-0.5-0.11-0.63-0.3c-0.07-0.1-0.15-0.26-0.09-0.47l1.52-4.94l0.4-1.29H9.46H5.23c-0.41,0-0.8-0.17-1.03-0.46c-0.12-0.15-0.25-0.4-0.18-0.71l1.34-6C5.46,5.35,5.97,5,6.57,5H16v8.61l-5.6,6.06z M20,13h-3V5h3V13z"/></svg>
+                    </button>
+                    <button class="channel-action-capsule-btn" id="btnChannelShare" aria-label="Compartilhar">
+                        <svg viewBox="0 0 24 24"><path d="M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z"/></svg>
+                    </button>
+                    <button class="channel-action-capsule-btn" id="btnChannelSparkle" aria-label="Resumo">
+                        <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                    </button>
+                    <button class="channel-action-capsule-btn" id="btnChannelKebab" aria-label="Mais opções">
+                        <svg viewBox="0 0 24 24"><path d="M7.5 12c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm6 0c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm6 0c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z"/></svg>
+                    </button>
+                </div>
             </div>
 
             <!-- PAINEL DA ABA 1: INÍCIO -->
@@ -4039,6 +4102,82 @@
                         <svg viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
                         <span>Denunciar série</span>
                     </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT B: MENU DE OPÇÕES DA SÉRIE (SALVAR E DENUNCIAR) -->
+        <div class="accounts-drawer" id="drawerSeriesKebab">
+            <div class="accounts-sheet" style="padding: 10px 0 20px 0;">
+                <div class="account-item-row" id="btnSeriesKebabSave">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span style="font-size:14.5px;">Salvar</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnSeriesKebabReport">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                        <span style="font-size:14.5px;">Denunciar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT C: SALVAR EM... (PLAYLISTS DE SÉRIES) -->
+        <div class="accounts-drawer" id="drawerSeriesSavePlaylist">
+            <div class="accounts-sheet" style="padding: 14px 16px 24px 16px; gap:12px;">
+                <h3 style="font-size:16px; font-weight:700;">Salvar em...</h3>
+                <div id="userSeriesPlaylistsList" style="display:flex; flex-direction:column; gap:8px;"></div>
+                <button class="profile-pill-btn" id="btnOpenNewSeriesPlaylistModal" style="background:#272727; height:40px;">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    <span>Nova playlist</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT D: NOVA PLAYLIST DE SÉRIES -->
+        <div class="yt-center-modal-backdrop" id="modalNewSeriesPlaylist">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:18px; font-weight:700; color:#fff;">Nova playlist</h3>
+                <input type="text" id="inputNewSeriesPlaylistTitle" class="yt-input" placeholder="Escolha um título">
+                
+                <div class="yt-input" id="btnSelectSeriesPlaylistVis" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                    <div>
+                        <div style="font-size:10.5px; color:#aaa;">Visibilidade</div>
+                        <div id="txtSeriesPlaylistVisVal" style="font-size:13px; font-weight:600;">Particular</div>
+                    </div>
+                    <svg style="width:18px;height:18px;fill:#fff" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:8px;">
+                    <button class="profile-pill-btn" id="btnCancelNewSeriesPlaylist" style="flex:none; padding:0 14px;">Cancelar</button>
+                    <button class="yt-btn-primary" id="btnCreateNewSeriesPlaylist" style="padding:8px 20px;">Criar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT E: VISIBILIDADE DA PLAYLIST DE SÉRIES -->
+        <div class="accounts-drawer" id="drawerSeriesPlaylistVis">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <h4 style="padding: 0 16px 10px 16px; font-size:15px;">Visibilidade</h4>
+                <div class="account-item-row optSeriesPlaylistVis" data-vis="Pública">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                        <div><div>Pública</div><small style="color:#aaa;">Todos podem pesquisar e ver</small></div>
+                    </div>
+                </div>
+                <div class="account-item-row optSeriesPlaylistVis" data-vis="Não listada">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                        <div><div>Não listada</div><small style="color:#aaa;">Todos com o link podem ver</small></div>
+                    </div>
+                </div>
+                <div class="account-item-row optSeriesPlaylistVis" data-vis="Particular">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <div><div>Particular</div><small style="color:#aaa;">Só você pode ver</small></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -6592,9 +6731,208 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         const btnExpandChannelVideos = document.getElementById("btnExpandChannelVideos");
         const btnChannelSubscribe = document.getElementById("btnChannelSubscribe");
 
+        // Botões de Ação do Canal (Print A)
+        const btnChannelLike = document.getElementById("btnChannelLike");
+        const btnChannelDislike = document.getElementById("btnChannelDislike");
+        const btnChannelShare = document.getElementById("btnChannelShare");
+        const btnChannelSparkle = document.getElementById("btnChannelSparkle");
+        const btnChannelKebab = document.getElementById("btnChannelKebab");
+
+        // Gavetas de Playlists de Série (Prints B, C, D e E)
+        const drawerSeriesKebab = document.getElementById("drawerSeriesKebab");
+        const btnSeriesKebabSave = document.getElementById("btnSeriesKebabSave");
+        const btnSeriesKebabReport = document.getElementById("btnSeriesKebabReport");
+        const drawerSeriesSavePlaylist = document.getElementById("drawerSeriesSavePlaylist");
+        const btnOpenNewSeriesPlaylistModal = document.getElementById("btnOpenNewSeriesPlaylistModal");
+        const modalNewSeriesPlaylist = document.getElementById("modalNewSeriesPlaylist");
+        const btnCancelNewSeriesPlaylist = document.getElementById("btnCancelNewSeriesPlaylist");
+        const btnCreateNewSeriesPlaylist = document.getElementById("btnCreateNewSeriesPlaylist");
+        const btnSelectSeriesPlaylistVis = document.getElementById("btnSelectSeriesPlaylistVis");
+        const drawerSeriesPlaylistVis = document.getElementById("drawerSeriesPlaylistVis");
+        const txtSeriesPlaylistVisVal = document.getElementById("txtSeriesPlaylistVisVal");
+        const inputNewSeriesPlaylistTitle = document.getElementById("inputNewSeriesPlaylistTitle");
+        const userSeriesPlaylistsList = document.getElementById("userSeriesPlaylistsList");
+
         let currentActiveSeriesEpisodes = [];
         let isChannelVideosExpanded = false;
         let isSeriesSubscribed = false;
+        let currentActiveSeriesName = "";
+        let selectedSeriesPlaylistVisibility = "Particular";
+
+        // Interações da Cápsula de Ações do Canal (Print A)
+        if (btnChannelLike) {
+            btnChannelLike.addEventListener("click", () => {
+                if (!currentUserEmail) return openAuthModal();
+                showToast("Adicionado às séries que você gostou");
+            });
+        }
+
+        if (btnChannelDislike) {
+            btnChannelDislike.addEventListener("click", () => {
+                showToast("Feedback registrado.");
+            });
+        }
+
+        if (btnChannelShare) {
+            btnChannelShare.addEventListener("click", () => {
+                if (navigator.share) {
+                    navigator.share({ title: currentActiveSeriesName, url: window.location.href }).catch(() => {});
+                } else {
+                    navigator.clipboard.writeText(window.location.href);
+                    showToast("Link da série copiado!");
+                }
+            });
+        }
+
+        if (btnChannelSparkle) {
+            btnChannelSparkle.addEventListener("click", () => {
+                drawerSeriesDescription.classList.add("active");
+            });
+        }
+
+        // Clique no Kebab do Canal (Print A -> Print B)
+        if (btnChannelKebab) {
+            btnChannelKebab.addEventListener("click", () => {
+                drawerSeriesKebab.classList.add("active");
+            });
+        }
+
+        // Fechar gaveta B ao clicar fora
+        if (drawerSeriesKebab) {
+            drawerSeriesKebab.addEventListener("click", (e) => {
+                if (e.target === drawerSeriesKebab) drawerSeriesKebab.classList.remove("active");
+            });
+        }
+
+        // Clique em Salvar no Menu Kebab (Print B -> Print C)
+        if (btnSeriesKebabSave) {
+            btnSeriesKebabSave.addEventListener("click", () => {
+                drawerSeriesKebab.classList.remove("active");
+                if (!currentUserEmail) return openAuthModal();
+                loadUserSeriesPlaylists();
+                drawerSeriesSavePlaylist.classList.add("active");
+            });
+        }
+
+        if (btnSeriesKebabReport) {
+            btnSeriesKebabReport.addEventListener("click", () => {
+                drawerSeriesKebab.classList.remove("active");
+                showToast("Denúncia enviada para análise.");
+            });
+        }
+
+        // Fechar gaveta C ao clicar fora
+        if (drawerSeriesSavePlaylist) {
+            drawerSeriesSavePlaylist.addEventListener("click", (e) => {
+                if (e.target === drawerSeriesSavePlaylist) drawerSeriesSavePlaylist.classList.remove("active");
+            });
+        }
+
+        // Clique em Nova Playlist em Print C -> Abre Modal Print D
+        if (btnOpenNewSeriesPlaylistModal) {
+            btnOpenNewSeriesPlaylistModal.addEventListener("click", () => {
+                drawerSeriesSavePlaylist.classList.remove("active");
+                inputNewSeriesPlaylistTitle.value = "";
+                selectedSeriesPlaylistVisibility = "Particular";
+                if (txtSeriesPlaylistVisVal) txtSeriesPlaylistVisVal.textContent = "Particular";
+                modalNewSeriesPlaylist.classList.add("active");
+            });
+        }
+
+        if (btnCancelNewSeriesPlaylist) {
+            btnCancelNewSeriesPlaylist.addEventListener("click", () => {
+                modalNewSeriesPlaylist.classList.remove("active");
+            });
+        }
+
+        // Clique no seletor de visibilidade em Print D -> Abre gaveta Print E
+        if (btnSelectSeriesPlaylistVis) {
+            btnSelectSeriesPlaylistVis.addEventListener("click", () => {
+                drawerSeriesPlaylistVis.classList.add("active");
+            });
+        }
+
+        // Seleção de visibilidade em Print E
+        document.querySelectorAll(".optSeriesPlaylistVis").forEach(opt => {
+            opt.addEventListener("click", () => {
+                selectedSeriesPlaylistVisibility = opt.getAttribute("data-vis");
+                if (txtSeriesPlaylistVisVal) txtSeriesPlaylistVisVal.textContent = selectedSeriesPlaylistVisibility;
+                drawerSeriesPlaylistVis.classList.remove("active");
+            });
+        });
+
+        if (drawerSeriesPlaylistVis) {
+            drawerSeriesPlaylistVis.addEventListener("click", (e) => {
+                if (e.target === drawerSeriesPlaylistVis) drawerSeriesPlaylistVis.classList.remove("active");
+            });
+        }
+
+        // Criar Nova Playlist de Séries no Firebase (Print D)
+        if (btnCreateNewSeriesPlaylist) {
+            btnCreateNewSeriesPlaylist.addEventListener("click", async () => {
+                const title = inputNewSeriesPlaylistTitle.value.trim();
+                if (!title) {
+                    alert("Digite o título da playlist");
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, "series_playlists"), {
+                        title: title,
+                        visibility: selectedSeriesPlaylistVisibility,
+                        user: currentUserEmail,
+                        series: [currentActiveSeriesName],
+                        type: "series",
+                        createdAt: serverTimestamp()
+                    });
+                    modalNewSeriesPlaylist.classList.remove("active");
+                    showToast(`Série salva na playlist ${title}`);
+                } catch(err) {
+                    console.error("Erro ao criar playlist de série:", err);
+                }
+            });
+        }
+
+        // Carrega apenas as playlists criadas especificamente para séries (Print C)
+        function loadUserSeriesPlaylists() {
+            if (!userSeriesPlaylistsList) return;
+            userSeriesPlaylistsList.innerHTML = "";
+
+            onSnapshot(collection(db, "series_playlists"), (snap) => {
+                userSeriesPlaylistsList.innerHTML = "";
+
+                snap.forEach(docSnap => {
+                    const pl = docSnap.data();
+                    if (pl.user === currentUserEmail) {
+                        const row = document.createElement("div");
+                        row.className = "account-item-row";
+                        row.innerHTML = `
+                            <div>
+                                <div style="font-weight:600; font-size:14px;">${escapeHtml(pl.title)}</div>
+                                <small style="color:#aaa;">${escapeHtml(pl.visibility)} • Playlist de Séries</small>
+                            </div>
+                        `;
+                        row.addEventListener("click", async () => {
+                            try {
+                                const playlistRef = doc(db, "series_playlists", docSnap.id);
+                                const list = Array.isArray(pl.series) ? [...pl.series] : [];
+                                if (!list.includes(currentActiveSeriesName)) {
+                                    list.push(currentActiveSeriesName);
+                                    await setDoc(playlistRef, { series: list }, { merge: true });
+                                    showToast(`Série salva em ${pl.title}`);
+                                } else {
+                                    showToast(`Esta série já está em ${pl.title}`);
+                                }
+                                drawerSeriesSavePlaylist.classList.remove("active");
+                            } catch(e) {
+                                console.error(e);
+                            }
+                        });
+                        userSeriesPlaylistsList.appendChild(row);
+                    }
+                });
+            });
+        }
 
         if (btnBackFromChannel) {
             btnBackFromChannel.addEventListener("click", () => {
@@ -6637,6 +6975,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             if (!seriesName) return;
 
             const cleanName = seriesName.trim();
+            currentActiveSeriesName = cleanName;
             const handleText = "@" + cleanName.toLowerCase().replace(/\s+/g, '');
 
             document.getElementById("topBarChannelTitle").textContent = cleanName;
