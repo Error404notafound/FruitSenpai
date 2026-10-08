@@ -2188,6 +2188,12 @@
             display: flex;
         }
 
+        /* Garante que a escolha de visibilidade fique ACIMA do modal central (Print D / Print E) */
+        #drawerPlaylistVis,
+        #drawerSeriesPlaylistVis {
+            z-index: 10005;
+        }
+
         .accounts-sheet {
             width: 100%;
             max-width: 480px;
