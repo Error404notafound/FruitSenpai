@@ -436,12 +436,21 @@
             text-overflow: ellipsis;
         }
 
+        .fs-ep-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 2px;
+            width: 100%;
+        }
+
         .fs-ep-sub {
             font-size: 10px;
-            color: #777;
+            color: #888888;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            flex: 1;
         }
 
         .fs-grid-2col {
@@ -6422,6 +6431,63 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             return num.toString();
         }
 
+        // Calcula a data de postagem real relativa fiel ao YouTube
+        function formatTimeAgo(timestamp) {
+            if (!timestamp) return "agora mesmo";
+            let date;
+            if (timestamp.toDate) {
+                date = timestamp.toDate();
+            } else if (timestamp.seconds) {
+                date = new Date(timestamp.seconds * 1000);
+            } else if (timestamp instanceof Date) {
+                date = timestamp;
+            } else if (typeof timestamp === "string" || typeof timestamp === "number") {
+                date = new Date(timestamp);
+            } else {
+                return "agora mesmo";
+            }
+
+            const now = new Date();
+            const diffMs = now - date;
+            if (diffMs < 0) return "agora mesmo";
+
+            const diffSec = Math.floor(diffMs / 1000);
+            const diffMin = Math.floor(diffSec / 60);
+            const diffHours = Math.floor(diffMin / 60);
+            const diffDays = Math.floor(diffHours / 24);
+            const diffWeeks = Math.floor(diffDays / 7);
+            const diffMonths = Math.floor(diffDays / 30);
+            const diffYears = Math.floor(diffDays / 365);
+
+            if (diffSec < 60) {
+                return "agora mesmo";
+            } else if (diffMin === 1) {
+                return "há 1 minuto";
+            } else if (diffMin < 60) {
+                return `há ${diffMin} minutos`;
+            } else if (diffHours === 1) {
+                return "há 1 hora";
+            } else if (diffHours < 24) {
+                return `há ${diffHours} horas`;
+            } else if (diffDays === 1) {
+                return "há 1 dia";
+            } else if (diffDays < 7) {
+                return `há ${diffDays} dias`;
+            } else if (diffWeeks === 1) {
+                return "há 1 semana";
+            } else if (diffWeeks < 4) {
+                return `há ${diffWeeks} semanas`;
+            } else if (diffMonths === 1) {
+                return "há 1 mês";
+            } else if (diffMonths < 12) {
+                return `há ${diffMonths} meses`;
+            } else if (diffYears === 1) {
+                return "há 1 ano";
+            } else {
+                return `há ${diffYears} anos`;
+            }
+        }
+
         function openWatchScreen(videoData, videoId) {
             currentWatchVideoId = videoId;
             openScreen(viewWatchVideo);
@@ -7114,7 +7180,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 // Renderiza a Aba 'Shorts' com Grid de 2 Colunas e Kebab (Fiel à captura 3)
                 renderFullShortsTab(seriesShortsList, finalThumb);
 
-                // 2. Seção "Para você" (12 cards horizontais aleatórios)
+                // 2. Seção "Para você" com tempo na capa, data relativa e kebab
                 const forYouCarousel = document.getElementById("channelForYouCarousel");
                 forYouCarousel.innerHTML = "";
                 const shuffled = [...currentActiveSeriesEpisodes].sort(() => 0.5 - Math.random()).slice(0, 12);
@@ -7122,18 +7188,37 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 shuffled.forEach(item => {
                     const card = document.createElement("div");
                     card.className = "fs-ep-card";
-                    card.style.minWidth = "140px";
-                    card.style.width = "140px";
+                    card.style.minWidth = "150px";
+                    card.style.width = "150px";
                     card.innerHTML = `
                         <div class="fs-ep-thumb">
                             <img src="${escapeHtml(item.thumbUrl || finalThumb)}" alt="Capa">
                             <span class="fs-badge-hd">HD</span>
                             <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                         </div>
-                        <div class="fs-ep-title">${escapeHtml(item.name)}</div>
-                        <div class="fs-ep-sub">${formatNumber(item.viewsCount || 0)} visualizações</div>
+                        <div class="fs-ep-title" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+                        <div class="fs-ep-meta-row">
+                            <span class="fs-ep-sub">${formatNumber(item.viewsCount || 0)} visualizações • ${formatTimeAgo(item.timestamp)}</span>
+                            <button class="fs-kebab-btn-mini btnForYouKebabItem" type="button" aria-label="Mais opções">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
+                        </div>
                     `;
-                    card.onclick = () => openWatchScreen(item, item.id);
+
+                    card.onclick = (e) => {
+                        if (e.target.closest(".btnForYouKebabItem")) return;
+                        openWatchScreen(item, item.id);
+                    };
+
+                    const kebabBtn = card.querySelector(".btnForYouKebabItem");
+                    if (kebabBtn) {
+                        kebabBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            currentWatchVideoId = item.id;
+                            drawerVideoKebab.classList.add("active");
+                        };
+                    }
+
                     forYouCarousel.appendChild(card);
                 });
 
@@ -7211,7 +7296,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Renderiza a lista de vídeos recentes com chevron de expansão
+        // Renderiza a lista de vídeos recentes com tempo na capa, data relativa e botão kebab
         function renderRecentChannelVideos() {
             const list = document.getElementById("channelRecentVideosList");
             list.innerHTML = "";
@@ -7229,15 +7314,30 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     <div class="channel-horizontal-details">
                         <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
                         <div class="channel-horizontal-meta">
-                            <span>${escapeHtml(item.channel || "Série")}</span>
-                            <span>•</span>
                             <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
                             <span>•</span>
-                            <span>${item.timeAgo || "recentemente"}</span>
+                            <span>${formatTimeAgo(item.timestamp)}</span>
                         </div>
                     </div>
+                    <button class="fs-kebab-btn-mini btnChannelRowKebabItem" type="button" aria-label="Mais opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
                 `;
-                row.onclick = () => openWatchScreen(item, item.id);
+
+                row.onclick = (e) => {
+                    if (e.target.closest(".btnChannelRowKebabItem")) return;
+                    openWatchScreen(item, item.id);
+                };
+
+                const kebabBtn = row.querySelector(".btnChannelRowKebabItem");
+                if (kebabBtn) {
+                    kebabBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        currentWatchVideoId = item.id;
+                        drawerVideoKebab.classList.add("active");
+                    };
+                }
+
                 list.appendChild(row);
             });
 
@@ -7493,7 +7593,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                             <div class="channel-horizontal-meta">
                                 <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
                                 <span>•</span>
-                                <span>${item.timeAgo || "recentemente"}</span>
+                                <span>${formatTimeAgo(item.timestamp)}</span>
                             </div>
                         </div>
                         <button class="fs-kebab-btn-mini btnVideoRowKebab" type="button" aria-label="Mais opções">
