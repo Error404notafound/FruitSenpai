@@ -813,64 +813,83 @@
         }
 
         .fs-collection-card {
-            width: 130px;
-            min-width: 130px;
+            width: 132px;
+            min-width: 132px;
             display: flex;
             flex-direction: column;
             cursor: pointer;
         }
 
+        /* Grade 2x2 forçando as 4 capas de episódios ou séries no formato quadrado */
         .fs-collection-grid-thumb {
             width: 100%;
             aspect-ratio: 1 / 1;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
             gap: 2px;
-            background: #1e1e1e;
+            background-color: #1e1e1e;
         }
 
         .fs-collection-grid-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .fs-collection-name {
-            font-size: 11.5px;
+            font-size: 12px;
             font-weight: 700;
-            color: #fff;
+            color: #ffffff;
             margin-top: 6px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            line-height: 1.25;
         }
 
         .fs-collection-author-row {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
             margin-top: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .fs-collection-author-avatar {
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
+            min-width: 16px;
             border-radius: 50%;
-            background: #444;
+            background-color: #555555;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .fs-collection-author-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .fs-collection-author-name {
-            font-size: 9.5px;
-            color: #888;
+            font-size: 10px;
+            color: #888888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .fs-adult-section-wrapper {
@@ -4471,45 +4490,17 @@
                 </div>
             </section>
 
-            <!-- 8. SEÇÃO: COLEÇÕES EM ALTA -->
+            <!-- 8. SEÇÃO: COLEÇÕES EM ALTA (DINÂMICO PELO FIREBASE COM PLAYLISTS PÚBLICAS >= 4 ITENS) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Coleções em alta</h3>
                     </div>
-                    <button class="fs-link-more">Tudo</button>
+                    <button class="fs-link-more" id="btnMoreCollections" type="button">Tudo</button>
                 </div>
 
-                <div class="fs-carousel">
-                    <div class="fs-collection-card">
-                        <div class="fs-collection-grid-thumb">
-                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" alt="Thumb">
-                            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200" alt="Thumb">
-                            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=200" alt="Thumb">
-                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200" alt="Thumb">
-                        </div>
-                        <div class="fs-collection-name">series no estilo d...</div>
-                        <div class="fs-collection-author-row">
-                            <div class="fs-collection-author-avatar"></div>
-                            <span class="fs-collection-author-name">nobi • 7 títulos</span>
-                        </div>
-                    </div>
-
-                    <div class="fs-collection-card">
-                        <div class="fs-collection-grid-thumb">
-                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200" alt="Thumb">
-                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200" alt="Thumb">
-                            <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=200" alt="Thumb">
-                            <img src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=200" alt="Thumb">
-                        </div>
-                        <div class="fs-collection-name">obras primas (ro...</div>
-                        <div class="fs-collection-author-row">
-                            <div class="fs-collection-author-avatar"></div>
-                            <span class="fs-collection-author-name">crosswz • 9 títulos</span>
-                        </div>
-                    </div>
-                </div>
+                <div class="fs-carousel" id="topCollectionsCarousel"></div>
             </section>
 
             <!-- 9. SEÇÃO: FILMES MAIS RECENTES (DINÂMICO PELO FIREBASE FIRESTORE) -->
@@ -9698,6 +9689,173 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         loadRecentSeriesFromFirestore();
+
+        // Carrega em tempo real as Coleções em Alta com playlists públicas (>= 4 episódios ou séries)
+        const topCollectionsCarousel = document.getElementById("topCollectionsCarousel");
+        const btnMoreCollections = document.getElementById("btnMoreCollections");
+
+        if (btnMoreCollections) {
+            btnMoreCollections.addEventListener("click", () => {
+                openAllPlaylistsPage();
+            });
+        }
+
+        function loadTopCollectionsFromFirestore() {
+            if (!topCollectionsCarousel) return;
+
+            onSnapshot(collection(db, "series_playlists"), (seriesPlSnap) => {
+                onSnapshot(collection(db, "playlists"), (epPlSnap) => {
+                    onSnapshot(frutasColecao, (videosSnap) => {
+                        onSnapshot(collection(db, "series"), (seriesSnap) => {
+                            // Mapa de capas de séries e de episódios para preencher a grade 2x2
+                            const seriesCoversMap = {};
+                            seriesSnap.forEach(d => {
+                                const s = d.data();
+                                if (s.title && s.coverUrl) {
+                                    seriesCoversMap[s.title.toLowerCase().trim()] = s.coverUrl;
+                                }
+                            });
+
+                            const videoThumbsMap = {};
+                            videosSnap.forEach(d => {
+                                const v = d.data();
+                                const cover = v.thumbUrl || v.seriesCover;
+                                if (cover) {
+                                    videoThumbsMap[d.id] = cover;
+                                    if (v.name) videoThumbsMap[v.name.toLowerCase().trim()] = cover;
+                                }
+                            });
+
+                            const publicCollectionsList = [];
+
+                            // 1. Playlists públicas de séries com mais de 4 itens
+                            seriesPlSnap.forEach(d => {
+                                const pl = { id: d.id, _collection: "series_playlists", ...d.data() };
+                                const seriesArray = Array.isArray(pl.series) ? pl.series : [];
+                                const isPublic = pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público";
+
+                                if (isPublic && seriesArray.length >= 4) {
+                                    // Pega 4 capas para a grade 2x2
+                                    const fourCovers = [];
+                                    for (let i = 0; i < seriesArray.length && fourCovers.length < 4; i++) {
+                                        const sName = String(seriesArray[i]).toLowerCase().trim();
+                                        const foundCover = seriesCoversMap[sName] || videoThumbsMap[sName];
+                                        if (foundCover) {
+                                            fourCovers.push(foundCover);
+                                        }
+                                    }
+                                    while (fourCovers.length < 4) {
+                                        fourCovers.push(pl.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400");
+                                    }
+
+                                    publicCollectionsList.push({
+                                        id: pl.id,
+                                        title: pl.title || "Coleção de Séries",
+                                        author: pl.user ? (pl.user.includes("@") ? pl.user.split("@")[0] : pl.user) : "autor",
+                                        totalItems: seriesArray.length,
+                                        covers: fourCovers
+                                    });
+                                }
+                            });
+
+                            // 2. Playlists públicas de episódios com mais de 4 itens
+                            epPlSnap.forEach(d => {
+                                const pl = { id: d.id, _collection: "playlists", ...d.data() };
+                                const vidsArray = Array.isArray(pl.videos) ? pl.videos : [];
+                                const isPublic = pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público";
+
+                                if (isPublic && vidsArray.length >= 4) {
+                                    const fourCovers = [];
+                                    for (let i = 0; i < vidsArray.length && fourCovers.length < 4; i++) {
+                                        const vIdOrName = String(vidsArray[i]).toLowerCase().trim();
+                                        const foundCover = videoThumbsMap[vidsArray[i]] || videoThumbsMap[vIdOrName];
+                                        if (foundCover) {
+                                            fourCovers.push(foundCover);
+                                        }
+                                    }
+                                    while (fourCovers.length < 4) {
+                                        fourCovers.push(pl.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400");
+                                    }
+
+                                    publicCollectionsList.push({
+                                        id: pl.id,
+                                        title: pl.title || "Coleção de Episódios",
+                                        author: pl.user ? (pl.user.includes("@") ? pl.user.split("@")[0] : pl.user) : "autor",
+                                        totalItems: vidsArray.length,
+                                        covers: fourCovers
+                                    });
+                                }
+                            });
+
+                            topCollectionsCarousel.innerHTML = "";
+
+                            // Caso ainda não haja playlists públicas com 4 itens criadas no banco, exibe modelos fiéis
+                            if (publicCollectionsList.length === 0) {
+                                const defaultCollections = [
+                                    {
+                                        id: "default_demo_1",
+                                        title: "series no estilo de aventura",
+                                        author: "nobi",
+                                        totalItems: 7,
+                                        covers: [
+                                            "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300",
+                                            "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300",
+                                            "https://images.unsplash.com/photo-1563089145-599997674d42?w=300",
+                                            "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300"
+                                        ]
+                                    },
+                                    {
+                                        id: "default_demo_2",
+                                        title: "obras primas (romance & drama)",
+                                        author: "crosswz",
+                                        totalItems: 9,
+                                        covers: [
+                                            "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300",
+                                            "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=300",
+                                            "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300",
+                                            "https://images.unsplash.com/photo-1541872703-74c5e44368f9?w=300"
+                                        ]
+                                    }
+                                ];
+
+                                defaultCollections.forEach(c => renderCollectionCard(c));
+                            } else {
+                                publicCollectionsList.forEach(c => renderCollectionCard(c));
+                            }
+                        });
+                    });
+                });
+            });
+        }
+
+        // Renderiza cada card de Coleção em Alta no formato 2x2
+        function renderCollectionCard(item) {
+            const card = document.createElement("div");
+            card.className = "fs-collection-card";
+            const initial = item.author.charAt(0).toUpperCase();
+
+            card.innerHTML = `
+                <div class="fs-collection-grid-thumb">
+                    <img src="${escapeHtml(item.covers[0])}" alt="Capa 1">
+                    <img src="${escapeHtml(item.covers[1])}" alt="Capa 2">
+                    <img src="${escapeHtml(item.covers[2])}" alt="Capa 3">
+                    <img src="${escapeHtml(item.covers[3])}" alt="Capa 4">
+                </div>
+                <div class="fs-collection-name" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div>
+                <div class="fs-collection-author-row">
+                    <div class="fs-collection-author-avatar">${initial}</div>
+                    <span class="fs-collection-author-name">${escapeHtml(item.author)} • ${item.totalItems} títulos</span>
+                </div>
+            `;
+
+            card.addEventListener("click", () => {
+                openPlaylistDetailPage(item.id, item.title);
+            });
+
+            topCollectionsCarousel.appendChild(card);
+        }
+
+        loadTopCollectionsFromFirestore();
     </script>
 </body>
   </html>
