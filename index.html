@@ -1888,60 +1888,136 @@
             fill: #ffffff;
         }
 
-        /* Barra de Fila da Playlist no Watch Screen (Prints B3, C3, D3, E3) */
-        .playlist-queue-bar-panel {
-            background-color: #1a1a1a;
-            border-radius: 12px;
-            margin: 8px 14px 12px 14px;
-            padding: 12px;
+        /* Gaveta Inferior de Playlist no Player (Print A5) */
+        .watch-playlist-drawer-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: 58vh;
+            max-height: 58vh;
+            background-color: #141414;
+            border-radius: 16px 16px 0 0;
+            z-index: 10002;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            animation: slideUp 0.22s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        .watch-playlist-drawer-sheet.active {
+            display: flex;
+        }
+
+        .watch-lock-svg-icon {
+            width: 12px;
+            height: 12px;
+            fill: #aaaaaa;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        .watch-queue-items-scroll-box {
+            flex: 1;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .playlist-queue-top-row {
+        .watch-queue-item-card-row {
             display: flex;
+            padding: 8px 14px;
+            gap: 12px;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .watch-queue-item-card-row.playing-active {
+            background-color: #271d22;
+        }
+
+        /* Card Retangular Horizontal Inferior da Playlist Fechada (Prints B5 e C5) */
+        .watch-playlist-mini-bar {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 24px);
+            max-width: 456px;
+            background-color: #212121;
+            border-radius: 12px;
+            padding: 9px 14px;
+            display: none;
             align-items: center;
             justify-content: space-between;
+            z-index: 10000;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.85);
         }
 
-        .playlist-queue-title-wrap h4 {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #ffffff;
+        .watch-playlist-mini-bar.active {
+            display: flex;
         }
 
-        .playlist-queue-title-wrap small {
-            font-size: 11px;
-            color: #aaaaaa;
-        }
-
-        .playlist-queue-ctrls-row {
+        .watch-mini-bar-left-content {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
         }
 
-        .playlist-queue-ctrl-btn {
+        .watch-mini-bar-left-content svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .watch-mini-bar-text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .watch-mini-bar-next-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .watch-mini-bar-playlist-sub {
+            font-size: 11px;
+            color: #aaaaaa;
+            line-height: 1.2;
+        }
+
+        .watch-mini-bar-chevron-btn {
             background: none;
             border: none;
-            color: #aaaaaa;
-            cursor: pointer;
+            color: #ffffff;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2px;
+            padding: 2px 0 2px 6px;
+            cursor: pointer;
         }
 
-        .playlist-queue-ctrl-btn.active {
-            color: #ffffff;
-        }
-
-        .playlist-queue-ctrl-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: currentColor;
+        .watch-mini-bar-chevron-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
         }
 
         /* Tela de Edição Completa da Playlist (Prints B2, C2, D2, E2) */
@@ -4557,24 +4633,53 @@
         </div>
     </div>
 
-            <!-- Barra de Fila da Playlist no Watch Screen (Prints B3, C3, D3, E3) -->
-            <div class="playlist-queue-bar-panel" id="watchPlaylistQueueBar" style="display:none;">
-                <div class="playlist-queue-top-row">
-                    <div class="playlist-queue-title-wrap">
-                        <h4 id="watchQueuePlaylistTitleText">Demonstração 1 / 1</h4>
-                        <small id="watchQueuePlaylistAuthorText">Error404 Not afound</small>
+            <!-- GAVETA INFERIOR DA PLAYLIST NO PLAYER (PRINT A5) -->
+            <div class="watch-playlist-drawer-sheet" id="watchPlaylistDrawerSheet">
+                <div class="yt-sheet-drag-handle"></div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; padding:8px 16px 6px 16px;">
+                    <div>
+                        <div style="font-size:16px; font-weight:700; color:#ffffff;" id="watchQueuePlaylistTitleText">Demonstração 1 / 2</div>
+                        <div style="font-size:11.5px; color:#aaaaaa; display:flex; align-items:center; margin-top:2px;">
+                            <span id="watchQueuePlaylistAuthorText">Error404 Not afound</span>
+                            <svg class="watch-lock-svg-icon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        </div>
                     </div>
-                    <div class="playlist-queue-ctrls-row">
-                        <button class="playlist-queue-ctrl-btn" id="btnWatchQueueLoop" type="button" aria-label="Loop">
+                    <!-- Botão X que fecha a gaveta e exibe o mini-card inferior (Print A5 -> Print B5) -->
+                    <button class="yt-icon-btn" id="btnCollapseWatchQueueDrawer" type="button" aria-label="Minimizar playlist">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Barra de Ações: Repetição, Aleatório e 3 Pontinhos -->
+                <div style="display:flex; align-items:center; justify-content:space-between; padding:2px 16px 8px 16px; border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <button class="yt-icon-btn" id="btnWatchQueueLoop" type="button" aria-label="Repetição">
                             <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
                         </button>
-                        <button class="playlist-queue-ctrl-btn" id="btnWatchQueueShuffle" type="button" aria-label="Aleatório">
+                        <button class="yt-icon-btn" id="btnWatchQueueShuffle" type="button" aria-label="Ordem aleatória">
                             <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
                         </button>
-                        <button class="playlist-queue-ctrl-btn" id="btnCloseWatchQueueBar" type="button" aria-label="Fechar fila">
-                            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                        </button>
                     </div>
+                    <button class="yt-icon-btn" id="btnWatchQueueKebab" type="button" aria-label="Mais opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Lista dos Vídeos dentro da Gaveta com destaque no vídeo ativo -->
+                <div class="watch-queue-items-scroll-box" id="watchQueueItemsList"></div>
+            </div>
+
+            <!-- CARD RETANGULAR HORIZONTAL INFERIOR DA PLAYLIST (PRINTS B5 E C5) -->
+            <div class="watch-playlist-mini-bar" id="watchPlaylistMiniBar">
+                <div class="watch-mini-bar-left-content">
+                    <svg viewBox="0 0 24 24"><path d="M19 9H2v2h17V9zm0-4H2v2h17V5zM2 15h11v-2H2v2zm13-2v6l5-3-5-3z"/></svg>
+                    <div class="watch-mini-bar-text-group">
+                        <div class="watch-mini-bar-next-title" id="watchMiniBarNextTitle">Próximo: Episódio</div>
+                        <div class="watch-mini-bar-playlist-sub" id="watchMiniBarPlaylistSub">Demonstração • 1 / 2</div>
+                    </div>
+                </div>
+                <div class="watch-mini-bar-chevron-btn">
+                    <svg viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
                 </div>
             </div>
 
@@ -7333,13 +7438,18 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         const btnItemKebabRemoveFromPlaylist = document.getElementById("btnItemKebabRemoveFromPlaylist");
         const lblRemoveFromPlaylistName = document.getElementById("lblRemoveFromPlaylistName");
 
-        // Fila no Watch Screen
-        const watchPlaylistQueueBar = document.getElementById("watchPlaylistQueueBar");
+        // Gaveta e Card Inferior da Playlist no Watch Screen (Prints A5, B5, C5)
+        const watchPlaylistDrawerSheet = document.getElementById("watchPlaylistDrawerSheet");
+        const watchPlaylistMiniBar = document.getElementById("watchPlaylistMiniBar");
+        const btnCollapseWatchQueueDrawer = document.getElementById("btnCollapseWatchQueueDrawer");
         const watchQueuePlaylistTitleText = document.getElementById("watchQueuePlaylistTitleText");
         const watchQueuePlaylistAuthorText = document.getElementById("watchQueuePlaylistAuthorText");
+        const watchQueueItemsList = document.getElementById("watchQueueItemsList");
         const btnWatchQueueLoop = document.getElementById("btnWatchQueueLoop");
         const btnWatchQueueShuffle = document.getElementById("btnWatchQueueShuffle");
-        const btnCloseWatchQueueBar = document.getElementById("btnCloseWatchQueueBar");
+        const btnWatchQueueKebab = document.getElementById("btnWatchQueueKebab");
+        const watchMiniBarNextTitle = document.getElementById("watchMiniBarNextTitle");
+        const watchMiniBarPlaylistSub = document.getElementById("watchMiniBarPlaylistSub");
 
         // Função que converte número em texto por extenso (ex: Um vídeo, Dois vídeos)
         function formatVideosCountWord(total) {
@@ -7540,11 +7650,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 } catch(e) {}
             }
 
-            // Exibe a barra de fila da playlist abaixo do player (Print B3)
-            watchPlaylistQueueBar.style.display = "flex";
+            // Abre a gaveta oficial da playlist no player (Print A5)
+            watchPlaylistMiniBar.classList.remove("active");
+            watchPlaylistDrawerSheet.classList.add("active");
             updateWatchQueueBarUI();
 
-            // Auto-advance de acordo com a duração do vídeo (após o término pula automaticamente)
+            // Auto-advance de acordo com a duração do vídeo
             if (playlistAutoPlayTimer) clearTimeout(playlistAutoPlayTimer);
             const durationMs = parseDurationToMs(videoItem.duration);
             playlistAutoPlayTimer = setTimeout(() => {
@@ -7553,11 +7664,51 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         function updateWatchQueueBarUI() {
-            if (!isPlaylistQueueActive) return;
-            watchQueuePlaylistTitleText.textContent = `${currentPlaylistData.title || 'Demonstração'} ${currentPlaylistQueueIndex + 1} / ${currentPlaylistVideosList.length}`;
-            watchQueuePlaylistAuthorText.textContent = `${plCreatorNameText.textContent} 🔒`;
+            if (!isPlaylistQueueActive || !currentPlaylistData) return;
+
+            const total = currentPlaylistVideosList.length;
+            const currentNumber = currentPlaylistQueueIndex + 1;
+            const playlistTitle = currentPlaylistData.title || "Demonstração";
+            const creator = plCreatorNameText ? plCreatorNameText.textContent : "Error404 Not afound";
+
+            // Atualiza a Gaveta Superior (Print A5)
+            watchQueuePlaylistTitleText.textContent = `${playlistTitle} ${currentNumber} / ${total}`;
+            watchQueuePlaylistAuthorText.textContent = creator;
             btnWatchQueueLoop.classList.toggle("active", isPlaylistLoopActive);
             btnWatchQueueShuffle.classList.toggle("active", isPlaylistShuffleActive);
+
+            // Atualiza o Card Flutuante Inferior (Prints B5 e C5)
+            if (currentNumber < total) {
+                const nextItem = currentPlaylistVideosList[currentPlaylistQueueIndex + 1];
+                watchMiniBarNextTitle.textContent = `Próximo: ${nextItem ? nextItem.name : "Próximo episódio"}`;
+            } else {
+                watchMiniBarNextTitle.textContent = "Fim da playlist";
+            }
+            watchMiniBarPlaylistSub.textContent = `${playlistTitle} • ${currentNumber} / ${total}`;
+
+            // Renderiza os vídeos dentro da gaveta com destaque no ativo
+            if (watchQueueItemsList) {
+                watchQueueItemsList.innerHTML = "";
+                currentPlaylistVideosList.forEach((item, idx) => {
+                    const row = document.createElement("div");
+                    row.className = `watch-queue-item-card-row ${idx === currentPlaylistQueueIndex ? 'playing-active' : ''}`;
+                    row.innerHTML = `
+                        <div style="width:120px; min-width:120px; aspect-ratio:16/9; border-radius:6px; overflow:hidden; position:relative; background:#212121;">
+                            <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" style="width:100%;height:100%;object-fit:cover;">
+                            <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                        </div>
+                        <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;">
+                            <div style="font-size:12.5px; font-weight:600; color:#fff; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(item.name)}</div>
+                            <div style="font-size:11px; color:#aaa;">${escapeHtml(item.channel || "Mouton")}</div>
+                            <div style="font-size:10.5px; color:#aaa;">${formatNumber(item.viewsCount || 0)} visualizações • ${formatTimeAgo(item.timestamp)}</div>
+                        </div>
+                    `;
+                    row.onclick = () => {
+                        startPlaylistPlaybackAt(idx);
+                    };
+                    watchQueueItemsList.appendChild(row);
+                });
+            }
         }
 
         function advancePlaylistNextVideo() {
@@ -7601,11 +7752,25 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             showToast(isPlaylistShuffleActive ? "Modo aleatório ativado" : "Modo aleatório desativado");
         });
 
-        btnCloseWatchQueueBar.addEventListener("click", () => {
-            isPlaylistQueueActive = false;
-            watchPlaylistQueueBar.style.display = "none";
-            if (playlistAutoPlayTimer) clearTimeout(playlistAutoPlayTimer);
+        // Clicar no X da gaveta fecha ela e abre o card inferior flutuante (Print A5 -> Print B5)
+        btnCollapseWatchQueueDrawer.addEventListener("click", () => {
+            watchPlaylistDrawerSheet.classList.remove("active");
+            if (isPlaylistQueueActive) {
+                watchPlaylistMiniBar.classList.add("active");
+            }
         });
+
+        // Clicar no card inferior reabre a gaveta da playlist (Print B5 -> Print A5)
+        watchPlaylistMiniBar.addEventListener("click", () => {
+            watchPlaylistMiniBar.classList.remove("active");
+            watchPlaylistDrawerSheet.classList.add("active");
+        });
+
+        if (btnWatchQueueKebab) {
+            btnWatchQueueKebab.addEventListener("click", () => {
+                openPlaylistOptionsDrawer();
+            });
+        }
 
         // ==========================================================================
         // ORDENAÇÃO DA PLAYLIST (PRINTS A E B)
