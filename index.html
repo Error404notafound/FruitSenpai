@@ -1631,6 +1631,399 @@
             z-index: 2;
         }
 
+        /* ==========================================================================
+           TELA COMPLETA DA PLAYLIST (PRINTS A ATÉ G2)
+           ========================================================================== */
+        .playlist-view-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #0f0f0f;
+            padding-bottom: 90px;
+        }
+
+        .playlist-cover-big-box {
+            width: calc(100% - 32px);
+            margin: 12px 16px 16px 16px;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #212121;
+            position: relative;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.8);
+        }
+
+        .playlist-cover-big-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .playlist-cover-placeholder-empty {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #383838;
+            color: #ffffff;
+        }
+
+        .playlist-cover-placeholder-empty svg {
+            width: 48px;
+            height: 48px;
+            fill: #aaaaaa;
+        }
+
+        .playlist-details-meta-block {
+            padding: 0 16px 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .playlist-header-title-text {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .playlist-creator-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .playlist-creator-avatar {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background-color: #00897b;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .playlist-creator-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .playlist-meta-sub-info {
+            font-size: 12px;
+            color: #aaaaaa;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        /* Descrição limitada exatamente a 3 linhas */
+        .playlist-description-3lines {
+            font-size: 12.5px;
+            color: #cccccc;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: 4px;
+            cursor: pointer;
+        }
+
+        .playlist-action-buttons-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px 14px 16px;
+        }
+
+        .playlist-btn-play-all {
+            flex: 1;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #ffffff;
+            color: #0f0f0f;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .playlist-btn-play-all svg {
+            width: 18px;
+            height: 18px;
+            fill: #0f0f0f;
+        }
+
+        .playlist-btn-circle-action {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #272727;
+            color: #ffffff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .playlist-btn-circle-action svg {
+            width: 20px;
+            height: 20px;
+            fill: #ffffff;
+        }
+
+        .playlist-sort-dropdown-box {
+            padding: 0 16px 10px 16px;
+        }
+
+        .playlist-sort-select-btn {
+            background-color: #272727;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            height: 32px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .playlist-sort-select-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #ffffff;
+        }
+
+        .playlist-items-vertical-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .playlist-video-row-card {
+            display: flex;
+            padding: 8px 16px;
+            gap: 12px;
+            align-items: flex-start;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .playlist-video-thumb-box {
+            width: 138px;
+            min-width: 138px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #212121;
+        }
+
+        .playlist-video-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .playlist-video-info-texts {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .playlist-video-title-line {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .playlist-video-meta-line {
+            font-size: 11px;
+            color: #aaaaaa;
+            margin-top: 2px;
+        }
+
+        .playlist-video-kebab-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 2px;
+        }
+
+        .playlist-video-kebab-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
+        /* Barra de Fila da Playlist no Watch Screen (Prints B3, C3, D3, E3) */
+        .playlist-queue-bar-panel {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            margin: 8px 14px 12px 14px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .playlist-queue-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .playlist-queue-title-wrap h4 {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .playlist-queue-title-wrap small {
+            font-size: 11px;
+            color: #aaaaaa;
+        }
+
+        .playlist-queue-ctrls-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .playlist-queue-ctrl-btn {
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px;
+        }
+
+        .playlist-queue-ctrl-btn.active {
+            color: #ffffff;
+        }
+
+        .playlist-queue-ctrl-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Tela de Edição Completa da Playlist (Prints B2, C2, D2, E2) */
+        .playlist-edit-drawer-content {
+            height: 85vh;
+            max-height: 85vh;
+            background-color: #0f0f0f;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .playlist-edit-scroll-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .playlist-edit-boxed-input {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 10px 12px;
+            background-color: #121212;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .playlist-edit-boxed-input label {
+            font-size: 11px;
+            color: #aaaaaa;
+        }
+
+        .playlist-edit-boxed-input input {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            width: 100%;
+        }
+
+        .playlist-edit-option-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .playlist-edit-option-row svg {
+            width: 22px;
+            height: 22px;
+            fill: #aaaaaa;
+        }
+
+        .playlist-edit-option-texts {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .playlist-edit-option-label {
+            font-size: 11.5px;
+            color: #aaaaaa;
+        }
+
+        .playlist-edit-option-val {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
         /* Abas de Conteúdo do Canal da Série */
         .channel-tab-pane {
             display: none;
@@ -4011,6 +4404,27 @@
         </div>
     </div>
 
+            <!-- Barra de Fila da Playlist no Watch Screen (Prints B3, C3, D3, E3) -->
+            <div class="playlist-queue-bar-panel" id="watchPlaylistQueueBar" style="display:none;">
+                <div class="playlist-queue-top-row">
+                    <div class="playlist-queue-title-wrap">
+                        <h4 id="watchQueuePlaylistTitleText">Demonstração 1 / 1</h4>
+                        <small id="watchQueuePlaylistAuthorText">Error404 Not afound</small>
+                    </div>
+                    <div class="playlist-queue-ctrls-row">
+                        <button class="playlist-queue-ctrl-btn" id="btnWatchQueueLoop" type="button" aria-label="Loop">
+                            <svg viewBox="0 0 24 24"><path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/></svg>
+                        </button>
+                        <button class="playlist-queue-ctrl-btn" id="btnWatchQueueShuffle" type="button" aria-label="Aleatório">
+                            <svg viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+                        </button>
+                        <button class="playlist-queue-ctrl-btn" id="btnCloseWatchQueueBar" type="button" aria-label="Fechar fila">
+                            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             <div class="yt-comments-snippet-box" id="btnOpenComments">
                 <div class="yt-comments-snippet-header">
                     <span>Comentários</span>
@@ -4351,6 +4765,154 @@
             </div>
         </div>
 
+        <!-- GAVETA PRINT B: ORDENAÇÃO DA PLAYLIST -->
+        <div class="accounts-drawer" id="drawerSortPlaylist">
+            <div class="accounts-sheet" style="padding: 14px 0 20px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row optSortChoice" data-sort="Manual"><div class="account-item-left"><span style="font-size:14.5px;">Manual</span></div></div>
+                <div class="account-item-row optSortChoice" data-sort="Data de inclusão (mais recente)"><div class="account-item-left"><span style="font-size:14.5px;">Data de inclusão (mais recente)</span></div></div>
+                <div class="account-item-row optSortChoice" data-sort="Data de inclusão (mais antiga)"><div class="account-item-left"><span style="font-size:14.5px;">Data de inclusão (mais antiga)</span></div></div>
+                <div class="account-item-row optSortChoice" data-sort="Mais acessados"><div class="account-item-left"><span style="font-size:14.5px;">Mais acessados</span></div></div>
+                <div class="account-item-row optSortChoice" data-sort="Data de publicação (mais recente)"><div class="account-item-left"><span style="font-size:14.5px;">Data de publicação (mais recente)</span></div></div>
+                <div class="account-item-row optSortChoice" data-sort="Data de publicação (mais antiga)"><div class="account-item-left"><span style="font-size:14.5px;">Data de publicação (mais antiga)</span></div></div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT B1: OPÇÕES DA PLAYLIST (ORDEM ALEATÓRIA E EXCLUIR) -->
+        <div class="accounts-drawer" id="drawerPlaylistMainOptions">
+            <div class="accounts-sheet" style="padding: 10px 0 20px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnOptionShufflePlay">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M10.59 9.17L5.41 4 4 5.41l5.17 5.17 1.42-1.41zM14.5 4l2.04 2.04L4 18.59 5.41 20 17.96 7.46 20 9.5V4h-5.5zm.33 9.41l-1.41 1.41 3.13 3.13L14.5 20H20v-5.5l-2.04 2.04-3.13-3.13z"/></svg>
+                        <span style="font-size:14.5px;">Ordem aleatória</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnOptionDeletePlaylist">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        <span style="font-size:14.5px;">Excluir playlist</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT B2: EDITAR PLAYLIST COMPLETA -->
+        <div class="accounts-drawer" id="drawerEditPlaylistFull">
+            <div class="accounts-sheet playlist-edit-drawer-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <h3 style="font-size:16px; font-weight:700;">Editar</h3>
+                    <button class="yt-icon-btn" id="btnCloseEditPlaylistFull">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+                <div class="playlist-edit-scroll-body">
+                    <div class="playlist-cover-big-box" style="margin:0; width:100%;">
+                        <img id="plEditThumbPreviewImg" src="" alt="Capa">
+                    </div>
+                    <div class="playlist-edit-boxed-input">
+                        <label>Título</label>
+                        <input type="text" id="inputEditPlaylistTitle">
+                    </div>
+                    <div class="playlist-edit-option-row" id="rowOpenEditPlaylistDesc">
+                        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                        <div class="playlist-edit-option-texts">
+                            <span class="playlist-edit-option-label" id="lblEditPlaylistDescHeader">Adicionar uma descrição</span>
+                            <span class="playlist-edit-option-val" id="valEditPlaylistDescPreview" style="display:none;"></span>
+                        </div>
+                    </div>
+                    <div class="playlist-edit-option-row" id="rowOpenEditPlaylistVis">
+                        <svg id="svgEditVisIcon" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <div class="playlist-edit-option-texts">
+                            <span class="playlist-edit-option-label">Visibilidade</span>
+                            <span class="playlist-edit-option-val" id="valEditPlaylistVis">Privada</span>
+                        </div>
+                    </div>
+                    <div class="playlist-edit-option-row" style="cursor:default;">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <div class="playlist-edit-option-texts">
+                            <span class="playlist-edit-option-val" style="color:#aaa;">Colaborar</span>
+                        </div>
+                    </div>
+                </div>
+                <div style="padding:12px 16px; border-top:1px solid rgba(255,255,255,0.08);">
+                    <button class="upload-submit-btn" id="btnSavePlaylistEdits" style="margin:0; width:100%;">Salvar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT C2: DEFINIR A VISIBILIDADE COM CHECKMARK -->
+        <div class="accounts-drawer" id="drawerPlaylistEditVisModal">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <h4 style="padding: 0 16px 12px 16px; font-size:16px; font-weight:700;">Definir a visibilidade</h4>
+                <div class="account-item-row optEditVisChoice" data-vis="Pública">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                        <div><div style="font-weight:600;">Pública</div><small style="color:#aaa;">Qualquer pessoa pode pesquisar e visualizar</small></div>
+                    </div>
+                    <svg class="svgCheckMark" style="width:18px;height:18px;fill:#fff;display:none;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+                <div class="account-item-row optEditVisChoice" data-vis="Não listada">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                        <div><div style="font-weight:600;">Não listada</div><small style="color:#aaa;">Qualquer pessoa com o link pode visualizar</small></div>
+                    </div>
+                    <svg class="svgCheckMark" style="width:18px;height:18px;fill:#fff;display:none;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+                <div class="account-item-row optEditVisChoice" data-vis="Privada">
+                    <div class="account-item-left">
+                        <svg style="width:20px;height:20px;fill:#aaa" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <div><div style="font-weight:600;">Privada</div><small style="color:#aaa;">Só você pode visualizar</small></div>
+                    </div>
+                    <svg class="svgCheckMark" style="width:18px;height:18px;fill:#fff;display:inline-block;" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT D2: ADICIONAR UMA DESCRIÇÃO COM BOTÃO CONCLUÍDO -->
+        <div class="accounts-drawer" id="drawerEditPlaylistDesc">
+            <div class="accounts-sheet playlist-edit-drawer-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <h3 style="font-size:16px; font-weight:700;">Adicionar uma descrição</h3>
+                    <button class="yt-icon-btn" id="btnCloseEditPlaylistDesc">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+                <div style="flex:1; padding:16px;">
+                    <textarea id="txtAreaEditPlaylistDesc" style="width:100%; height:200px; background:none; border:none; color:#ffffff; font-size:15px; outline:none; resize:none; font-family:inherit;" placeholder="Escreva a descrição..."></textarea>
+                </div>
+                <div style="padding:12px 16px; border-top:1px solid rgba(255,255,255,0.08);">
+                    <button class="upload-submit-btn" id="btnConfirmDescDone" style="margin:0; width:100%;">Concluído</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT B4: OPÇÕES DO VÍDEO DENTRO DA PLAYLIST (SALVAR E REMOVER) -->
+        <div class="accounts-drawer" id="drawerPlaylistItemKebab">
+            <div class="accounts-sheet" style="padding: 10px 0 20px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnItemKebabSaveWatchLater">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        <span style="font-size:14.5px;">Salvar em "Assistir mais tarde"</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnItemKebabSaveOtherPlaylist">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span style="font-size:14.5px;">Salvar na playlist</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnItemKebabRemoveFromPlaylist">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        <span style="font-size:14.5px;" id="lblRemoveFromPlaylistName">Remover de Demonstração</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 <!-- ==========================================================================
              TELA A2: PAINEL PRINCIPAL "VOCÊ" (ABERTO PELO BOTÃO A1)
              ========================================================================== -->
@@ -4642,21 +5204,84 @@
         </section>
 
         <!-- ==========================================================================
-             TELA F1, F2, F3: PLAYLISTS
+             TELA OFICIAL DA PLAYLIST (PRINTS A, A1, A2, A3, A4, F2, G2)
              ========================================================================== -->
         <section class="yt-subview" id="viewPlaylists">
-            <div class="yt-subview-header">
+            <div class="yt-subview-header" style="background:#0f0f0f; position:sticky; top:0; z-index:50;">
                 <div class="yt-subview-header-left">
-                    <button class="yt-icon-btn btnBackToYou">
+                    <button class="yt-icon-btn btnBackToYou" type="button" aria-label="Voltar">
                         <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                     </button>
-                    <span class="yt-subview-title" id="playlistPageTitle">Playlists</span>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
+                    <button class="yt-icon-btn" id="btnTopPlaylistKebab"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
                 </div>
             </div>
-            <div style="padding: 24px 16px; text-align: center; color: var(--yt-text-secondary);" id="playlistPageContent">
-                Ainda não há vídeos nesta playlist.
+
+            <div class="playlist-view-container" id="playlistMainContainerView">
+                <!-- Capa Principal (Se tiver vídeos, pega a capa; se vazia, mostra o cinza E4) -->
+                <div class="playlist-cover-big-box" id="plCoverBox">
+                    <img id="plCoverImg" src="" alt="Capa da Playlist" style="display:none;">
+                    <div class="playlist-cover-placeholder-empty" id="plCoverEmptyPlaceholder">
+                        <svg viewBox="0 0 24 24"><path d="M19 9H2v2h17V9zm0-4H2v2h17V5zM2 15h11v-2H2v2zm13-2v6l5-3-5-3z"/></svg>
+                    </div>
+                </div>
+
+                <!-- Detalhes, Nome do Criador e Contadores Reais -->
+                <div class="playlist-details-meta-block">
+                    <h1 class="playlist-header-title-text" id="plDetailHeaderTitle">Demonstração</h1>
+
+                    <div class="playlist-creator-row">
+                        <div class="playlist-creator-avatar" id="plCreatorAvatarLetter">E</div>
+                        <span class="playlist-creator-name" id="plCreatorNameText">Error404 Not afound</span>
+                    </div>
+
+                    <div class="playlist-meta-sub-info">
+                        <span>Playlist</span>
+                        <span>•</span>
+                        <span id="plVisibilityBadgeText">Privado</span>
+                        <span>•</span>
+                        <span id="plVideosCountLabelText">0 vídeos</span>
+                        <span>•</span>
+                        <span id="plViewsCountLabelText">0 visualizações</span>
+                    </div>
+
+                    <!-- Descrição da playlist limitada a 3 linhas -->
+                    <div class="playlist-description-3lines" id="plDescriptionDisplayBox" style="display:none;"></div>
+                </div>
+
+                <!-- Botões de Ação: Reproduzir tudo, Lápis Editar e 3 Pontinhos -->
+                <div class="playlist-action-buttons-row">
+                    <button class="playlist-btn-play-all" id="btnPlayAllPlaylistVideos" type="button">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        <span>Reproduzir tudo</span>
+                    </button>
+                    <button class="playlist-btn-circle-action" id="btnOpenEditPlaylistModal" type="button" aria-label="Editar">
+                        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    </button>
+                    <button class="playlist-btn-circle-action" id="btnOpenPlaylistKebabModal" type="button" aria-label="Opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Botão Ordenação Manual (Print A -> Abre Print B) -->
+                <div class="playlist-sort-dropdown-box">
+                    <button class="playlist-sort-select-btn" id="btnOpenSortDrawer" type="button">
+                        <span id="txtCurrentSortModeLabel">Manual</span>
+                        <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Lista dos Vídeos Salvos na Playlist -->
+                <div class="playlist-items-vertical-list" id="plVideosListContainer"></div>
+
+                <!-- Mensagem quando a playlist não existe mais (Print C1) -->
+                <div id="plNotFoundMessage" style="display:none; padding:40px 16px; text-align:center; color:#ffffff; font-size:15px; font-weight:500;">
+                    A playlist não existe.
+                </div>
             </div>
-                    </section>
+        </section>
         
         <!-- ==========================================================================
              BARRA INFERIOR DE NAVEGAÇÃO FIXA (BOTTOM NAVIGATION BAR)
@@ -6472,22 +7097,588 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         // E: Abre E1 Filmes
         document.getElementById("btnOpenMovies").addEventListener("click", () => openScreen(viewMovies));
 
-        // F: Abre F1 Playlists
+        // ==========================================================================
+        // SISTEMA COMPLETO DE PLAYLISTS (PRINTS A ATÉ E4)
+        // ==========================================================================
+        let currentOpenPlaylistDocId = null;
+        let currentPlaylistData = null;
+        let currentPlaylistVideosList = [];
+        let currentPlaylistQueueIndex = 0;
+        let isPlaylistQueueActive = false;
+        let isPlaylistLoopActive = false;
+        let isPlaylistShuffleActive = false;
+        let playlistAutoPlayTimer = null;
+        let currentSelectedVideoForRemoval = null;
+        let tempEditedDescription = "";
+        let tempEditedVisibility = "Privada";
+
+        const plMainContainerView = document.getElementById("playlistMainContainerView");
+        const plNotFoundMessage = document.getElementById("plNotFoundMessage");
+        const plCoverBox = document.getElementById("plCoverBox");
+        const plCoverImg = document.getElementById("plCoverImg");
+        const plCoverEmptyPlaceholder = document.getElementById("plCoverEmptyPlaceholder");
+        const plDetailHeaderTitle = document.getElementById("plDetailHeaderTitle");
+        const plCreatorAvatarLetter = document.getElementById("plCreatorAvatarLetter");
+        const plCreatorNameText = document.getElementById("plCreatorNameText");
+        const plVisibilityBadgeText = document.getElementById("plVisibilityBadgeText");
+        const plVideosCountLabelText = document.getElementById("plVideosCountLabelText");
+        const plViewsCountLabelText = document.getElementById("plViewsCountLabelText");
+        const plDescriptionDisplayBox = document.getElementById("plDescriptionDisplayBox");
+        const plVideosListContainer = document.getElementById("plVideosListContainer");
+        const btnPlayAllPlaylistVideos = document.getElementById("btnPlayAllPlaylistVideos");
+        const btnOpenEditPlaylistModal = document.getElementById("btnOpenEditPlaylistModal");
+        const btnOpenPlaylistKebabModal = document.getElementById("btnOpenPlaylistKebabModal");
+        const btnTopPlaylistKebab = document.getElementById("btnTopPlaylistKebab");
+        const btnOpenSortDrawer = document.getElementById("btnOpenSortDrawer");
+        const txtCurrentSortModeLabel = document.getElementById("txtCurrentSortModeLabel");
+
+        // Gavetas da Playlist
+        const drawerSortPlaylist = document.getElementById("drawerSortPlaylist");
+        const drawerPlaylistMainOptions = document.getElementById("drawerPlaylistMainOptions");
+        const btnOptionShufflePlay = document.getElementById("btnOptionShufflePlay");
+        const btnOptionDeletePlaylist = document.getElementById("btnOptionDeletePlaylist");
+
+        // Gavetas de Edição (B2, C2, D2)
+        const drawerEditPlaylistFull = document.getElementById("drawerEditPlaylistFull");
+        const btnCloseEditPlaylistFull = document.getElementById("btnCloseEditPlaylistFull");
+        const plEditThumbPreviewImg = document.getElementById("plEditThumbPreviewImg");
+        const inputEditPlaylistTitle = document.getElementById("inputEditPlaylistTitle");
+        const rowOpenEditPlaylistDesc = document.getElementById("rowOpenEditPlaylistDesc");
+        const lblEditPlaylistDescHeader = document.getElementById("lblEditPlaylistDescHeader");
+        const valEditPlaylistDescPreview = document.getElementById("valEditPlaylistDescPreview");
+        const rowOpenEditPlaylistVis = document.getElementById("rowOpenEditPlaylistVis");
+        const valEditPlaylistVis = document.getElementById("valEditPlaylistVis");
+        const btnSavePlaylistEdits = document.getElementById("btnSavePlaylistEdits");
+        const drawerPlaylistEditVisModal = document.getElementById("drawerPlaylistEditVisModal");
+        const drawerEditPlaylistDesc = document.getElementById("drawerEditPlaylistDesc");
+        const btnCloseEditPlaylistDesc = document.getElementById("btnCloseEditPlaylistDesc");
+        const txtAreaEditPlaylistDesc = document.getElementById("txtAreaEditPlaylistDesc");
+        const btnConfirmDescDone = document.getElementById("btnConfirmDescDone");
+
+        // Gaveta Kebab do Item de Vídeo (B4)
+        const drawerPlaylistItemKebab = document.getElementById("drawerPlaylistItemKebab");
+        const btnItemKebabSaveWatchLater = document.getElementById("btnItemKebabSaveWatchLater");
+        const btnItemKebabSaveOtherPlaylist = document.getElementById("btnItemKebabSaveOtherPlaylist");
+        const btnItemKebabRemoveFromPlaylist = document.getElementById("btnItemKebabRemoveFromPlaylist");
+        const lblRemoveFromPlaylistName = document.getElementById("lblRemoveFromPlaylistName");
+
+        // Fila no Watch Screen
+        const watchPlaylistQueueBar = document.getElementById("watchPlaylistQueueBar");
+        const watchQueuePlaylistTitleText = document.getElementById("watchQueuePlaylistTitleText");
+        const watchQueuePlaylistAuthorText = document.getElementById("watchQueuePlaylistAuthorText");
+        const btnWatchQueueLoop = document.getElementById("btnWatchQueueLoop");
+        const btnWatchQueueShuffle = document.getElementById("btnWatchQueueShuffle");
+        const btnCloseWatchQueueBar = document.getElementById("btnCloseWatchQueueBar");
+
+        // Função que converte número em texto por extenso (ex: Um vídeo, Dois vídeos)
+        function formatVideosCountWord(total) {
+            const count = Number(total) || 0;
+            if (count === 0) return "Nenhum vídeo";
+            if (count === 1) return "Um vídeo";
+            if (count === 2) return "Dois vídeos";
+            if (count === 3) return "Três vídeos";
+            return `${count} vídeos`;
+        }
+
+        // Converte string mm:ss ou hh:mm:ss em milissegundos para pular o vídeo automaticamente
+        function parseDurationToMs(durationStr) {
+            if (!durationStr) return 1440000;
+            const parts = String(durationStr).trim().split(":").map(Number);
+            if (parts.length === 2) {
+                return ((parts[0] * 60) + parts[1]) * 1000;
+            } else if (parts.length === 3) {
+                return ((parts[0] * 3600) + (parts[1] * 60) + parts[2]) * 1000;
+            }
+            return 1440000;
+        }
+
+        // Abre a Tela Oficial da Playlist pelo ID ou Título
+        async function openPlaylistDetailPage(playlistId, playlistTitle) {
+            currentOpenPlaylistDocId = playlistId;
+            openScreen(viewPlaylists);
+            window.scrollTo(0, 0);
+
+            plNotFoundMessage.style.display = "none";
+            plMainContainerView.style.display = "flex";
+
+            // Busca na coleção playlists ou series_playlists
+            let foundDoc = null;
+            let collectionName = "playlists";
+
+            try {
+                let docSnap = await getDoc(doc(db, "playlists", playlistId));
+                if (docSnap.exists()) {
+                    foundDoc = { id: docSnap.id, ...docSnap.data() };
+                    collectionName = "playlists";
+                } else {
+                    docSnap = await getDoc(doc(db, "series_playlists", playlistId));
+                    if (docSnap.exists()) {
+                        foundDoc = { id: docSnap.id, ...docSnap.data() };
+                        collectionName = "series_playlists";
+                    }
+                }
+            } catch (e) {}
+
+            if (!foundDoc) {
+                foundDoc = {
+                    id: playlistId,
+                    title: playlistTitle || "Demonstração",
+                    user: currentUserEmail || "Error404 Not afound",
+                    visibility: "Privado",
+                    description: "",
+                    viewsCount: 0,
+                    videos: [],
+                    series: []
+                };
+            }
+
+            currentPlaylistData = foundDoc;
+            currentPlaylistData._collection = collectionName;
+            tempEditedVisibility = foundDoc.visibility || "Privada";
+            tempEditedDescription = foundDoc.description || "";
+
+            // Renderiza cabeçalho e metadados reais
+            plDetailHeaderTitle.textContent = foundDoc.title || "Demonstração";
+            const author = foundDoc.user ? (foundDoc.user.includes("@") ? getNameFromEmail(foundDoc.user) : foundDoc.user) : "Error404 Not afound";
+            plCreatorNameText.textContent = author;
+            plCreatorAvatarLetter.textContent = author.charAt(0).toUpperCase();
+            plVisibilityBadgeText.textContent = foundDoc.visibility || "Privado";
+            plViewsCountLabelText.textContent = `${foundDoc.viewsCount || 0} visualização`;
+
+            // Descrição (limite de 3 linhas)
+            if (foundDoc.description && foundDoc.description.trim()) {
+                plDescriptionDisplayBox.textContent = foundDoc.description;
+                plDescriptionDisplayBox.style.display = "-webkit-box";
+            } else {
+                plDescriptionDisplayBox.style.display = "none";
+            }
+
+            // Puxa os vídeos reais salvos na playlist
+            loadPlaylistVideosRealtime();
+        }
+
+        // Carrega em tempo real os vídeos da playlist
+        function loadPlaylistVideosRealtime() {
+            plVideosListContainer.innerHTML = "";
+            const idsList = Array.isArray(currentPlaylistData.videos) ? currentPlaylistData.videos : (Array.isArray(currentPlaylistData.series) ? currentPlaylistData.series : []);
+
+            onSnapshot(frutasColecao, (snap) => {
+                currentPlaylistVideosList = [];
+                let firstCover = "";
+
+                snap.forEach(d => {
+                    const videoItem = { id: d.id, ...d.data() };
+                    const targetName = (videoItem.channel || "").toLowerCase();
+                    const targetTitle = (videoItem.name || "").toLowerCase();
+
+                    // Verifica se o item pertence à lista da playlist
+                    const isMatch = idsList.some(idOrName => {
+                        const clean = String(idOrName).toLowerCase();
+                        return idOrName === d.id || targetName === clean || targetName.includes(clean) || targetTitle.includes(clean);
+                    });
+
+                    if (isMatch) {
+                        currentPlaylistVideosList.push(videoItem);
+                        if (!firstCover) {
+                            firstCover = videoItem.thumbUrl || videoItem.seriesCover || "";
+                        }
+                    }
+                });
+
+                // Atualiza contagem de vídeos por extenso
+                plVideosCountLabelText.textContent = formatVideosCountWord(currentPlaylistVideosList.length);
+
+                // Capa da playlist: Se tiver vídeos, usa o primeiro. Se vazia, mostra o cinza E4
+                if (firstCover) {
+                    plCoverImg.src = firstCover;
+                    plCoverImg.style.display = "block";
+                    plCoverEmptyPlaceholder.style.display = "none";
+                } else {
+                    plCoverImg.style.display = "none";
+                    plCoverEmptyPlaceholder.style.display = "flex";
+                }
+
+                renderPlaylistVideosRows();
+            });
+        }
+
+        // Renderiza as linhas dos vídeos na tela da playlist
+        function renderPlaylistVideosRows() {
+            plVideosListContainer.innerHTML = "";
+
+            if (currentPlaylistVideosList.length === 0) {
+                plVideosListContainer.innerHTML = `<div style="padding:28px 16px; text-align:center; color:#888; font-size:13px;">Esta playlist não tem vídeos ainda.</div>`;
+                return;
+            }
+
+            currentPlaylistVideosList.forEach((item, index) => {
+                const row = document.createElement("div");
+                row.className = "playlist-video-row-card";
+                row.innerHTML = `
+                    <div class="playlist-video-thumb-box">
+                        <img src="${escapeHtml(item.thumbUrl || item.seriesCover || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
+                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                    </div>
+                    <div class="playlist-video-info-texts">
+                        <div class="playlist-video-title-line">${escapeHtml(item.name)}</div>
+                        <div class="playlist-video-meta-line">${escapeHtml(item.channel || "Mouton")}</div>
+                    </div>
+                    <button class="playlist-video-kebab-btn btnVideoItemKebabTrigger" type="button" aria-label="Opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                `;
+
+                row.onclick = (e) => {
+                    if (e.target.closest(".btnVideoItemKebabTrigger")) return;
+                    startPlaylistPlaybackAt(index);
+                };
+
+                const kebab = row.querySelector(".btnVideoItemKebabTrigger");
+                if (kebab) {
+                    kebab.onclick = (e) => {
+                        e.stopPropagation();
+                        currentSelectedVideoForRemoval = item;
+                        if (lblRemoveFromPlaylistName) {
+                            lblRemoveFromPlaylistName.textContent = `Remover de ${currentPlaylistData.title || 'Demonstração'}`;
+                        }
+                        drawerPlaylistItemKebab.classList.add("active");
+                    };
+                }
+
+                plVideosListContainer.appendChild(row);
+            });
+        }
+
+        // ==========================================================================
+        // FLUXO DE REPRODUÇÃO DA PLAYLIST NO WATCH SCREEN (A3, B3, C3, D3, E3)
+        // ==========================================================================
+        function startPlaylistPlaybackAt(index) {
+            if (currentPlaylistVideosList.length === 0) return;
+            currentPlaylistQueueIndex = index >= 0 && index < currentPlaylistVideosList.length ? index : 0;
+            isPlaylistQueueActive = true;
+
+            const videoItem = currentPlaylistVideosList[currentPlaylistQueueIndex];
+            openWatchScreen(videoItem, videoItem.id);
+
+            // Soma 1 visualização na contagem da playlist
+            if (currentPlaylistData && currentOpenPlaylistDocId) {
+                try {
+                    const col = currentPlaylistData._collection || "playlists";
+                    const newViews = (currentPlaylistData.viewsCount || 0) + 1;
+                    setDoc(doc(db, col, currentOpenPlaylistDocId), { viewsCount: newViews }, { merge: true });
+                } catch(e) {}
+            }
+
+            // Exibe a barra de fila da playlist abaixo do player (Print B3)
+            watchPlaylistQueueBar.style.display = "flex";
+            updateWatchQueueBarUI();
+
+            // Auto-advance de acordo com a duração do vídeo (após o término pula automaticamente)
+            if (playlistAutoPlayTimer) clearTimeout(playlistAutoPlayTimer);
+            const durationMs = parseDurationToMs(videoItem.duration);
+            playlistAutoPlayTimer = setTimeout(() => {
+                advancePlaylistNextVideo();
+            }, durationMs);
+        }
+
+        function updateWatchQueueBarUI() {
+            if (!isPlaylistQueueActive) return;
+            watchQueuePlaylistTitleText.textContent = `${currentPlaylistData.title || 'Demonstração'} ${currentPlaylistQueueIndex + 1} / ${currentPlaylistVideosList.length}`;
+            watchQueuePlaylistAuthorText.textContent = `${plCreatorNameText.textContent} 🔒`;
+            btnWatchQueueLoop.classList.toggle("active", isPlaylistLoopActive);
+            btnWatchQueueShuffle.classList.toggle("active", isPlaylistShuffleActive);
+        }
+
+        function advancePlaylistNextVideo() {
+            if (!isPlaylistQueueActive || currentPlaylistVideosList.length === 0) return;
+
+            if (isPlaylistShuffleActive) {
+                currentPlaylistQueueIndex = Math.floor(Math.random() * currentPlaylistVideosList.length);
+            } else {
+                currentPlaylistQueueIndex++;
+                if (currentPlaylistQueueIndex >= currentPlaylistVideosList.length) {
+                    if (isPlaylistLoopActive) {
+                        currentPlaylistQueueIndex = 0;
+                    } else {
+                        isPlaylistQueueActive = false;
+                        watchPlaylistQueueBar.style.display = "none";
+                        return;
+                    }
+                }
+            }
+
+            startPlaylistPlaybackAt(currentPlaylistQueueIndex);
+        }
+
+        // Botão Reproduzir tudo (Print A3)
+        btnPlayAllPlaylistVideos.addEventListener("click", () => {
+            isPlaylistShuffleActive = false;
+            startPlaylistPlaybackAt(0);
+        });
+
+        // Alternar Loop (Print E3)
+        btnWatchQueueLoop.addEventListener("click", () => {
+            isPlaylistLoopActive = !isPlaylistLoopActive;
+            btnWatchQueueLoop.classList.toggle("active", isPlaylistLoopActive);
+            showToast(isPlaylistLoopActive ? "Repetição ativada" : "Repetição desativada");
+        });
+
+        // Alternar Modo Aleatório (Prints C3 e D3)
+        btnWatchQueueShuffle.addEventListener("click", () => {
+            isPlaylistShuffleActive = !isPlaylistShuffleActive;
+            btnWatchQueueShuffle.classList.toggle("active", isPlaylistShuffleActive);
+            showToast(isPlaylistShuffleActive ? "Modo aleatório ativado" : "Modo aleatório desativado");
+        });
+
+        btnCloseWatchQueueBar.addEventListener("click", () => {
+            isPlaylistQueueActive = false;
+            watchPlaylistQueueBar.style.display = "none";
+            if (playlistAutoPlayTimer) clearTimeout(playlistAutoPlayTimer);
+        });
+
+        // ==========================================================================
+        // ORDENAÇÃO DA PLAYLIST (PRINTS A E B)
+        // ==========================================================================
+        btnOpenSortDrawer.addEventListener("click", () => drawerSortPlaylist.classList.add("active"));
+
+        document.querySelectorAll(".optSortChoice").forEach(opt => {
+            opt.addEventListener("click", () => {
+                const mode = opt.getAttribute("data-sort");
+                txtCurrentSortModeLabel.textContent = mode;
+                drawerSortPlaylist.classList.remove("active");
+
+                if (mode === "Manual") {
+                    // Mantém a ordem original
+                } else if (mode.includes("mais recente")) {
+                    currentPlaylistVideosList.sort((a, b) => ((b.timestamp && b.timestamp.seconds) || 0) - ((a.timestamp && a.timestamp.seconds) || 0));
+                } else if (mode.includes("mais antiga")) {
+                    currentPlaylistVideosList.sort((a, b) => ((a.timestamp && a.timestamp.seconds) || 0) - ((b.timestamp && b.timestamp.seconds) || 0));
+                } else if (mode === "Mais acessados") {
+                    currentPlaylistVideosList.sort((a, b) => Number(b.viewsCount || 0) - Number(a.viewsCount || 0));
+                }
+
+                renderPlaylistVideosRows();
+            });
+        });
+
+        // ==========================================================================
+        // OPÇÕES DA PLAYLIST E EXCLUSÃO (PRINTS A1, B1, C1)
+        // ==========================================================================
+        function openPlaylistOptionsDrawer() {
+            drawerPlaylistMainOptions.classList.add("active");
+        }
+
+        btnOpenPlaylistKebabModal.addEventListener("click", openPlaylistOptionsDrawer);
+        btnTopPlaylistKebab.addEventListener("click", openPlaylistOptionsDrawer);
+
+        // Ordem aleatória a partir de B1
+        btnOptionShufflePlay.addEventListener("click", () => {
+            drawerPlaylistMainOptions.classList.remove("active");
+            isPlaylistShuffleActive = true;
+            startPlaylistPlaybackAt(Math.floor(Math.random() * currentPlaylistVideosList.length));
+        });
+
+        // Excluir Playlist (Print C1)
+        btnOptionDeletePlaylist.addEventListener("click", async () => {
+            drawerPlaylistMainOptions.classList.remove("active");
+
+            try {
+                if (currentOpenPlaylistDocId && currentPlaylistData) {
+                    const col = currentPlaylistData._collection || "playlists";
+                    await deleteDoc(doc(db, col, currentOpenPlaylistDocId));
+                }
+            } catch(e) {}
+
+            plMainContainerView.style.display = "none";
+            plNotFoundMessage.style.display = "block";
+            showCoverSnackbar("Playlist excluída", plCoverImg.src);
+            refreshUserChannelPlaylists();
+        });
+
+        // ==========================================================================
+        // FLUXO DE EDIÇÃO DA PLAYLIST (PRINTS A2, B2, C2, D2, E2, F2)
+        // ==========================================================================
+        btnOpenEditPlaylistModal.addEventListener("click", () => {
+            if (!currentPlaylistData) return;
+
+            inputEditPlaylistTitle.value = currentPlaylistData.title || "";
+            tempEditedDescription = currentPlaylistData.description || "";
+            tempEditedVisibility = currentPlaylistData.visibility || "Privada";
+
+            plEditThumbPreviewImg.src = plCoverImg.src || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+            valEditPlaylistVis.textContent = tempEditedVisibility;
+
+            if (tempEditedDescription) {
+                lblEditPlaylistDescHeader.textContent = "Descrição";
+                valEditPlaylistDescPreview.textContent = tempEditedDescription;
+                valEditPlaylistDescPreview.style.display = "block";
+            } else {
+                lblEditPlaylistDescHeader.textContent = "Adicionar uma descrição";
+                valEditPlaylistDescPreview.style.display = "none";
+            }
+
+            drawerEditPlaylistFull.classList.add("active");
+        });
+
+        btnCloseEditPlaylistFull.addEventListener("click", () => drawerEditPlaylistFull.classList.remove("active"));
+
+        // Abrir seleção de visibilidade C2 com checkmark
+        rowOpenEditPlaylistVis.addEventListener("click", () => {
+            updateCheckmarkOnVisibilityDrawer(tempEditedVisibility);
+            drawerPlaylistEditVisModal.classList.add("active");
+        });
+
+        function updateCheckmarkOnVisibilityDrawer(selectedVis) {
+            document.querySelectorAll(".optEditVisChoice").forEach(row => {
+                const vis = row.getAttribute("data-vis");
+                const check = row.querySelector(".svgCheckMark");
+                if (vis === selectedVis) {
+                    check.style.display = "inline-block";
+                } else {
+                    check.style.display = "none";
+                }
+            });
+        }
+
+        document.querySelectorAll(".optEditVisChoice").forEach(row => {
+            row.addEventListener("click", () => {
+                tempEditedVisibility = row.getAttribute("data-vis");
+                valEditPlaylistVis.textContent = tempEditedVisibility;
+                updateCheckmarkOnVisibilityDrawer(tempEditedVisibility);
+                drawerPlaylistEditVisModal.classList.remove("active");
+            });
+        });
+
+        // Abrir edição de descrição D2
+        rowOpenEditPlaylistDesc.addEventListener("click", () => {
+            txtAreaEditPlaylistDesc.value = tempEditedDescription;
+            drawerEditPlaylistDesc.classList.add("active");
+        });
+
+        btnCloseEditPlaylistDesc.addEventListener("click", () => drawerEditPlaylistDesc.classList.remove("active"));
+
+        btnConfirmDescDone.addEventListener("click", () => {
+            tempEditedDescription = txtAreaEditPlaylistDesc.value.trim();
+            drawerEditPlaylistDesc.classList.remove("active");
+
+            // Atualiza o preview na tela B2 (E2)
+            if (tempEditedDescription) {
+                lblEditPlaylistDescHeader.textContent = "Descrição";
+                valEditPlaylistDescPreview.textContent = tempEditedDescription;
+                valEditPlaylistDescPreview.style.display = "block";
+            } else {
+                lblEditPlaylistDescHeader.textContent = "Adicionar uma descrição";
+                valEditPlaylistDescPreview.style.display = "none";
+            }
+        });
+
+        // Salvar as edições (Print F2)
+        btnSavePlaylistEdits.addEventListener("click", async () => {
+            const newTitle = inputEditPlaylistTitle.value.trim() || "Demonstração";
+            drawerEditPlaylistFull.classList.remove("active");
+
+            currentPlaylistData.title = newTitle;
+            currentPlaylistData.description = tempEditedDescription;
+            currentPlaylistData.visibility = tempEditedVisibility;
+
+            // Salva no Firestore
+            try {
+                if (currentOpenPlaylistDocId && currentPlaylistData) {
+                    const col = currentPlaylistData._collection || "playlists";
+                    await setDoc(doc(db, col, currentOpenPlaylistDocId), {
+                        title: newTitle,
+                        description: tempEditedDescription,
+                        visibility: tempEditedVisibility,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                }
+            } catch(e) {}
+
+            // Atualiza os textos da tela da playlist
+            plDetailHeaderTitle.textContent = newTitle;
+            plVisibilityBadgeText.textContent = tempEditedVisibility;
+
+            if (tempEditedDescription) {
+                plDescriptionDisplayBox.textContent = tempEditedDescription;
+                plDescriptionDisplayBox.style.display = "-webkit-box";
+            } else {
+                plDescriptionDisplayBox.style.display = "none";
+            }
+
+            // Exibe o toast oficial "Edições salvas"
+            showCoverSnackbar("Edições salvas", plCoverImg.src);
+            refreshUserChannelPlaylists();
+        });
+
+        // ==========================================================================
+        // REMOVER VÍDEO DA PLAYLIST (PRINTS A4, B4, C4, E4)
+        // ==========================================================================
+        btnItemKebabRemoveFromPlaylist.addEventListener("click", async () => {
+            drawerPlaylistItemKebab.classList.remove("active");
+            if (!currentSelectedVideoForRemoval || !currentPlaylistData) return;
+
+            const removeId = currentSelectedVideoForRemoval.id;
+            const removeName = (currentSelectedVideoForRemoval.name || "").toLowerCase();
+
+            // Remove da lista em memória
+            currentPlaylistVideosList = currentPlaylistVideosList.filter(v => v.id !== removeId);
+
+            // Remove do Firestore
+            try {
+                if (currentOpenPlaylistDocId) {
+                    const col = currentPlaylistData._collection || "playlists";
+                    const currentArray = Array.isArray(currentPlaylistData.videos) ? currentPlaylistData.videos : (Array.isArray(currentPlaylistData.series) ? currentPlaylistData.series : []);
+                    const filteredArray = currentArray.filter(item => {
+                        const str = String(item).toLowerCase();
+                        return item !== removeId && !removeName.includes(str);
+                    });
+
+                    await setDoc(doc(db, col, currentOpenPlaylistDocId), {
+                        videos: filteredArray,
+                        series: filteredArray,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+                }
+            } catch(e) {}
+
+            // Se a playlist ficou vazia (0 vídeos), limpa a capa igual C4 e E4
+            if (currentPlaylistVideosList.length === 0) {
+                plCoverImg.style.display = "none";
+                plCoverEmptyPlaceholder.style.display = "flex";
+                plVideosCountLabelText.textContent = "Nenhum vídeo";
+            } else {
+                plVideosCountLabelText.textContent = formatVideosCountWord(currentPlaylistVideosList.length);
+            }
+
+            renderPlaylistVideosRows();
+            refreshUserChannelPlaylists();
+            showToast("Item removido da playlist.");
+        });
+
+        btnItemKebabSaveWatchLater.addEventListener("click", async () => {
+            drawerPlaylistItemKebab.classList.remove("active");
+            if (currentSelectedVideoForRemoval) {
+                showToast("Salvo em Assistir mais tarde");
+            }
+        });
+
+        btnItemKebabSaveOtherPlaylist.addEventListener("click", () => {
+            drawerPlaylistItemKebab.classList.remove("active");
+            loadUserPlaylists();
+            drawerSavePlaylist.classList.add("active");
+        });
+
+        // Conecta o clique de qualquer playlist criada ao novo visual oficial
         document.getElementById("btnOpenPlaylists").addEventListener("click", () => {
-            playlistPageTitle.textContent = "Playlists";
-            openScreen(viewPlaylists);
+            openPlaylistDetailPage("default_demo", "Demonstração");
         });
 
-        // F2: Assistir Mais Tarde
         document.getElementById("cardWatchLater").addEventListener("click", () => {
-            playlistPageTitle.textContent = "Assistir mais tarde";
-            openScreen(viewPlaylists);
+            openPlaylistDetailPage("watch_later_main", "Assistir mais tarde");
         });
 
-        // F3: Vídeos com Gostei
         document.getElementById("cardLikedVideos").addEventListener("click", () => {
-            playlistPageTitle.textContent = "Vídeos com 'Gostei'";
-            openScreen(viewPlaylists);
+            openPlaylistDetailPage("liked_videos_main", "Vídeos com 'Gostei'");
         });
 
         // Acordeões de Configurações (B2, B3, B4)
