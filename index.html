@@ -820,24 +820,73 @@
             cursor: pointer;
         }
 
-        /* Grade 2x2 forçando as 4 capas de episódios ou séries no formato quadrado */
+        /* Mosaico Assimétrico de Colagem (Fiel ao Print de Comparação) */
         .fs-collection-grid-thumb {
             width: 100%;
             aspect-ratio: 1 / 1;
             border-radius: 12px;
             overflow: hidden;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(2, 1fr);
+            display: flex;
             gap: 2px;
-            background-color: #1e1e1e;
+            background-color: #181818;
         }
 
-        .fs-collection-grid-thumb img {
-            width: 100%;
+        .fs-collection-col {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
             height: 100%;
+            overflow: hidden;
+        }
+
+        .fs-col-left {
+            flex: 1;
+        }
+
+        .fs-col-right {
+            flex: 1;
+        }
+
+        /* Coluna esquerda: corte em 58% e 42% */
+        .fs-col-left img:first-child {
+            height: 58%;
+        }
+
+        .fs-col-left img:last-child {
+            height: 42%;
+        }
+
+        /* Coluna direita: corte assimétrico em 70% e 30% (foto alta como a garota do print) */
+        .fs-col-right img:first-child {
+            height: 70%;
+        }
+
+        .fs-col-right img:last-child {
+            height: 30%;
+        }
+
+        .fs-collection-col img {
+            width: 100%;
             object-fit: cover;
             display: block;
+            min-height: 0;
+        }
+
+        /* Alterna o padrão nos cartões pares para dar variedade visual orgânica no carrossel */
+        .fs-collection-card:nth-child(even) .fs-col-left img:first-child {
+            height: 36%;
+        }
+
+        .fs-collection-card:nth-child(even) .fs-col-left img:last-child {
+            height: 64%;
+        }
+
+        .fs-collection-card:nth-child(even) .fs-col-right img:first-child {
+            height: 44%;
+        }
+
+        .fs-collection-card:nth-child(even) .fs-col-right img:last-child {
+            height: 56%;
         }
 
         .fs-collection-name {
@@ -9828,7 +9877,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Renderiza cada card de Coleção em Alta no formato 2x2
+        // Renderiza cada card de Coleção em Alta no formato de Mosaico Assimétrico
         function renderCollectionCard(item) {
             const card = document.createElement("div");
             card.className = "fs-collection-card";
@@ -9836,10 +9885,14 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
             card.innerHTML = `
                 <div class="fs-collection-grid-thumb">
-                    <img src="${escapeHtml(item.covers[0])}" alt="Capa 1">
-                    <img src="${escapeHtml(item.covers[1])}" alt="Capa 2">
-                    <img src="${escapeHtml(item.covers[2])}" alt="Capa 3">
-                    <img src="${escapeHtml(item.covers[3])}" alt="Capa 4">
+                    <div class="fs-collection-col fs-col-left">
+                        <img src="${escapeHtml(item.covers[0])}" alt="Capa 1">
+                        <img src="${escapeHtml(item.covers[1])}" alt="Capa 2">
+                    </div>
+                    <div class="fs-collection-col fs-col-right">
+                        <img src="${escapeHtml(item.covers[2])}" alt="Capa 3">
+                        <img src="${escapeHtml(item.covers[3])}" alt="Capa 4">
+                    </div>
                 </div>
                 <div class="fs-collection-name" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</div>
                 <div class="fs-collection-author-row">
