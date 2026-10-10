@@ -3728,10 +3728,89 @@
             left: 0;
             right: 0;
             margin: 0 auto;
-            z-index: 9999; /* Fica acima de absolutamente tudo */
+            z-index: 9999;
             overflow-y: auto;
+            overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             padding-bottom: 80px;
+        }
+
+        /* Estilos dos Vídeos Recomendados Abaixo dos Comentários (Fiel ao Print da Seta Amarela) */
+        .yt-video-card {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .yt-thumbnail-wrapper {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .yt-thumbnail-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .yt-video-info-row {
+            display: flex;
+            padding: 12px 14px 6px 14px;
+            gap: 12px;
+            align-items: flex-start;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .yt-channel-avatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background-color: #333333;
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .yt-channel-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .yt-video-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .yt-video-title {
+            font-size: 14.5px;
+            font-weight: 500;
+            line-height: 1.35;
+            color: #f1f1f1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 3px;
+        }
+
+        .yt-video-metadata {
+            font-size: 12px;
+            color: #aaaaaa;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
         }
 
         .yt-watch-screen.active {
@@ -8636,12 +8715,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     card.innerHTML = `
                         <div class="yt-thumbnail-wrapper">
                             <img src="${escapeHtml(ep.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
-                            <div class="yt-duration-badge">${escapeHtml(ep.duration || "24:00")}</div>
+                            <div class="yt-duration-badge">${escapeHtml(formatDurationBadge(ep.duration))}</div>
                         </div>
                         <div class="yt-video-info-row">
-                            <div class="yt-channel-avatar" style="width:36px; height:36px; border-radius:50%; overflow:hidden;">
+                            <div class="yt-channel-avatar">
                                 ${(ep.seriesCover || ep.thumbUrl)
-                                    ? `<img src="${escapeHtml(ep.seriesCover || ep.thumbUrl)}" alt="Capa" style="width:100%; height:100%; object-fit:cover;">`
+                                    ? `<img src="${escapeHtml(ep.seriesCover || ep.thumbUrl)}" alt="Avatar">`
                                     : `<div style="background:#cc0000; color:#fff; font-weight:700; width:100%; height:100%; display:flex; align-items:center; justify-content:center;">${(ep.channel || "S").charAt(0).toUpperCase()}</div>`
                                 }
                             </div>
@@ -8652,12 +8731,29 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                     <span>•</span>
                                     <span>${formatNumber(ep.viewsCount || 0)} visualizações</span>
                                     <span>•</span>
-                                    <span>${ep.timeAgo || "recentemente"}</span>
+                                    <span>${formatTimeAgo(ep.timestamp)}</span>
                                 </div>
                             </div>
+                            <button class="fs-kebab-btn-mini btnRelatedVideoKebab" type="button" aria-label="Mais opções">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
                         </div>
                     `;
-                    card.onclick = () => openWatchScreen(ep, ep.id);
+
+                    card.onclick = (e) => {
+                        if (e.target.closest(".btnRelatedVideoKebab")) return;
+                        openWatchScreen(ep, ep.id);
+                    };
+
+                    const kebabBtn = card.querySelector(".btnRelatedVideoKebab");
+                    if (kebabBtn) {
+                        kebabBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            currentWatchVideoId = ep.id;
+                            drawerVideoKebab.classList.add("active");
+                        };
+                    }
+
                     container.appendChild(card);
                 });
             });
