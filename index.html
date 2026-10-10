@@ -790,7 +790,7 @@
 
         .fs-ranked-card {
             display: flex;
-            align-items: flex-end;
+            align-items: flex-start;
             min-width: 160px;
             cursor: pointer;
         }
@@ -805,11 +805,56 @@
             -webkit-text-stroke: 1.5px #3a3a3a;
             font-family: 'Roboto', sans-serif;
             user-select: none;
+            margin-top: 86px;
+        }
+
+        .fs-ranked-col {
+            display: flex;
+            flex-direction: column;
+            width: 100px;
+            min-width: 100px;
+            z-index: 1;
         }
 
         .fs-ranked-card .fs-poster-thumb {
             width: 100px;
-            z-index: 1;
+            aspect-ratio: 2 / 3;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #1c1c1c;
+        }
+
+        .fs-ranked-card .fs-poster-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .fs-ranked-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 5px;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            line-height: 1.25;
+        }
+
+        .fs-ranked-genre {
+            font-size: 9.5px;
+            color: #888888;
+            margin-top: 2px;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            line-height: 1.2;
         }
 
         .fs-collection-card {
@@ -10166,9 +10211,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
                     if (top9Series.length === 0) {
                         const fallbackSeries = [
-                            { title: "Kusuriya no Hitorigoto", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" },
-                            { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" },
-                            { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400" }
+                            { title: "Invencível", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Drama", "Ação"] },
+                            { title: "Overflow", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400", genres: ["Comédia", "Romance"] },
+                            { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400", genres: ["Aventura", "Fantasia"] }
                         ];
 
                         fallbackSeries.forEach((item, index) => {
@@ -10189,10 +10234,23 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             const coverImage = item.coverUrl || item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400";
             const seriesTitle = item.title || item.name || "Série";
 
+            // Sorteia exatamente 1 único gênero entre os cadastrados na série
+            let singleRandomGenre = "Anime";
+            if (Array.isArray(item.genres) && item.genres.length > 0) {
+                const randomIndex = Math.floor(Math.random() * item.genres.length);
+                singleRandomGenre = item.genres[randomIndex];
+            } else if (item.genre) {
+                singleRandomGenre = item.genre;
+            }
+
             card.innerHTML = `
                 <div class="fs-rank-num">${rankPosition}</div>
-                <div class="fs-poster-thumb">
-                    <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(seriesTitle)}">
+                <div class="fs-ranked-col">
+                    <div class="fs-poster-thumb">
+                        <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(seriesTitle)}">
+                    </div>
+                    <div class="fs-ranked-title" title="${escapeHtml(seriesTitle)}">${escapeHtml(seriesTitle)}</div>
+                    <div class="fs-ranked-genre" title="${escapeHtml(singleRandomGenre)}">${escapeHtml(singleRandomGenre)}</div>
                 </div>
             `;
 
