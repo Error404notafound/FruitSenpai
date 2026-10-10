@@ -4594,38 +4594,17 @@
                 </div>
             </section>
 
-            <!-- 7. SEÇÃO: MAIS ASSISTIDOS (COM NÚMEROS 1, 2, 3) -->
+            <!-- 7. SEÇÃO: MAIS ASSISTIDOS (DINÂMICO: TOP 1 A 9 PELA SOMA DE VIEWS DE TODOS OS EPISÓDIOS) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Mais assistidos</h3>
                     </div>
-                    <button class="fs-link-more">Tudo</button>
+                    <button class="fs-link-more" type="button">Tudo</button>
                 </div>
 
-                <div class="fs-carousel">
-                    <div class="fs-ranked-card">
-                        <div class="fs-rank-num">1</div>
-                        <div class="fs-poster-thumb">
-                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="1">
-                        </div>
-                    </div>
-
-                    <div class="fs-ranked-card">
-                        <div class="fs-rank-num">2</div>
-                        <div class="fs-poster-thumb">
-                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="2">
-                        </div>
-                    </div>
-
-                    <div class="fs-ranked-card">
-                        <div class="fs-rank-num">3</div>
-                        <div class="fs-poster-thumb">
-                            <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400" alt="3">
-                        </div>
-                    </div>
-                </div>
+                <div class="fs-carousel" id="mostWatchedCarousel"></div>
             </section>
 
             <!-- 8. SEÇÃO: COLEÇÕES EM ALTA (DINÂMICO PELO FIREBASE COM PLAYLISTS PÚBLICAS >= 4 ITENS) -->
@@ -10142,6 +10121,89 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         loadTopCollectionsFromFirestore();
+
+        // Carrega em tempo real o ranking dos Mais Assistidos (Top 1 ao 9) pela soma de views de cada série
+        const mostWatchedCarousel = document.getElementById("mostWatchedCarousel");
+
+        function loadMostWatchedSeriesFromFirestore() {
+            if (!mostWatchedCarousel) return;
+
+            onSnapshot(collection(db, "series"), (seriesSnapshot) => {
+                onSnapshot(frutasColecao, (videosSnapshot) => {
+                    const seriesRankingList = [];
+
+                    seriesSnapshot.forEach((sDoc) => {
+                        const sData = { id: sDoc.id, ...sDoc.data() };
+                        const seriesTitle = (sData.title || "").toLowerCase().trim();
+                        if (!seriesTitle) return;
+
+                        // Soma todas as visualizações individuais de cada episódio pertencente a esta série
+                        let totalSeriesViews = 0;
+
+                        videosSnapshot.forEach((vDoc) => {
+                            const vData = vDoc.data();
+                            const vChannel = (vData.channel || "").toLowerCase().trim();
+                            const vName = (vData.name || "").toLowerCase().trim();
+
+                            if (vChannel === seriesTitle || vChannel.includes(seriesTitle) || vName.includes(seriesTitle)) {
+                                totalSeriesViews += Number(vData.viewsCount || 0);
+                            }
+                        });
+
+                        seriesRankingList.push({
+                            ...sData,
+                            accumulatedViews: totalSeriesViews
+                        });
+                    });
+
+                    // Ordena do 1º ao 9º lugar em ordem decrescente pelo total acumulado de visualizações
+                    seriesRankingList.sort((a, b) => b.accumulatedViews - a.accumulatedViews);
+
+                    // Limite máximo de 9 cards verticais
+                    const top9Series = seriesRankingList.slice(0, 9);
+
+                    mostWatchedCarousel.innerHTML = "";
+
+                    if (top9Series.length === 0) {
+                        const fallbackSeries = [
+                            { title: "Kusuriya no Hitorigoto", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" },
+                            { title: "Cowboy Bebop", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" },
+                            { title: "Overgeared", coverUrl: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=400" }
+                        ];
+
+                        fallbackSeries.forEach((item, index) => {
+                            renderMostWatchedRankCard(item, index + 1);
+                        });
+                    } else {
+                        top9Series.forEach((item, index) => {
+                            renderMostWatchedRankCard(item, index + 1);
+                        });
+                    }
+                });
+            });
+        }
+
+        function renderMostWatchedRankCard(item, rankPosition) {
+            const card = document.createElement("div");
+            card.className = "fs-ranked-card";
+            const coverImage = item.coverUrl || item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400";
+            const seriesTitle = item.title || item.name || "Série";
+
+            card.innerHTML = `
+                <div class="fs-rank-num">${rankPosition}</div>
+                <div class="fs-poster-thumb">
+                    <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(seriesTitle)}">
+                </div>
+            `;
+
+            card.onclick = () => {
+                openSeriesChannel(seriesTitle);
+            };
+
+            mostWatchedCarousel.appendChild(card);
+        }
+
+        loadMostWatchedSeriesFromFirestore();
     </script>
 </body>
   </html>
