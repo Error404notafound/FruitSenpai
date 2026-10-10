@@ -1083,8 +1083,89 @@
         }
 
         .fs-history-msg b {
-            color: #fff;
+            color: #ffffff;
             cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Estilos do Carrossel de Histórico (Print A) */
+        .history-card {
+            min-width: 150px;
+            width: 150px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .history-thumb-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #212121;
+        }
+
+        .history-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Barra de progresso vermelha do YouTube na base da miniatura */
+        .history-progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 70%;
+            height: 3px;
+            background-color: #ff0000;
+            z-index: 4;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .history-card-details {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-top: 5px;
+            gap: 4px;
+        }
+
+        .history-card-texts {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+        }
+
+        .history-card-title {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .history-card-channel {
+            font-size: 10px;
+            color: #aaaaaa;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .history-card-meta {
+            font-size: 9.5px;
+            color: #777777;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         /* ==========================================================================
@@ -4625,18 +4706,23 @@
                 </div>
             </section>
 
-            <!-- 6. SEÇÃO: SEU HISTÓRICO -->
-            <section>
+            <!-- 6. SEÇÃO: SEU HISTÓRICO (PRINTS A E B) -->
+            <section id="sectionHistoryMain">
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Seu histórico</h3>
                     </div>
-                    <button class="fs-link-more">Tudo</button>
+                    <button class="fs-link-more" id="btnHistorySeeAll" type="button">Tudo</button>
                 </div>
-                <div class="fs-history-msg">
-                    Para exibir seu histórico de animes é necessário estar conectado ʕ•́ᴥ•̀ʔ <b onclick="openAuthModal()">Conecte-se</b> ou <b onclick="openAuthModal()">Registrar</b>
+
+                <!-- Estado Deslogado (Print B) -->
+                <div class="fs-history-msg" id="historyLoggedOutBox">
+                    Para exibir seu histórico de animes é necessário estar conectado ʕ•́ᴥ•̀ʔ <b id="btnHistoryLogin">Conecte-se</b> ou <b id="btnHistoryRegister">Registrar</b>
                 </div>
+
+                <!-- Estado Logado: Carrossel com os 7 últimos vídeos assistidos (Print A) -->
+                <div class="fs-carousel" id="userHistoryCarousel" style="display:none;"></div>
             </section>
 
             <!-- 7. SEÇÃO: MAIS ASSISTIDOS (DINÂMICO: TOP 1 A 9 PELA SOMA DE VIEWS DE TODOS OS EPISÓDIOS) -->
@@ -7265,6 +7351,9 @@
                 // Carrega em tempo real todas as playlists do usuário logado
                 loadAllUserPlaylistsDynamic();
 
+                // Carrega o histórico de vídeos assistidos do usuário (Print A)
+                loadUserHistory();
+
                 if (accountsListContainer) {
                     accountsListContainer.innerHTML = `
                         <div class="account-item-row">
@@ -7289,6 +7378,9 @@
                 navYouIconLoggedOut.style.display = "block";
                 navYouAvatarLoggedIn.style.display = "none";
                 if (profileUserEmail) profileUserEmail.textContent = "";
+
+                // Restaura o aviso deslogado de histórico (Print B)
+                loadUserHistory();
             }
         }
 
@@ -7337,6 +7429,154 @@
 
         btnTopLogin.addEventListener("click", openAuthModal);
         btnMainLogin.addEventListener("click", openAuthModal);
+
+        // Ações de "Conecte-se" e "Registrar" do Histórico Deslogado (Print B)
+        const btnHistoryLogin = document.getElementById("btnHistoryLogin");
+        const btnHistoryRegister = document.getElementById("btnHistoryRegister");
+
+        if (btnHistoryLogin) {
+            btnHistoryLogin.addEventListener("click", () => {
+                isRegisterMode = false;
+                btnSubmitAuth.textContent = "Fazer login";
+                authModalSub.textContent = "Faça Login ou Cadastre-se para Continuar";
+                btnToggleAuthMode.textContent = "Não tem uma conta? Cadastre-se";
+                openAuthModal();
+            });
+        }
+
+        if (btnHistoryRegister) {
+            btnHistoryRegister.addEventListener("click", () => {
+                isRegisterMode = true;
+                btnSubmitAuth.textContent = "Criar conta";
+                authModalSub.textContent = "Cadastre-se com seu e-mail para continuar";
+                btnToggleAuthMode.textContent = "Já tem uma conta? Faça login";
+                openAuthModal();
+            });
+        }
+
+        // Elementos do Histórico (Prints A e B)
+        const historyLoggedOutBox = document.getElementById("historyLoggedOutBox");
+        const userHistoryCarousel = document.getElementById("userHistoryCarousel");
+        let currentUserHistoryList = [];
+
+        // Salva o vídeo reproduzido no histórico do usuário logado (máximo 7 vídeos)
+        async function saveVideoToUserHistory(videoData, videoId) {
+            if (!currentUserEmail || !auth.currentUser) return;
+
+            const videoEntry = {
+                id: videoId,
+                name: videoData.name || "Vídeo",
+                channel: videoData.channel || "Fruit Senpai",
+                thumbUrl: videoData.thumbUrl || videoData.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400",
+                duration: videoData.duration || "24:00",
+                viewsCount: videoData.viewsCount || 0,
+                timestamp: new Date().toISOString()
+            };
+
+            // Remove ocorrência anterior do mesmo vídeo para evitar duplicata
+            currentUserHistoryList = currentUserHistoryList.filter(item => item.id !== videoId);
+            // Coloca no topo (mais recente primeiro)
+            currentUserHistoryList.unshift(videoEntry);
+            // Mantém no máximo os 7 últimos vídeos
+            if (currentUserHistoryList.length > 7) {
+                currentUserHistoryList = currentUserHistoryList.slice(0, 7);
+            }
+
+            // Salva no Firestore sob o perfil do usuário
+            try {
+                const userRef = doc(db, "users", auth.currentUser.uid);
+                await setDoc(userRef, { history: currentUserHistoryList }, { merge: true });
+            } catch (err) {}
+
+            // Salva no cache local do dispositivo
+            localStorage.setItem(`history_${currentUserEmail}`, JSON.stringify(currentUserHistoryList));
+
+            renderUserHistoryCarousel();
+        }
+
+        // Carrega o histórico ao fazer login ou carregar a página
+        async function loadUserHistory() {
+            if (!currentUserEmail || !auth.currentUser) {
+                currentUserHistoryList = [];
+                if (historyLoggedOutBox) historyLoggedOutBox.style.display = "block";
+                if (userHistoryCarousel) userHistoryCarousel.style.display = "none";
+                return;
+            }
+
+            // Usuário logado: esconde o aviso e exibe o carrossel (Print A)
+            if (historyLoggedOutBox) historyLoggedOutBox.style.display = "none";
+            if (userHistoryCarousel) userHistoryCarousel.style.display = "flex";
+
+            // Lê primeiro do cache local para resposta instantânea
+            const localData = localStorage.getItem(`history_${currentUserEmail}`);
+            if (localData) {
+                try {
+                    currentUserHistoryList = JSON.parse(localData);
+                    renderUserHistoryCarousel();
+                } catch(e) {}
+            }
+
+            // Sincroniza em tempo real com o Firestore
+            try {
+                const userRef = doc(db, "users", auth.currentUser.uid);
+                const snap = await getDoc(userRef);
+                if (snap.exists() && Array.isArray(snap.data().history)) {
+                    currentUserHistoryList = snap.data().history.slice(0, 7);
+                    localStorage.setItem(`history_${currentUserEmail}`, JSON.stringify(currentUserHistoryList));
+                    renderUserHistoryCarousel();
+                }
+            } catch(err) {}
+        }
+
+        // Renderiza o carrossel dos 7 últimos episódios assistidos (Print A)
+        function renderUserHistoryCarousel() {
+            if (!userHistoryCarousel) return;
+            userHistoryCarousel.innerHTML = "";
+
+            if (currentUserHistoryList.length === 0) {
+                userHistoryCarousel.innerHTML = `<div style="padding:16px 14px; font-size:12px; color:#888888;">Nenhum vídeo assistido recentemente.</div>`;
+                return;
+            }
+
+            currentUserHistoryList.forEach(item => {
+                const card = document.createElement("div");
+                card.className = "history-card";
+                card.innerHTML = `
+                    <div class="history-thumb-box">
+                        <img src="${escapeHtml(item.thumbUrl)}" alt="Capa">
+                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                        <div class="history-progress-bar"></div>
+                    </div>
+                    <div class="history-card-details">
+                        <div class="history-card-texts">
+                            <div class="history-card-title" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+                            <div class="history-card-channel">${escapeHtml(item.channel || "Fruit Senpai")}</div>
+                            <div class="history-card-meta">${formatNumber(item.viewsCount || 0)} visualizações • ${formatTimeAgo(item.timestamp)}</div>
+                        </div>
+                        <button class="fs-kebab-btn-mini btnHistoryItemKebab" type="button" aria-label="Mais opções">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    </div>
+                `;
+
+                // Ao clicar no card, abre direto a página do player daquele vídeo
+                card.onclick = (e) => {
+                    if (e.target.closest(".btnHistoryItemKebab")) return;
+                    openWatchScreen(item, item.id);
+                };
+
+                const kebabBtn = card.querySelector(".btnHistoryItemKebab");
+                if (kebabBtn) {
+                    kebabBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        currentWatchVideoId = item.id;
+                        drawerVideoKebab.classList.add("active");
+                    };
+                }
+
+                userHistoryCarousel.appendChild(card);
+            });
+        }
 
         if (btnAddNewAccount) {
             btnAddNewAccount.addEventListener("click", () => {
@@ -8592,6 +8832,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         function openWatchScreen(videoData, videoId) {
             currentWatchVideoId = videoId;
             openScreen(viewWatchVideo);
+
+            // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
+            saveVideoToUserHistory(videoData, videoId);
 
             const title = videoData.name || "Vídeo sem título";
             if (watchVideoTitle) watchVideoTitle.textContent = title;
