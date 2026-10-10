@@ -1848,11 +1848,21 @@
             justify-content: center;
             cursor: pointer;
             flex-shrink: 0;
+            transition: transform 0.15s;
+        }
+
+        .playlist-btn-circle-action:active {
+            transform: scale(1.1);
         }
 
         .playlist-btn-circle-action svg {
             width: 20px;
             height: 20px;
+            fill: #ffffff;
+        }
+
+        /* Estado salvo do bookmark do visitante (Print B) */
+        .playlist-btn-circle-action.saved-filled svg {
             fill: #ffffff;
         }
 
@@ -5567,15 +5577,29 @@
                     <div class="playlist-description-3lines" id="plDescriptionDisplayBox" style="display:none;"></div>
                 </div>
 
-                <!-- Botões de Ação: Reproduzir tudo, Lápis Editar e 3 Pontinhos -->
+                <!-- Botões de Ação Dinâmicos: Dono vs Visitante (Prints A e B) -->
                 <div class="playlist-action-buttons-row">
                     <button class="playlist-btn-play-all" id="btnPlayAllPlaylistVideos" type="button">
                         <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                         <span>Reproduzir tudo</span>
                     </button>
+
+                    <!-- Botão Editar do Dono (Lápis) -->
                     <button class="playlist-btn-circle-action" id="btnOpenEditPlaylistModal" type="button" aria-label="Editar">
                         <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                     </button>
+
+                    <!-- Botão Salvar do Visitante (Bookmark - Prints A e B) -->
+                    <button class="playlist-btn-circle-action" id="btnSavePlaylistBookmarkAction" type="button" style="display:none;" aria-label="Salvar playlist">
+                        <svg id="svgBookmarkIcon" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/></svg>
+                    </button>
+
+                    <!-- Botão Compartilhar do Visitante (Print A) -->
+                    <button class="playlist-btn-circle-action" id="btnSharePlaylistVisitorAction" type="button" style="display:none;" aria-label="Compartilhar">
+                        <svg viewBox="0 0 24 24"><path d="M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z"/></svg>
+                    </button>
+
+                    <!-- Menu Kebab 3 Pontinhos -->
                     <button class="playlist-btn-circle-action" id="btnOpenPlaylistKebabModal" type="button" aria-label="Opções">
                         <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                     </button>
@@ -7446,6 +7470,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         const plVideosListContainer = document.getElementById("plVideosListContainer");
         const btnPlayAllPlaylistVideos = document.getElementById("btnPlayAllPlaylistVideos");
         const btnOpenEditPlaylistModal = document.getElementById("btnOpenEditPlaylistModal");
+        const btnSavePlaylistBookmarkAction = document.getElementById("btnSavePlaylistBookmarkAction");
+        const btnSharePlaylistVisitorAction = document.getElementById("btnSharePlaylistVisitorAction");
+        const svgBookmarkIcon = document.getElementById("svgBookmarkIcon");
         const btnOpenPlaylistKebabModal = document.getElementById("btnOpenPlaylistKebabModal");
         const btnTopPlaylistKebab = document.getElementById("btnTopPlaylistKebab");
         const btnOpenSortDrawer = document.getElementById("btnOpenSortDrawer");
@@ -7456,6 +7483,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         const drawerPlaylistMainOptions = document.getElementById("drawerPlaylistMainOptions");
         const btnOptionShufflePlay = document.getElementById("btnOptionShufflePlay");
         const btnOptionDeletePlaylist = document.getElementById("btnOptionDeletePlaylist");
+
+        let isPlaylistCurrentlySavedByUser = false;
 
         // Gavetas de Edição (B2, C2, D2)
         const drawerEditPlaylistFull = document.getElementById("drawerEditPlaylistFull");
@@ -7561,13 +7590,33 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             tempEditedVisibility = foundDoc.visibility || "Privada";
             tempEditedDescription = foundDoc.description || "";
 
+            // Identifica se o usuário atual é o DONO ou VISITANTE
+            const isOwner = currentUserEmail && (foundDoc.user === currentUserEmail) && !foundDoc.isSavedFromOtherUser;
+
+            if (isOwner) {
+                // DONO: Lápis para editar ativado, botões de salvar/compartilhar ocultos, opção de excluir visível
+                btnOpenEditPlaylistModal.style.display = "flex";
+                btnSavePlaylistBookmarkAction.style.display = "none";
+                btnSharePlaylistVisitorAction.style.display = "none";
+                btnOptionDeletePlaylist.style.display = "flex";
+            } else {
+                // VISITANTE (Prints A, B e C): Lápis e exclusão ocultos, botões de salvar e compartilhar ativados
+                btnOpenEditPlaylistModal.style.display = "none";
+                btnSavePlaylistBookmarkAction.style.display = "flex";
+                btnSharePlaylistVisitorAction.style.display = "flex";
+                btnOptionDeletePlaylist.style.display = "none";
+            }
+
+            // Verifica se o visitante já salvou essa playlist pública em sua biblioteca
+            checkIfPlaylistIsSavedByVisitor(foundDoc.id);
+
             // Renderiza cabeçalho e metadados reais
             plDetailHeaderTitle.textContent = foundDoc.title || "Demonstração";
-            const author = foundDoc.user ? (foundDoc.user.includes("@") ? getNameFromEmail(foundDoc.user) : foundDoc.user) : "Error404 Not afound";
+            const author = foundDoc.originalAuthor || (foundDoc.user ? (foundDoc.user.includes("@") ? getNameFromEmail(foundDoc.user) : foundDoc.user) : "Error404 Not afound");
             plCreatorNameText.textContent = author;
             plCreatorAvatarLetter.textContent = author.charAt(0).toUpperCase();
-            plVisibilityBadgeText.textContent = foundDoc.visibility || "Privado";
-            plViewsCountLabelText.textContent = `${foundDoc.viewsCount || 0} visualização`;
+            plVisibilityBadgeText.textContent = foundDoc.visibility || "Pública";
+            plViewsCountLabelText.textContent = `${foundDoc.viewsCount || 0} visualizações`;
 
             // Descrição (limite de 3 linhas)
             if (foundDoc.description && foundDoc.description.trim()) {
@@ -7779,6 +7828,94 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         btnPlayAllPlaylistVideos.addEventListener("click", () => {
             isPlaylistShuffleActive = false;
             startPlaylistPlaybackAt(0);
+        });
+
+        // Verifica se a playlist pública está salva na conta do visitante
+        async function checkIfPlaylistIsSavedByVisitor(playlistId) {
+            if (!currentUserEmail) {
+                isPlaylistCurrentlySavedByUser = false;
+                updateBookmarkButtonUI(false);
+                return;
+            }
+
+            try {
+                const savedDocId = `saved_${currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_')}_${playlistId}`;
+                const snap = await getDoc(doc(db, "series_playlists", savedDocId));
+                isPlaylistCurrentlySavedByUser = snap.exists();
+                updateBookmarkButtonUI(isPlaylistCurrentlySavedByUser);
+            } catch(e) {
+                isPlaylistCurrentlySavedByUser = false;
+                updateBookmarkButtonUI(false);
+            }
+        }
+
+        function updateBookmarkButtonUI(isSaved) {
+            if (!svgBookmarkIcon || !btnSavePlaylistBookmarkAction) return;
+            if (isSaved) {
+                btnSavePlaylistBookmarkAction.classList.add("saved-filled");
+                svgBookmarkIcon.innerHTML = `<path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/>`;
+            } else {
+                btnSavePlaylistBookmarkAction.classList.remove("saved-filled");
+                svgBookmarkIcon.innerHTML = `<path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"/>`;
+            }
+        }
+
+        // Clique no botão Salvar do Visitante (Prints A e B)
+        btnSavePlaylistBookmarkAction.addEventListener("click", async () => {
+            // Se NÃO estiver logado: abre o modal de login
+            if (!currentUserEmail) {
+                openAuthModal();
+                return;
+            }
+
+            try {
+                const savedDocId = `saved_${currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_')}_${currentPlaylistData.id}`;
+                const savedDocRef = doc(db, "series_playlists", savedDocId);
+
+                if (!isPlaylistCurrentlySavedByUser) {
+                    // Salva a playlist pública na biblioteca do visitante (Prints B, D e E)
+                    const originalCreator = currentPlaylistData.originalAuthor || (currentPlaylistData.user ? (currentPlaylistData.user.includes("@") ? getNameFromEmail(currentPlaylistData.user) : currentPlaylistData.user) : "ANCAPSU");
+                    
+                    await setDoc(savedDocRef, {
+                        title: currentPlaylistData.title,
+                        visibility: "Pública",
+                        user: currentUserEmail,
+                        originalAuthor: originalCreator,
+                        isSavedFromOtherUser: true,
+                        originalPlaylistId: currentPlaylistData.id,
+                        series: currentPlaylistData.series || [],
+                        videos: currentPlaylistData.videos || [],
+                        coverUrl: currentPlaylistData.coverUrl || plCoverImg.src,
+                        type: "series",
+                        createdAt: serverTimestamp()
+                    });
+
+                    isPlaylistCurrentlySavedByUser = true;
+                    updateBookmarkButtonUI(true);
+                    showCoverSnackbar("Salva na biblioteca", plCoverImg.src);
+                } else {
+                    // Remove da biblioteca
+                    await deleteDoc(savedDocRef);
+                    isPlaylistCurrentlySavedByUser = false;
+                    updateBookmarkButtonUI(false);
+                    showCoverSnackbar("Removida da biblioteca", plCoverImg.src);
+                }
+
+                // Atualiza o carrossel da tela Você (Print D) e a página Ver tudo (Print E)
+                loadAllUserPlaylistsDynamic();
+            } catch(err) {
+                console.error("Erro ao salvar playlist:", err);
+            }
+        });
+
+        // Botão Compartilhar do Visitante
+        btnSharePlaylistVisitorAction.addEventListener("click", () => {
+            if (navigator.share) {
+                navigator.share({ title: currentPlaylistData.title, url: window.location.href }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showToast("Link copiado para a área de transferência!");
+            }
         });
 
         // Alternar Loop (Print E3)
