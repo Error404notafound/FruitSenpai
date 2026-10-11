@@ -276,7 +276,14 @@
             border-radius: 4px;
             display: inline-flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
+        }
+
+        .fs-badge-pill svg {
+            width: 10px;
+            height: 10px;
+            fill: currentColor;
+            flex-shrink: 0;
         }
 
         .fs-link-more {
@@ -757,12 +764,23 @@
             position: absolute;
             top: 4px;
             left: 4px;
-            background: rgba(230, 81, 0, 0.85);
-            color: #fff;
+            background: rgba(230, 81, 0, 0.9);
+            color: #ffffff;
             font-size: 8.5px;
             font-weight: 700;
-            padding: 2px 4px;
+            padding: 2px 5px;
             border-radius: 3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            z-index: 2;
+        }
+
+        .fs-badge-trend svg {
+            width: 9px;
+            height: 9px;
+            fill: currentColor;
+            flex-shrink: 0;
         }
 
         .fs-poster-title {
@@ -4657,53 +4675,20 @@
                 </div>
             </section>
 
-            <!-- 5. SEÇÃO: EM ALTA - TOP 5 -->
+            <!-- 5. SEÇÃO: EM ALTA - TOP 5 (DINÂMICO: TOP 5 MAIS CURTIDOS NOS ÚLTIMOS 3 DIAS) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Em Alta - Top 5</h3>
-                        <span class="fs-badge-pill">⚡ ÚLTIMOS 3 DIAS</span>
+                        <span class="fs-badge-pill">
+                            <svg viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+                            <span>ÚLTIMOS 3 DIAS</span>
+                        </span>
                     </div>
                 </div>
 
-                <div class="fs-carousel">
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb">
-                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="AOT">
-                            <span class="fs-badge-trend">🔥 MAIS QUENTE</span>
-                        </div>
-                        <div class="fs-poster-title">Attack on Titan...</div>
-                        <div class="fs-poster-genre">Shōnen</div>
-                    </div>
-
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb">
-                            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Bleach">
-                            <span class="fs-badge-trend" style="background:#f59e0b;">🔥 EM ALTA</span>
-                        </div>
-                        <div class="fs-poster-title">Bleach (Dublado)</div>
-                        <div class="fs-poster-genre">Super Poder</div>
-                    </div>
-
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb">
-                            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="One Piece">
-                            <span class="fs-badge-trend" style="background:#f59e0b;">🔥 EM ALTA</span>
-                        </div>
-                        <div class="fs-poster-title">One Piece...</div>
-                        <div class="fs-poster-genre">Shōnen</div>
-                    </div>
-
-                    <div class="fs-poster-card">
-                        <div class="fs-poster-thumb">
-                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" alt="Kusuriya">
-                            <span class="fs-badge-trend" style="background:#f59e0b;">🔥 EM ALTA</span>
-                        </div>
-                        <div class="fs-poster-title">Kusuriya no...</div>
-                        <div class="fs-poster-genre">Mistério</div>
-                    </div>
-                </div>
+                <div class="fs-carousel" id="top5TrendingCarousel"></div>
             </section>
 
             <!-- 6. SEÇÃO: SEU HISTÓRICO (PRINTS A E B) -->
@@ -10644,6 +10629,119 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         loadMostWatchedSeriesFromFirestore();
+
+        // Carrega em tempo real o Top 5 Em Alta somando as curtidas dos episódios nos últimos 3 dias
+        const top5TrendingCarousel = document.getElementById("top5TrendingCarousel");
+
+        function loadTop5TrendingSeriesFromFirestore() {
+            if (!top5TrendingCarousel) return;
+
+            onSnapshot(collection(db, "series"), (seriesSnapshot) => {
+                onSnapshot(frutasColecao, (videosSnapshot) => {
+                    const seriesLikesRanking = [];
+                    const threeDaysAgoTimestamp = Date.now() - (3 * 24 * 60 * 60 * 1000);
+
+                    seriesSnapshot.forEach((sDoc) => {
+                        const sData = { id: sDoc.id, ...sDoc.data() };
+                        const sTitle = (sData.title || "").toLowerCase().trim();
+                        if (!sTitle) return;
+
+                        let recentLikesCount = 0;
+                        let totalLikesFallback = 0;
+
+                        videosSnapshot.forEach((vDoc) => {
+                            const vData = vDoc.data();
+                            const vChannel = (vData.channel || "").toLowerCase().trim();
+                            const vName = (vData.name || "").toLowerCase().trim();
+
+                            if (vChannel === sTitle || vChannel.includes(sTitle) || vName.includes(sTitle)) {
+                                const epLikes = Number(vData.likesCount || 0);
+                                totalLikesFallback += epLikes;
+
+                                // Verifica se o episódio teve atividade nos últimos 3 dias
+                                const epTime = (vData.timestamp && vData.timestamp.seconds) ? (vData.timestamp.seconds * 1000) : 0;
+                                if (epTime >= threeDaysAgoTimestamp || epTime === 0) {
+                                    recentLikesCount += epLikes;
+                                }
+                            }
+                        });
+
+                        seriesLikesRanking.push({
+                            ...sData,
+                            periodLikes: recentLikesCount > 0 ? recentLikesCount : totalLikesFallback
+                        });
+                    });
+
+                    // Ordena da mais curtida para a menos curtida
+                    seriesLikesRanking.sort((a, b) => b.periodLikes - a.periodLikes);
+
+                    // Pega exatamente as 5 primeiras séries
+                    const top5Series = seriesLikesRanking.slice(0, 5);
+
+                    top5TrendingCarousel.innerHTML = "";
+
+                    if (top5Series.length === 0) {
+                        const defaultTop5 = [
+                            { title: "Attack on Titan", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", genres: ["Shōnen", "Ação"] },
+                            { title: "Bleach (Dublado)", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400", genres: ["Super Poder", "Ação"] },
+                            { title: "One Piece", coverUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", genres: ["Shōnen", "Aventura"] },
+                            { title: "Kusuriya no Hitorigoto", coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400", genres: ["Mistério", "Drama"] },
+                            { title: "Hunter x Hunter", coverUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", genres: ["Fantasia", "Aventura"] }
+                        ];
+
+                        defaultTop5.forEach((item, index) => {
+                            renderTop5TrendingCard(item, index + 1);
+                        });
+                    } else {
+                        top5Series.forEach((item, index) => {
+                            renderTop5TrendingCard(item, index + 1);
+                        });
+                    }
+                });
+            });
+        }
+
+        // Renderiza cada card vertical com SVG de fogo e gênero aleatório
+        function renderTop5TrendingCard(item, rankPosition) {
+            const card = document.createElement("div");
+            card.className = "fs-poster-card";
+            const coverImage = item.coverUrl || item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+            const seriesTitle = item.title || item.name || "Série";
+
+            // Sorteia exatamente 1 gênero único da série
+            let randomGenre = "Anime";
+            if (Array.isArray(item.genres) && item.genres.length > 0) {
+                const rIdx = Math.floor(Math.random() * item.genres.length);
+                randomGenre = item.genres[rIdx];
+            } else if (item.genre) {
+                randomGenre = item.genre;
+            }
+
+            // O 1º lugar ganha "MAIS QUENTE" em vermelho; do 2º ao 5º ganham "EM ALTA" em amarelo
+            const isHottest = (rankPosition === 1);
+            const badgeLabel = isHottest ? "MAIS QUENTE" : "EM ALTA";
+            const badgeStyle = isHottest ? "background:rgba(229, 9, 20, 0.95);" : "background:#f59e0b;";
+
+            card.innerHTML = `
+                <div class="fs-poster-thumb">
+                    <img src="${escapeHtml(coverImage)}" alt="${escapeHtml(seriesTitle)}">
+                    <span class="fs-badge-trend" style="${badgeStyle}">
+                        <svg viewBox="0 0 24 24"><path d="M12 23c-4.42 0-8-3.58-8-8 0-3.38 1.21-6.49 3.23-8.89l-.03.36c0 2.06 1.56 3.73 3.63 3.73 2.06 0 3.41-1.67 3.41-3.73 0-2.15-.74-4.8-.74-4.8 3.91 3.13 6.5 7.94 6.5 13.33 0 4.42-3.58 8-8 8zm0-2c2.21 0 4-3.14 4-7 0-.28.01-.56.03-.84-.89.54-1.93.84-3.03.84-2.41 0-4.41-1.23-5.46-3.08C6.56 11.04 6 12.47 6 14c0 3.31 2.69 6 6 6z"/></svg>
+                        <span>${badgeLabel}</span>
+                    </span>
+                </div>
+                <div class="fs-poster-title" title="${escapeHtml(seriesTitle)}">${escapeHtml(seriesTitle)}</div>
+                <div class="fs-poster-genre" title="${escapeHtml(randomGenre)}">${escapeHtml(randomGenre)}</div>
+            `;
+
+            card.onclick = () => {
+                openSeriesChannel(seriesTitle);
+            };
+
+            top5TrendingCarousel.appendChild(card);
+        }
+
+        loadTop5TrendingSeriesFromFirestore();
     </script>
 </body>
   </html>
