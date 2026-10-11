@@ -1106,6 +1106,574 @@
             text-decoration: underline;
         }
 
+        /* ==========================================================================
+           ESTILOS DO SISTEMA DE GRUPOS E COMUNIDADES (PRINTS A ATÉ P)
+           ========================================================================== */
+        .group-screen-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #0f0f0f;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 480px;
+            z-index: 9998;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 75px;
+        }
+
+        .group-screen-view.active {
+            display: flex;
+        }
+
+        .group-top-bar {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background-color: #0f0f0f;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .group-chip-tabs-bar {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 14px;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .group-chip-tabs-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .group-chip-pill {
+            background-color: #212121;
+            color: #ffffff;
+            border: none;
+            border-radius: 18px;
+            height: 36px;
+            padding: 0 14px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .group-chip-pill.active {
+            background-color: #27415d;
+            color: #ffffff;
+        }
+
+        .group-chip-pill svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .group-create-action-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            cursor: pointer;
+        }
+
+        .group-create-plus-icon-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #242424;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .group-create-plus-icon-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+        }
+
+        .group-item-list-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 16px;
+            cursor: pointer;
+        }
+
+        .group-item-avatar-thumb {
+            width: 48px;
+            height: 48px;
+            min-width: 48px;
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #272727;
+        }
+
+        .group-item-avatar-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .group-item-texts-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .group-item-name-text {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .group-item-sub-meta {
+            font-size: 11.5px;
+            color: #aaaaaa;
+        }
+
+        .group-item-sub-meta.has-badge {
+            color: #3ea6ff;
+            font-weight: 600;
+        }
+
+        /* Foto de Capa do Grupo com o Botão de Voltar '<' no Topo Esquerdo (Print N) */
+        .group-banner-cover-container {
+            width: 100%;
+            aspect-ratio: 16 / 7;
+            position: relative;
+            background-color: #212121;
+            overflow: hidden;
+        }
+
+        .group-banner-cover-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .group-cover-chevron-back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.65);
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .group-cover-chevron-back-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+        }
+
+        .group-cover-edit-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-radius: 16px;
+            padding: 5px 12px;
+            font-size: 11.5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .group-cover-edit-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        /* Cabeçalho de Detalhes do Grupo */
+        .group-page-header-info {
+            padding: 14px 16px 8px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .group-page-title-h1 {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .group-page-meta-row {
+            font-size: 12.5px;
+            color: #aaaaaa;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .group-page-meta-row svg {
+            width: 14px;
+            height: 14px;
+            fill: #aaaaaa;
+        }
+
+        /* Linha de Membros e Botão "+ Convidar" Branco Compacto (Prints L e N) */
+        .group-members-action-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px 12px 16px;
+            gap: 12px;
+        }
+
+        .group-members-stack-box {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .group-member-avatar-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 2px solid #0f0f0f;
+            background-color: #444444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-right: -8px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .group-member-avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .group-member-avatar-circle.more-dots {
+            background-color: #272727;
+            color: #ffffff;
+            margin-right: 0;
+            margin-left: 2px;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .group-invite-btn-white {
+            background-color: #ffffff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 18px;
+            height: 36px;
+            padding: 0 16px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .group-invite-btn-white svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .group-join-full-btn {
+            width: calc(100% - 32px);
+            margin: 6px 16px 12px 16px;
+            height: 38px;
+            background-color: #ffffff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 19px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* Barra de Criação Rápida de Post no Grupo */
+        .group-quick-post-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .group-quick-post-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #555555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .group-quick-post-input-fake {
+            flex: 1;
+            background-color: #212121;
+            border-radius: 20px;
+            height: 38px;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            color: #aaaaaa;
+            font-size: 13.5px;
+            cursor: pointer;
+        }
+
+        .group-quick-post-photo-btn {
+            background: none;
+            border: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            gap: 2px;
+            color: #aaaaaa;
+            font-size: 10px;
+        }
+
+        .group-quick-post-photo-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #11c76f;
+        }
+
+        .group-quick-post-shortcuts-row {
+            display: flex;
+            gap: 8px;
+            padding: 10px 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .group-quick-post-shortcuts-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .group-shortcut-pill {
+            background-color: #212121;
+            color: #ffffff;
+            border: none;
+            border-radius: 16px;
+            height: 32px;
+            padding: 0 12px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .group-shortcut-pill svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+        }
+
+        /* Card de Publicação no Feed do Grupo (Print P) */
+        .group-post-feed-card {
+            display: flex;
+            flex-direction: column;
+            background-color: #141414;
+            border-bottom: 8px solid #000000;
+            padding: 14px 0 6px 0;
+        }
+
+        .group-post-author-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px 10px 16px;
+        }
+
+        .group-post-author-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .group-post-author-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background-color: #333333;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .group-post-author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .group-post-author-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .group-post-timestamp {
+            font-size: 11px;
+            color: #aaaaaa;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 1px;
+        }
+
+        .group-post-timestamp svg {
+            width: 12px;
+            height: 12px;
+            fill: #aaaaaa;
+        }
+
+        .group-post-text-content {
+            padding: 0 16px 12px 16px;
+            font-size: 14.5px;
+            color: #f1f1f1;
+            line-height: 1.4;
+        }
+
+        .group-post-media-box {
+            width: 100%;
+            background-color: #000000;
+            max-height: 480px;
+            overflow: hidden;
+        }
+
+        .group-post-media-box img {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .group-post-actions-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 6px;
+        }
+
+        .group-post-comment-input-fake {
+            margin: 4px 16px 8px 16px;
+            background-color: #212121;
+            border-radius: 18px;
+            height: 36px;
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            font-size: 12.5px;
+            color: #aaaaaa;
+            cursor: pointer;
+        }
+
+        /* Telas das Etapas de Criação do Grupo (Prints D, E, F, G, H, I, J) */
+        .group-step-input-box {
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .group-step-boxed-input {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px 14px;
+            background-color: #121212;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
+            width: 100%;
+        }
+
+        .group-step-boxed-input:focus {
+            border-color: #3ea6ff;
+        }
+
+        .group-step-primary-btn {
+            width: 100%;
+            height: 44px;
+            border-radius: 22px;
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+            border: none;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
         /* Estilos do Carrossel de Histórico (Print A) */
         .history-card {
             min-width: 150px;
@@ -5489,6 +6057,12 @@
                         <svg viewBox="0 0 24 24"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
                         <span>Seus vídeos</span>
                     </button>
+
+                    <!-- Botão Seus Grupos (Print A) -->
+                    <button class="profile-menu-item" id="btnOpenUserGroupsList" type="button">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <span>Seus grupos</span>
+                    </button>
                     <!-- Botão E (Abre Filmes E1) -->
                     <button class="profile-menu-item" id="btnOpenMovies">
                         <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
@@ -5700,6 +6274,315 @@
 
                 <!-- Lista Vertical de Todas as Playlists do Usuário (Print C) -->
                 <div class="all-playlists-vertical-list" id="allPlaylistsVerticalContainer"></div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA PRINT B E C: LISTA DE GRUPOS DO USUÁRIO
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewUserGroupsList">
+            <div class="group-top-bar">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button class="yt-icon-btn btnGroupBackStep" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    </button>
+                    <div class="yt-logo-area">
+                        <img src="https://raw.githubusercontent.com/Error404notafound/FruitSenpai/main/20261001_022059.png" alt="Logo" class="fruit-logo-img">
+                        <span class="yt-logo-text">FruitSenpai</span>
+                    </div>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
+                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
+                </div>
+            </div>
+
+            <!-- Scroll Horizontal de Filtros Superiores (Prints B e C) -->
+            <div class="group-chip-tabs-bar">
+                <button class="group-chip-pill active" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <span>Seus grupos</span>
+                </button>
+                <button class="group-chip-pill" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                    <span>Posts</span>
+                </button>
+                <button class="group-chip-pill" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1 1.1-.49 1.1-1.1-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
+                    <span>Descobrir</span>
+                </button>
+                <button class="group-chip-pill" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span>Convites</span>
+                </button>
+            </div>
+
+            <!-- Botão "+ Crie um grupo" (Print B) -->
+            <div class="group-create-action-row" id="btnTriggerCreateGroup">
+                <div class="group-create-plus-icon-btn">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </div>
+                <div style="font-size:16px; font-weight:700; color:#ffffff;">Crie um grupo</div>
+            </div>
+
+            <div style="padding: 10px 16px 6px 16px; font-size:15px; font-weight:700; color:#ffffff;">Mais visitados</div>
+            
+            <!-- Lista Dinâmica Real dos Grupos (Zero duplicações) -->
+            <div id="userGroupsRealContainer" style="display:flex; flex-direction:column; gap:4px;"></div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA PRINT D E F: ETAPA 1 DA CRIAÇÃO DO GRUPO (NOME E PRIVACIDADE)
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewCreateGroupStep1">
+            <div class="group-top-bar">
+                <button class="yt-icon-btn btnGroupBackStep" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <span style="font-size:16px; font-weight:700; color:#ffffff;">Criar grupo</span>
+                <div style="width:36px;"></div>
+            </div>
+
+            <div class="group-step-input-box">
+                <!-- Ícone Câmera SVG (Sem emojis) -->
+                <div style="width:68px; height:68px; border-radius:50%; background:#242424; margin:10px auto 4px auto; display:flex; align-items:center; justify-content:center;">
+                    <svg style="width:28px;height:28px;fill:#ffffff;" viewBox="0 0 24 24"><path d="M12 15c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0-8c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm8 4h-2.15l-1.45-2H7.6l-1.45 2H4c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+
+                <div>
+                    <label style="font-size:12px; color:#aaa; margin-bottom:4px; display:block;">Nome do grupo</label>
+                    <input type="text" id="inputNewGroupName" class="group-step-boxed-input" maxlength="50" placeholder="Dê um nome ao seu grupo">
+                </div>
+
+                <div>
+                    <label style="font-size:12px; color:#aaa; margin-bottom:4px; display:block;">Privacidade</label>
+                    <button class="group-step-boxed-input" id="btnOpenGroupPrivacyChoice" type="button" style="display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
+                        <span id="txtGroupPrivacyVal">Público</span>
+                        <svg style="width:18px;height:18px;fill:#aaa;" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Caixa Informativa Dinâmica (Print F) -->
+                <div style="background:#191919; border-radius:10px; padding:12px; font-size:12px; color:#cccccc; line-height:1.4;" id="boxPrivacyExplainer">
+                    Qualquer pessoa pode ver quem está no grupo e o que postam. Dependendo da idade e do tamanho do grupo, talvez você consiga torná-lo privado mais tarde.
+                </div>
+
+                <button class="group-step-primary-btn" id="btnSubmitGroupStep1" type="button">Criar</button>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             GAVETA PRINT E: ESCOLHA A PRIVACIDADE DO GRUPO (100% SVG)
+             ========================================================================== -->
+        <div class="accounts-drawer" id="drawerGroupPrivacyModal" style="z-index:10005;">
+            <div class="accounts-sheet" style="padding:14px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0 16px 12px 16px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <button class="yt-icon-btn" id="btnCloseGroupPrivacy"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                        <h4 style="font-size:16px; font-weight:700;">Escolha a privacidade</h4>
+                    </div>
+                    <button class="fs-link-more" id="btnConfirmGroupPrivacyChoice" style="color:#3ea6ff; font-weight:700;">Concluir</button>
+                </div>
+
+                <div class="account-item-row optGroupPrivacyChoice" data-privacy="Público">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#aaa;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                        <div>
+                            <div style="font-weight:700; color:#fff;">Público</div>
+                            <small style="color:#aaa;">Qualquer pessoa pode ver os membros e os posts do grupo.</small>
+                        </div>
+                    </div>
+                    <svg class="svgRadioPrivacy" style="width:20px;height:20px;fill:#3ea6ff;" viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+                </div>
+
+                <div class="account-item-row optGroupPrivacyChoice" data-privacy="Privado">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#aaa;" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        <div>
+                            <div style="font-weight:700; color:#fff;">Privado</div>
+                            <small style="color:#aaa;">Somente os membros podem ver quem está no grupo e o que postam nele.</small>
+                        </div>
+                    </div>
+                    <svg class="svgRadioPrivacy" style="width:20px;height:20px;fill:#777;display:none;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             TELA PRINT G: ADICIONAR DESCRIÇÃO DO GRUPO
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewCreateGroupDesc">
+            <div class="group-top-bar">
+                <button class="yt-icon-btn btnGroupBackStep" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <span style="font-size:16px; font-weight:700; color:#ffffff;">Descrição</span>
+                <button class="fs-link-more" id="btnDoneGroupDesc" style="color:#3ea6ff; font-weight:700; font-size:14px;">Concluir</button>
+            </div>
+
+            <div style="padding:16px;">
+                <h2 style="font-size:20px; font-weight:800; color:#fff; margin-bottom:6px;">Adicionar descrição</h2>
+                <p style="font-size:12.5px; color:#aaa; margin-bottom:16px;">Descreva seu grupo para que as pessoas saibam sobre o que ele é.</p>
+                <textarea id="txtAreaNewGroupDesc" class="group-step-boxed-input" style="height:150px; resize:none;" placeholder="Descreva o tema do seu grupo..."></textarea>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA PRINT H: CONVIDAR MEMBROS
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewGroupInviteStep">
+            <div class="group-top-bar">
+                <button class="yt-icon-btn btnGroupBackStep" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <span style="font-size:16px; font-weight:700; color:#ffffff;">Convidar membros</span>
+                <button class="fs-link-more" id="btnDoneGroupInvite" style="color:#3ea6ff; font-weight:700; font-size:14px;">Concluir</button>
+            </div>
+
+            <div style="padding:16px;">
+                <h2 style="font-size:20px; font-weight:800; color:#fff; margin-bottom:6px;">Seu grupo foi criado</h2>
+                <p style="font-size:12.5px; color:#aaa; margin-bottom:16px;">Reúna pessoas que pensam como você convidando amigos para seu grupo.</p>
+                <button class="group-step-boxed-input" id="btnShareGroupLinkAction" style="display:flex; align-items:center; gap:10px; cursor:pointer;" type="button">
+                    <svg style="width:18px;height:18px;fill:#fff;" viewBox="0 0 24 24"><path d="M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z"/></svg>
+                    <span>Compartilhar grupo</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA PRINT I: CRIAR POST INAUGURAL
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewGroupFirstPostStep">
+            <div class="group-top-bar">
+                <button class="yt-icon-btn btnGroupBackStep" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <span style="font-size:16px; font-weight:700; color:#ffffff;">Criar post</span>
+                <button class="fs-link-more" id="btnDoneFirstPostStep" style="color:#3ea6ff; font-weight:700; font-size:14px;">Concluir</button>
+            </div>
+
+            <div style="padding:20px 16px;">
+                <h2 style="font-size:20px; font-weight:800; color:#fff; margin-bottom:6px;">Criar post</h2>
+                <p style="font-size:12.5px; color:#aaa; margin-bottom:20px;">Você pode definir o tom do seu novo grupo e iniciar a conversa com um post.</p>
+                <button class="group-step-primary-btn" id="btnOpenPostModalFromStep" type="button">Criar post</button>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA OFICIAL DA COMUNIDADE / GRUPO (PRINTS K, L, M, N, O, P)
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewGroupDetail">
+            <!-- Capa do Grupo com o Botão Chevron '<' no Canto Superior Esquerdo (Print N) -->
+            <div class="group-banner-cover-container">
+                <img id="imgGroupCoverBanner" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Capa do Grupo">
+                <button class="group-cover-chevron-back-btn" id="btnLeaveGroupViewToGroupsList" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <button class="group-cover-edit-btn" id="btnEditGroupCoverPhoto">
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    <span>EDITAR</span>
+                </button>
+            </div>
+
+            <!-- Título e Metadados do Grupo (100% SVG, sem emojis) -->
+            <div class="group-page-header-info">
+                <h1 class="group-page-title-h1" id="txtGroupPageTitle">FruitSenpai Group</h1>
+                <div class="group-page-meta-row">
+                    <svg id="svgGroupPrivacyHeaderIcon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    <span id="txtGroupPagePrivacyType">Grupo Público</span>
+                    <span>•</span>
+                    <span id="txtGroupPageMembersCount">1 membro</span>
+                </div>
+            </div>
+
+            <!-- Membros e Botão "+ Convidar" Branco Compacto (Prints L e N) -->
+            <div class="group-members-action-row" id="rowGroupMembersAndInvite">
+                <div class="group-members-stack-box" id="groupMembersAvatarsStack">
+                    <div class="group-member-avatar-circle">E</div>
+                </div>
+                <button class="group-invite-btn-white" id="btnGroupInviteMembersAction" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    <span>Convidar</span>
+                </button>
+            </div>
+
+            <!-- Botão "Participar do grupo" para visitantes (Print O) -->
+            <button class="group-join-full-btn" id="btnJoinGroupAction" style="display:none;" type="button">Participar do grupo</button>
+
+            <!-- Barra de Criação Rápida de Post -->
+            <div class="group-quick-post-box">
+                <div class="group-quick-post-avatar" id="avatarQuickPostUser">U</div>
+                <div class="group-quick-post-input-fake" id="btnTriggerCreatePostModal">Escreva algo...</div>
+                <button class="group-quick-post-photo-btn" id="btnQuickPostPhoto" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                    <span>Foto</span>
+                </button>
+            </div>
+
+            <!-- Atalhos: Post Anônimo, Sentimento, Enquete (100% SVG) -->
+            <div class="group-quick-post-shortcuts-row">
+                <button class="group-shortcut-pill" id="btnQuickPostAnonymous" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 12.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span>Post anônimo</span>
+                </button>
+                <button class="group-shortcut-pill" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+                    <span>Sentimento</span>
+                </button>
+                <button class="group-shortcut-pill" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                    <span>Enquete</span>
+                </button>
+            </div>
+
+            <!-- Feed de Publicações da Comunidade (Print P) -->
+            <div id="groupPostsFeedContainer" style="display:flex; flex-direction:column;"></div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA PRINT J: CRIAR POST DENTRO DO GRUPO
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewCreateGroupPostModal">
+            <div class="group-top-bar">
+                <button class="yt-icon-btn btnGroupBackStep" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <span id="txtGroupPostModalGroupName" style="font-size:16px; font-weight:700; color:#ffffff;">Postar no Grupo</span>
+                <button class="fs-link-more" id="btnSubmitGroupPostTop" style="color:#3ea6ff; font-weight:700; font-size:14px;">POSTAR</button>
+            </div>
+
+            <div style="padding:16px; display:flex; flex-direction:column; gap:14px;">
+                <!-- Alternador de Post Anônimo -->
+                <div style="background:#1e1e1e; border-radius:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between;">
+                    <div style="font-size:13.5px; font-weight:600; color:#ffffff;">Postar anonimamente</div>
+                    <div class="yt-switch" id="switchPostAnonymous"></div>
+                </div>
+
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div class="group-post-author-avatar" id="avatarPostModalUser">U</div>
+                    <div>
+                        <div style="font-weight:700; font-size:14px; color:#fff;" id="namePostModalUser">Usuário</div>
+                        <small style="color:#aaa;">Grupo público</small>
+                    </div>
+                </div>
+
+                <textarea id="txtAreaGroupPostContent" class="group-step-boxed-input" style="height:120px; resize:none;" placeholder="Escreva algo..."></textarea>
+
+                <!-- Input Opcional de Imagem / Vídeo -->
+                <div id="boxPostMediaInput" style="display:none; flex-direction:column; gap:6px;">
+                    <label style="font-size:12px; color:#aaa;">Link da Foto ou Vídeo:</label>
+                    <input type="url" id="inputGroupPostMediaUrl" class="group-step-boxed-input" placeholder="Cole o link da foto ou vídeo aqui...">
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:4px;">
+                    <button class="group-shortcut-pill" id="btnToggleMediaBox" type="button">
+                        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                        <span>Foto / Vídeo</span>
+                    </button>
+                </div>
+
+                <button class="group-step-primary-btn" id="btnSubmitGroupPostBottom" type="button" style="margin-top:20px;">POSTAR</button>
             </div>
         </section>
 
@@ -7674,10 +8557,18 @@
         // Navegação de Telas com Ajuste Inteligente do Cabeçalho Único
         const headerWrapper = document.querySelector(".yt-header-wrapper");
 
-        function openScreen(screen) {
+        // Histórico de navegação sem sobreposição de telas
+        let screenNavigationHistory = [];
+
+        function openScreen(screen, addToHistory = true) {
+            if (addToHistory && screen !== "home") {
+                screenNavigationHistory.push(screen);
+            }
+
             feedContainer.style.display = "none";
             chipsBar.style.display = "none";
             document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".group-screen-view").forEach(s => s.classList.remove("active"));
 
             // Na tela Inicial (Home): Mostra logotipo, lupa e o sino (apenas se logado)
             if (screen === "home") {
@@ -7713,11 +8604,14 @@
             openScreen(viewYou);
         });
 
-        // Clicar em "Início" volta para o Feed
+        // Clicar em "Início" fecha qualquer criação ou grupo aberto e vai direto ao Feed Principal
         document.getElementById("navHome").addEventListener("click", () => {
+            screenNavigationHistory = [];
+            document.querySelectorAll(".group-screen-view").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".accounts-drawer").forEach(d => d.classList.remove("active"));
             document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
             document.getElementById("navHome").classList.add("active");
-            openScreen("home");
+            openScreen("home", false);
         });
 
         // Clicar em "Shorts"
@@ -10742,6 +11636,500 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         loadTop5TrendingSeriesFromFirestore();
-    </script>
+
+        // ==========================================================================
+        // LÓGICA DO SISTEMA DE GRUPOS E COMUNIDADES (PRINTS B ATÉ P)
+        // ==========================================================================
+        const viewUserGroupsList = document.getElementById("viewUserGroupsList");
+        const viewCreateGroupStep1 = document.getElementById("viewCreateGroupStep1");
+        const viewCreateGroupDesc = document.getElementById("viewCreateGroupDesc");
+        const viewGroupInviteStep = document.getElementById("viewGroupInviteStep");
+        const viewGroupFirstPostStep = document.getElementById("viewGroupFirstPostStep");
+        const viewGroupDetail = document.getElementById("viewGroupDetail");
+        const viewCreateGroupPostModal = document.getElementById("viewCreateGroupPostModal");
+
+        const btnOpenUserGroupsList = document.getElementById("btnOpenUserGroupsList");
+        const btnTriggerCreateGroup = document.getElementById("btnTriggerCreateGroup");
+        const userGroupsRealContainer = document.getElementById("userGroupsRealContainer");
+
+        // Criação do Grupo
+        const inputNewGroupName = document.getElementById("inputNewGroupName");
+        const btnOpenGroupPrivacyChoice = document.getElementById("btnOpenGroupPrivacyChoice");
+        const drawerGroupPrivacyModal = document.getElementById("drawerGroupPrivacyModal");
+        const btnCloseGroupPrivacy = document.getElementById("btnCloseGroupPrivacy");
+        const btnConfirmGroupPrivacyChoice = document.getElementById("btnConfirmGroupPrivacyChoice");
+        const txtGroupPrivacyVal = document.getElementById("txtGroupPrivacyVal");
+        const boxPrivacyExplainer = document.getElementById("boxPrivacyExplainer");
+        const btnSubmitGroupStep1 = document.getElementById("btnSubmitGroupStep1");
+
+        const txtAreaNewGroupDesc = document.getElementById("txtAreaNewGroupDesc");
+        const btnDoneGroupDesc = document.getElementById("btnDoneGroupDesc");
+        const btnDoneGroupInvite = document.getElementById("btnDoneGroupInvite");
+        const btnDoneFirstPostStep = document.getElementById("btnDoneFirstPostStep");
+        const btnOpenPostModalFromStep = document.getElementById("btnOpenPostModalFromStep");
+        const btnShareGroupLinkAction = document.getElementById("btnShareGroupLinkAction");
+
+        // Página do Grupo
+        const imgGroupCoverBanner = document.getElementById("imgGroupCoverBanner");
+        const btnLeaveGroupViewToGroupsList = document.getElementById("btnLeaveGroupViewToGroupsList");
+        const btnEditGroupCoverPhoto = document.getElementById("btnEditGroupCoverPhoto");
+        const txtGroupPageTitle = document.getElementById("txtGroupPageTitle");
+        const txtGroupPagePrivacyType = document.getElementById("txtGroupPagePrivacyType");
+        const txtGroupPageMembersCount = document.getElementById("txtGroupPageMembersCount");
+        const groupMembersAvatarsStack = document.getElementById("groupMembersAvatarsStack");
+        const btnGroupInviteMembersAction = document.getElementById("btnGroupInviteMembersAction");
+        const btnJoinGroupAction = document.getElementById("btnJoinGroupAction");
+        const btnTriggerCreatePostModal = document.getElementById("btnTriggerCreatePostModal");
+        const btnQuickPostPhoto = document.getElementById("btnQuickPostPhoto");
+        const btnQuickPostAnonymous = document.getElementById("btnQuickPostAnonymous");
+        const groupPostsFeedContainer = document.getElementById("groupPostsFeedContainer");
+
+        // Modal de Post
+        const txtGroupPostModalGroupName = document.getElementById("txtGroupPostModalGroupName");
+        const switchPostAnonymous = document.getElementById("switchPostAnonymous");
+        const namePostModalUser = document.getElementById("namePostModalUser");
+        const txtAreaGroupPostContent = document.getElementById("txtAreaGroupPostContent");
+        const boxPostMediaInput = document.getElementById("boxPostMediaInput");
+        const inputGroupPostMediaUrl = document.getElementById("inputGroupPostMediaUrl");
+        const btnToggleMediaBox = document.getElementById("btnToggleMediaBox");
+        const btnSubmitGroupPostTop = document.getElementById("btnSubmitGroupPostTop");
+        const btnSubmitGroupPostBottom = document.getElementById("btnSubmitGroupPostBottom");
+
+        let currentActiveGroupId = null;
+        let currentActiveGroupData = null;
+        let tempSelectedGroupPrivacy = "Público";
+        let isAnonymousPostActive = false;
+
+        // Botão chevron de voltar "<" que retorna à etapa anterior
+        document.querySelectorAll(".btnGroupBackStep").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (screenNavigationHistory.length > 1) {
+                    screenNavigationHistory.pop(); // Remove a tela atual
+                    const previousScreen = screenNavigationHistory.pop(); // Pega a anterior
+                    openScreen(previousScreen);
+                } else {
+                    openScreen(viewUserGroupsList);
+                }
+            });
+        });
+
+        // 1. Abrir lista de grupos a partir de "Você" (Print A -> Print B)
+        if (btnOpenUserGroupsList) {
+            btnOpenUserGroupsList.addEventListener("click", () => {
+                openScreen(viewUserGroupsList);
+                loadRealUserGroups();
+            });
+        }
+
+        // 2. Clicar em "+ Crie um grupo" (Print B -> Print D)
+        if (btnTriggerCreateGroup) {
+            btnTriggerCreateGroup.addEventListener("click", () => {
+                if (!currentUserEmail) return openAuthModal();
+                inputNewGroupName.value = "";
+                tempSelectedGroupPrivacy = "Público";
+                txtGroupPrivacyVal.textContent = "Público";
+                openScreen(viewCreateGroupStep1);
+            });
+        }
+
+        // 3. Escolher Privacidade do Grupo (Print D -> Print E e F)
+        if (btnOpenGroupPrivacyChoice) {
+            btnOpenGroupPrivacyChoice.addEventListener("click", () => {
+                drawerGroupPrivacyModal.classList.add("active");
+            });
+        }
+
+        if (btnCloseGroupPrivacy) {
+            btnCloseGroupPrivacy.addEventListener("click", () => {
+                drawerGroupPrivacyModal.classList.remove("active");
+            });
+        }
+
+        document.querySelectorAll(".optGroupPrivacyChoice").forEach(row => {
+            row.addEventListener("click", () => {
+                tempSelectedGroupPrivacy = row.getAttribute("data-privacy");
+                document.querySelectorAll(".optGroupPrivacyChoice .svgRadioPrivacy").forEach(radio => radio.style.display = "none");
+                const radioSelected = row.querySelector(".svgRadioPrivacy");
+                if (radioSelected) radioSelected.style.display = "block";
+            });
+        });
+
+        if (btnConfirmGroupPrivacyChoice) {
+            btnConfirmGroupPrivacyChoice.addEventListener("click", () => {
+                drawerGroupPrivacyModal.classList.remove("active");
+                txtGroupPrivacyVal.textContent = tempSelectedGroupPrivacy;
+                if (tempSelectedGroupPrivacy === "Público") {
+                    boxPrivacyExplainer.textContent = "Qualquer pessoa pode ver quem está no grupo e o que postam. Dependendo da idade e do tamanho do grupo, talvez você consiga torná-lo privado mais tarde.";
+                } else {
+                    boxPrivacyExplainer.textContent = "Somente os membros podem ver quem está no grupo e o que postam nele. Você pode alterar para público mais tarde.";
+                }
+            });
+        }
+
+        // 4. Salvar Etapa 1 e Avançar para Descrição (Print F -> Print G)
+        if (btnSubmitGroupStep1) {
+            btnSubmitGroupStep1.addEventListener("click", async () => {
+                const groupName = inputNewGroupName.value.trim();
+                if (!groupName) {
+                    alert("Por favor, dê um nome ao seu grupo.");
+                    inputNewGroupName.focus();
+                    return;
+                }
+
+                try {
+                    btnSubmitGroupStep1.disabled = true;
+                    const docRef = await addDoc(collection(db, "groups"), {
+                        name: groupName,
+                        privacy: tempSelectedGroupPrivacy,
+                        creator: currentUserEmail,
+                        creatorName: getNameFromEmail(currentUserEmail),
+                        members: [currentUserEmail],
+                        bannerUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800",
+                        description: "",
+                        postsCount: 0,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+
+                    currentActiveGroupId = docRef.id;
+                    currentActiveGroupData = {
+                        id: docRef.id,
+                        name: groupName,
+                        privacy: tempSelectedGroupPrivacy,
+                        creator: currentUserEmail,
+                        members: [currentUserEmail]
+                    };
+
+                    txtAreaNewGroupDesc.value = "";
+                    openScreen(viewCreateGroupDesc);
+                } catch (e) {
+                    console.error("Erro ao criar grupo:", e);
+                } finally {
+                    btnSubmitGroupStep1.disabled = false;
+                }
+            });
+        }
+
+        // 5. Concluir Descrição e ir para Convidar (Print G -> Print H)
+        if (btnDoneGroupDesc) {
+            btnDoneGroupDesc.addEventListener("click", async () => {
+                const desc = txtAreaNewGroupDesc.value.trim();
+                if (currentActiveGroupId && desc) {
+                    try {
+                        await setDoc(doc(db, "groups", currentActiveGroupId), { description: desc }, { merge: true });
+                    } catch (e) {}
+                }
+                openScreen(viewGroupInviteStep);
+            });
+        }
+
+        // 6. Concluir Convidar e ir para Criar Post Inicial (Print H -> Print I)
+        if (btnDoneGroupInvite) {
+            btnDoneGroupInvite.addEventListener("click", () => {
+                openScreen(viewGroupFirstPostStep);
+            });
+        }
+
+        if (btnShareGroupLinkAction) {
+            btnShareGroupLinkAction.addEventListener("click", () => {
+                navigator.clipboard.writeText(window.location.href);
+                showToast("Link do grupo copiado!");
+            });
+        }
+
+        // 7. Concluir Etapa Inicial e abrir a Página Oficial do Grupo (Print I -> Print K/L)
+        if (btnDoneFirstPostStep) {
+            btnDoneFirstPostStep.addEventListener("click", () => {
+                openGroupDetailPage(currentActiveGroupId);
+            });
+        }
+
+        if (btnOpenPostModalFromStep) {
+            btnOpenPostModalFromStep.addEventListener("click", () => {
+                openCreateGroupPostModal(false);
+            });
+        }
+
+        // 8. Abrir a Tela Oficial do Grupo
+        async function openGroupDetailPage(groupId) {
+            currentActiveGroupId = groupId;
+            openScreen(viewGroupDetail);
+            window.scrollTo(0, 0);
+
+            try {
+                const snap = await getDoc(doc(db, "groups", groupId));
+                if (snap.exists()) {
+                    currentActiveGroupData = { id: snap.id, ...snap.data() };
+                }
+            } catch(e) {}
+
+            if (!currentActiveGroupData) return;
+
+            txtGroupPageTitle.textContent = currentActiveGroupData.name || "Grupo";
+            txtGroupPagePrivacyType.textContent = `Grupo ${currentActiveGroupData.privacy || "Público"}`;
+
+            // Exibe a Foto de Capa Real do Grupo (Print N)
+            imgGroupCoverBanner.src = currentActiveGroupData.bannerUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+
+            // Membros reais
+            const membersList = Array.isArray(currentActiveGroupData.members) ? currentActiveGroupData.members : [currentActiveGroupData.creator];
+            txtGroupPageMembersCount.textContent = `${membersList.length} ${membersList.length === 1 ? 'membro' : 'membros'}`;
+
+            // Renderiza até 6 membros e coloca "..." se passar de 6 (Print N)
+            renderGroupMembersStack(membersList);
+
+            // Se for o dono ou membro: exibe botão "+ Convidar" branco; senão exibe "Participar do grupo" (Print O)
+            const isMember = currentUserEmail && membersList.includes(currentUserEmail);
+            if (isMember) {
+                btnJoinGroupAction.style.display = "none";
+                btnGroupInviteMembersAction.style.display = "flex";
+            } else {
+                btnJoinGroupAction.style.display = "block";
+                btnGroupInviteMembersAction.style.display = "none";
+            }
+
+            // Carrega em tempo real o Feed de Posts
+            loadGroupPostsRealtime(groupId);
+        }
+
+        // Voltar da página do grupo para a lista de grupos pelo botão '<'
+        btnLeaveGroupViewToGroupsList.addEventListener("click", () => {
+            openScreen(viewUserGroupsList);
+        });
+
+        // Renderiza a pilha de até 6 avatares (Print N)
+        function renderGroupMembersStack(members) {
+            groupMembersAvatarsStack.innerHTML = "";
+            const maxToShow = 6;
+            const sliceMembers = members.slice(0, maxToShow);
+
+            sliceMembers.forEach(m => {
+                const initial = m ? (m.includes("@") ? m.split("@")[0].charAt(0).toUpperCase() : String(m).charAt(0).toUpperCase()) : "U";
+                const div = document.createElement("div");
+                div.className = "group-member-avatar-circle";
+                div.textContent = initial;
+                groupMembersAvatarsStack.appendChild(div);
+            });
+
+            if (members.length > maxToShow) {
+                const moreDiv = document.createElement("div");
+                moreDiv.className = "group-member-avatar-circle more-dots";
+                moreDiv.textContent = "•••";
+                groupMembersAvatarsStack.appendChild(moreDiv);
+            }
+        }
+
+        // Participar do Grupo (Print O -> Print N)
+        btnJoinGroupAction.addEventListener("click", async () => {
+            if (!currentUserEmail) return openAuthModal();
+            try {
+                const members = Array.isArray(currentActiveGroupData.members) ? [...currentActiveGroupData.members] : [];
+                if (!members.includes(currentUserEmail)) {
+                    members.push(currentUserEmail);
+                    await setDoc(doc(db, "groups", currentActiveGroupId), { members: members }, { merge: true });
+                    currentActiveGroupData.members = members;
+                    openGroupDetailPage(currentActiveGroupId);
+                    showToast("Você entrou no grupo!");
+                }
+            } catch (e) {}
+        });
+
+        // 9. Modal de Postagem do Grupo (Print J)
+        function openCreateGroupPostModal(startAnonymous = false) {
+            if (!currentUserEmail) return openAuthModal();
+            isAnonymousPostActive = startAnonymous;
+            txtGroupPostModalGroupName.textContent = currentActiveGroupData ? currentActiveGroupData.name : "Postar no Grupo";
+            namePostModalUser.textContent = isAnonymousPostActive ? "Membro Anônimo" : getNameFromEmail(currentUserEmail);
+            switchPostAnonymous.classList.toggle("active", isAnonymousPostActive);
+            txtAreaGroupPostContent.value = "";
+            inputGroupPostMediaUrl.value = "";
+            boxPostMediaInput.style.display = "none";
+            openScreen(viewCreateGroupPostModal);
+        }
+
+        btnTriggerCreatePostModal.addEventListener("click", () => openCreateGroupPostModal(false));
+        btnQuickPostPhoto.addEventListener("click", () => {
+            openCreateGroupPostModal(false);
+            boxPostMediaInput.style.display = "flex";
+            inputGroupPostMediaUrl.focus();
+        });
+        btnQuickPostAnonymous.addEventListener("click", () => openCreateGroupPostModal(true));
+
+        switchPostAnonymous.addEventListener("click", () => {
+            isAnonymousPostActive = !isAnonymousPostActive;
+            switchPostAnonymous.classList.toggle("active", isAnonymousPostActive);
+            namePostModalUser.textContent = isAnonymousPostActive ? "Membro Anônimo" : getNameFromEmail(currentUserEmail);
+        });
+
+        btnToggleMediaBox.addEventListener("click", () => {
+            const isVisible = boxPostMediaInput.style.display === "flex";
+            boxPostMediaInput.style.display = isVisible ? "none" : "flex";
+            if (!isVisible) inputGroupPostMediaUrl.focus();
+        });
+
+        async function submitGroupPost() {
+            const text = txtAreaGroupPostContent.value.trim();
+            const media = inputGroupPostMediaUrl.value.trim();
+
+            if (!text && !media) {
+                alert("Por favor, escreva algo ou insira uma imagem.");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, `groups/${currentActiveGroupId}/posts`), {
+                    text: text,
+                    mediaUrl: media || null,
+                    author: currentUserEmail,
+                    authorName: isAnonymousPostActive ? "Membro Anônimo" : getNameFromEmail(currentUserEmail),
+                    isAnonymous: isAnonymousPostActive,
+                    createdAt: serverTimestamp()
+                });
+
+                openGroupDetailPage(currentActiveGroupId);
+                showToast("Post publicado no grupo!");
+            } catch (e) {
+                console.error("Erro ao postar:", e);
+            }
+        }
+
+        btnSubmitGroupPostTop.addEventListener("click", submitGroupPost);
+        btnSubmitGroupPostBottom.addEventListener("click", submitGroupPost);
+
+        // 10. Formatação de Data dos Posts (Print P)
+        function formatGroupPostDate(timestamp) {
+            if (!timestamp) return "agora mesmo";
+            let postDate;
+            if (timestamp.toDate) {
+                postDate = timestamp.toDate();
+            } else if (timestamp.seconds) {
+                postDate = new Date(timestamp.seconds * 1000);
+            } else {
+                postDate = new Date(timestamp);
+            }
+
+            const now = new Date();
+            const diffMs = now - postDate;
+            const diffMin = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMin / 60);
+            const diffDays = Math.floor(diffHours / 24);
+
+            if (diffMin < 1) return "agora mesmo";
+            if (diffMin === 1) return "há 1 minuto";
+            if (diffMin < 60) return `há ${diffMin} minutos`;
+            if (diffHours === 1) return "há 1 hora";
+            if (diffHours < 24) return `há ${diffHours} horas`;
+            if (diffDays === 1) return "há 1 dia";
+            if (diffDays <= 30) return `há ${diffDays} dias`;
+
+            // Mais de 1 mês: exibe a data exata (ex: 10 de abr. de 2022)
+            const months = ["jan.", "fev.", "mar.", "abr.", "mai.", "jun.", "jul.", "ago.", "set.", "out.", "nov.", "dez."];
+            return `${postDate.getDate()} de ${months[postDate.getMonth()]} de ${postDate.getFullYear()}`;
+        }
+
+        // Carrega os posts em tempo real para o feed do grupo (Print P)
+        function loadGroupPostsRealtime(groupId) {
+            groupPostsFeedContainer.innerHTML = "";
+            onSnapshot(collection(db, `groups/${groupId}/posts`), (snap) => {
+                groupPostsFeedContainer.innerHTML = "";
+                const postsList = [];
+                snap.forEach(d => postsList.push({ id: d.id, ...d.data() }));
+
+                postsList.sort((a, b) => {
+                    const timeA = (a.createdAt && a.createdAt.seconds) ? a.createdAt.seconds : 0;
+                    const timeB = (b.createdAt && b.createdAt.seconds) ? b.createdAt.seconds : 0;
+                    return timeB - timeA;
+                });
+
+                if (postsList.length === 0) {
+                    groupPostsFeedContainer.innerHTML = `<div style="padding:28px 16px; text-align:center; color:#888; font-size:13px;">Ainda não há posts neste grupo. Seja o primeiro a postar!</div>`;
+                    return;
+                }
+
+                postsList.forEach(p => {
+                    const card = document.createElement("article");
+                    card.className = "group-post-feed-card";
+                    const initial = p.authorName ? p.authorName.charAt(0).toUpperCase() : "U";
+
+                    card.innerHTML = `
+                        <div class="group-post-author-row">
+                            <div class="group-post-author-left">
+                                <div class="group-post-author-avatar">${initial}</div>
+                                <div>
+                                    <div class="group-post-author-name">${escapeHtml(p.authorName)}</div>
+                                    <div class="group-post-timestamp">
+                                        <span>${formatGroupPostDate(p.createdAt)}</span>
+                                        <span>•</span>
+                                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                        </div>
+                        ${p.text ? `<div class="group-post-text-content">${escapeHtml(p.text)}</div>` : ''}
+                        ${p.mediaUrl ? `<div class="group-post-media-box"><img src="${escapeHtml(p.mediaUrl)}" alt="Post"></div>` : ''}
+                        <div class="group-post-actions-bar">
+                            <div style="display:flex; align-items:center; gap:16px;">
+                                <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M18.77,11h-4.23l1.52-4.94C16.38,5.03,15.54,4,14.38,4c-0.58,0-1.14,0.24-1.52,0.65L7,11H3v10h4h1h9.43c1.06,0,1.98-0.67,2.19-1.61l1.34-6C21.23,12.15,20.18,11,18.77,11z"/></svg></button>
+                                <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M17,4h-1H6.57C5.5,4,4.59,4.67,4.38,5.61l-1.34,6C2.77,12.85,3.82,14,5.23,14h4.23l-1.52,4.94C7.62,19.97,8.46,21,9.62,21c0.58,0,1.14-0.24,1.52-0.65L17,14h4V4H17z"/></svg></button>
+                                <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z"/></svg></button>
+                            </div>
+                        </div>
+                        <div class="group-post-comment-input-fake">Adicione um comentário...</div>
+                    `;
+                    groupPostsFeedContainer.appendChild(card);
+                });
+            });
+        }
+
+        // 11. Carrega os grupos reais do Firebase (Eliminando duplicações e mockups)
+        function loadRealUserGroups() {
+            if (!userGroupsRealContainer) return;
+            userGroupsRealContainer.innerHTML = "";
+
+            onSnapshot(collection(db, "groups"), (snap) => {
+                userGroupsRealContainer.innerHTML = "";
+                const uniqueGroups = new Map();
+
+                snap.forEach(docSnap => {
+                    const g = { id: docSnap.id, ...docSnap.data() };
+                    uniqueGroups.set(docSnap.id, g);
+                });
+
+                if (uniqueGroups.size === 0) {
+                    userGroupsRealContainer.innerHTML = `<div style="padding:24px 16px; color:#888; font-size:13px; text-align:center;">Você ainda não participa de nenhum grupo. Clique em "+ Crie um grupo" acima para começar!</div>`;
+                    return;
+                }
+
+                uniqueGroups.forEach(g => {
+                    const row = document.createElement("div");
+                    row.className = "group-item-list-row";
+                    const initial = g.name ? g.name.charAt(0).toUpperCase() : "G";
+
+                    row.innerHTML = `
+                        <div class="group-item-avatar-thumb">
+                            ${g.bannerUrl 
+                                ? `<img src="${escapeHtml(g.bannerUrl)}" alt="Avatar">`
+                                : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#333;color:#fff;font-weight:700;">${initial}</div>`
+                            }
+                        </div>
+                        <div class="group-item-texts-wrap">
+                            <div class="group-item-name-text">${escapeHtml(g.name)}</div>
+                            <div class="group-item-sub-meta ${g.newPostsCount ? 'has-badge' : ''}">
+                                ${g.newPostsCount ? `• ${g.newPostsCount > 25 ? '25+' : g.newPostsCount} novos posts` : 'Atualizado recentemente.'}
+                            </div>
+                        </div>
+                    `;
+
+                    row.onclick = () => {
+                        openGroupDetailPage(g.id);
+                    };
+
+                    userGroupsRealContainer.appendChild(row);
+                });
+            });
+        }
+        
+        </script>
 </body>
   </html>
