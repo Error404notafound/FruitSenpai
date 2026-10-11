@@ -2604,19 +2604,6 @@
         }
 
         /* Formulários das Etapas de Criação (Prints D, G, H, I) */
-        .group-wizard-screen {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-            min-height: 100vh;
-            background-color: #0f0f0f;
-            padding-bottom: 60px;
-        }
-
-        .group-wizard-screen.active {
-            display: flex;
-        }
-
         .group-wizard-avatar-upload-box {
             width: 84px;
             height: 84px;
@@ -2686,11 +2673,11 @@
             line-height: 1.45;
         }
 
-        /* Tela do Grupo Completo (Prints K, L, M, N, O, P) */
+        /* Tela do Grupo Completo (Prints K, L, N, O, P) */
         .group-banner-hero-box {
             width: 100%;
             aspect-ratio: 16 / 9;
-            background-color: #212121;
+            background-color: #181818;
             position: relative;
             overflow: hidden;
         }
@@ -2700,6 +2687,30 @@
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+
+        /* Botão Voltar `<` no canto superior esquerdo da Capa (Fiel ao Print N) */
+        .group-floating-chevron-back-btn {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.65);
+            color: #ffffff;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .group-floating-chevron-back-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
         }
 
         .group-btn-edit-banner-admin {
@@ -2717,6 +2728,7 @@
             align-items: center;
             gap: 6px;
             cursor: pointer;
+            z-index: 5;
         }
 
         .group-btn-edit-banner-admin svg {
@@ -2747,11 +2759,24 @@
             gap: 6px;
         }
 
-        /* Sobreposição dos 6 membros mais recentes (Print N) */
+        .group-sub-stats-line svg {
+            width: 14px;
+            height: 14px;
+            fill: #aaaaaa;
+        }
+
+        /* Linha que alinha os membros e o botão branco compacto de convidar lado a lado (Prints L e N) */
+        .group-members-and-invite-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 6px;
+        }
+
         .group-members-overlap-stack {
             display: flex;
             align-items: center;
-            margin-top: 6px;
         }
 
         .group-member-stack-avatar {
@@ -2782,21 +2807,28 @@
             display: block;
         }
 
-        .group-primary-action-btn-blue {
-            width: 100%;
-            height: 38px;
-            border-radius: 8px;
-            background-color: #2563eb;
-            color: #ffffff;
+        /* Botão Branco Compacto "+ Convidar" ao lado das fotos (Prints L e N) */
+        .group-compact-btn-white {
+            height: 34px;
+            border-radius: 17px;
+            background-color: #ffffff;
+            color: #0f0f0f;
             border: none;
-            font-size: 13.5px;
+            font-size: 12.5px;
             font-weight: 700;
-            display: flex;
+            padding: 0 16px;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 6px;
             cursor: pointer;
-            margin-top: 6px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .group-compact-btn-white svg {
+            width: 16px;
+            height: 16px;
+            fill: #0f0f0f;
         }
 
         .group-primary-action-btn-white {
@@ -6328,9 +6360,9 @@
              FLUXO DE CRIAÇÃO DO GRUPO (PRINTS D, E, F, G, H, I)
              ========================================================================== -->
         <!-- ETAPA 1: NOME E PRIVACIDADE (PRINTS D E F) -->
-        <section class="group-wizard-screen" id="viewCreateGroupStep1">
+        <section class="yt-subview" id="viewCreateGroupStep1">
             <div class="yt-subview-header">
-                <button class="yt-icon-btn" id="btnBackFromGroupWizard1" type="button"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+                <button class="yt-icon-btn" id="btnBackFromGroupWizard1" type="button"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
             </div>
             <div class="group-wizard-avatar-upload-box" id="btnUploadGroupAvatar">
                 <img id="imgGroupAvatarPreview" src="" alt="Avatar" style="display:none;">
@@ -6344,7 +6376,7 @@
                 <span id="txtGroupPrivacySelectedVal">Escolha a privacidade</span>
                 <svg style="width:18px;height:18px;fill:#aaa;" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
             </div>
-            <!-- Card explicativo que aparece após selecionar (Print F) -->
+            <!-- Card explicativo da privacidade (Print F) -->
             <div class="group-privacy-info-card-gray" id="cardGroupPrivacyExplanation" style="display:none;">
                 Qualquer pessoa pode ver quem está no grupo e o que postam. Dependendo da idade e do tamanho do grupo, talvez você consiga torná-lo privado mais tarde.
             </div>
@@ -6358,7 +6390,7 @@
             <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
                 <div style="display:flex; justify-content:space-between; align-items:center; padding:0 16px 14px 16px; border-bottom:1px solid rgba(255,255,255,0.08);">
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <button class="yt-icon-btn" id="btnCloseGroupPrivacy"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+                        <button class="yt-icon-btn" id="btnCloseGroupPrivacy"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
                         <h3 style="font-size:16px; font-weight:700;">Escolha a privacidade</h3>
                     </div>
                     <span id="btnConfirmGroupPrivacyDone" style="color:#3b82f6; font-size:14px; font-weight:700; cursor:pointer;">Concluir</span>
@@ -6387,10 +6419,10 @@
         </div>
 
         <!-- ETAPA 2: ADICIONAR DESCRIÇÃO (PRINT G) -->
-        <section class="group-wizard-screen" id="viewCreateGroupStep2">
+        <section class="yt-subview" id="viewCreateGroupStep2">
             <div class="yt-header" style="border-bottom:1px solid rgba(255,255,255,0.08);">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <button class="yt-icon-btn" id="btnBackFromGroupWizard2" type="button"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+                    <button class="yt-icon-btn" id="btnBackFromGroupWizard2" type="button"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
                     <span style="font-size:16px; font-weight:700; color:#fff;">Descrição</span>
                 </div>
                 <span id="btnFinishGroupDescription" style="color:#3b82f6; font-size:14px; font-weight:700; cursor:pointer;">Concluir</span>
@@ -6405,10 +6437,10 @@
         </section>
 
         <!-- ETAPA 3: CONVIDAR MEMBROS (PRINT H) -->
-        <section class="group-wizard-screen" id="viewCreateGroupStep3">
+        <section class="yt-subview" id="viewCreateGroupStep3">
             <div class="yt-header" style="border-bottom:1px solid rgba(255,255,255,0.08);">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <button class="yt-icon-btn" id="btnBackFromGroupWizard3" type="button"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+                    <button class="yt-icon-btn" id="btnBackFromGroupWizard3" type="button"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
                     <span style="font-size:16px; font-weight:700; color:#fff;">Convidar membros</span>
                 </div>
                 <span id="btnFinishGroupInvites" style="color:#3b82f6; font-size:14px; font-weight:700; cursor:pointer;">Concluir</span>
@@ -6428,10 +6460,10 @@
         </section>
 
         <!-- ETAPA 4: CRIAR POST INICIAL (PRINT I) -->
-        <section class="group-wizard-screen" id="viewCreateGroupStep4">
+        <section class="yt-subview" id="viewCreateGroupStep4">
             <div class="yt-header" style="border-bottom:1px solid rgba(255,255,255,0.08);">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <button class="yt-icon-btn" id="btnBackFromGroupWizard4" type="button"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+                    <button class="yt-icon-btn" id="btnBackFromGroupWizard4" type="button"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
                     <span style="font-size:16px; font-weight:700; color:#fff;">Criar post</span>
                 </div>
                 <span id="btnFinishGroupWizardComplete" style="color:#3b82f6; font-size:14px; font-weight:700; cursor:pointer;">Concluir</span>
@@ -6446,11 +6478,11 @@
         <!-- ==========================================================================
              TELA DE POSTAR NO GRUPO (PRINT J)
              ========================================================================== -->
-        <section class="group-wizard-screen" id="viewCreateGroupPostScreen">
+        <section class="yt-subview" id="viewCreateGroupPostScreen">
             <div class="yt-header" style="border-bottom:1px solid rgba(255,255,255,0.08);">
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <button class="yt-icon-btn" id="btnCloseGroupPostScreen" type="button"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
-                    <span style="font-size:16px; font-weight:700; color:#fff;" id="txtHeaderPostGroupName">FruitSenpai Group</span>
+                    <button class="yt-icon-btn" id="btnCloseGroupPostScreen" type="button"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></button>
+                    <span style="font-size:16px; font-weight:700; color:#fff;" id="txtHeaderPostGroupName">Grupo</span>
                 </div>
                 <span id="btnSubmitGroupPostTop" style="color:#3b82f6; font-size:14px; font-weight:800; cursor:pointer;">POSTAR</span>
             </div>
@@ -6459,14 +6491,20 @@
                 <span style="font-size:13.5px; font-weight:600; color:#fff;">Postar anonimamente</span>
                 <div class="yt-switch" id="switchPostAnonymously"></div>
             </div>
-            <!-- Perfil do autor do post -->
+            <!-- Perfil do autor do post com SVGs (Print J) -->
             <div style="display:flex; align-items:center; gap:12px; padding:14px 16px;">
                 <div class="group-post-avatar" id="postComposerAuthorAvatar">U</div>
                 <div>
                     <div style="font-size:14px; font-weight:700; color:#fff;" id="postComposerAuthorName">Usuário</div>
                     <div style="display:flex; gap:6px; margin-top:2px;">
-                        <span style="font-size:11px; background:#262626; padding:2px 6px; border-radius:4px; color:#aaa;">🕒 Programar</span>
-                        <span style="font-size:11px; background:#262626; padding:2px 6px; border-radius:4px; color:#aaa;">🌐 Grupo público</span>
+                        <span style="font-size:11px; background:#262626; padding:2px 8px; border-radius:4px; color:#aaa; display:inline-flex; align-items:center; gap:4px;">
+                            <svg style="width:12px;height:12px;fill:#aaa;" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                            <span>Programar</span>
+                        </span>
+                        <span style="font-size:11px; background:#262626; padding:2px 8px; border-radius:4px; color:#aaa; display:inline-flex; align-items:center; gap:4px;">
+                            <svg style="width:12px;height:12px;fill:#aaa;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            <span>Grupo público</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -6497,22 +6535,107 @@
              PÁGINA DO GRUPO (PRINTS K, L, M, N, O, P)
              ========================================================================== -->
         <section class="yt-subview" id="viewGroupDetail">
-            <div class="yt-header-wrapper" style="position:sticky; top:0; z-index:50;">
-                <div class="yt-header">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <button class="yt-icon-btn" id="btnBackFromGroupDetail" type="button"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
-                        <span style="font-size:16px; font-weight:700; color:#fff;" id="txtTopBarGroupName">FruitSenpai Group</span>
-                    </div>
-                    <div class="yt-header-actions">
-                        <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
-                        <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
-                    </div>
+            <!-- Capa do Grupo com botão voltar `<` em círculo translúcido (Print N) -->
+            <div class="group-banner-hero-box">
+                <button class="group-floating-chevron-back-btn" id="btnBackFromGroupDetail" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <img id="imgGroupBannerHero" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Capa">
+                <button class="group-btn-edit-banner-admin" id="btnAdminEditCover" type="button" style="display:none;">
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    <span>EDITAR</span>
+                </button>
+            </div>
+
+            <!-- Cabeçalho com Título, Metadados e Linha com Membros + Botão Convidar Branco (Prints L e N) -->
+            <div class="group-profile-meta-section">
+                <h1 class="group-title-h1" id="txtGroupMainTitle">Grupo</h1>
+                <div class="group-sub-stats-line">
+                    <svg id="svgGroupPrivacyIconBadge" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    <span id="txtGroupPrivacyTag">Grupo Público</span>
+                    <span>•</span>
+                    <span id="txtGroupMembersCount">1 membro</span>
+                </div>
+
+                <!-- Membros e Botão Branco Convidar lado a lado (Prints L e N) -->
+                <div class="group-members-and-invite-row">
+                    <div class="group-members-overlap-stack" id="groupMembersOverlapContainer"></div>
+                    <button class="group-compact-btn-white" id="btnGroupInvitePrimary" type="button" style="display:none;">
+                        <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <span>Convidar</span>
+                    </button>
+                    <button class="group-compact-btn-white" id="btnGroupJoinVisitor" type="button" style="display:none;">
+                        <span>Participar</span>
+                    </button>
+                </div>
+
+                <!-- Ações do Administrador (Gerenciar / Eventos) -->
+                <div class="group-admin-actions-row" id="groupAdminActionPills" style="display:none;">
+                    <button class="group-pill-admin-btn" type="button">Gerenciar</button>
+                    <button class="group-pill-admin-btn" type="button">Eventos</button>
                 </div>
             </div>
 
-            <!-- Capa do Grupo (Print K, N) -->
-            <div class="group-banner-hero-box">
-                <img id="imgGroupBannerHero" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Capa">
+            <!-- Seção "Sobre este grupo" para visitantes (Print O) -->
+            <div id="groupAboutVisitorBox" style="display:none; padding:12px 16px; border-top:1px solid rgba(255,255,255,0.08);">
+                <h4 style="font-size:14px; font-weight:700; color:#fff; margin-bottom:4px;">Sobre este grupo</h4>
+                <p style="font-size:12.5px; color:#aaa; line-height:1.45;" id="txtGroupAboutVisitorDesc"></p>
+            </div>
+
+            <!-- Checklist do Administrador (Print M) -->
+            <div class="group-setup-checklist-box" id="groupAdminSetupChecklist" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h3 style="font-size:14.5px; font-weight:800; color:#fff;">Conclua a configuração do seu grupo</h3>
+                    <button class="yt-icon-btn" id="btnCloseGroupChecklist" style="padding:0;"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+                </div>
+                <p style="font-size:12px; color:#aaa; line-height:1.35; margin-top:-6px;">Continue adicionando detalhes importantes e comece a interagir com sua comunidade.</p>
+                <div class="group-checklist-row" id="chkRowInvite">
+                    <div class="group-checklist-left"><svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Convidar pessoas para participar</span></div>
+                    <button class="group-checklist-plus-btn">+</button>
+                </div>
+                <div class="group-checklist-row" id="chkRowCover">
+                    <div class="group-checklist-left"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg><span>Adicionar uma foto da capa</span></div>
+                    <button class="group-checklist-plus-btn">+</button>
+                </div>
+                <div class="group-checklist-row" id="chkRowDesc">
+                    <div class="group-checklist-left"><svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg><span>Adicionar uma descrição</span></div>
+                    <button class="group-checklist-plus-btn">+</button>
+                </div>
+                <div class="group-checklist-row" id="chkRowPost">
+                    <div class="group-checklist-left"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg><span>Criar um post</span></div>
+                    <button class="group-checklist-plus-btn">+</button>
+                </div>
+            </div>
+
+            <!-- Entrada de Publicação dentro do Grupo (Prints K e M) -->
+            <div class="group-post-composer-bar">
+                <div class="group-post-avatar" id="groupComposerUserAvatar">U</div>
+                <div class="group-composer-fake-input" id="btnOpenGroupPostNormal">Escreva algo...</div>
+                <button class="group-composer-photo-icon-btn" id="btnOpenGroupPostPhotoOnly" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                    <span>Foto</span>
+                </button>
+            </div>
+
+            <!-- Atalhos de Publicação Rápida com SVGs (Print K) -->
+            <div class="group-composer-pills-row">
+                <button class="group-shortcut-pill" id="btnOpenGroupPostAnonymous" type="button">
+                    <svg style="width:16px;height:16px;fill:#06b6d4;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span>Post anônimo</span>
+                </button>
+                <button class="group-shortcut-pill" type="button">
+                    <svg style="width:16px;height:16px;fill:#eab308;" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+                    <span>Sentimento</span>
+                </button>
+                <button class="group-shortcut-pill" type="button">
+                    <svg style="width:16px;height:16px;fill:#f97316;" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                    <span>Enquete</span>
+                </button>
+            </div>
+
+            <!-- Feed de Publicações do Grupo (Print P) -->
+            <div id="groupFeedPostsContainer" style="display:flex; flex-direction:column; padding-bottom:90px;"></div>
+        </section>
                 <button class="group-btn-edit-banner-admin" id="btnAdminEditCover" type="button" style="display:none;">
                     <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                     <span>EDITAR</span>
@@ -8872,13 +8995,15 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Botões Voltar do Wizard
+        // Botões Voltar que retornam estritamente à etapa anterior
         document.getElementById("btnBackFromGroupWizard1")?.addEventListener("click", () => openScreen(viewGroupsHome));
         document.getElementById("btnBackFromGroupWizard2")?.addEventListener("click", () => openScreen(viewCreateGroupStep1));
         document.getElementById("btnBackFromGroupWizard3")?.addEventListener("click", () => openScreen(viewCreateGroupStep2));
         document.getElementById("btnBackFromGroupWizard4")?.addEventListener("click", () => openScreen(viewCreateGroupStep3));
         if (btnCloseGroupPostScreen) btnCloseGroupPostScreen.addEventListener("click", () => openGroupDetailPage(currentActiveGroupId));
         if (btnBackFromGroupDetail) btnBackFromGroupDetail.addEventListener("click", () => openScreen(viewGroupsHome));
+
+        let groupsRealtimeUnsubscribe = null;
 
         // Preparar a tela de postagem (Print J)
         function prepareAndOpenGroupPostComposer(isAnonymous) {
@@ -9012,7 +9137,15 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
             txtTopBarGroupName.textContent = currentGroupData.name;
             txtGroupMainTitle.textContent = currentGroupData.name;
-            txtGroupPrivacyTag.textContent = currentGroupData.privacy === "Privado" ? "🔒 Grupo Privado" : "🌐 Grupo Público";
+            txtGroupPrivacyTag.textContent = currentGroupData.privacy === "Privado" ? "Grupo Privado" : "Grupo Público";
+
+            const svgPrivacyBadge = document.getElementById("svgGroupPrivacyIconBadge");
+            if (svgPrivacyBadge) {
+                svgPrivacyBadge.innerHTML = currentGroupData.privacy === "Privado" 
+                    ? `<path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>`
+                    : `<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>`;
+            }
+
             imgGroupBannerHero.src = currentGroupData.bannerUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
 
             const members = Array.isArray(currentGroupData.members) ? currentGroupData.members : [];
@@ -9141,36 +9274,40 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Carrega em tempo real a lista de grupos na tela principal (Prints B e C)
+        // Carrega em tempo real APENAS os grupos reais do Firestore, sem mockups e sem duplicatas
         function loadAllGroupsRealtime() {
-            onSnapshot(collection(db, "groups"), (snap) => {
+            if (groupsRealtimeUnsubscribe) {
+                groupsRealtimeUnsubscribe();
+            }
+
+            groupsRealtimeUnsubscribe = onSnapshot(collection(db, "groups"), (snap) => {
                 groupsVerticalListContainer.innerHTML = "";
-                const groupsList = [];
-                snap.forEach(d => groupsList.push({ id: d.id, ...d.data() }));
 
-                // Modelos padrão caso o banco esteja vazio
+                const uniqueGroupsMap = new Map();
+                snap.forEach(d => {
+                    if (!uniqueGroupsMap.has(d.id)) {
+                        uniqueGroupsMap.set(d.id, { id: d.id, ...d.data() });
+                    }
+                });
+
+                const groupsList = Array.from(uniqueGroupsMap.values());
+
                 if (groupsList.length === 0) {
-                    const defaults = [
-                        { id: "demo_g1", name: "Mezase Anime Master", sub: "Atualizado há cerca de 3 anos.", avatar: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=120" },
-                        { id: "demo_g2", name: "Waifus radish group", sub: "Atualizado há cerca de 3 semanas.", avatar: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=120" },
-                        { id: "demo_g3", name: "Construção Civil | Dicas e Soluções", sub: "• 25+ novos posts", isHighlight: true, avatar: "https://images.unsplash.com/photo-1563089145-599997674d42?w=120" },
-                        { id: "demo_g4", name: "FruitSenpai Group", sub: "Atualizado há 10 horas.", avatar: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=120" }
-                    ];
-
-                    defaults.forEach(g => renderSingleGroupRow(g));
-                } else {
-                    groupsList.forEach(g => {
-                        const count = g.postsCount || 0;
-                        const sub = count > 25 ? "• 25+ novos posts" : (count > 0 ? `• ${count} novos posts` : "Atualizado recentemente.");
-                        renderSingleGroupRow({
-                            id: g.id,
-                            name: g.name,
-                            sub: sub,
-                            isHighlight: count > 0,
-                            avatar: g.avatarUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=120"
-                        });
-                    });
+                    groupsVerticalListContainer.innerHTML = `<div style="padding:32px 16px; text-align:center; color:#888; font-size:13px;">Nenhum grupo criado ainda. Clique em "Crie um grupo" acima!</div>`;
+                    return;
                 }
+
+                groupsList.forEach(g => {
+                    const count = Number(g.postsCount) || 0;
+                    const sub = count > 25 ? "• 25+ novos posts" : (count > 0 ? `• ${count} novos posts` : "Atualizado recentemente.");
+                    renderSingleGroupRow({
+                        id: g.id,
+                        name: g.name || "Grupo",
+                        sub: sub,
+                        isHighlight: count > 0,
+                        avatar: g.avatarUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=120"
+                    });
+                });
             });
         }
 
