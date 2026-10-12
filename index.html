@@ -1276,13 +1276,15 @@
             font-weight: 600;
         }
 
-        /* Foto de Capa do Grupo com o Botão de Voltar '<' no Topo Esquerdo (Print N) */
+        /* Foto de Capa do Grupo com Altura Fixa de 180px e Botão '<' (Prints N e A) */
         .group-banner-cover-container {
             width: 100%;
-            aspect-ratio: 16 / 7;
+            height: 180px;
+            min-height: 180px;
             position: relative;
             background-color: #212121;
             overflow: hidden;
+            display: block;
         }
 
         .group-banner-cover-container img {
@@ -1294,8 +1296,8 @@
 
         .group-cover-chevron-back-btn {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 12px;
+            left: 12px;
             width: 36px;
             height: 36px;
             border-radius: 50%;
@@ -1317,13 +1319,13 @@
 
         .group-cover-edit-btn {
             position: absolute;
-            bottom: 10px;
-            right: 10px;
+            bottom: 12px;
+            right: 12px;
             background-color: rgba(0, 0, 0, 0.65);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #ffffff;
             border-radius: 16px;
-            padding: 5px 12px;
+            padding: 6px 14px;
             font-size: 11.5px;
             font-weight: 700;
             display: flex;
@@ -1336,7 +1338,7 @@
         .group-cover-edit-btn svg {
             width: 14px;
             height: 14px;
-            fill: currentColor;
+            fill: #ffffff;
         }
 
         /* Cabeçalho de Detalhes do Grupo */
@@ -1345,6 +1347,7 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
+            background-color: #0f0f0f;
         }
 
         .group-page-title-h1 {
@@ -1366,6 +1369,7 @@
             width: 14px;
             height: 14px;
             fill: #aaaaaa;
+            flex-shrink: 0;
         }
 
         /* Linha de Membros e Botão "+ Convidar" Branco Compacto (Prints L e N) */
@@ -1373,8 +1377,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 16px 12px 16px;
+            padding: 8px 16px 14px 16px;
             gap: 12px;
+            background-color: #0f0f0f;
         }
 
         .group-members-stack-box {
@@ -1437,12 +1442,12 @@
         .group-invite-btn-white svg {
             width: 16px;
             height: 16px;
-            fill: currentColor;
+            fill: #0f0f0f;
         }
 
         .group-join-full-btn {
             width: calc(100% - 32px);
-            margin: 6px 16px 12px 16px;
+            margin: 6px 16px 14px 16px;
             height: 38px;
             background-color: #ffffff;
             color: #0f0f0f;
@@ -1458,9 +1463,10 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 16px;
+            padding: 12px 16px;
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #0f0f0f;
         }
 
         .group-quick-post-avatar {
@@ -1507,13 +1513,18 @@
             fill: #11c76f;
         }
 
+        /* Linha de Atalhos com Altura Mínima Garantida (Sem Esmagar) */
         .group-quick-post-shortcuts-row {
             display: flex;
+            align-items: center;
             gap: 8px;
+            min-height: 52px;
             padding: 10px 16px;
             overflow-x: auto;
             scrollbar-width: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #0f0f0f;
+            box-sizing: border-box;
         }
 
         .group-quick-post-shortcuts-row::-webkit-scrollbar {
@@ -12049,11 +12060,13 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // 8. Abrir a Tela Oficial do Grupo
+        // 8. Abrir a Tela Oficial do Grupo com Banner e Barra Inferior Garantidos
         async function openGroupDetailPage(groupId) {
             currentActiveGroupId = groupId;
             openScreen(viewGroupDetail);
             window.scrollTo(0, 0);
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
 
             try {
                 const snap = await getDoc(doc(db, "groups", groupId));
@@ -12067,8 +12080,15 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             txtGroupPageTitle.textContent = currentActiveGroupData.name || "Grupo";
             txtGroupPagePrivacyType.textContent = `Grupo ${currentActiveGroupData.privacy || "Público"}`;
 
-            // Exibe a Foto de Capa Real do Grupo (Print N)
-            imgGroupCoverBanner.src = currentActiveGroupData.bannerUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+            // Exibe a Foto de Capa Real com Fallback Confiável
+            const safeBanner = currentActiveGroupData.bannerUrl && currentActiveGroupData.bannerUrl.trim()
+                ? currentActiveGroupData.bannerUrl.trim()
+                : "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+
+            if (imgGroupCoverBanner) {
+                imgGroupCoverBanner.src = safeBanner;
+                imgGroupCoverBanner.style.display = "block";
+            }
 
             // Membros reais
             const membersList = Array.isArray(currentActiveGroupData.members) ? currentActiveGroupData.members : [currentActiveGroupData.creator];
