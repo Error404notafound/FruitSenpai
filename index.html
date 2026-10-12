@@ -1113,23 +1113,35 @@
             display: none;
             flex-direction: column;
             width: 100%;
-            min-height: 100vh;
+            min-height: calc(100vh - var(--yt-bottom-nav-h));
             background-color: #0f0f0f;
+            position: relative;
+            z-index: 1;
+            padding-bottom: calc(var(--yt-bottom-nav-h) + 25px);
+        }
+
+        .group-screen-view.active {
+            display: flex;
+        }
+
+        /* Etapas de criação e edição continuam em tela cheia fixa */
+        #viewCreateGroupStep1,
+        #viewCreateGroupDesc,
+        #viewGroupInviteStep,
+        #viewGroupFirstPostStep,
+        #viewCreateGroupPostModal,
+        #viewEditGroupScreen {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             margin: 0 auto;
             max-width: 480px;
-            z-index: 9998;
+            height: 100vh;
+            height: 100dvh;
+            z-index: 10002;
             overflow-y: auto;
-            overflow-x: hidden;
-            -webkit-overflow-scrolling: touch;
-            padding-bottom: 75px;
-        }
-
-        .group-screen-view.active {
-            display: flex;
+            padding-bottom: 30px;
         }
 
         .group-top-bar {
@@ -8759,14 +8771,21 @@
                 feedContainer.style.display = "flex";
                 chipsBar.style.display = "flex";
             }
-            // Na tela Você (A2): Esconde o sino e exibe apenas 1 lupa e 1 engrenagem (fiel à captura)
+            // Na tela Você (A2): Esconde o sino e exibe apenas 1 lupa e 1 engrenagem
             else if (screen === viewYou) {
                 headerWrapper.style.display = "block";
                 btnBell.style.display = "none";
                 btnSettingsTop.style.display = "flex";
                 viewYou.classList.add("active");
             } 
-            // Em subtelas (Configurações, Filmes, Playlists): Oculta o topo principal para usar o topo nativo da tela com botão voltar
+            // Na tela do Grupo (viewGroupDetail) e na Lista de Grupos (viewUserGroupsList): Exibe o Logo FruitSenpai, Sino e Lupa
+            else if (screen === viewGroupDetail || screen === viewUserGroupsList) {
+                headerWrapper.style.display = "block";
+                btnBell.style.display = currentUserEmail ? "flex" : "none";
+                btnSettingsTop.style.display = "none";
+                screen.classList.add("active");
+            }
+            // Em subtelas de criação/modais (Fullscreen com botão próprio de fechar): Oculta o topo principal
             else if (screen) {
                 headerWrapper.style.display = "none";
                 screen.classList.add("active");
