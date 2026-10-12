@@ -662,79 +662,123 @@
             cursor: pointer;
         }
 
-        .fs-community-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+        /* Carrossel Horizontal da Comunidade Sushi (Print A) */
+        .fs-community-carousel {
+            display: flex;
+            gap: 12px;
             padding: 0 14px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .fs-community-carousel::-webkit-scrollbar {
+            display: none;
         }
 
         .fs-community-card {
+            min-width: 210px;
+            width: 210px;
             background: #141414;
-            border-radius: 12px;
+            border-radius: 14px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(255,255,255,0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.15s ease;
+        }
+
+        .fs-community-card:active {
+            transform: scale(0.98);
         }
 
         .fs-community-cover {
             width: 100%;
-            height: 60px;
+            height: 74px;
             position: relative;
-            background: #222;
+            background: #222222;
         }
 
         .fs-community-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .fs-community-icon {
             position: absolute;
             bottom: -10px;
             left: 10px;
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
             border: 2px solid #141414;
             overflow: hidden;
-            background: #333;
+            background: #333333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
         }
 
         .fs-community-icon img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .fs-community-info {
-            padding: 14px 10px 10px 10px;
+            padding: 16px 12px 12px 12px;
             display: flex;
             flex-direction: column;
             gap: 2px;
         }
 
         .fs-community-name {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
-            color: #fff;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
         }
 
         .fs-community-desc {
-            font-size: 10px;
-            color: #777;
+            font-size: 11px;
+            color: #888888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 1px;
+            line-height: 1.2;
+        }
+
+        .fs-community-stats {
+            font-size: 10.5px;
+            color: #e50914;
+            margin-top: 6px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .fs-community-stats {
-            font-size: 9.5px;
-            color: #e50914;
-            margin-top: 4px;
-            font-weight: 600;
+        .fs-community-stats svg {
+            width: 13px;
+            height: 13px;
+            fill: #e50914;
+            flex-shrink: 0;
         }
 
         .fs-poster-card {
@@ -5311,14 +5355,14 @@
                 <div class="fs-grid-2col" id="dynamicFirebaseFeed"></div>
             </section>
 
-            <!-- 4. SEÇÃO: COMUNIDADE SUSHI -->
+            <!-- 4. SEÇÃO: COMUNIDADE SUSHI (CARROSSEL DINÂMICO - TOP 8 GRUPOS PÚBLICOS) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Comunidade Sushi</h3>
                     </div>
-                    <button class="fs-link-more">Explorar</button>
+                    <button class="fs-link-more" id="btnSushiExplorarGrupos" type="button">Explorar</button>
                 </div>
 
                 <div class="fs-sushi-banner">
@@ -5329,36 +5373,13 @@
                     <h3 class="fs-sushi-h2">Encontre pessoas que acompanham o mesmo que você.</h3>
                     <p class="fs-sushi-sub">Entre nos grupos, publique recomendações e converse sobre os episódios do momento.</p>
                     <div class="fs-sushi-actions">
-                        <button class="fs-btn-red">Ver grupos</button>
-                        <button class="fs-btn-dark">Abrir comunidade</button>
+                        <button class="fs-btn-red" id="btnSushiVerGrupos" type="button">Ver grupos</button>
+                        <button class="fs-btn-dark" id="btnSushiAbrirComunidade" type="button">Abrir comunidade</button>
                     </div>
                 </div>
 
-                <div class="fs-community-grid">
-                    <div class="fs-community-card">
-                        <div class="fs-community-cover">
-                            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400" alt="Cover">
-                            <div class="fs-community-icon"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100" alt="Icon"></div>
-                        </div>
-                        <div class="fs-community-info">
-                            <div class="fs-community-name">TROPINHA DE RELANCE</div>
-                            <div class="fs-community-desc">bem vindos ao tropinhas de relance...</div>
-                            <div class="fs-community-stats">👥 53 membros • 27 publicações</div>
-                        </div>
-                    </div>
-
-                    <div class="fs-community-card">
-                        <div class="fs-community-cover">
-                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400" alt="Cover">
-                            <div class="fs-community-icon"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=100" alt="Icon"></div>
-                        </div>
-                        <div class="fs-community-info">
-                            <div class="fs-community-name">OG fans do Sushi</div>
-                            <div class="fs-community-desc">Amamos o Baka, e seu site lindo</div>
-                            <div class="fs-community-stats">👥 44 membros • 151 publicações</div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Scroll Horizontal dos Top 8 Grupos Públicos -->
+                <div class="fs-community-carousel" id="communitySushiCarousel"></div>
             </section>
 
             <!-- 5. SEÇÃO: EM ALTA - TOP 5 (DINÂMICO: TOP 5 MAIS CURTIDOS NOS ÚLTIMOS 3 DIAS) -->
@@ -12348,6 +12369,142 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 });
             });
         }
+
+        // ==========================================================================
+        // COMUNIDADE SUSHI: CARROSSEL DOS TOP 8 GRUPOS PÚBLICOS (PRINT A)
+        // ==========================================================================
+        const communitySushiCarousel = document.getElementById("communitySushiCarousel");
+        const btnSushiVerGrupos = document.getElementById("btnSushiVerGrupos");
+        const btnSushiAbrirComunidade = document.getElementById("btnSushiAbrirComunidade");
+        const btnSushiExplorarGrupos = document.getElementById("btnSushiExplorarGrupos");
+
+        // Botão Vermelho "Ver grupos" e link "Explorar": Abre a lista de grupos
+        if (btnSushiVerGrupos) {
+            btnSushiVerGrupos.addEventListener("click", () => {
+                openScreen(viewUserGroupsList);
+                loadRealUserGroups();
+            });
+        }
+
+        if (btnSushiExplorarGrupos) {
+            btnSushiExplorarGrupos.addEventListener("click", () => {
+                openScreen(viewUserGroupsList);
+                loadRealUserGroups();
+            });
+        }
+
+        // Botão Preto "Abrir comunidade": Abre login se deslogado, ou vai para criar grupo se logado
+        if (btnSushiAbrirComunidade) {
+            btnSushiAbrirComunidade.addEventListener("click", () => {
+                if (!currentUserEmail) {
+                    openAuthModal();
+                } else {
+                    inputNewGroupName.value = "";
+                    tempSelectedGroupPrivacy = "Público";
+                    txtGroupPrivacyVal.textContent = "Público";
+                    openScreen(viewCreateGroupStep1);
+                }
+            });
+        }
+
+        // Carrega em tempo real os 8 grupos públicos com mais membros e postagens no último mês
+        function loadSushiCommunityGroupsFromFirestore() {
+            if (!communitySushiCarousel) return;
+
+            onSnapshot(collection(db, "groups"), async (snap) => {
+                const publicGroupsList = [];
+                const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+
+                snap.forEach(d => {
+                    const data = { id: d.id, ...d.data() };
+                    const isPublic = (data.privacy === "Público" || data.privacy === "Publico" || !data.privacy);
+                    if (isPublic) {
+                        const membersCount = Array.isArray(data.members) ? data.members.length : 1;
+                        const postsCount = Number(data.postsCount) || 0;
+                        publicGroupsList.push({
+                            ...data,
+                            membersCount: membersCount,
+                            monthlyPosts: postsCount,
+                            score: (membersCount * 3) + postsCount
+                        });
+                    }
+                });
+
+                // Ordena por popularidade (membros e posts) e seleciona até 8 grupos
+                publicGroupsList.sort((a, b) => b.score - a.score);
+                const top8Groups = publicGroupsList.slice(0, 8);
+
+                communitySushiCarousel.innerHTML = "";
+
+                if (top8Groups.length === 0) {
+                    const defaultSushiGroups = [
+                        {
+                            id: "default_group_1",
+                            name: "TROPINHA DE RELANCE",
+                            description: "bem vindos ao tropinhas de relance...",
+                            bannerUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400",
+                            avatarUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100",
+                            membersCount: 53,
+                            monthlyPosts: 27
+                        },
+                        {
+                            id: "default_group_2",
+                            name: "OG fans do Sushi",
+                            description: "Amamos o Baka, e seu site lindo",
+                            bannerUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=400",
+                            avatarUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=100",
+                            membersCount: 44,
+                            monthlyPosts: 151
+                        }
+                    ];
+
+                    defaultSushiGroups.forEach(g => renderSushiCommunityCard(g));
+                } else {
+                    top8Groups.forEach(g => renderSushiCommunityCard(g));
+                }
+            });
+        }
+
+        // Renderiza cada card de grupo com capa, avatar, biografia, contagem de membros e publicações do mês
+        function renderSushiCommunityCard(group) {
+            const card = document.createElement("div");
+            card.className = "fs-community-card";
+            const initial = group.name ? group.name.charAt(0).toUpperCase() : "G";
+            const coverPhoto = group.bannerUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
+            const avatarPhoto = group.avatarUrl || "";
+
+            card.innerHTML = `
+                <div class="fs-community-cover">
+                    <img src="${escapeHtml(coverPhoto)}" alt="Capa">
+                    <div class="fs-community-icon">
+                        ${avatarPhoto 
+                            ? `<img src="${escapeHtml(avatarPhoto)}" alt="Avatar">`
+                            : initial
+                        }
+                    </div>
+                </div>
+                <div class="fs-community-info">
+                    <div class="fs-community-name" title="${escapeHtml(group.name)}">${escapeHtml(group.name)}</div>
+                    <div class="fs-community-desc" title="${escapeHtml(group.description || 'Comunidade oficial')}">${escapeHtml(group.description || 'Comunidade oficial')}</div>
+                    <div class="fs-community-stats">
+                        <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <span>${group.membersCount} membros • ${group.monthlyPosts} publicações</span>
+                    </div>
+                </div>
+            `;
+
+            card.addEventListener("click", () => {
+                if (group.id && !group.id.startsWith("default_")) {
+                    openGroupDetailPage(group.id);
+                } else {
+                    openScreen(viewUserGroupsList);
+                }
+            });
+
+            communitySushiCarousel.appendChild(card);
+        }
+
+        loadSushiCommunityGroupsFromFirestore();
 
         // ==========================================================================
         // FUNCIONALIDADE DA CÂMERA (PRINT C) E TELA EDITAR GRUPO (PRINTS D1, D3, D4)
