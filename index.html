@@ -1674,6 +1674,101 @@
             margin-top: 10px;
         }
 
+        /* Botão Câmera Refinado (Print C e D1) */
+        .group-camera-upload-circle {
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            background-color: #242424;
+            border: 2px dashed rgba(255, 255, 255, 0.25);
+            margin: 8px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .group-camera-upload-circle:hover,
+        .group-camera-upload-circle:active {
+            border-color: #3ea6ff;
+            background-color: #2c2c2c;
+        }
+
+        .group-camera-upload-circle svg {
+            width: 30px;
+            height: 30px;
+            fill: #ffffff;
+        }
+
+        .group-camera-upload-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Tela Oficial "Editar Grupo" (Prints D1, D3 e D4) */
+        .group-edit-section-card {
+            background-color: #161616;
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .group-privacy-radio-card {
+            background-color: #1a1a1a;
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+
+        .group-privacy-radio-card.active-selected {
+            border-color: #ff3b30;
+            background-color: #211516;
+        }
+
+        .group-privacy-radio-card svg {
+            width: 22px;
+            height: 22px;
+            fill: #ff453a;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .group-edit-danger-delete-btn {
+            background-color: #ff2d55;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            height: 44px;
+            padding: 0 16px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            align-self: flex-start;
+        }
+
+        .group-edit-danger-delete-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
         /* Estilos do Carrossel de Histórico (Print A) */
         .history-card {
             min-width: 150px;
@@ -6344,9 +6439,10 @@
             </div>
 
             <div class="group-step-input-box">
-                <!-- Ícone Câmera SVG (Sem emojis) -->
-                <div style="width:68px; height:68px; border-radius:50%; background:#242424; margin:10px auto 4px auto; display:flex; align-items:center; justify-content:center;">
-                    <svg style="width:28px;height:28px;fill:#ffffff;" viewBox="0 0 24 24"><path d="M12 15c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm0-8c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm8 4h-2.15l-1.45-2H7.6l-1.45 2H4c-1.1 0-2 .9-2 2v9c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-9c0-1.1-.9-2-2-2z"/></svg>
+                <!-- Ícone Câmera Interativo com Design Moderno (Print C) -->
+                <div class="group-camera-upload-circle" id="btnTriggerStep1UploadImage" title="Adicionar imagem de capa do grupo">
+                    <img id="imgStep1GroupPreviewThumb" src="" alt="Capa" style="display:none;">
+                    <svg id="svgStep1CameraIcon" viewBox="0 0 24 24"><path d="M9.4 3L7.6 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.6l-1.8-2h-4.8zm2.6 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-2c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/></svg>
                 </div>
 
                 <div>
@@ -6583,6 +6679,91 @@
                 </div>
 
                 <button class="group-step-primary-btn" id="btnSubmitGroupPostBottom" type="button" style="margin-top:20px;">POSTAR</button>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA OFICIAL: EDITAR GRUPO (PRINTS D1, D3 E D4)
+             ========================================================================== -->
+        <section class="group-screen-view" id="viewEditGroupScreen">
+            <div class="group-top-bar">
+                <div style="display:flex; flex-direction:column;">
+                    <span style="font-size:10px; font-weight:700; color:#ff3b30; letter-spacing:0.5px;">GERENCIAR GRUPO</span>
+                    <span style="font-size:17px; font-weight:800; color:#ffffff;">Editar grupo</span>
+                </div>
+                <button class="yt-icon-btn" id="btnCloseEditGroupScreen" type="button" aria-label="Fechar">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+
+            <div style="padding:16px; display:flex; flex-direction:column; gap:16px;">
+                <!-- Nome do grupo (Seta verde Print D1) -->
+                <div>
+                    <label style="font-size:12px; color:#aaa; margin-bottom:4px; display:block;">Nome do grupo</label>
+                    <input type="text" id="inputEditGroupNameField" class="group-step-boxed-input" placeholder="Ex.: Fãs de animes clássicos">
+                </div>
+
+                <!-- Descrição (Seta vermelha Print D1) -->
+                <div>
+                    <label style="font-size:12px; color:#aaa; margin-bottom:4px; display:block;">Descrição</label>
+                    <textarea id="txtAreaEditGroupDescField" class="group-step-boxed-input" style="height:90px; resize:none;" placeholder="Explique sobre o que o grupo conversa"></textarea>
+                </div>
+
+                <!-- Identidade do Grupo (Avatar e Banner - Setas roxa e rosa Print D1) -->
+                <div class="group-edit-section-card">
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <button class="group-shortcut-pill" id="btnEditBannerActionTrigger" type="button" style="background:#272727; height:34px;">
+                            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                            <span>Alterar banner</span>
+                        </button>
+                    </div>
+
+                    <div style="display:flex; align-items:center; gap:14px;">
+                        <div class="group-camera-upload-circle" id="btnEditAvatarActionTrigger" style="width:60px; height:60px; margin:0;" title="Alterar foto">
+                            <img id="imgEditGroupAvatarPreview" src="" alt="Avatar" style="display:none;">
+                            <svg viewBox="0 0 24 24" style="width:24px; height:24px;"><path d="M9.4 3L7.6 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3.6l-1.8-2h-4.8zm2.6 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-2c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3z"/></svg>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="font-weight:700; font-size:13px; color:#fff;">Avatar e banner</div>
+                            <small style="color:#aaa; font-size:11px;">Envie apenas o link do arquivo que deseja substituir.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Privacidade (Seta laranja Print D1) -->
+                <div>
+                    <label style="font-size:12px; color:#aaa; margin-bottom:8px; display:block;">Privacidade</label>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <!-- Opção Público -->
+                        <div class="group-privacy-radio-card active-selected" id="cardPrivacyPublic" data-privacy="Público">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            <div>
+                                <div style="font-weight:700; color:#fff; font-size:14px;">Público</div>
+                                <small style="color:#aaa; font-size:11.5px;">Qualquer pessoa pode ver e participar.</small>
+                            </div>
+                        </div>
+
+                        <!-- Opção Privado -->
+                        <div class="group-privacy-radio-card" id="cardPrivacyPrivate" data-privacy="Privado">
+                            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                            <div>
+                                <div style="font-weight:700; color:#fff; font-size:14px;">Privado</div>
+                                <small style="color:#aaa; font-size:11.5px;">Novos membros precisam solicitar entrada.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botões de Ação na Base (Print D4) -->
+                <div style="display:flex; gap:10px; margin-top:6px;">
+                    <button class="profile-pill-btn" id="btnCancelEditGroupAction" type="button" style="height:44px; font-weight:700;">Cancelar</button>
+                    <button class="upload-submit-btn" id="btnSaveEditGroupAction" type="button" style="margin:0; flex:1; height:44px; background:#ff453a; color:#fff;">Salvar alterações</button>
+                </div>
+
+                <button class="group-edit-danger-delete-btn" id="btnDeleteGroupPermanently" type="button" style="margin-top:6px;">
+                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    <span>Excluir</span>
+                </button>
             </div>
         </section>
 
@@ -11700,15 +11881,14 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         let tempSelectedGroupPrivacy = "Público";
         let isAnonymousPostActive = false;
 
-        // Botão chevron de voltar "<" que retorna à etapa anterior
+        // Navegação hierárquica sem loop infinito (Print B -> B1 -> A e retorno limpo)
         document.querySelectorAll(".btnGroupBackStep").forEach(btn => {
             btn.addEventListener("click", () => {
-                if (screenNavigationHistory.length > 1) {
-                    screenNavigationHistory.pop(); // Remove a tela atual
-                    const previousScreen = screenNavigationHistory.pop(); // Pega a anterior
-                    openScreen(previousScreen);
+                // Se estiver na lista de grupos (Print B1), voltar leva direto à tela "Você" (Print B)
+                if (viewUserGroupsList.classList.contains("active")) {
+                    openScreen(viewYou, false);
                 } else {
-                    openScreen(viewUserGroupsList);
+                    openScreen(viewUserGroupsList, false);
                 }
             });
         });
@@ -11892,9 +12072,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             loadGroupPostsRealtime(groupId);
         }
 
-        // Voltar da página do grupo para a lista de grupos pelo botão '<'
+        // Da página do grupo (Print A), o botão '<' retorna direto para a lista de grupos (Print B1)
         btnLeaveGroupViewToGroupsList.addEventListener("click", () => {
-            openScreen(viewUserGroupsList);
+            openScreen(viewUserGroupsList, false);
         });
 
         // Renderiza a pilha de até 6 avatares (Print N)
@@ -12127,6 +12307,178 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
                     userGroupsRealContainer.appendChild(row);
                 });
+            });
+        }
+
+        // ==========================================================================
+        // FUNCIONALIDADE DA CÂMERA (PRINT C) E TELA EDITAR GRUPO (PRINTS D1, D3, D4)
+        // ==========================================================================
+        const btnTriggerStep1UploadImage = document.getElementById("btnTriggerStep1UploadImage");
+        const imgStep1GroupPreviewThumb = document.getElementById("imgStep1GroupPreviewThumb");
+        const svgStep1CameraIcon = document.getElementById("svgStep1CameraIcon");
+        let tempStep1GroupCoverUrl = "";
+
+        // Clique no botão da câmera para adicionar URL da capa do grupo (Print C)
+        if (btnTriggerStep1UploadImage) {
+            btnTriggerStep1UploadImage.addEventListener("click", () => {
+                const url = prompt("Cole a URL da imagem de capa para o seu grupo:");
+                if (url && url.trim()) {
+                    tempStep1GroupCoverUrl = url.trim();
+                    imgStep1GroupPreviewThumb.src = tempStep1GroupCoverUrl;
+                    imgStep1GroupPreviewThumb.style.display = "block";
+                    svgStep1CameraIcon.style.display = "none";
+                }
+            });
+        }
+
+        // Elementos da Tela Editar Grupo
+        const viewEditGroupScreen = document.getElementById("viewEditGroupScreen");
+        const btnCloseEditGroupScreen = document.getElementById("btnCloseEditGroupScreen");
+        const inputEditGroupNameField = document.getElementById("inputEditGroupNameField");
+        const txtAreaEditGroupDescField = document.getElementById("txtAreaEditGroupDescField");
+        const btnEditBannerActionTrigger = document.getElementById("btnEditBannerActionTrigger");
+        const btnEditAvatarActionTrigger = document.getElementById("btnEditAvatarActionTrigger");
+        const imgEditGroupAvatarPreview = document.getElementById("imgEditGroupAvatarPreview");
+        const cardPrivacyPublic = document.getElementById("cardPrivacyPublic");
+        const cardPrivacyPrivate = document.getElementById("cardPrivacyPrivate");
+        const btnCancelEditGroupAction = document.getElementById("btnCancelEditGroupAction");
+        const btnSaveEditGroupAction = document.getElementById("btnSaveEditGroupAction");
+        const btnDeleteGroupPermanently = document.getElementById("btnDeleteGroupPermanently");
+
+        let tempEditGroupPrivacyChoice = "Público";
+        let tempEditGroupBannerUrl = "";
+        let tempEditGroupAvatarUrl = "";
+
+        // Clique no botão EDITAR da capa do grupo (Print A -> Abre Print D1/D3)
+        if (btnEditGroupCoverPhoto) {
+            btnEditGroupCoverPhoto.addEventListener("click", () => {
+                if (!currentActiveGroupData) return;
+
+                inputEditGroupNameField.value = currentActiveGroupData.name || "";
+                txtAreaEditGroupDescField.value = currentActiveGroupData.description || "";
+                tempEditGroupPrivacyChoice = currentActiveGroupData.privacy || "Público";
+                tempEditGroupBannerUrl = currentActiveGroupData.bannerUrl || "";
+                tempEditGroupAvatarUrl = currentActiveGroupData.avatarUrl || "";
+
+                if (tempEditGroupAvatarUrl) {
+                    imgEditGroupAvatarPreview.src = tempEditGroupAvatarUrl;
+                    imgEditGroupAvatarPreview.style.display = "block";
+                } else {
+                    imgEditGroupAvatarPreview.style.display = "none";
+                }
+
+                // Marcação do card de privacidade ativo (com borda vermelha)
+                updatePrivacyCardsUI(tempEditGroupPrivacyChoice);
+
+                openScreen(viewEditGroupScreen, false);
+            });
+        }
+
+        function updatePrivacyCardsUI(choice) {
+            if (choice === "Público") {
+                cardPrivacyPublic.classList.add("active-selected");
+                cardPrivacyPrivate.classList.remove("active-selected");
+            } else {
+                cardPrivacyPrivate.classList.add("active-selected");
+                cardPrivacyPublic.classList.remove("active-selected");
+            }
+        }
+
+        if (cardPrivacyPublic) {
+            cardPrivacyPublic.addEventListener("click", () => {
+                tempEditGroupPrivacyChoice = "Público";
+                updatePrivacyCardsUI("Público");
+            });
+        }
+
+        if (cardPrivacyPrivate) {
+            cardPrivacyPrivate.addEventListener("click", () => {
+                tempEditGroupPrivacyChoice = "Privado";
+                updatePrivacyCardsUI("Privado");
+            });
+        }
+
+        // Alterar Banner pela URL (Seta roxa Print D1)
+        if (btnEditBannerActionTrigger) {
+            btnEditBannerActionTrigger.addEventListener("click", () => {
+                const url = prompt("Cole a URL da imagem do novo banner:", tempEditGroupBannerUrl);
+                if (url && url.trim()) {
+                    tempEditGroupBannerUrl = url.trim();
+                    showToast("Banner atualizado. Clique em Salvar alterações.");
+                }
+            });
+        }
+
+        // Alterar Avatar pela URL (Seta rosa Print D1)
+        if (btnEditAvatarActionTrigger) {
+            btnEditAvatarActionTrigger.addEventListener("click", () => {
+                const url = prompt("Cole a URL da nova foto de identidade/avatar:", tempEditGroupAvatarUrl);
+                if (url && url.trim()) {
+                    tempEditGroupAvatarUrl = url.trim();
+                    imgEditGroupAvatarPreview.src = tempEditGroupAvatarUrl;
+                    imgEditGroupAvatarPreview.style.display = "block";
+                }
+            });
+        }
+
+        // Fechar / Cancelar Edição
+        if (btnCloseEditGroupScreen) {
+            btnCloseEditGroupScreen.addEventListener("click", () => {
+                openScreen(viewGroupDetail, false);
+            });
+        }
+
+        if (btnCancelEditGroupAction) {
+            btnCancelEditGroupAction.addEventListener("click", () => {
+                openScreen(viewGroupDetail, false);
+            });
+        }
+
+        // Salvar Alterações no Firebase (Print D4)
+        if (btnSaveEditGroupAction) {
+            btnSaveEditGroupAction.addEventListener("click", async () => {
+                const newName = inputEditGroupNameField.value.trim();
+                const newDesc = txtAreaEditGroupDescField.value.trim();
+
+                if (!newName) {
+                    alert("O grupo precisa ter um nome.");
+                    return;
+                }
+
+                try {
+                    btnSaveEditGroupAction.disabled = true;
+                    await setDoc(doc(db, "groups", currentActiveGroupId), {
+                        name: newName,
+                        description: newDesc,
+                        privacy: tempEditGroupPrivacyChoice,
+                        bannerUrl: tempEditGroupBannerUrl || currentActiveGroupData.bannerUrl,
+                        avatarUrl: tempEditGroupAvatarUrl || currentActiveGroupData.avatarUrl || null,
+                        updatedAt: serverTimestamp()
+                    }, { merge: true });
+
+                    showToast("Alterações do grupo salvas com sucesso!");
+                    openGroupDetailPage(currentActiveGroupId);
+                } catch (err) {
+                    console.error("Erro ao salvar grupo:", err);
+                } finally {
+                    btnSaveEditGroupAction.disabled = false;
+                }
+            });
+        }
+
+        // Excluir Grupo Permanentemente (Print D4)
+        if (btnDeleteGroupPermanently) {
+            btnDeleteGroupPermanently.addEventListener("click", async () => {
+                if (confirm(`Tem certeza que deseja excluir o grupo "${currentActiveGroupData.name}"?`)) {
+                    try {
+                        await deleteDoc(doc(db, "groups", currentActiveGroupId));
+                        showToast("Grupo excluído com sucesso.");
+                        openScreen(viewUserGroupsList, false);
+                        loadRealUserGroups();
+                    } catch (err) {
+                        console.error("Erro ao excluir grupo:", err);
+                    }
+                }
             });
         }
         
