@@ -302,19 +302,24 @@
             position: relative;
             overflow: hidden;
             background: #181818;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            touch-action: pan-y;
+            user-select: none;
+            cursor: pointer;
         }
 
         .fs-hero-banner img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+            transition: opacity 0.35s ease;
         }
 
         .fs-hero-overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(0deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 50%, transparent 100%);
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
@@ -326,6 +331,8 @@
             font-weight: 600;
             color: #f59e0b;
             margin-bottom: 2px;
+            display: flex;
+            align-items: center;
         }
 
         .fs-hero-genre span {
@@ -339,25 +346,75 @@
             color: #ffffff;
             letter-spacing: -0.5px;
             line-height: 1.1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+            display: block;
         }
 
         .fs-hero-dots {
             display: flex;
             gap: 5px;
             margin-top: 10px;
+            align-items: center;
         }
 
         .fs-dot {
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background-color: rgba(255,255,255,0.35);
+            background-color: rgba(255, 255, 255, 0.35);
+            transition: all 0.25s ease;
         }
 
         .fs-dot.active {
             background-color: #ffffff;
             width: 14px;
             border-radius: 3px;
+        }
+
+        /* Botão Seletor Sim / Não para Novo ou Recente */
+        .upload-recent-flag-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            margin: 0 16px 12px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .upload-recent-flag-row span {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .upload-recent-toggle-group {
+            display: flex;
+            background-color: #121212;
+            border-radius: 16px;
+            padding: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .upload-recent-toggle-btn {
+            border: none;
+            background: none;
+            color: #888888;
+            padding: 5px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .upload-recent-toggle-btn.active {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
         }
 
         .fs-btn-surprise {
@@ -5350,15 +5407,17 @@
              ========================================================================== -->
         <main class="yt-feed" id="feedContainer">
 
-            <!-- 1. HERO BANNER PRINCIPAL (KUSURIYA 2) -->
+            <!-- 1. HERO BANNER PRINCIPAL (CARROSSEL DINÂMICO DE 3s E SWIPE) -->
             <section class="fs-hero-banner" id="heroBannerMain">
-                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80" alt="Kusuriya 2">
+                <img id="heroBannerCurrentImg" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Banner">
                 <div class="fs-hero-overlay">
-                    <div class="fs-hero-genre">Anime <span>| Drama</span></div>
-                    <h2 class="fs-hero-title">KUSURIYA 2</h2>
-                    <div class="fs-hero-dots">
+                    <div class="fs-hero-genre" id="heroBannerGenreText">
+                        <span id="heroBannerContentTypeLabel" style="margin-left:0; color:#f59e0b;">Anime</span>
+                        <span id="heroBannerRandomGenreLabel">| Drama</span>
+                    </div>
+                    <h2 class="fs-hero-title" id="heroBannerTitleText">KUSURIYA 2</h2>
+                    <div class="fs-hero-dots" id="heroBannerDotsContainer">
                         <span class="fs-dot active"></span>
-                        <span class="fs-dot"></span>
                         <span class="fs-dot"></span>
                         <span class="fs-dot"></span>
                     </div>
@@ -7053,6 +7112,20 @@
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadFirstEpisodeDuration" class="upload-title-input" placeholder="Duração do 1º episódio (ex: 24:00 ou 12 min, opcional)">
                 </div>
+
+                <!-- URL 3: Capa de Exibição da Série (Banner horizontal do topo) -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadHeroBannerUrl" class="upload-title-input" placeholder="Link da capa de exibição (Banner horizontal do topo, opcional)">
+                </div>
+
+                <!-- Botão Seletor: Novo ou recente (Sim / Não) para Exibir no Topo -->
+                <div class="upload-recent-flag-row">
+                    <span>Novo ou recente (Exibir no topo)?</span>
+                    <div class="upload-recent-toggle-group">
+                        <button type="button" class="upload-recent-toggle-btn active" id="btnRecentFlagNo">Não</button>
+                        <button type="button" class="upload-recent-toggle-btn" id="btnRecentFlagYes">Sim</button>
+                    </div>
+                </div>
             </div>
 
             <!-- ==========================================================
@@ -7482,6 +7555,12 @@
                 </div>
                 <div class="account-item-row optUploadContentType" data-type="Filme">
                     <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Filme</span></div>
+                </div>
+                <div class="account-item-row optUploadContentType" data-type="Anime">
+                    <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Anime</span></div>
+                </div>
+                <div class="account-item-row optUploadContentType" data-type="Cartoon">
+                    <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Cartoon</span></div>
                 </div>
                 <div class="account-item-row optUploadContentType" data-type="Trailer">
                     <div class="account-item-left"><span style="font-weight:500; font-size:14.5px;">Trailer</span></div>
@@ -8406,16 +8485,22 @@
                         return;
                     }
 
-                    // Grava a Série mãe no banco (Card vertical para 'Filmes/Animes mais recentes')
+                    // Leitura da URL da capa de exibição do topo e do seletor Novo/Recente
+                    const heroBannerInput = document.getElementById("uploadHeroBannerUrl");
+                    const heroBannerUrlVal = heroBannerInput ? heroBannerInput.value.trim() : "";
+
+                    // Grava a Série mãe no banco (Card vertical para os carrosséis e exibição no banner se Novo/Recente for Sim)
                     await addDoc(collection(db, "series"), {
                         title: sName,
                         coverUrl: currentUploadSettings.thumbUrl,
+                        heroBannerUrl: heroBannerUrlVal || null,
+                        isRecentFeatured: isRecentFeaturedSelected,
                         synopsis: sSynopsis,
                         genres: sGenres ? sGenres.split(",").map(g => g.trim()) : ["Anime"],
                         visibility: currentUploadSettings.visibility,
                         isAdult: isAdult,
                         ratingBadge: selectedAgeBadge || "12+",
-                        contentType: selectedContentType || "Série",
+                        contentType: selectedContentType || "Anime",
                         nextEpDate: nextEpDate || null,
                         author: currentUserEmail,
                         episodes: [],
@@ -13030,6 +13115,176 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         loadNewEpisodesFromFirestore();
+
+        // ==========================================================================
+        // CONTROLE DO BOTÃO "NOVO OU RECENTE (SIM/NÃO)" NA POSTAGEM
+        // ==========================================================================
+        const btnRecentFlagNo = document.getElementById("btnRecentFlagNo");
+        const btnRecentFlagYes = document.getElementById("btnRecentFlagYes");
+        let isRecentFeaturedSelected = false;
+
+        if (btnRecentFlagNo && btnRecentFlagYes) {
+            btnRecentFlagNo.onclick = () => {
+                isRecentFeaturedSelected = false;
+                btnRecentFlagNo.classList.add("active");
+                btnRecentFlagYes.classList.remove("active");
+            };
+
+            btnRecentFlagYes.onclick = () => {
+                isRecentFeaturedSelected = true;
+                btnRecentFlagYes.classList.add("active");
+                btnRecentFlagNo.classList.remove("active");
+            };
+        }
+
+        // ==========================================================================
+        // CARROSSEL DO TOPO (HERO BANNER) COM ROTAÇÃO DE 3s E SWIPE
+        // ==========================================================================
+        const heroBannerMain = document.getElementById("heroBannerMain");
+        const heroBannerCurrentImg = document.getElementById("heroBannerCurrentImg");
+        const heroBannerContentTypeLabel = document.getElementById("heroBannerContentTypeLabel");
+        const heroBannerRandomGenreLabel = document.getElementById("heroBannerRandomGenreLabel");
+        const heroBannerTitleText = document.getElementById("heroBannerTitleText");
+        const heroBannerDotsContainer = document.getElementById("heroBannerDotsContainer");
+
+        let heroSlidesList = [];
+        let currentHeroIndex = 0;
+        let heroCarouselInterval = null;
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function loadHeroBannerCarouselFromFirestore() {
+            if (!heroBannerMain) return;
+
+            onSnapshot(collection(db, "series"), (snapshot) => {
+                const featuredSeries = [];
+
+                snapshot.forEach((docSnap) => {
+                    const data = { id: docSnap.id, ...docSnap.data() };
+                    // Apenas séries assinaladas com Novo/Recente = Sim e que possuem capa de exibição
+                    if (data.isRecentFeatured && data.heroBannerUrl) {
+                        featuredSeries.push(data);
+                    }
+                });
+
+                // Ordena as mais recentes primeiro
+                featuredSeries.sort((a, b) => {
+                    const timeA = (a.createdAt && a.createdAt.seconds) || 0;
+                    const timeB = (b.createdAt && b.createdAt.seconds) || 0;
+                    return timeB - timeA;
+                });
+
+                if (featuredSeries.length === 0) {
+                    heroSlidesList = [
+                        {
+                            title: "KUSURIYA 2",
+                            heroBannerUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&auto=format&fit=crop&q=80",
+                            contentType: "Anime",
+                            genres: ["Drama", "Mistério"]
+                        },
+                        {
+                            title: "Attack on Titan",
+                            heroBannerUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80",
+                            contentType: "Anime",
+                            genres: ["Ação", "Shōnen"]
+                        },
+                        {
+                            title: "Chainsaw Man",
+                            heroBannerUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+                            contentType: "Filme",
+                            genres: ["Ação", "Fantasia"]
+                        }
+                    ];
+                } else {
+                    heroSlidesList = featuredSeries;
+                }
+
+                currentHeroIndex = 0;
+                renderHeroCurrentSlide();
+                startHeroAutoRotate();
+            });
+        }
+
+        function renderHeroCurrentSlide() {
+            if (heroSlidesList.length === 0) return;
+            const slide = heroSlidesList[currentHeroIndex];
+
+            // 1. Capa de exibição com transição suave
+            heroBannerCurrentImg.style.opacity = "0.4";
+            setTimeout(() => {
+                heroBannerCurrentImg.src = slide.heroBannerUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+                heroBannerCurrentImg.style.opacity = "1";
+            }, 120);
+
+            // 2. Tipo de conteúdo (seta branca)
+            heroBannerContentTypeLabel.textContent = slide.contentType || "Anime";
+
+            // 3. Um gênero aleatório da série (seta azul)
+            let chosenGenre = "Drama";
+            if (Array.isArray(slide.genres) && slide.genres.length > 0) {
+                const randomIdx = Math.floor(Math.random() * slide.genres.length);
+                chosenGenre = slide.genres[randomIdx];
+            } else if (slide.genre) {
+                chosenGenre = slide.genre;
+            }
+            heroBannerRandomGenreLabel.textContent = `| ${chosenGenre}`;
+
+            // 4. Nome da série com reticências se exceder a largura (seta verde)
+            heroBannerTitleText.textContent = slide.title || "Série";
+            heroBannerTitleText.title = slide.title || "Série";
+
+            // 5. Pontinhos indicadores (seta roxa)
+            if (heroBannerDotsContainer) {
+                heroBannerDotsContainer.innerHTML = "";
+                heroSlidesList.forEach((_, idx) => {
+                    const dot = document.createElement("span");
+                    dot.className = `fs-dot ${idx === currentHeroIndex ? 'active' : ''}`;
+                    heroBannerDotsContainer.appendChild(dot);
+                });
+            }
+
+            // Clique no card abre o canal oficial da série (seta rosa)
+            heroBannerMain.onclick = () => {
+                openSeriesChannel(slide.title);
+            };
+        }
+
+        function startHeroAutoRotate() {
+            if (heroCarouselInterval) clearInterval(heroCarouselInterval);
+            heroCarouselInterval = setInterval(() => {
+                if (heroSlidesList.length > 1) {
+                    currentHeroIndex = (currentHeroIndex + 1) % heroSlidesList.length;
+                    renderHeroCurrentSlide();
+                }
+            }, 3000);
+        }
+
+        // Suporte a Arraste / Swipe com o dedo (Esquerda = Avançar, Direita = Voltar)
+        heroBannerMain.addEventListener("touchstart", (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        heroBannerMain.addEventListener("touchend", (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleHeroSwipeGesture();
+        }, { passive: true });
+
+        function handleHeroSwipeGesture() {
+            const swipeDistance = touchEndX - touchStartX;
+            if (Math.abs(swipeDistance) > 40) {
+                if (swipeDistance < 0) {
+                    // Arrastou para a esquerda: passa para o próximo
+                    currentHeroIndex = (currentHeroIndex + 1) % heroSlidesList.length;
+                } else {
+                    // Arrastou para a direita: volta para o anterior
+                    currentHeroIndex = (currentHeroIndex - 1 + heroSlidesList.length) % heroSlidesList.length;
+                }
+                renderHeroCurrentSlide();
+                startHeroAutoRotate(); // Reinicia o timer de 3 segundos
+            }
+        }
+
+        loadHeroBannerCarouselFromFirestore();
     </script>
 </body>
   </html>
