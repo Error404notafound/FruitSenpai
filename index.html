@@ -413,24 +413,96 @@
             position: absolute;
             top: 4px;
             left: 4px;
-            background: rgba(0,0,0,0.7);
-            color: #bbb;
-            font-size: 9px;
-            font-weight: 600;
-            padding: 2px 4px;
-            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #dddddd;
+            font-size: 9.5px;
+            font-weight: 700;
+            padding: 2px 5px;
+            border-radius: 4px;
+            z-index: 3;
+            letter-spacing: 0.2px;
         }
 
         .fs-badge-hd {
             position: absolute;
             top: 4px;
             right: 4px;
-            background: rgba(0,0,0,0.7);
-            color: #bbb;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 4px;
-            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+            font-size: 9.5px;
+            font-weight: 800;
+            padding: 2px 5px;
+            border-radius: 4px;
+            z-index: 3;
+            letter-spacing: 0.3px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Sanfona e Campos da Gaveta de Temporada (Prints B2, B3, B4) */
+        .season-spec-accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            cursor: pointer;
+            color: #ffffff;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .season-spec-accordion-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .season-spec-accordion-header-left svg {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+        }
+
+        .season-spec-accordion-header-left span {
+            font-size: 14.5px;
+            font-weight: 500;
+        }
+
+        .season-spec-chevron-icon {
+            width: 20px;
+            height: 20px;
+            fill: #aaaaaa;
+            transition: transform 0.2s ease;
+        }
+
+        .season-spec-chevron-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .season-spec-input-container {
+            display: none;
+            padding: 10px 16px 14px 16px;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .season-spec-input-container.open {
+            display: block;
+        }
+
+        .season-spec-text-input {
+            width: 100%;
+            height: 44px;
+            background-color: #121212;
+            border: 1px solid #3ea6ff;
+            border-radius: 8px;
+            padding: 0 14px;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .season-spec-text-input::placeholder {
+            color: #777777;
         }
 
         .fs-ep-title {
@@ -5286,61 +5358,22 @@
                 </div>
             </section>
 
-            <!-- 2. SEÇÃO: NOVOS EPISÓDIOS -->
+            <!-- 2. SEÇÃO: NOVOS EPISÓDIOS (DINÂMICO: TOP 11 ÚLTIMOS EPISÓDIOS POSTADOS) -->
             <section>
                 <div class="fs-section-header">
                     <div class="fs-section-title-wrap">
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Novos episódios</h3>
-                        <button class="fs-link-more" style="margin-left:4px;">Tudo</button>
+                        <button class="fs-link-more" style="margin-left:4px;" type="button">Tudo</button>
                     </div>
-                    <button class="fs-btn-surprise" id="btnSurpriseMe">
+                    <button class="fs-btn-surprise" id="btnSurpriseMe" type="button">
                         <svg style="width:12px;height:12px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                         <span>Surpreenda-me</span>
                     </button>
                 </div>
 
-                <div class="fs-carousel">
-                    <div class="fs-ep-card">
-                        <div class="fs-ep-thumb">
-                            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Ep">
-                            <span class="fs-badge-date">02 Out</span>
-                            <span class="fs-badge-hd">HD</span>
-                        </div>
-                        <div class="fs-ep-title">Cowboy Bebop...</div>
-                        <div class="fs-ep-sub">1ª Temporada | 26º Episódio</div>
-                    </div>
-
-                    <div class="fs-ep-card">
-                        <div class="fs-ep-thumb">
-                            <img src="https://images.unsplash.com/photo-1563089145-599997674d42?w=400" alt="Ep">
-                            <span class="fs-badge-date">02 Out</span>
-                            <span class="fs-badge-hd">HD</span>
-                        </div>
-                        <div class="fs-ep-title">Cowboy Bebop...</div>
-                        <div class="fs-ep-sub">1ª Temporada | 25º Episódio</div>
-                    </div>
-
-                    <div class="fs-ep-card">
-                        <div class="fs-ep-thumb">
-                            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" alt="Ep">
-                            <span class="fs-badge-date">02 Out</span>
-                            <span class="fs-badge-hd">HD</span>
-                        </div>
-                        <div class="fs-ep-title">Cowboy Bebop...</div>
-                        <div class="fs-ep-sub">1ª Temporada | 24º Episódio</div>
-                    </div>
-
-                    <div class="fs-ep-card">
-                        <div class="fs-ep-thumb">
-                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400" alt="Ep">
-                            <span class="fs-badge-date">02 Out</span>
-                            <span class="fs-badge-hd">HD</span>
-                        </div>
-                        <div class="fs-ep-title">Cowboy Bebop...</div>
-                        <div class="fs-ep-sub">1ª Temporada | 22º Episódio</div>
-                    </div>
-                </div>
+                <!-- Scroll Horizontal dos 11 Novos Últimos Episódios (Print A) -->
+                <div class="fs-carousel" id="newEpisodesCarousel"></div>
             </section>
 
             <!-- 3. SEÇÃO: "PARA VOCÊ" (LIMITADO A 4 LINHAS X 2 COLUNAS = 8 EPISÓDIOS MAIS RECENTES) -->
@@ -7009,6 +7042,10 @@
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Link do 1º episódio (Embed/Drive/YouTube, opcional)">
                 </div>
+                <!-- Campo de Duração do 1º Episódio ao Criar Série -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeDuration" class="upload-title-input" placeholder="Duração do 1º episódio (ex: 24:00 ou 12 min, opcional)">
+                </div>
             </div>
 
             <!-- ==========================================================
@@ -7056,6 +7093,30 @@
                     <div class="upload-opt-texts">
                         <span class="upload-opt-label">Classificação Indicativa</span>
                         <span class="upload-opt-value" id="valUploadRating">Livre (L)</span>
+                    </div>
+                </div>
+                <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+
+            <!-- Especificação da Temporada / Arco Narrativo (Prints B1 e B5) -->
+            <button class="upload-opt-row" id="rowUploadSeasonArc" type="button">
+                <div class="upload-opt-left">
+                    <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-8-3h2v-2h2v-2h-2V8h-2v2h-2v2h2v2z"/></svg>
+                    <div class="upload-opt-texts">
+                        <span class="upload-opt-label">período de arco narrativo</span>
+                        <span class="upload-opt-value" id="valUploadSeasonArc">Temporada</span>
+                    </div>
+                </div>
+                <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+            </button>
+
+            <!-- Qualidade de Vídeo / Resolução (Print B6) -->
+            <button class="upload-opt-row" id="rowUploadVideoQuality" type="button">
+                <div class="upload-opt-left">
+                    <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/></svg>
+                    <div class="upload-opt-texts">
+                        <span class="upload-opt-label">Qualidade de vídeo</span>
+                        <span class="upload-opt-value" id="valUploadVideoQuality">Resolução</span>
                     </div>
                 </div>
                 <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
@@ -7443,9 +7504,72 @@
                 </div>
                 <div class="account-item-row optUploadRating" data-rating="16+" data-badge="16+">
                     <div class="account-item-left"><span style="font-weight:600;">16 anos (16+)</span></div>
-                </div>
                 <div class="account-item-row optUploadRating" data-rating="18+" data-badge="18+">
                     <div class="account-item-left"><span style="font-weight:600; color:#ff4444;">Conteúdo Adulto (18+)</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA: ESPECIFICAÇÃO DA TEMPORADA (PRINTS B2, B3, B4) -->
+        <div class="accounts-drawer" id="drawerUploadSeasonArc">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0 16px 14px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Especificação da Temporada</h3>
+                    <button class="yt-icon-btn" id="btnCloseUploadSeasonArc">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Sanfona 1: Número da Temporada (Print B4) -->
+                <div class="season-spec-accordion-header" id="headerToggleSeasonAccordion">
+                    <div class="season-spec-accordion-header-left">
+                        <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-8-3h2v-2h2v-2h-2V8h-2v2h-2v2h2v2z"/></svg>
+                        <span>Numero da temporada</span>
+                    </div>
+                    <svg class="season-spec-chevron-icon" id="chevronSeasonAccordion" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </div>
+                <div class="season-spec-input-container" id="containerSeasonInput">
+                    <input type="text" id="inputSeasonNumberVal" class="season-spec-text-input" placeholder="Defina o número da temporada">
+                </div>
+
+                <!-- Sanfona 2: Número do Episódio (Print B3) -->
+                <div class="season-spec-accordion-header" id="headerToggleEpisodeAccordion">
+                    <div class="season-spec-accordion-header-left">
+                        <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+                        <span>Numero do episódio</span>
+                    </div>
+                    <svg class="season-spec-chevron-icon" id="chevronEpisodeAccordion" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </div>
+                <div class="season-spec-input-container" id="containerEpisodeInput">
+                    <input type="text" id="inputEpisodeNumberVal" class="season-spec-text-input" placeholder="Defina o número do episódio">
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA: RESOLUÇÃO DE VÍDEO (PRINT B7) -->
+        <div class="accounts-drawer" id="drawerUploadVideoQuality">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:0 16px 14px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Resolução de vídeo</h3>
+                    <button class="yt-icon-btn" id="btnCloseUploadVideoQuality">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+
+                <div class="account-item-row optVideoQualityChoice" data-label="SD 480p" data-badge="SD">
+                    <div class="account-item-left"><span style="font-size:14px; font-weight:500;">SD Definição Padrão 480p (720x480)</span></div>
+                </div>
+                <div class="account-item-row optVideoQualityChoice" data-label="HD 720p" data-badge="HD">
+                    <div class="account-item-left"><span style="font-size:14px; font-weight:500;">HD Alta Definição 720p (1280x720)</span></div>
+                </div>
+                <div class="account-item-row optVideoQualityChoice" data-label="Full HD 1080p" data-badge="FHD">
+                    <div class="account-item-left"><span style="font-size:14px; font-weight:500;">Full HD Alta Definição Completa 1080p (1920x1080)</span></div>
+                </div>
+                <div class="account-item-row optVideoQualityChoice" data-label="2K / QHD 1440p" data-badge="QHD">
+                    <div class="account-item-left"><span style="font-size:14px; font-weight:500;">2K / QHD Quad HD 1440p (2560x1440)</span></div>
+                </div>
+                <div class="account-item-row optVideoQualityChoice" data-label="4K / UHD 2160p" data-badge="4K">
+                    <div class="account-item-left"><span style="font-size:14px; font-weight:500;">4K / UHD Ultra HD 2160p (3840x2160)</span></div>
                 </div>
             </div>
         </div>
@@ -8133,6 +8257,100 @@
             });
         });
 
+        // Gaveta de Especificação da Temporada e Episódio (Prints B1 a B5)
+        const drawerUploadSeasonArc = document.getElementById("drawerUploadSeasonArc");
+        const btnCloseUploadSeasonArc = document.getElementById("btnCloseUploadSeasonArc");
+        const rowUploadSeasonArc = document.getElementById("rowUploadSeasonArc");
+        const valUploadSeasonArc = document.getElementById("valUploadSeasonArc");
+        const headerToggleSeasonAccordion = document.getElementById("headerToggleSeasonAccordion");
+        const chevronSeasonAccordion = document.getElementById("chevronSeasonAccordion");
+        const containerSeasonInput = document.getElementById("containerSeasonInput");
+        const inputSeasonNumberVal = document.getElementById("inputSeasonNumberVal");
+        const headerToggleEpisodeAccordion = document.getElementById("headerToggleEpisodeAccordion");
+        const chevronEpisodeAccordion = document.getElementById("chevronEpisodeAccordion");
+        const containerEpisodeInput = document.getElementById("containerEpisodeInput");
+        const inputEpisodeNumberVal = document.getElementById("inputEpisodeNumberVal");
+
+        let selectedSeasonNumber = "";
+        let selectedEpisodeNumber = "";
+
+        if (rowUploadSeasonArc) {
+            rowUploadSeasonArc.addEventListener("click", () => {
+                drawerUploadSeasonArc.classList.add("active");
+            });
+        }
+
+        if (btnCloseUploadSeasonArc) {
+            btnCloseUploadSeasonArc.addEventListener("click", () => {
+                drawerUploadSeasonArc.classList.remove("active");
+            });
+        }
+
+        // Alternância da Sanfona de Temporada (Print B4)
+        if (headerToggleSeasonAccordion) {
+            headerToggleSeasonAccordion.addEventListener("click", () => {
+                const isOpen = containerSeasonInput.classList.toggle("open");
+                chevronSeasonAccordion.classList.toggle("open", isOpen);
+                if (isOpen) inputSeasonNumberVal.focus();
+            });
+        }
+
+        // Alternância da Sanfona de Episódio (Print B3)
+        if (headerToggleEpisodeAccordion) {
+            headerToggleEpisodeAccordion.addEventListener("click", () => {
+                const isOpen = containerEpisodeInput.classList.toggle("open");
+                chevronEpisodeAccordion.classList.toggle("open", isOpen);
+                if (isOpen) inputEpisodeNumberVal.focus();
+            });
+        }
+
+        // Atualiza em tempo real o texto da linha: "Temporada 1 episódio 2" (Print B5)
+        function updateSeasonArcRowLabel() {
+            selectedSeasonNumber = inputSeasonNumberVal.value.trim();
+            selectedEpisodeNumber = inputEpisodeNumberVal.value.trim();
+
+            if (selectedSeasonNumber && selectedEpisodeNumber) {
+                valUploadSeasonArc.textContent = `Temporada ${selectedSeasonNumber} episódio ${selectedEpisodeNumber}`;
+            } else if (selectedSeasonNumber) {
+                valUploadSeasonArc.textContent = `Temporada ${selectedSeasonNumber}`;
+            } else if (selectedEpisodeNumber) {
+                valUploadSeasonArc.textContent = `Episódio ${selectedEpisodeNumber}`;
+            } else {
+                valUploadSeasonArc.textContent = "Temporada";
+            }
+        }
+
+        inputSeasonNumberVal.addEventListener("input", updateSeasonArcRowLabel);
+        inputEpisodeNumberVal.addEventListener("input", updateSeasonArcRowLabel);
+
+        // Gaveta de Resolução de Vídeo (Prints B6 e B7)
+        const drawerUploadVideoQuality = document.getElementById("drawerUploadVideoQuality");
+        const btnCloseUploadVideoQuality = document.getElementById("btnCloseUploadVideoQuality");
+        const rowUploadVideoQuality = document.getElementById("rowUploadVideoQuality");
+        const valUploadVideoQuality = document.getElementById("valUploadVideoQuality");
+        let selectedResolutionBadge = "HD";
+
+        if (rowUploadVideoQuality) {
+            rowUploadVideoQuality.addEventListener("click", () => {
+                drawerUploadVideoQuality.classList.add("active");
+            });
+        }
+
+        if (btnCloseUploadVideoQuality) {
+            btnCloseUploadVideoQuality.addEventListener("click", () => {
+                drawerUploadVideoQuality.classList.remove("active");
+            });
+        }
+
+        document.querySelectorAll(".optVideoQualityChoice").forEach(opt => {
+            opt.addEventListener("click", () => {
+                const label = opt.getAttribute("data-label");
+                selectedResolutionBadge = opt.getAttribute("data-badge") || "HD";
+                if (valUploadVideoQuality) valUploadVideoQuality.textContent = label;
+                drawerUploadVideoQuality.classList.remove("active");
+            });
+        });
+
         // 2. ENVIAR CONTEÚDO (COM TIPO DE CONTEÚDO VINCULADO À SÉRIE MÃE)
         btnSubmitVideoUpload.addEventListener("click", async () => {
             const isAdult = document.getElementById("uploadIsAdult").checked;
@@ -8176,6 +8394,9 @@
 
                     // Se o usuário adicionou o link do primeiro episódio, gera o card horizontal no 'Para você'
                     if (firstEpUrl) {
+                        const firstEpDurationInput = document.getElementById("uploadFirstEpisodeDuration");
+                        const customFirstEpDuration = firstEpDurationInput && firstEpDurationInput.value.trim() ? firstEpDurationInput.value.trim() : "24:00";
+
                         await addDoc(frutasColecao, {
                             name: `${sName} - Episódio 1`,
                             channel: sName,
@@ -8184,7 +8405,10 @@
                             timeAgo: "agora mesmo",
                             thumbUrl: firstEpCover || currentUploadSettings.thumbUrl,
                             videoUrl: firstEpUrl,
-                            duration: "24:00",
+                            duration: customFirstEpDuration,
+                            season: selectedSeasonNumber || "1",
+                            episodeNum: selectedEpisodeNumber || "1",
+                            resolutionBadge: selectedResolutionBadge || "HD",
                             ratingBadge: selectedAgeBadge || "12+",
                             isAdult: isAdult,
                             contentType: "episode",
@@ -8239,6 +8463,9 @@
                         duration: epDuration,
                         tags: epTagsList,
                         audioType: currentAudioType,
+                        season: selectedSeasonNumber || "1",
+                        episodeNum: selectedEpisodeNumber || "1",
+                        resolutionBadge: selectedResolutionBadge || "HD",
                         ratingBadge: selectedAgeBadge || "12+",
                         isAdult: isAdult,
                         contentType: selectedContentType || "Série",
@@ -12678,6 +12905,101 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
         
-        </script>
+        // Formata data abreviada fiel ao YouTube (ex: 02 Out, 15 Jan, 03 Mar)
+        function formatShortReleaseDate(timestamp) {
+            if (!timestamp) return "02 Out";
+            let date;
+            if (timestamp.toDate) {
+                date = timestamp.toDate();
+            } else if (timestamp.seconds) {
+                date = new Date(timestamp.seconds * 1000);
+            } else if (timestamp instanceof Date) {
+                date = timestamp;
+            } else if (typeof timestamp === "string" || typeof timestamp === "number") {
+                date = new Date(timestamp);
+            } else {
+                date = new Date();
+            }
+
+            const day = String(date.getDate()).padStart(2, '0');
+            const months = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+            const month = months[date.getMonth()];
+            return `${day} ${month}`;
+        }
+
+        // Carrega os 11 últimos episódios postados para a seção "Novos episódios" (Print A)
+        const newEpisodesCarousel = document.getElementById("newEpisodesCarousel");
+
+        function loadNewEpisodesFromFirestore() {
+            if (!newEpisodesCarousel) return;
+
+            onSnapshot(frutasColecao, (snapshot) => {
+                const epList = [];
+
+                snapshot.forEach(docSnap => {
+                    const data = { id: docSnap.id, ...docSnap.data() };
+                    if (data.videoUrl || data.contentType === "episode") {
+                        epList.push(data);
+                    }
+                });
+
+                // Ordena pelos mais recentes primeiro
+                epList.sort((a, b) => {
+                    const timeA = (a.timestamp && a.timestamp.seconds) || (a.createdAt && a.createdAt.seconds) || 0;
+                    const timeB = (b.timestamp && b.timestamp.seconds) || (b.createdAt && b.createdAt.seconds) || 0;
+                    return timeB - timeA;
+                });
+
+                // Limite exato dos 11 novos últimos episódios
+                const top11Episodes = epList.slice(0, 11);
+
+                newEpisodesCarousel.innerHTML = "";
+
+                if (top11Episodes.length === 0) {
+                    const defaultNewEpisodes = [
+                        { name: "Cowboy Bebop", channel: "Sunrise", thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400", duration: "24:00", season: "1", episodeNum: "26", resolutionBadge: "HD" },
+                        { name: "Cowboy Bebop", channel: "Sunrise", thumbUrl: "https://images.unsplash.com/photo-1563089145-599997674d42?w=400", duration: "24:00", season: "1", episodeNum: "25", resolutionBadge: "HD" },
+                        { name: "Cowboy Bebop", channel: "Sunrise", thumbUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400", duration: "24:00", season: "1", episodeNum: "24", resolutionBadge: "HD" },
+                        { name: "Cowboy Bebop", channel: "Sunrise", thumbUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400", duration: "24:00", season: "1", episodeNum: "22", resolutionBadge: "HD" }
+                    ];
+
+                    defaultNewEpisodes.forEach(ep => renderSingleNewEpisodeCard(ep));
+                } else {
+                    top11Episodes.forEach(ep => renderSingleNewEpisodeCard(ep));
+                }
+            });
+        }
+
+        function renderSingleNewEpisodeCard(item) {
+            const card = document.createElement("div");
+            card.className = "fs-ep-card";
+            card.style.minWidth = "150px";
+            card.style.width = "150px";
+
+            const episodeThumb = item.thumbUrl || item.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+            const dateBadgeText = formatShortReleaseDate(item.timestamp || item.createdAt);
+            const resolutionText = item.resolutionBadge || "HD";
+            const seasonNum = item.season || "1";
+            const episodeNum = item.episodeNum || "1";
+
+            card.innerHTML = `
+                <div class="fs-ep-thumb" style="aspect-ratio:16/9; position:relative; overflow:hidden; border-radius:8px; background:#202020;">
+                    <img src="${escapeHtml(episodeThumb)}" alt="Capa" style="width:100%; height:100%; object-fit:cover; display:block;">
+                    <span class="fs-badge-date">${escapeHtml(dateBadgeText)}</span>
+                    <span class="fs-badge-hd">${escapeHtml(resolutionText)}</span>
+                </div>
+                <div class="fs-ep-title" title="${escapeHtml(item.name || 'Episódio')}">${escapeHtml(item.name || 'Episódio')}</div>
+                <div class="fs-ep-sub">${seasonNum}ª Temporada | ${episodeNum}º Episódio</div>
+            `;
+
+            card.onclick = () => {
+                openWatchScreen(item, item.id);
+            };
+
+            newEpisodesCarousel.appendChild(card);
+        }
+
+        loadNewEpisodesFromFirestore();
+    </script>
 </body>
   </html>
