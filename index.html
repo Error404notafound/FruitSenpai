@@ -6690,34 +6690,15 @@
             <!-- Botão "Participar do grupo" para visitantes (Print O) -->
             <button class="group-join-full-btn" id="btnJoinGroupAction" style="display:none;" type="button">Participar do grupo</button>
 
-            <!-- Barra de Criação Rápida de Post Integrada com Upload Infinito de Vídeo -->
-<div class="group-quick-post-box">
-    <div class="group-quick-post-avatar" id="avatarQuickPostUser">U</div>
-    <div class="group-quick-post-input-fake" id="btnTriggerCreatePostModal">Escreva algo...</div>
-    
-    <!-- Seu botão de foto original continua funcionando normalmente -->
-    <button class="group-quick-post-photo-btn" id="btnQuickPostPhoto" type="button">
-        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-        <span>Foto</span>
-    </button>
-
-    <!-- NOVO: Botão de Vídeo dedicado integrado à API v2 -->
-    <label for="video-uploader" class="group-quick-post-photo-btn" style="cursor: pointer; display: flex; align-items: center;">
-        <!-- Ícone SVG de Câmera/Filmadora do YouTube -->
-        <svg viewBox="0 0 24 24" style="fill: #11c76f;"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
-        <span>Vídeo</span>
-    </label>
-    
-    <!-- O input invisível que abre a gaveta do celular quando clica em "Vídeo" -->
-    <input type="file" id="video-uploader" accept="video/*" style="display: none;">
-</div>
-
-<!-- NOVA: Barra de progresso vermelha integrada abaixo do card (estilo YouTube loading) -->
-<div class="progress-bar-bg" style="display: none; width: 100%; background: #272727; height: 4px; position: relative;">
-    <div id="progress-bar-fill" style="width: 0%; background: #ff0000; height: 100%; transition: width 0.1s;"></div>
-</div>
-<p id="upload-status" style="font-size: 11px; color: #aaaaaa; padding: 6px 16px; margin: 0; display: none; background: #0f0f0f; font-family: 'Roboto', sans-serif;"></p>
-
+            <!-- Barra de Criação Rápida de Post -->
+            <div class="group-quick-post-box">
+                <div class="group-quick-post-avatar" id="avatarQuickPostUser">U</div>
+                <div class="group-quick-post-input-fake" id="btnTriggerCreatePostModal">Escreva algo...</div>
+                <button class="group-quick-post-photo-btn" id="btnQuickPostPhoto" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                    <span>Foto</span>
+                </button>
+            </div>
 
             <!-- Atalhos: Post Anônimo, Sentimento, Enquete (100% SVG) -->
             <div class="group-quick-post-shortcuts-row">
@@ -13049,130 +13030,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         loadNewEpisodesFromFirestore();
-
-    // 🔑 COLOQUE AQUI OS SEUS CÓDIGOS REAIS DO DAILYMOTION:
-const CLIENT_ID = '6797760b51ee2483a8d5905c92418b410684d1f3'; 
-const CLIENT_SECRET = '2f23eb8d029215e269d8'; 
-
-const fileInput = document.getElementById('video-uploader');
-const statusText = document.getElementById('upload-status');
-const progressBarBg = document.querySelector('.progress-bar-bg');
-const progressBarFill = document.getElementById('progress-bar-fill');
-
-// Função em background que gera o Token de Acesso usando suas chaves
-async function obterTokenAutomatico() {
-    const urlToken = 'https://dailymotion.com';
-    const corpo = new URLSearchParams();
-    corpo.append('grant_type', 'client_credentials');
-    corpo.append('client_id', CLIENT_ID);
-    corpo.append('client_secret', CLIENT_SECRET);
-
-    const resposta = await fetch(urlToken, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json'
-        },
-        body: corpo
-    });
-
-    if (!resposta.ok) throw new Error('Erro na autenticação');
-    const dados = await resposta.json();
-    return dados.access_token;
-}
-
-// Monitora quando o usuário escolhe um vídeo da galeria do celular
-fileInput.addEventListener('change', async (e) => {
-    const arquivoVideo = e.target.files[0];
-    if (!arquivoVideo) return;
-
-    // Torna os elementos visuais de progresso visíveis na interface
-    statusText.style.display = 'block';
-    progressBarBg.style.display = 'block';
-    statusText.innerText = "Autenticando canal...";
-    progressBarFill.style.width = '0%';
-
-    try {
-        const DAILYMOTION_TOKEN = await obterTokenAutomatico();
-        statusText.innerText = "Conectando ao servidor infinito...";
-
-        // Passo 1: Abre a sessão de upload na API v2
-        const respostaSessao = await fetch('https://dailymotion.com', {
-            method: 'POST',
-            headers: { 
-                'Authorization': `Bearer ${DAILYMOTION_TOKEN}`,
-                'Accept': 'application/json'
-            }
-        });
-        
-        const dadosSessao = await respostaSessao.json();
-        const urlDeUploadServidor = dadosSessao.upload_url;
-
-        // Passo 2: Envia o arquivo físico da galeria do Android
-        const formData = new FormData();
-        formData.append('file', arquivoVideo);
-
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', urlDeUploadServidor, true);
-
-        // Move a barra vermelha de progresso na tela enquanto o vídeo sobe
-        xhr.upload.onprogress = (evento) => {
-            if (evento.lengthComputable) {
-                const porcentagem = Math.round((evento.loaded / evento.total) * 100);
-                progressBarFill.style.width = porcentagem + '%';
-                statusText.innerText = `Enviando episódio: ${porcentagem}%`;
-            }
-        };
-
-        xhr.onload = async () => {
-            if (xhr.status === 200 || xhr.status === 201) {
-                const resultadoUpload = JSON.parse(xhr.responseText);
-                statusText.innerText = "Salvando configurações de streaming...";
-
-                // Passo 3: Cria o vídeo de forma privada dentro da conta
-                const publicarVideo = await fetch('https://dailymotion.com', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${DAILYMOTION_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        source: { file_url: resultadoUpload.url },
-                        title: arquivoVideo.name,
-                        private: true // Garante que o vídeo fica oculto lá e só roda no seu site
-                    })
-                });
-
-                const dadosPublicacao = await publicarVideo.json();
-                const videoId = dadosPublicacao.id; 
-
-                // 🎬 O LINK DO PLAYER QUE CAI DIRETO NO SEU SITE!
-                const linkDoPlayer = `https://dailymotion.com{videoId}`;
-                
-                statusText.innerText = "🚀 Episódio publicado automaticamente com sucesso!";
-                console.log("URL gerada automaticamente para o seu Firebase:", linkDoPlayer);
-
-                // 🔥 PASSO 4: INTEGRAÇÃO AUTOMÁTICA COM O SEU FIREBASE
-                // Descomente as linhas abaixo quando for linkar seu banco de dados:
-                // database.ref('posts_ou_episodios/').push({
-                //     videoUrl: linkDoPlayer,
-                //     titulo: arquivoVideo.name,
-                //     data: new Date().toISOString()
-                // });
-
-            } else {
-                statusText.innerText = "❌ Falha ao processar arquivo no servidor.";
-            }
-        };
-
-        xhr.send(formData);
-
-    } catch (erro) {
-        console.error(erro);
-        statusText.innerText = "❌ Erro nas credenciais ou na conexão.";
-    }
-});
-
     </script>
 </body>
   </html>
