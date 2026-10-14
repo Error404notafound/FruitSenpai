@@ -1965,6 +1965,629 @@
             fill: #ffffff;
         }
 
+        /* ==========================================================================
+           SISTEMA DE GUIAS, ABAS E NAVEGAÇÃO CHROME MOBILE (PRINTS A ATÉ Q)
+           ========================================================================== */
+        /* Contador de Guias do Topo (Print A) */
+        .tab-counter-badge-btn {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--yt-text-primary);
+            border-radius: 6px;
+            background: none;
+            color: var(--yt-text-primary);
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+
+        /* Tela Principal do Seletor de Guias (Print C, D, L, Q) */
+        .tabs-switcher-screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #0c1015;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 480px;
+            z-index: 10005;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 70px;
+        }
+
+        .tabs-switcher-screen.active {
+            display: flex;
+        }
+
+        .tabs-switcher-header {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            background-color: #0c1015;
+            z-index: 10;
+        }
+
+        .tabs-switcher-new-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background-color: #7fcfff;
+            color: #003355;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .tabs-switcher-new-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: #003355;
+        }
+
+        /* Segmented Control Central (Abas Normais, Anônimas, Grupos - Prints C e D) */
+        .tabs-segmented-control {
+            display: flex;
+            background-color: #1a222c;
+            border-radius: 16px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .tabs-segmented-tab {
+            background: none;
+            border: none;
+            color: #8da0b6;
+            width: 40px;
+            height: 34px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .tabs-segmented-tab.active {
+            background-color: #2b394a;
+            color: #dbe8f6;
+        }
+
+        .tabs-segmented-tab svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .tabs-search-input-box {
+            margin: 6px 14px 14px 14px;
+            background-color: #1a222c;
+            border-radius: 20px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 10px;
+        }
+
+        .tabs-search-input-box svg {
+            width: 18px;
+            height: 18px;
+            fill: #8da0b6;
+        }
+
+        .tabs-search-input-box input {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 13.5px;
+            outline: none;
+            width: 100%;
+        }
+
+        /* Grid de 2 Colunas das Guias (Print C e Q) */
+        .tabs-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 0 14px;
+        }
+
+        .tab-card-preview {
+            border-radius: 16px;
+            background-color: #1a222c;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            aspect-ratio: 9 / 12;
+            cursor: pointer;
+            position: relative;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.15s, transform 0.15s;
+        }
+
+        /* Borda Azul da Guia Ativa / Última Aberta (Print Q) */
+        .tab-card-preview.active-tab-highlight {
+            border-color: #7fcfff;
+        }
+
+        .tab-card-preview.select-mode-checked {
+            border-color: #7fcfff;
+        }
+
+        .tab-card-top-bar {
+            height: 38px;
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #1e2936;
+            gap: 6px;
+        }
+
+        .tab-card-favicon-title {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tab-card-favicon-title svg {
+            width: 16px;
+            height: 16px;
+            fill: #7fcfff;
+            flex-shrink: 0;
+        }
+
+        .tab-card-title-text {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tab-card-close-btn {
+            background: none;
+            border: none;
+            color: #8da0b6;
+            cursor: pointer;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tab-card-close-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .tab-card-body-snapshot {
+            flex: 1;
+            background-color: #0f0f0f;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-card-body-snapshot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Card de Grupo de Guias na Grade (Print L e D) */
+        .tab-group-grid-card {
+            border-radius: 16px;
+            background-color: #1a222c;
+            aspect-ratio: 9 / 12;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .tab-group-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .tab-group-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .tab-group-color-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .tab-group-4grid-preview {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 3px;
+            background-color: #121820;
+            padding: 3px;
+        }
+
+        .tab-group-preview-cell {
+            background-color: #1e2936;
+            border-radius: 6px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .tab-group-preview-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .tab-group-preview-cell.plus-more-cell {
+            background-color: #223040;
+            color: #7fcfff;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* Lista de Grupos em Linhas (Print D) */
+        .tab-groups-list-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 0 14px;
+        }
+
+        .tab-group-row-item {
+            display: flex;
+            align-items: center;
+            background-color: #131a22;
+            border-radius: 16px;
+            padding: 10px 14px;
+            gap: 14px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-group-row-thumb-4grid {
+            width: 68px;
+            height: 68px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            gap: 2px;
+            background-color: #1e2936;
+            padding: 2px;
+            flex-shrink: 0;
+        }
+
+        .tab-group-row-thumb-4grid img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        .tab-group-row-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .tab-group-row-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-group-row-meta {
+            font-size: 11.5px;
+            color: #8da0b6;
+        }
+
+        /* Tela de Nova Guia / Busca FruitSenpai (Print E e F) */
+        .new-tab-home-screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #0f141c;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 480px;
+            z-index: 10006;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 75px;
+        }
+
+        .new-tab-home-screen.active {
+            display: flex;
+        }
+
+        .new-tab-center-brand {
+            font-size: 34px;
+            font-weight: 800;
+            color: #ffffff;
+            text-align: center;
+            margin: 28px 0 18px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .new-tab-search-bar {
+            margin: 0 16px 14px 16px;
+            background-color: #1f2a38;
+            border-radius: 26px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            gap: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .new-tab-search-bar input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .new-tab-quick-modes-row {
+            display: flex;
+            gap: 10px;
+            padding: 0 16px 16px 16px;
+        }
+
+        .new-tab-mode-pill {
+            flex: 1;
+            background-color: #1a222c;
+            border: none;
+            border-radius: 20px;
+            height: 40px;
+            color: #dbe8f6;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .new-tab-mode-pill svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Carrossel de Atalhos dos Últimos 8 Acessados (Print E - Setas Laranjas e Roxas) */
+        .new-tab-shortcuts-carousel {
+            display: flex;
+            gap: 14px;
+            padding: 10px 16px 18px 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            background-color: #131a22;
+            border-radius: 16px;
+            margin: 0 16px 16px 16px;
+        }
+
+        .new-tab-shortcuts-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .new-tab-shortcut-item {
+            width: 64px;
+            min-width: 64px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .new-tab-shortcut-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #1f2a38;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .new-tab-shortcut-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .new-tab-shortcut-label {
+            font-size: 11px;
+            color: #8da0b6;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+        }
+
+        /* Card de Trailer Aleatório Recente no Feed da Nova Guia (Print E - Setas Verde e Azul) */
+        .new-tab-trailer-card {
+            margin: 0 16px 16px 16px;
+            background-color: #131a22;
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .new-tab-trailer-thumb-box {
+            width: 90px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #000000;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .new-tab-trailer-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .new-tab-trailer-play-icon {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+        }
+
+        /* Barra Flutuante de Guias do Grupo no Rodapé (Print N) */
+        .group-bottom-tabstrip-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 480px;
+            height: 48px;
+            background-color: #121820;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: none;
+            align-items: center;
+            padding: 0 10px;
+            gap: 10px;
+            z-index: 10010;
+        }
+
+        .group-bottom-tabstrip-bar.active {
+            display: flex;
+        }
+
+        .group-bottom-tabstrip-scroll {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .group-bottom-tabstrip-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .group-mini-tab-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #1e2936;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .group-mini-tab-icon.current-tab {
+            border: 2px solid #7fcfff;
+        }
+
+        .group-mini-tab-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        /* Seleção de Cores da Nova Guia (Print K) */
+        .tab-group-color-choice-row {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-choice-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.15s;
+        }
+
+        .color-choice-circle.selected {
+            border-color: #ffffff;
+            transform: scale(1.15);
+        }
+
         /* Estilos do Carrossel de Histórico (Print A) */
         .history-card {
             min-width: 150px;
@@ -5363,20 +5986,35 @@
             <span class="yt-logo-text">FruitSenpai</span>
         </div>
 
-        <!-- Ações do Cabeçalho com Suporte Dinâmico -->
+        <!-- Ações do Cabeçalho com Suporte Dinâmico (Prints A, B e C) -->
         <div class="yt-header-actions">
-            <!-- Sininho de Notificação (Ocultado na tela Você) -->
-            <button class="yt-icon-btn" aria-label="Notificações" id="btnBell">
+            <!-- Sininho de Notificação (Exibido apenas quando logado no Print B; oculto no Print A) -->
+            <button class="yt-icon-btn" aria-label="Notificações" id="btnBell" style="display:none;">
                 <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
                 <span class="badge-notification">9+</span>
             </button>
 
-            <!-- Lupa de Pesquisa Única -->
+            <!-- Lupa de Pesquisa -->
             <button class="yt-icon-btn" aria-label="Pesquisar" id="btnSearch">
                 <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
             </button>
 
-            <!-- Botão Configurações Único (Ativado na tela Você) -->
+            <!-- Botão + Nova Guia / Abrir com ID Temporário (Seta Azul do Print A) -->
+            <button class="yt-icon-btn" aria-label="Nova Guia" id="btnHeaderNewTabPlus">
+                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </button>
+
+            <!-- Contador de Abas Abertas (Seta Rosa do Print A - Abre o Print C) -->
+            <button class="tab-counter-badge-btn" id="btnHeaderTabCounter" type="button" title="Guias abertas">
+                <span id="txtHeaderTabCountNum">1</span>
+            </button>
+
+            <!-- Kebab 3 Pontinhos de Opções de Navegação (Seta Verde do Print A - Abre Print R) -->
+            <button class="yt-icon-btn" id="btnHeaderBrowserMenu" type="button" aria-label="Menu do Navegador">
+                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </button>
+
+            <!-- Botão Configurações (Ativado na tela Você) -->
             <button class="yt-icon-btn" id="btnSettingsTop" style="display: none;" aria-label="Configurações">
                 <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
             </button>
@@ -6909,6 +7547,226 @@
                 </button>
             </div>
         </section>
+
+        <!-- ==========================================================================
+             TELA PRINT C E D: GERENCIADOR DE GUIAS E ABAS (ESTILO CHROME MOBILE)
+             ========================================================================== -->
+        <section class="tabs-switcher-screen" id="viewTabsGridSwitcher">
+            <div class="tabs-switcher-header">
+                <!-- Botão + Nova Guia no topo esquerdo -->
+                <button class="tabs-switcher-new-btn" id="btnTabsSwitcherNewTab" type="button" title="Nova guia">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+
+                <!-- Controle Segmentado Central: Abas Normais, Anônimas, Grupos de Guias -->
+                <div class="tabs-segmented-control">
+                    <button class="tabs-segmented-tab active" id="tabSegmentNormal" type="button" title="Guias normais">
+                        <span id="txtSegmentNormalCount">1</span>
+                    </button>
+                    <button class="tabs-segmented-tab" id="tabSegmentIncognito" type="button" title="Modo anônimo">
+                        <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 12.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    </button>
+                    <button class="tabs-segmented-tab" id="tabSegmentGroups" type="button" title="Grupos de guias">
+                        <svg viewBox="0 0 24 24"><path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zm-9 9h7v7H4v-7zm9 0h7v7h-7v-7z"/></svg>
+                    </button>
+                </div>
+
+                <!-- 3 Pontinhos de Opções das Guias (Abre Print G) -->
+                <button class="yt-icon-btn" id="btnTabsSwitcherKebabMenu" type="button" aria-label="Opções">
+                    <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </button>
+            </div>
+
+            <!-- Barra de Pesquisa nas Guias -->
+            <div class="tabs-search-input-box">
+                <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                <input type="text" id="inputSearchTabsList" placeholder="Pesquise nas guias">
+            </div>
+
+            <!-- Grade de 2 Colunas das Guias Ativas (Print C e Q) -->
+            <div class="tabs-cards-grid" id="tabsCardsGridContainer"></div>
+
+            <!-- Lista de Grupos de Guias (Exibida na aba de grupos - Print D) -->
+            <div class="tab-groups-list-rows" id="tabGroupsRowsContainer" style="display:none;"></div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA PRINT E E F: NOVA GUIA / PÁGINA INICIAL DA GUIA (FRUITSENPAI SEARCH)
+             ========================================================================== -->
+        <section class="new-tab-home-screen" id="viewNewTabHome">
+            <div class="tabs-switcher-header" style="background:#0f141c;">
+                <div style="width:38px;"></div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn" id="btnNewTabBell" style="display:none;"><svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg></button>
+                    <button class="tab-counter-badge-btn" id="btnNewTabCounter"><span id="txtNewTabCountNum">1</span></button>
+                    <button class="yt-icon-btn" id="btnNewTabOptions"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                </div>
+            </div>
+
+            <!-- Marca FruitSenpai Substituindo o Google (Print E) -->
+            <h1 class="new-tab-center-brand">FruitSenpai</h1>
+
+            <!-- Barra de Busca Universal / Login por ID Selvagem -->
+            <div class="new-tab-search-bar">
+                <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#7fcfff;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                <input type="text" id="inputUniversalWildSearch" placeholder="Pesquise no FruitSenpai ou digite o ID...">
+                <button class="yt-icon-btn" id="btnSubmitWildSearch" type="button"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
+            </div>
+
+            <!-- Botões Modo IA e Modo Anônimo -->
+            <div class="new-tab-quick-modes-row">
+                <button class="new-tab-mode-pill" id="btnNewTabModeAI" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                    <span>Modo IA</span>
+                </button>
+                <button class="new-tab-mode-pill" id="btnNewTabModeIncognito" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 12.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    <span>Modo anônimo</span>
+                </button>
+            </div>
+
+            <!-- Atalhos Horizontais das Últimas 8 Páginas Acessadas (Setas Laranjas e Roxas) -->
+            <div class="new-tab-shortcuts-carousel" id="newTabShortcutsCarousel"></div>
+
+            <!-- Card de Trailer Aleatório Recente no Feed da Guia (Setas Verde e Azul) -->
+            <div class="new-tab-trailer-card" id="btnNewTabPlayTrailer">
+                <div style="flex:1; min-width:0;">
+                    <h3 style="font-size:14px; font-weight:700; color:#fff; line-height:1.3;" id="txtNewTabTrailerTitle">Trailer Oficial Recente</h3>
+                    <div style="font-size:11px; color:#8da0b6; margin-top:4px;">FruitSenpai Trailers • Recente</div>
+                </div>
+                <div class="new-tab-trailer-thumb-box">
+                    <img id="imgNewTabTrailerThumb" src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300" alt="Trailer">
+                    <svg class="new-tab-trailer-play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA PRINT M E M1: DENTRO DO GRUPO DE GUIAS
+             ========================================================================== -->
+        <section class="tabs-switcher-screen" id="viewInsideTabGroup">
+            <div class="tabs-switcher-header">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button class="yt-icon-btn" id="btnBackFromInsideGroup" type="button"><svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg></button>
+                    <div class="tab-group-color-dot" id="dotInsideGroupColor"></div>
+                    <span style="font-size:16px; font-weight:700; color:#fff;" id="txtInsideGroupTitle">5 guias</span>
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <button class="yt-icon-btn" id="btnAddTabInsideCurrentGroup" type="button" title="Adicionar guia ao grupo"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+                    <button class="yt-icon-btn" id="btnInsideGroupKebabOptions" type="button"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                </div>
+            </div>
+            <div class="tabs-cards-grid" id="insideGroupCardsGrid" style="padding-top:10px;"></div>
+        </section>
+
+        <!-- BARRA FLUTUANTE DE NAVEGAÇÃO DE GUIAS DO GRUPO (PRINT N) -->
+        <div class="group-bottom-tabstrip-bar" id="groupBottomTabstripBar">
+            <div class="group-bottom-tabstrip-scroll" id="groupBottomTabstripItems"></div>
+            <button class="yt-icon-btn" id="btnGroupTabstripAddPlus" type="button" title="Nova guia no grupo"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+        </div>
+
+        <!-- ==========================================================================
+             MODAIS E GAVETAS DO SISTEMA DE ABAS E ID TEMPORÁRIO
+             ========================================================================== -->
+        <!-- Modal: Pergunta se já possui ID Temporário ao clicar no + (Print A) -->
+        <div class="yt-center-modal-backdrop" id="modalTempIdQuestion">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:17px; font-weight:700; color:#fff;">Perfil Temporário</h3>
+                <p style="font-size:13px; color:#aaa; line-height:1.4;">Você já possui um ID de perfil temporário salvo?</p>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+                    <button class="profile-pill-btn" id="btnTempIdAnswerNo" type="button">Não</button>
+                    <button class="yt-btn-primary" id="btnTempIdAnswerYes" type="button" style="padding:8px 22px;">Sim</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Exibe o Novo ID Temporário Gerado (com botão Copiar) -->
+        <div class="yt-center-modal-backdrop" id="modalTempIdShowGenerated">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:17px; font-weight:700; color:#fff;">Seu ID Temporário</h3>
+                <p style="font-size:12px; color:#aaa;">Guarde este ID para acessar seu perfil em qualquer dispositivo por até 30 dias de inatividade:</p>
+                <div style="background:#121820; border:1px solid #7fcfff; border-radius:8px; padding:12px; font-size:16px; font-weight:800; color:#7fcfff; text-align:center; letter-spacing:1px;" id="txtGeneratedTempIdVal">FS-TEMP-8492</div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                    <button class="profile-pill-btn" id="btnCopyGeneratedTempId" type="button">Copiar ID</button>
+                    <button class="yt-btn-primary" id="btnContinueWithTempId" type="button">Acessar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Login por ID Temporário -->
+        <div class="yt-center-modal-backdrop" id="modalTempIdPasteLogin">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:17px; font-weight:700; color:#fff;">Entrar com ID</h3>
+                <input type="text" id="inputPasteTempIdVal" class="yt-input" placeholder="Cole ou digite seu ID temporário...">
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                    <button class="profile-pill-btn" id="btnCancelPasteTempId" type="button">Cancelar</button>
+                    <button class="yt-btn-primary" id="btnSubmitPasteTempIdLogin" type="button">Entrar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gaveta: Menu de Opções das Guias (Print G e R) -->
+        <div class="accounts-drawer" id="drawerTabsOptionsMenu" style="z-index:10015;">
+            <div class="accounts-sheet" style="padding:10px 0 20px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnMenuNewTab"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg><span style="font-size:14px;">Nova guia</span></div></div>
+                <div class="account-item-row" id="btnMenuNewIncognitoTab"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 12.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg><span style="font-size:14px;">Nova guia anônima</span></div></div>
+                <div class="account-item-row" id="btnMenuSelectTabsToGroup"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg><span style="font-size:14px;">Selecionar guias</span></div></div>
+                <div class="account-item-row" id="btnMenuCloseAllTabs"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg><span style="font-size:14px;">Fechar todas as guias</span></div></div>
+            </div>
+        </div>
+
+        <!-- Modal: Criar / Renomear Novo Grupo de Guias com Cores (Print K) -->
+        <div class="yt-center-modal-backdrop" id="modalCreateTabGroup">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:18px; font-weight:700; color:#fff;" id="txtModalTabGroupHeader">Novo grupo de guias</h3>
+                <div style="display:flex; flex-direction:column; gap:4px;">
+                    <label style="font-size:11px; color:#7fcfff;">Título</label>
+                    <input type="text" id="inputTabGroupTitle" class="yt-input" placeholder="5 guias">
+                </div>
+                <div class="tab-group-color-choice-row" id="tabGroupColorsRow">
+                    <div class="color-choice-circle selected" data-color="#ffffff" style="background:#ffffff;"></div>
+                    <div class="color-choice-circle" data-color="#3ea6ff" style="background:#3ea6ff;"></div>
+                    <div class="color-choice-circle" data-color="#ff453a" style="background:#ff453a;"></div>
+                    <div class="color-choice-circle" data-color="#ffd60a" style="background:#ffd60a;"></div>
+                    <div class="color-choice-circle" data-color="#30d158" style="background:#30d158;"></div>
+                    <div class="color-choice-circle" data-color="#bf5af2" style="background:#bf5af2;"></div>
+                    <div class="color-choice-circle" data-color="#64d2ff" style="background:#64d2ff;"></div>
+                    <div class="color-choice-circle" data-color="#ff9f0a" style="background:#ff9f0a;"></div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+                    <button class="profile-pill-btn" id="btnCancelCreateTabGroup" type="button">Cancelar</button>
+                    <button class="yt-btn-primary" id="btnConfirmCreateTabGroup" type="button" style="background:#7fcfff; color:#003355;">Concluído</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal: Desfazer Grupo de Guias (Print P) -->
+        <div class="yt-center-modal-backdrop" id="modalUngroupConfirm">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:18px; font-weight:700; color:#fff;">Desfazer grupo de guias?</h3>
+                <p style="font-size:13px; color:#aaa; line-height:1.4;">As guias vão continuar abertas no dispositivo, mas o grupo será excluído permanentemente.</p>
+                <label style="display:flex; align-items:center; gap:8px; font-size:12px; color:#aaa; margin-top:4px;">
+                    <input type="checkbox" id="chkDontAskUngroupAgain" style="accent-color:#7fcfff;">
+                    <span>Não perguntar novamente</span>
+                </label>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                    <button class="profile-pill-btn" id="btnCancelUngroup" type="button">Cancelar</button>
+                    <button class="yt-btn-primary" id="btnConfirmUngroup" type="button" style="background:#7fcfff; color:#003355;">Desagrupar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gaveta: Opções do Grupo de Guias (Print O) -->
+        <div class="accounts-drawer" id="drawerTabGroupKebabActions" style="z-index:10015;">
+            <div class="accounts-sheet" style="padding:10px 0 20px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnGroupActionClose"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#aaa;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg><span style="font-size:14px;">Fechar</span></div></div>
+                <div class="account-item-row" id="btnGroupActionRename"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#aaa;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span style="font-size:14px;">Renomear</span></div></div>
+                <div class="account-item-row" id="btnGroupActionUngroup"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#aaa;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg><span style="font-size:14px;">Desagrupar</span></div></div>
+                <div class="account-item-row" id="btnGroupActionDelete"><div class="account-item-left"><svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ff453a;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span style="font-size:14px; color:#ff453a;">Excluir</span></div></div>
+            </div>
+        </div>
 
         <!-- ==========================================================================
              TELA OFICIAL DA PLAYLIST INDIVIDUAL (PRINTS A, A1, A2, A3, A4, F2, G2)
@@ -13285,6 +14143,825 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         loadHeroBannerCarouselFromFirestore();
+
+        // ==========================================================================
+        // SISTEMA DE GUIAS, ID TEMPORÁRIO E COMPARTILHAMENTO SELVAGEM (PRINTS A ATÉ Q)
+        // ==========================================================================
+        let appTabsList = [];
+        let appTabGroupsList = [];
+        let activeTabId = null;
+        let activeInsideGroupId = null;
+        let isTabSelectionMode = false;
+        let selectedTabIdsForGrouping = new Set();
+        let selectedGroupColor = "#ffffff";
+        let isAntiSpamCooldownActive = false;
+        let recentShortcutsList = [];
+
+        const btnHeaderNewTabPlus = document.getElementById("btnHeaderNewTabPlus");
+        const btnHeaderTabCounter = document.getElementById("btnHeaderTabCounter");
+        const txtHeaderTabCountNum = document.getElementById("txtHeaderTabCountNum");
+        const btnHeaderBrowserMenu = document.getElementById("btnHeaderBrowserMenu");
+
+        const viewTabsGridSwitcher = document.getElementById("viewTabsGridSwitcher");
+        const btnTabsSwitcherNewTab = document.getElementById("btnTabsSwitcherNewTab");
+        const tabSegmentNormal = document.getElementById("tabSegmentNormal");
+        const tabSegmentIncognito = document.getElementById("tabSegmentIncognito");
+        const tabSegmentGroups = document.getElementById("tabSegmentGroups");
+        const txtSegmentNormalCount = document.getElementById("txtSegmentNormalCount");
+        const btnTabsSwitcherKebabMenu = document.getElementById("btnTabsSwitcherKebabMenu");
+        const tabsCardsGridContainer = document.getElementById("tabsCardsGridContainer");
+        const tabGroupsRowsContainer = document.getElementById("tabGroupsRowsContainer");
+
+        const viewNewTabHome = document.getElementById("viewNewTabHome");
+        const inputUniversalWildSearch = document.getElementById("inputUniversalWildSearch");
+        const btnSubmitWildSearch = document.getElementById("btnSubmitWildSearch");
+        const newTabShortcutsCarousel = document.getElementById("newTabShortcutsCarousel");
+        const btnNewTabPlayTrailer = document.getElementById("btnNewTabPlayTrailer");
+        const txtNewTabTrailerTitle = document.getElementById("txtNewTabTrailerTitle");
+        const imgNewTabTrailerThumb = document.getElementById("imgNewTabTrailerThumb");
+        const btnNewTabCounter = document.getElementById("btnNewTabCounter");
+        const txtNewTabCountNum = document.getElementById("txtNewTabCountNum");
+
+        const viewInsideTabGroup = document.getElementById("viewInsideTabGroup");
+        const btnBackFromInsideGroup = document.getElementById("btnBackFromInsideGroup");
+        const txtInsideGroupTitle = document.getElementById("txtInsideGroupTitle");
+        const dotInsideGroupColor = document.getElementById("dotInsideGroupColor");
+        const insideGroupCardsGrid = document.getElementById("insideGroupCardsGrid");
+        const btnAddTabInsideCurrentGroup = document.getElementById("btnAddTabInsideCurrentGroup");
+        const groupBottomTabstripBar = document.getElementById("groupBottomTabstripBar");
+        const groupBottomTabstripItems = document.getElementById("groupBottomTabstripItems");
+        const btnGroupTabstripAddPlus = document.getElementById("btnGroupTabstripAddPlus");
+
+        const modalTempIdQuestion = document.getElementById("modalTempIdQuestion");
+        const btnTempIdAnswerNo = document.getElementById("btnTempIdAnswerNo");
+        const btnTempIdAnswerYes = document.getElementById("btnTempIdAnswerYes");
+        const modalTempIdShowGenerated = document.getElementById("modalTempIdShowGenerated");
+        const txtGeneratedTempIdVal = document.getElementById("txtGeneratedTempIdVal");
+        const btnCopyGeneratedTempId = document.getElementById("btnCopyGeneratedTempId");
+        const btnContinueWithTempId = document.getElementById("btnContinueWithTempId");
+        const modalTempIdPasteLogin = document.getElementById("modalTempIdPasteLogin");
+        const inputPasteTempIdVal = document.getElementById("inputPasteTempIdVal");
+        const btnCancelPasteTempId = document.getElementById("btnCancelPasteTempId");
+        const btnSubmitPasteTempIdLogin = document.getElementById("btnSubmitPasteTempIdLogin");
+
+        const drawerTabsOptionsMenu = document.getElementById("drawerTabsOptionsMenu");
+        const btnMenuNewTab = document.getElementById("btnMenuNewTab");
+        const btnMenuNewIncognitoTab = document.getElementById("btnMenuNewIncognitoTab");
+        const btnMenuSelectTabsToGroup = document.getElementById("btnMenuSelectTabsToGroup");
+        const btnMenuCloseAllTabs = document.getElementById("btnMenuCloseAllTabs");
+
+        const modalCreateTabGroup = document.getElementById("modalCreateTabGroup");
+        const txtModalTabGroupHeader = document.getElementById("txtModalTabGroupHeader");
+        const inputTabGroupTitle = document.getElementById("inputTabGroupTitle");
+        const btnCancelCreateTabGroup = document.getElementById("btnCancelCreateTabGroup");
+        const btnConfirmCreateTabGroup = document.getElementById("btnConfirmCreateTabGroup");
+
+        const modalUngroupConfirm = document.getElementById("modalUngroupConfirm");
+        const btnCancelUngroup = document.getElementById("btnCancelUngroup");
+        const btnConfirmUngroup = document.getElementById("btnConfirmUngroup");
+        const drawerTabGroupKebabActions = document.getElementById("drawerTabGroupKebabActions");
+        const btnGroupActionClose = document.getElementById("btnGroupActionClose");
+        const btnGroupActionRename = document.getElementById("btnGroupActionRename");
+        const btnGroupActionUngroup = document.getElementById("btnGroupActionUngroup");
+        const btnGroupActionDelete = document.getElementById("btnGroupActionDelete");
+
+        let currentTargetGroupForAction = null;
+
+        // 1. CARREGAMENTO INICIAL DO STORAGE E LIMPEZA DE ABAS ANTIGAS (> 2 DIAS E ANÔNIMAS > 15 DIAS)
+        function initAppTabsAndStorage() {
+            const savedTabs = localStorage.getItem("fs_browser_tabs");
+            if (savedTabs) {
+                try {
+                    const parsed = JSON.parse(savedTabs);
+                    const now = Date.now();
+                    const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
+                    const fifteenDaysMs = 15 * 24 * 60 * 60 * 1000;
+
+                    // Limpa automaticamente abas expiradas
+                    appTabsList = parsed.filter(t => {
+                        const age = now - (t.createdAt || now);
+                        if (t.isIncognito) return age < fifteenDaysMs;
+                        return age < twoDaysMs;
+                    });
+                } catch(e) {
+                    appTabsList = [];
+                }
+            }
+
+            if (appTabsList.length === 0) {
+                createNewTabObject("Início", "home", false);
+            } else {
+                activeTabId = appTabsList[0].id;
+            }
+
+            const savedGroups = localStorage.getItem("fs_tab_groups");
+            if (savedGroups) {
+                try { appTabGroupsList = JSON.parse(savedGroups); } catch(e) { appTabGroupsList = []; }
+            }
+
+            const savedShortcuts = localStorage.getItem("fs_recent_shortcuts");
+            if (savedShortcuts) {
+                try { recentShortcutsList = JSON.parse(savedShortcuts); } catch(e) { recentShortcutsList = []; }
+            }
+
+            updateTabsCountBadges();
+            loadRandomTrailerForNewTab();
+        }
+
+        function saveTabsToStorage() {
+            localStorage.setItem("fs_browser_tabs", JSON.stringify(appTabsList));
+            localStorage.setItem("fs_tab_groups", JSON.stringify(appTabGroupsList));
+            localStorage.setItem("fs_recent_shortcuts", JSON.stringify(recentShortcutsList));
+            updateTabsCountBadges();
+        }
+
+        function updateTabsCountBadges() {
+            const count = appTabsList.length;
+            const label = count > 99 ? "99+" : String(count);
+            if (txtHeaderTabCountNum) txtHeaderTabCountNum.textContent = label;
+            if (txtNewTabCountNum) txtNewTabCountNum.textContent = label;
+            if (txtSegmentNormalCount) txtSegmentNormalCount.textContent = label;
+        }
+
+        // 2. CRIAÇÃO DE NOVA ABA COM VALIDAÇÃO DE ID TEMPORÁRIO (PRINT A -> PRINT E)
+        function createNewTabObject(title = "Nova Guia", route = "newtab", isIncognito = false, groupId = null) {
+            const newId = `tab_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+            const tabObj = {
+                id: newId,
+                title: title,
+                route: route,
+                isIncognito: isIncognito,
+                groupId: groupId,
+                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400",
+                createdAt: Date.now(),
+                lastActive: Date.now()
+            };
+
+            appTabsList.push(tabObj);
+            activeTabId = newId;
+            saveTabsToStorage();
+            return tabObj;
+        }
+
+        // Clique na seta azul do Print A: Botão +
+        btnHeaderNewTabPlus.addEventListener("click", () => {
+            // Se o usuário está logado: abre direto a nova aba (Print F)
+            if (currentUserEmail) {
+                createNewTabObject("Nova Guia", "newtab", false);
+                openNewTabHomeScreen(true);
+                return;
+            }
+
+            // Se o usuário NÃO está logado: verifica ID temporário existente no navegador (Barreira do Navegador)
+            const savedTempId = localStorage.getItem("fs_temp_profile_id");
+            if (savedTempId) {
+                createNewTabObject("Nova Guia", "newtab", false);
+                openNewTabHomeScreen(false);
+            } else {
+                modalTempIdQuestion.classList.add("active");
+            }
+        });
+
+        // Resposta "Sim" (Print E -> Abre modal com campo para colar o ID temporário)
+        btnTempIdAnswerYes.addEventListener("click", () => {
+            modalTempIdQuestion.classList.remove("active");
+            inputPasteTempIdVal.value = "";
+            modalTempIdPasteLogin.classList.add("active");
+            inputPasteTempIdVal.focus();
+        });
+
+        // Resposta "Não" (Gera 1 ID temporário único e aplica proteção Antispam de 5 min)
+        btnTempIdAnswerNo.addEventListener("click", () => {
+            modalTempIdQuestion.classList.remove("active");
+
+            if (isAntiSpamCooldownActive) {
+                alert("Calma! Você já gerou um perfil temporário recentemente. Aguarde um momento.");
+                return;
+            }
+
+            // Ativa a Barreira de Tempo Antispam por 5 minutos
+            isAntiSpamCooldownActive = true;
+            setTimeout(() => { isAntiSpamCooldownActive = false; }, 5 * 60 * 1000);
+
+            const randomCode = `FS-TEMP-${Math.floor(1000 + Math.random() * 9000)}`;
+            txtGeneratedTempIdVal.textContent = randomCode;
+            localStorage.setItem("fs_temp_profile_id", randomCode);
+            modalTempIdShowGenerated.classList.add("active");
+        });
+
+        btnCopyGeneratedTempId.addEventListener("click", () => {
+            navigator.clipboard.writeText(txtGeneratedTempIdVal.textContent);
+            showToast("ID temporário copiado!");
+        });
+
+        btnContinueWithTempId.addEventListener("click", () => {
+            modalTempIdShowGenerated.classList.remove("active");
+            createNewTabObject("Nova Guia", "newtab", false);
+            openNewTabHomeScreen(false);
+            showToast("Perfil temporário ativo por 30 dias.");
+        });
+
+        btnCancelPasteTempId.addEventListener("click", () => {
+            modalTempIdPasteLogin.classList.remove("active");
+        });
+
+        // Login por ID temporário (no modal ou pela barra de busca do Print E)
+        async function processTempIdLogin(idString) {
+            const cleanId = String(idString).trim().toUpperCase();
+            if (!cleanId) return;
+
+            localStorage.setItem("fs_temp_profile_id", cleanId);
+            modalTempIdPasteLogin.classList.remove("active");
+            showToast(`Conectado com o ID: ${cleanId}`);
+            createNewTabObject("Nova Guia", "newtab", false);
+            openNewTabHomeScreen(false);
+        }
+
+        btnSubmitPasteTempIdLogin.addEventListener("click", () => {
+            processTempIdLogin(inputPasteTempIdVal.value);
+        });
+
+        // 3. SISTEMA DE COMPARTILHAMENTO SELVAGEM (ID UNIVERSAL CURTO)
+        async function createWildShareId(type, originalDocId) {
+            try {
+                const shortCode = `FS-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+                await setDoc(doc(db, "compartilhamentos", shortCode), {
+                    tipo: type,
+                    idOriginal: originalDocId,
+                    criadoEm: serverTimestamp()
+                });
+                return shortCode;
+            } catch(e) {
+                return `FS-${originalDocId.substring(0, 5).toUpperCase()}`;
+            }
+        }
+
+        // Rastreamento automático dos últimos 8 acessados (Setas laranjas e roxas do Print E)
+        function registerRecentOpenedItem(title, coverUrl, type, originalId) {
+            if (!title) return;
+            recentShortcutsList = recentShortcutsList.filter(item => item.title !== title);
+            recentShortcutsList.unshift({
+                title: title,
+                coverUrl: coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200",
+                type: type,
+                originalId: originalId
+            });
+            if (recentShortcutsList.length > 8) {
+                recentShortcutsList = recentShortcutsList.slice(0, 8);
+            }
+            saveTabsToStorage();
+        }
+
+        // 4. TELA DA NOVA GUIA (PRINT E E F)
+        function openNewTabHomeScreen(isLoggedIn) {
+            openScreen(viewNewTabHome);
+            const bell = document.getElementById("btnNewTabBell");
+            if (bell) bell.style.display = isLoggedIn ? "flex" : "none";
+
+            renderRecentShortcutsInNewTab();
+        }
+
+        function renderRecentShortcutsInNewTab() {
+            if (!newTabShortcutsCarousel) return;
+            newTabShortcutsCarousel.innerHTML = "";
+
+            if (recentShortcutsList.length === 0) {
+                const defaults = [
+                    { title: "Facebook", coverUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200", type: "social" },
+                    { title: "YouTube", coverUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200", type: "video" },
+                    { title: "HentaiLândia", coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200", type: "adult" },
+                    { title: "Clevatess", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200", type: "serie" }
+                ];
+                defaults.forEach(d => renderSingleShortcutPill(d));
+            } else {
+                recentShortcutsList.forEach(item => renderSingleShortcutPill(item));
+            }
+        }
+
+        function renderSingleShortcutPill(item) {
+            const div = document.createElement("div");
+            div.className = "new-tab-shortcut-item";
+            div.innerHTML = `
+                <div class="new-tab-shortcut-circle">
+                    <img src="${escapeHtml(item.coverUrl)}" alt="${escapeHtml(item.title)}">
+                </div>
+                <span class="new-tab-shortcut-label" title="${escapeHtml(item.title)}">${escapeHtml(item.title)}</span>
+            `;
+            div.onclick = () => {
+                if (item.type === "serie") openSeriesChannel(item.title);
+                else openScreen("home");
+            };
+            newTabShortcutsCarousel.appendChild(div);
+        }
+
+        // Busca Universal: Resolve ID Temporário ou ID Selvagem de Compartilhamento
+        async function executeUniversalWildSearch() {
+            const term = inputUniversalWildSearch.value.trim();
+            if (!term) return;
+
+            // 1. Se for um ID Temporário de Perfil (FS-TEMP-...)
+            if (term.toUpperCase().startsWith("FS-TEMP-")) {
+                processTempIdLogin(term);
+                return;
+            }
+
+            // 2. Se for um ID Selvagem de Compartilhamento (FS-...)
+            if (term.toUpperCase().startsWith("FS-")) {
+                try {
+                    const snap = await getDoc(doc(db, "compartilhamentos", term.toUpperCase()));
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        if (data.tipo === "serie") {
+                            openSeriesChannel(data.idOriginal);
+                        } else if (data.tipo === "grupo") {
+                            openGroupDetailPage(data.idOriginal);
+                        } else if (data.tipo === "playlist") {
+                            openPlaylistDetailPage(data.idOriginal, "Playlist");
+                        } else {
+                            openScreen("home");
+                        }
+                        showToast(`Redirecionado pelo ID Selvagem ${term.toUpperCase()}`);
+                        return;
+                    }
+                } catch(e) {}
+            }
+
+            // 3. Busca normal
+            showToast(`Buscando por: ${term}`);
+            openScreen("home");
+        }
+
+        btnSubmitWildSearch.addEventListener("click", executeUniversalWildSearch);
+        inputUniversalWildSearch.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") executeUniversalWildSearch();
+        });
+
+        // Trailer Recente no Feed da Guia
+        function loadRandomTrailerForNewTab() {
+            onSnapshot(frutasColecao, (snap) => {
+                const trailers = [];
+                snap.forEach(d => {
+                    const data = d.data();
+                    if (data.contentType === "Trailer" || (data.name && data.name.toLowerCase().includes("trailer"))) {
+                        trailers.push({ id: d.id, ...data });
+                    }
+                });
+
+                if (trailers.length > 0) {
+                    const picked = trailers[Math.floor(Math.random() * trailers.length)];
+                    txtNewTabTrailerTitle.textContent = picked.name;
+                    imgNewTabTrailerThumb.src = picked.thumbUrl || picked.seriesCover || "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300";
+                    btnNewTabPlayTrailer.onclick = () => openWatchScreen(picked, picked.id);
+                }
+            });
+        }
+
+        // 5. SELETOR DE GUIAS (PRINT C, D, L, Q)
+        btnHeaderTabCounter.addEventListener("click", () => openTabsSwitcherScreen("normal"));
+        btnNewTabCounter.addEventListener("click", () => openTabsSwitcherScreen("normal"));
+
+        function openTabsSwitcherScreen(segment = "normal") {
+            openScreen(viewTabsGridSwitcher);
+            isTabSelectionMode = false;
+            selectedTabIdsForGrouping.clear();
+
+            tabSegmentNormal.classList.toggle("active", segment === "normal");
+            tabSegmentIncognito.classList.toggle("active", segment === "incognito");
+            tabSegmentGroups.classList.toggle("active", segment === "groups");
+
+            if (segment === "groups") {
+                tabsCardsGridContainer.style.display = "none";
+                tabGroupsRowsContainer.style.display = "flex";
+                renderTabGroupsRowsList();
+            } else {
+                tabGroupsRowsContainer.style.display = "none";
+                tabsCardsGridContainer.style.display = "grid";
+                renderTabsCardsGrid(segment === "incognito");
+            }
+        }
+
+        tabSegmentNormal.addEventListener("click", () => openTabsSwitcherScreen("normal"));
+        tabSegmentIncognito.addEventListener("click", () => openTabsSwitcherScreen("incognito"));
+        tabSegmentGroups.addEventListener("click", () => openTabsSwitcherScreen("groups"));
+
+        btnTabsSwitcherNewTab.addEventListener("click", () => {
+            createNewTabObject("Nova Guia", "newtab", tabSegmentIncognito.classList.contains("active"));
+            openNewTabHomeScreen(Boolean(currentUserEmail));
+        });
+
+        // Renderiza as guias em grade de 2 colunas com borda azul na ativa (Print C e Q)
+        function renderTabsCardsGrid(filterIncognito = false) {
+            tabsCardsGridContainer.innerHTML = "";
+            const filteredTabs = appTabsList.filter(t => Boolean(t.isIncognito) === filterIncognito && !t.groupId);
+
+            // Renderiza primeiro os grupos criados dentro da grade (Print L)
+            if (!filterIncognito) {
+                appTabGroupsList.forEach(grp => {
+                    const groupCard = document.createElement("div");
+                    groupCard.className = "tab-group-grid-card";
+                    const tabsInGroup = appTabsList.filter(t => grp.tabIds && grp.tabIds.includes(t.id));
+                    const count = tabsInGroup.length;
+
+                    groupCard.innerHTML = `
+                        <div class="tab-group-card-header">
+                            <div class="tab-group-card-header-left">
+                                <div class="tab-group-color-dot" style="background:${grp.color || '#fff'};"></div>
+                                <span>${escapeHtml(grp.title || `${count} guias`)}</span>
+                            </div>
+                            <button class="fs-kebab-btn-mini btnGroupKebabOpt" type="button"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                        </div>
+                        <div class="tab-group-4grid-preview">
+                            <div class="tab-group-preview-cell"><img src="${escapeHtml(tabsInGroup[0] ? tabsInGroup[0].thumbUrl : 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200')}"></div>
+                            <div class="tab-group-preview-cell"><img src="${escapeHtml(tabsInGroup[1] ? tabsInGroup[1].thumbUrl : 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200')}"></div>
+                            <div class="tab-group-preview-cell"><img src="${escapeHtml(tabsInGroup[2] ? tabsInGroup[2].thumbUrl : 'https://images.unsplash.com/photo-1563089145-599997674d42?w=200')}"></div>
+                            <div class="tab-group-preview-cell ${count > 3 ? 'plus-more-cell' : ''}">
+                                ${count > 3 ? `+${count - 3}` : `<img src="${escapeHtml(tabsInGroup[3] ? tabsInGroup[3].thumbUrl : 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200')}">`}
+                            </div>
+                        </div>
+                    `;
+
+                    groupCard.onclick = (e) => {
+                        if (e.target.closest(".btnGroupKebabOpt")) return;
+                        openInsideGroupScreen(grp.id);
+                    };
+
+                    const kebab = groupCard.querySelector(".btnGroupKebabOpt");
+                    if (kebab) {
+                        kebab.onclick = (e) => {
+                            e.stopPropagation();
+                            currentTargetGroupForAction = grp;
+                            drawerTabGroupKebabActions.classList.add("active");
+                        };
+                    }
+
+                    tabsCardsGridContainer.appendChild(groupCard);
+                });
+            }
+
+            // Renderiza as guias soltas
+            filteredTabs.forEach(t => {
+                const card = document.createElement("div");
+                const isActive = (t.id === activeTabId);
+                const isSelected = selectedTabIdsForGrouping.has(t.id);
+                card.className = `tab-card-preview ${isActive ? 'active-tab-highlight' : ''} ${isSelected ? 'select-mode-checked' : ''}`;
+
+                card.innerHTML = `
+                    <div class="tab-card-top-bar">
+                        <div class="tab-card-favicon-title">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            <span class="tab-card-title-text">${escapeHtml(t.title)}</span>
+                        </div>
+                        <button class="tab-card-close-btn btnCloseSingleTab" type="button"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+                    </div>
+                    <div class="tab-card-body-snapshot">
+                        <img src="${escapeHtml(t.thumbUrl)}" alt="Snapshot">
+                    </div>
+                `;
+
+                card.onclick = (e) => {
+                    if (e.target.closest(".btnCloseSingleTab")) return;
+
+                    // Modo seleção de guias para agrupar (Print H)
+                    if (isTabSelectionMode) {
+                        if (selectedTabIdsForGrouping.has(t.id)) {
+                            selectedTabIdsForGrouping.delete(t.id);
+                        } else {
+                            selectedTabIdsForGrouping.add(t.id);
+                        }
+                        renderTabsCardsGrid(filterIncognito);
+                        return;
+                    }
+
+                    // Abre a guia selecionada
+                    activeTabId = t.id;
+                    saveTabsToStorage();
+                    if (t.route === "newtab") {
+                        openNewTabHomeScreen(Boolean(currentUserEmail));
+                    } else {
+                        openScreen("home");
+                    }
+                };
+
+                const closeBtn = card.querySelector(".btnCloseSingleTab");
+                if (closeBtn) {
+                    closeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        appTabsList = appTabsList.filter(tab => tab.id !== t.id);
+                        if (activeTabId === t.id && appTabsList.length > 0) {
+                            activeTabId = appTabsList[0].id;
+                        }
+                        saveTabsToStorage();
+                        renderTabsCardsGrid(filterIncognito);
+                    };
+                }
+
+                tabsCardsGridContainer.appendChild(card);
+            });
+        }
+
+        // Renderiza lista em linhas de grupos (Print D)
+        function renderTabGroupsRowsList() {
+            tabGroupsRowsContainer.innerHTML = "";
+
+            if (appTabGroupsList.length === 0) {
+                tabGroupsRowsContainer.innerHTML = `<div style="padding:40px 16px; text-align:center; color:#8da0b6; font-size:13.5px;">Nenhum grupo de guias criado ainda.</div>`;
+                return;
+            }
+
+            appTabGroupsList.forEach(grp => {
+                const tabsInGroup = appTabsList.filter(t => grp.tabIds && grp.tabIds.includes(t.id));
+                const count = tabsInGroup.length;
+                const row = document.createElement("div");
+                row.className = "tab-group-row-item";
+
+                row.innerHTML = `
+                    <div class="tab-group-row-thumb-4grid">
+                        <img src="${escapeHtml(tabsInGroup[0] ? tabsInGroup[0].thumbUrl : 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200')}">
+                        <img src="${escapeHtml(tabsInGroup[1] ? tabsInGroup[1].thumbUrl : 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200')}">
+                        <img src="${escapeHtml(tabsInGroup[2] ? tabsInGroup[2].thumbUrl : 'https://images.unsplash.com/photo-1563089145-599997674d42?w=200')}">
+                        <img src="${escapeHtml(tabsInGroup[3] ? tabsInGroup[3].thumbUrl : 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=200')}">
+                    </div>
+                    <div class="tab-group-row-info">
+                        <div class="tab-group-row-title">
+                            <div class="tab-group-color-dot" style="background:${grp.color || '#fff'};"></div>
+                            <span>${count === 1 ? '1 guia' : `${count} guias`}</span>
+                        </div>
+                        <div class="tab-group-row-meta">Atualizado recentemente</div>
+                    </div>
+                    <button class="yt-icon-btn btnRowGroupKebabOpt" type="button"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                `;
+
+                row.onclick = (e) => {
+                    if (e.target.closest(".btnRowGroupKebabOpt")) return;
+                    openInsideGroupScreen(grp.id);
+                };
+
+                const kebab = row.querySelector(".btnRowGroupKebabOpt");
+                if (kebab) {
+                    kebab.onclick = (e) => {
+                        e.stopPropagation();
+                        currentTargetGroupForAction = grp;
+                        drawerTabGroupKebabActions.classList.add("active");
+                    };
+                }
+
+                tabGroupsRowsContainer.appendChild(row);
+            });
+        }
+
+        // 6. DENTRO DO GRUPO DE GUIAS (PRINT M E M1)
+        function openInsideGroupScreen(groupId) {
+            activeInsideGroupId = groupId;
+            const grp = appTabGroupsList.find(g => g.id === groupId);
+            if (!grp) return;
+
+            openScreen(viewInsideTabGroup);
+            const tabsInGroup = appTabsList.filter(t => grp.tabIds && grp.tabIds.includes(t.id));
+
+            txtInsideGroupTitle.textContent = grp.title || `${tabsInGroup.length} guias`;
+            dotInsideGroupColor.style.backgroundColor = grp.color || "#ffffff";
+
+            renderInsideGroupGrid(tabsInGroup, grp);
+        }
+
+        btnBackFromInsideGroup.addEventListener("click", () => {
+            openTabsSwitcherScreen("normal");
+        });
+
+        btnAddTabInsideCurrentGroup.addEventListener("click", () => {
+            const newTab = createNewTabObject("Nova Guia no Grupo", "newtab", false, activeInsideGroupId);
+            const grp = appTabGroupsList.find(g => g.id === activeInsideGroupId);
+            if (grp) {
+                if (!grp.tabIds) grp.tabIds = [];
+                grp.tabIds.push(newTab.id);
+                saveTabsToStorage();
+            }
+            openInsideGroupScreen(activeInsideGroupId);
+        });
+
+        function renderInsideGroupGrid(tabsInGroup, grp) {
+            insideGroupCardsGrid.innerHTML = "";
+            tabsInGroup.forEach(t => {
+                const card = document.createElement("div");
+                card.className = "tab-card-preview";
+                card.innerHTML = `
+                    <div class="tab-card-top-bar">
+                        <div class="tab-card-favicon-title">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            <span class="tab-card-title-text">${escapeHtml(t.title)}</span>
+                        </div>
+                        <button class="tab-card-close-btn btnCloseInsideTab" type="button"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+                    </div>
+                    <div class="tab-card-body-snapshot">
+                        <img src="${escapeHtml(t.thumbUrl)}" alt="Snapshot">
+                    </div>
+                `;
+
+                card.onclick = (e) => {
+                    if (e.target.closest(".btnCloseInsideTab")) return;
+                    activeTabId = t.id;
+                    saveTabsToStorage();
+                    openScreen("home");
+                    showGroupBottomTabstrip(grp);
+                };
+
+                const closeBtn = card.querySelector(".btnCloseInsideTab");
+                if (closeBtn) {
+                    closeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        appTabsList = appTabsList.filter(tab => tab.id !== t.id);
+                        grp.tabIds = grp.tabIds.filter(id => id !== t.id);
+                        saveTabsToStorage();
+                        openInsideGroupScreen(grp.id);
+                    };
+                }
+
+                insideGroupCardsGrid.appendChild(card);
+            });
+        }
+
+        // 7. BARRA FLUTUANTE DE GUIAS DO GRUPO NO RODAPÉ (PRINT N)
+        function showGroupBottomTabstrip(grp) {
+            if (!grp || !groupBottomTabstripBar) return;
+            groupBottomTabstripBar.classList.add("active");
+            groupBottomTabstripItems.innerHTML = "";
+
+            const tabsInGroup = appTabsList.filter(t => grp.tabIds && grp.tabIds.includes(t.id));
+            tabsInGroup.forEach(t => {
+                const icon = document.createElement("div");
+                const isCurrent = (t.id === activeTabId);
+                icon.className = `group-mini-tab-icon ${isCurrent ? 'current-tab' : ''}`;
+                icon.innerHTML = `<img src="${escapeHtml(t.thumbUrl)}">`;
+                icon.onclick = () => {
+                    activeTabId = t.id;
+                    saveTabsToStorage();
+                    showGroupBottomTabstrip(grp);
+                };
+                groupBottomTabstripItems.appendChild(icon);
+            });
+        }
+
+        btnGroupTabstripAddPlus.addEventListener("click", () => {
+            if (activeInsideGroupId) {
+                const newTab = createNewTabObject("Nova Guia", "newtab", false, activeInsideGroupId);
+                const grp = appTabGroupsList.find(g => g.id === activeInsideGroupId);
+                if (grp) {
+                    grp.tabIds.push(newTab.id);
+                    saveTabsToStorage();
+                    showGroupBottomTabstrip(grp);
+                }
+            }
+        });
+
+        // 8. CRIAÇÃO E GERENCIAMENTO DE GRUPOS DE GUIAS (PRINT G, H, I, K, O, P)
+        btnHeaderBrowserMenu.addEventListener("click", () => drawerTabsOptionsMenu.classList.add("active"));
+        btnTabsSwitcherKebabMenu.addEventListener("click", () => drawerTabsOptionsMenu.classList.add("active"));
+
+        btnMenuNewTab.addEventListener("click", () => {
+            drawerTabsOptionsMenu.classList.remove("active");
+            createNewTabObject("Nova Guia", "newtab", false);
+            openNewTabHomeScreen(Boolean(currentUserEmail));
+        });
+
+        btnMenuNewIncognitoTab.addEventListener("click", () => {
+            drawerTabsOptionsMenu.classList.remove("active");
+            createNewTabObject("Nova Guia Anônima", "newtab", true);
+            openNewTabHomeScreen(false);
+        });
+
+        btnMenuCloseAllTabs.addEventListener("click", () => {
+            drawerTabsOptionsMenu.classList.remove("active");
+            appTabsList = [];
+            appTabGroupsList = [];
+            createNewTabObject("Início", "home", false);
+            saveTabsToStorage();
+            openTabsSwitcherScreen("normal");
+            showToast("Todas as guias foram fechadas.");
+        });
+
+        // Modo Selecionar Guias (Print G -> Print H)
+        btnMenuSelectTabsToGroup.addEventListener("click", () => {
+            drawerTabsOptionsMenu.classList.remove("active");
+            isTabSelectionMode = true;
+            selectedTabIdsForGrouping.clear();
+            renderTabsCardsGrid(false);
+            showToast("Selecione as guias que deseja agrupar e clique em Novo Grupo.");
+
+            // Abre o modal de criar grupo com as selecionadas
+            setTimeout(() => {
+                inputTabGroupTitle.value = "";
+                modalCreateTabGroup.classList.add("active");
+            }, 300);
+        });
+
+        // Escolha de Cor no Modal de Novo Grupo (Print K)
+        document.querySelectorAll(".color-choice-circle").forEach(circle => {
+            circle.addEventListener("click", () => {
+                document.querySelectorAll(".color-choice-circle").forEach(c => c.classList.remove("selected"));
+                circle.classList.add("selected");
+                selectedGroupColor = circle.getAttribute("data-color");
+            });
+        });
+
+        btnCancelCreateTabGroup.addEventListener("click", () => {
+            modalCreateTabGroup.classList.remove("active");
+            isTabSelectionMode = false;
+            selectedTabIdsForGrouping.clear();
+            renderTabsCardsGrid(false);
+        });
+
+        // Concluir Criação de Grupo de Guias (Print K -> Print L)
+        btnConfirmCreateTabGroup.addEventListener("click", () => {
+            const rawTitle = inputTabGroupTitle.value.trim();
+            const tabIdsToGroup = selectedTabIdsForGrouping.size > 0 
+                ? Array.from(selectedTabIdsForGrouping) 
+                : appTabsList.slice(0, 5).map(t => t.id);
+
+            const finalTitle = rawTitle || `${tabIdsToGroup.length} guias`;
+            const newGroupId = `group_${Date.now()}`;
+
+            appTabGroupsList.push({
+                id: newGroupId,
+                title: finalTitle,
+                color: selectedGroupColor,
+                tabIds: tabIdsToGroup,
+                updatedAt: Date.now()
+            });
+
+            // Associa as guias ao grupo
+            appTabsList.forEach(t => {
+                if (tabIdsToGroup.includes(t.id)) {
+                    t.groupId = newGroupId;
+                }
+            });
+
+            modalCreateTabGroup.classList.remove("active");
+            isTabSelectionMode = false;
+            selectedTabIdsForGrouping.clear();
+            saveTabsToStorage();
+            openTabsSwitcherScreen("normal");
+            showToast(`Grupo "${finalTitle}" criado!`);
+        });
+
+        // Opções do Kebab do Grupo (Print O)
+        btnGroupActionClose.addEventListener("click", () => {
+            drawerTabGroupKebabActions.classList.remove("active");
+            if (currentTargetGroupForAction) {
+                // Fecha todas as guias do grupo mantendo o grupo
+                appTabsList = appTabsList.filter(t => !currentTargetGroupForAction.tabIds.includes(t.id));
+                currentTargetGroupForAction.tabIds = [];
+                saveTabsToStorage();
+                openTabsSwitcherScreen("normal");
+                showToast("Guias do grupo fechadas.");
+            }
+        });
+
+        btnGroupActionRename.addEventListener("click", () => {
+            drawerTabGroupKebabActions.classList.remove("active");
+            if (currentTargetGroupForAction) {
+                txtModalTabGroupHeader.textContent = "Renomear grupo";
+                inputTabGroupTitle.value = currentTargetGroupForAction.title;
+                modalCreateTabGroup.classList.add("active");
+            }
+        });
+
+        btnGroupActionUngroup.addEventListener("click", () => {
+            drawerTabGroupKebabActions.classList.remove("active");
+            modalUngroupConfirm.classList.add("active");
+        });
+
+        btnCancelUngroup.addEventListener("click", () => {
+            modalUngroupConfirm.classList.remove("active");
+        });
+
+        // Desagrupar confirmado (Print P): liberta as guias e apaga o grupo
+        btnConfirmUngroup.addEventListener("click", () => {
+            modalUngroupConfirm.classList.remove("active");
+            if (currentTargetGroupForAction) {
+                appTabsList.forEach(t => {
+                    if (t.groupId === currentTargetGroupForAction.id) {
+                        t.groupId = null;
+                    }
+                });
+                appTabGroupsList = appTabGroupsList.filter(g => g.id !== currentTargetGroupForAction.id);
+                saveTabsToStorage();
+                openTabsSwitcherScreen("normal");
+                showToast("Grupo desfeito. As guias continuam abertas.");
+            }
+        });
+
+        btnGroupActionDelete.addEventListener("click", () => {
+            drawerTabGroupKebabActions.classList.remove("active");
+            if (currentTargetGroupForAction) {
+                appTabsList = appTabsList.filter(t => !currentTargetGroupForAction.tabIds.includes(t.id));
+                appTabGroupsList = appTabGroupsList.filter(g => g.id !== currentTargetGroupForAction.id);
+                saveTabsToStorage();
+                openTabsSwitcherScreen("normal");
+                showToast("Grupo e guias excluídos permanentemente.");
+            }
+        });
+
+        initAppTabsAndStorage();
     </script>
 </body>
   </html>
