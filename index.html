@@ -9561,60 +9561,66 @@
             iconUploadExpand.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
         });
 
-        // Elementos do Modal do Lápis
+        // Elementos do Modal do Lápis (com verificação para não travar o script)
         const drawerEditThumb = document.getElementById("drawerEditThumb");
         const inputThumbModalUrl = document.getElementById("inputThumbModalUrl");
         const btnCloseEditThumb = document.getElementById("btnCloseEditThumb");
         const btnCancelEditThumb = document.getElementById("btnCancelEditThumb");
         const btnConfirmEditThumb = document.getElementById("btnConfirmEditThumb");
 
-        // 1. Ao clicar no lápis, abre o campo de URL
-        btnEditUploadThumb.addEventListener("click", () => {
-            // Puxa a URL atual (seja a que já estiver na tela ou no input de episódio)
-            inputThumbModalUrl.value = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
-            drawerEditThumb.classList.add("active");
-            inputThumbModalUrl.focus();
-        });
+        if (btnEditUploadThumb) {
+            btnEditUploadThumb.addEventListener("click", () => {
+                inputThumbModalUrl.value = uploadEpisodeCover ? uploadEpisodeCover.value.trim() : currentUploadSettings.thumbUrl;
+                if (drawerEditThumb) drawerEditThumb.classList.add("active");
+                if (inputThumbModalUrl) inputThumbModalUrl.focus();
+            });
+        }
 
-        // 2. Pré-visualização instantânea enquanto digita ou cola a URL no campo
-        inputThumbModalUrl.addEventListener("input", (e) => {
-            const url = e.target.value.trim();
-            if (url) {
-                uploadVideoThumb.src = url;
-            }
-        });
-
-        // 3. Confirmar alteração
-        btnConfirmEditThumb.addEventListener("click", () => {
-            const url = inputThumbModalUrl.value.trim();
-            if (url) {
-                currentUploadSettings.thumbUrl = url;
-                uploadVideoThumb.src = url;
-                // Sincroniza também com o campo do episódio se estiver nele
-                if (uploadEpisodeCover) {
-                    uploadEpisodeCover.value = url;
+        if (inputThumbModalUrl) {
+            inputThumbModalUrl.addEventListener("input", (e) => {
+                const url = e.target.value.trim();
+                if (url && uploadVideoThumb) {
+                    uploadVideoThumb.src = url;
                 }
-            }
-            drawerEditThumb.classList.remove("active");
-        });
+            });
+        }
 
-        // 4. Fechar ou Cancelar
-        btnCloseEditThumb.addEventListener("click", () => {
-            uploadVideoThumb.src = currentUploadSettings.thumbUrl; // Restaura se não confirmou
-            drawerEditThumb.classList.remove("active");
-        });
+        if (btnConfirmEditThumb) {
+            btnConfirmEditThumb.addEventListener("click", () => {
+                const url = inputThumbModalUrl ? inputThumbModalUrl.value.trim() : "";
+                if (url) {
+                    currentUploadSettings.thumbUrl = url;
+                    if (uploadVideoThumb) uploadVideoThumb.src = url;
+                    if (uploadEpisodeCover) {
+                        uploadEpisodeCover.value = url;
+                    }
+                }
+                if (drawerEditThumb) drawerEditThumb.classList.remove("active");
+            });
+        }
 
-        btnCancelEditThumb.addEventListener("click", () => {
-            uploadVideoThumb.src = currentUploadSettings.thumbUrl;
-            drawerEditThumb.classList.remove("active");
-        });
+        if (btnCloseEditThumb) {
+            btnCloseEditThumb.addEventListener("click", () => {
+                if (uploadVideoThumb) uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+                if (drawerEditThumb) drawerEditThumb.classList.remove("active");
+            });
+        }
 
-        drawerEditThumb.addEventListener("click", (e) => {
-            if (e.target === drawerEditThumb) {
-                uploadVideoThumb.src = currentUploadSettings.thumbUrl;
-                drawerEditThumb.classList.remove("active");
-            }
-        });
+        if (btnCancelEditThumb) {
+            btnCancelEditThumb.addEventListener("click", () => {
+                if (uploadVideoThumb) uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+                if (drawerEditThumb) drawerEditThumb.classList.remove("active");
+            });
+        }
+
+        if (drawerEditThumb) {
+            drawerEditThumb.addEventListener("click", (e) => {
+                if (e.target === drawerEditThumb) {
+                    if (uploadVideoThumb) uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+                    drawerEditThumb.classList.remove("active");
+                }
+            });
+        }
 
         // Subtelas existentes
         const viewUploadVisibilityScreen = document.getElementById("viewUploadVisibilityScreen");
