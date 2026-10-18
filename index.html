@@ -10350,6 +10350,154 @@
             }
         });
 
+
+            const isAdult = document.getElementById("uploadIsAdult").checked;
+            const nextEpDate = document.getElementById("uploadNextEpDate").value;
+
+            try {
+                btnSubmitVideoUpload.disabled = true;
+                btnSubmitVideoUpload.textContent = "Enviando...";
+
+                if (currentUploadMode === "series") {
+                    // MODO 1: CRIAR SÉRIE (CAPA VERTICAL VAI PARA OS CARROSSÉIS E ABRE O CANAL)
+                    const sName = uploadSeriesName.value.trim();
+                    const sSynopsis = uploadSeriesSynopsis.value.trim();
+                    const sGenres = uploadSeriesGenres.value.trim();
+                    const firstEpCoverInput = document.getElementById("uploadFirstEpisodeCover");
+                    const firstEpUrlInput = document.getElementById("uploadFirstEpisodeUrl");
+                    const firstEpCover = firstEpCoverInput ? firstEpCoverInput.value.trim() : "";
+                    const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
+
+                    if (!sName) {
+                        alert("Por favor, preencha o nome da série!");
+                        uploadSeriesName.focus();
+                        return;
+                    }
+
+                    // Leitura da URL da capa de exibição do topo e do seletor Novo/Recente
+                    const heroBannerInput = document.getElementById("uploadHeroBannerUrl");
+                    const heroBannerUrlVal = heroBannerInput ? heroBannerInput.value.trim() : "";
+
+                    // Grava a Série mãe no banco (Card vertical para os carrosséis e exibição no banner se Novo/Recente for Sim)
+                    await addDoc(collection(db, "series"), {
+                        title: sName,
+                        coverUrl: currentUploadSettings.thumbUrl,
+                        heroBannerUrl: heroBannerUrlVal || null,
+                        isRecentFeatured: isRecentFeaturedSelected,
+                        synopsis: sSynopsis,
+                        genres: sGenres ? sGenres.split(",").map(g => g.trim()) : ["Anime"],
+                        visibility: currentUploadSettings.visibility,
+                        isAdult: isAdult,
+                        ratingBadge: selectedAgeBadge || "12+",
+                        contentType: selectedContentType || "Anime",
+                        nextEpDate: nextEpDate || null,
+                        author: currentUserEmail,
+                        episodes: [],
+                        createdAt: serverTimestamp()
+                    });
+
+                    // Se o usuário adicionou o link do primeiro episódio, gera o card horizontal no 'Para você'
+                    if (firstEpUrl) {
+                        const firstEpDurationInput = document.getElementById("uploadFirstEpisodeDuration");
+                        const customFirstEpDuration = firstEpDurationInput && firstEpDurationInput.value.trim() ? firstEpDurationInput.value.trim() : "24:00";
+
+                        await addDoc(frutasColecao, {
+                            name: `${sName} - Episódio 1`,
+                            channel: sName,
+                            seriesCover: currentUploadSettings.thumbUrl,
+                            viewsCount: 0,
+                            timeAgo: "agora mesmo",
+                            thumbUrl: firstEpCover || currentUploadSettings.thumbUrl,
+                            videoUrl: firstEpUrl,
+                            duration: customFirstEpDuration,
+                            season: selectedSeasonNumber || "1",
+                            episodeNum: selectedEpisodeNumber || "1",
+                            resolutionBadge: selectedResolutionBadge || "HD",
+                            ratingBadge: selectedAgeBadge || "12+",
+                            isAdult: isAdult,
+                            contentType: "episode",
+                            timestamp: serverTimestamp()
+                        });
+                    }
+
+                    uploadSeriesName.value = "";
+                    uploadSeriesSynopsis.value = "";
+                    uploadSeriesGenres.value = "";
+                    if (firstEpCoverInput) firstEpCoverInput.value = "";
+                    if (firstEpUrlInput) firstEpUrlInput.value = "";
+                    showToast("Série criada com sucesso!");
+
+                } else {
+                    // MODO 2: POSTAR EPISÓDIO / REELS / TRAILER (VINCULADO AO NOME DA SÉRIE MÃE)
+                    const epTitle = uploadEpisodeTitle.value.trim();
+                    const epCover = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
+                    const epVideoUrl = uploadEpisodeVideoUrl.value.trim();
+
+                    if (!selectedSeriesId && !uploadSearchSeries.value.trim()) {
+                        alert("Por favor, selecione ou digite a série correspondente!");
+                        uploadSearchSeries.focus();
+                        return;
+                    }
+
+                    if (!epTitle) {
+                        alert("Por favor, digite o nome do episódio!");
+                        uploadEpisodeTitle.focus();
+                        return;
+                    }
+
+                    const seriesName = uploadSearchSeries.value.trim();
+                    const epDuration = uploadEpisodeDuration && uploadEpisodeDuration.value.trim() ? uploadEpisodeDuration.value.trim() : "24:00";
+                    const epTagsRaw = uploadEpisodeTags ? uploadEpisodeTags.value.trim() : "";
+                    const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
+
+                    let seriesPhoto = "";
+                    const matchedSeries = availableSeriesList.find(s => s.id === selectedSeriesId || (s.title && s.title.toLowerCase() === seriesName.toLowerCase()));
+                    if (matchedSeries && matchedSeries.coverUrl) {
+                        seriesPhoto = matchedSeries.coverUrl;
+                    }
+
+                    await addDoc(frutasColecao, {
+                        name: epTitle,
+                        channel: seriesName,
+                        seriesCover: seriesPhoto || epCover,
+                        viewsCount: 0,
+                        timeAgo: "agora mesmo",
+                        thumbUrl: epCover,
+                        videoUrl: epVideoUrl,
+                        duration: epDuration,
+                        tags: epTagsList,
+                        audioType: currentAudioType,
+                        season: selectedSeasonNumber || "1",
+                        episodeNum: selectedEpisodeNumber || "1",
+                        resolutionBadge: selectedResolutionBadge || "HD",
+                        ratingBadge: selectedAgeBadge || "12+",
+                        isAdult: isAdult,
+                        contentType: selectedContentType || "Série",
+                        timestamp: serverTimestamp()
+                    });
+
+                    uploadEpisodeTitle.value = "";
+                    uploadEpisodeCover.value = "";
+                    uploadEpisodeVideoUrl.value = "";
+                    if (uploadEpisodeDuration) uploadEpisodeDuration.value = "";
+                    if (uploadEpisodeTags) uploadEpisodeTags.value = "";
+                    uploadSearchSeries.value = "";
+                    selectedSeriesId = null;
+                    showToast(`${selectedContentType} publicado com sucesso!`);
+                }
+
+                viewUploadDetails.classList.remove("active");
+                openScreen("home");
+            } catch (err) {
+                console.error("Erro ao enviar:", err);
+                showToast("Erro ao publicar.");
+            } finally {
+                btnSubmitVideoUpload.disabled = false;
+                btnSubmitVideoUpload.textContent = "Enviar";
+            }
+        });
+                    
+
         // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (4 LINHAS X 2 COLUNAS), MAIS RECENTES NO TOPO
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
