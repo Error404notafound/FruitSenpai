@@ -5390,6 +5390,122 @@
             text-overflow: ellipsis;
             line-height: 1.2;
         }
+
+        /* ==========================================================================
+           1. PRÉVIA SUPERIOR: CARD REDONDO E NOME DA SÉRIE (SETA VERDE)
+           ========================================================================== */
+        .upload-video-header-preview {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px 6px 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .upload-video-header-circle {
+            width: 42px;
+            height: 42px;
+            min-width: 42px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #242424;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .upload-video-header-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .upload-video-header-texts {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .upload-video-header-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .upload-video-header-sub {
+            font-size: 11.5px;
+            color: #aaaaaa;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-top: 1px;
+        }
+
+        /* ==========================================================================
+           2. PRÉVIA INFERIOR: CARD VERTICAL DA SÉRIE (FIEL AO PRINT)
+           ========================================================================== */
+        .upload-series-vertical-preview-area {
+            padding: 12px 16px;
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .upload-series-vertical-card {
+            width: 115px;
+            min-width: 115px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .upload-series-vertical-thumb {
+            width: 100%;
+            aspect-ratio: 2 / 3;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+        }
+
+        .upload-series-vertical-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .upload-series-vertical-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .upload-series-vertical-genre {
+            font-size: 10px;
+            color: #888888;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
         .upload-title-box {
             padding: 0 16px 14px 16px;
         }
@@ -8207,6 +8323,17 @@
                 </button>
             </div>
 
+            <!-- 1. Prévia Superior com Card Redondo e Título da Série (Seta Verde) -->
+            <div class="upload-video-header-preview">
+                <div class="upload-video-header-circle">
+                    <img id="uploadHeaderCircleThumb" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" alt="Capa da Série">
+                </div>
+                <div class="upload-video-header-texts">
+                    <h2 class="upload-video-header-title" id="uploadHeaderTitleText">The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life - Episódio 1</h2>
+                    <span class="upload-video-header-sub" id="uploadHeaderSubText">The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life</span>
+                </div>
+            </div>
+
             <!-- Linha Unificada: Canal do Usuário e Botões Lado a Lado -->
             <div class="upload-channel-row">
                 <div class="upload-channel-left-info">
@@ -8244,8 +8371,19 @@
                 <div class="upload-episodes-scroll" id="uploadEpisodesScroll"></div>
             </div>
 
+            <!-- 2. Prévia Inferior da Série: Card Vertical com Bordas Arredondadas (Fiel ao Print) -->
+            <div class="upload-series-vertical-preview-area">
+                <div class="upload-series-vertical-card">
+                    <div class="upload-series-vertical-thumb">
+                        <img id="uploadSeriesVerticalPosterImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Capa da Série">
+                    </div>
+                    <div class="upload-series-vertical-title" id="uploadSeriesVerticalPosterTitle">The Laid-Off Chea...</div>
+                    <div class="upload-series-vertical-genre" id="uploadSeriesVerticalPosterGenre">Fantasia</div>
+                </div>
+            </div>
+
             <!-- ==========================================================
-                 MODO 1: CAMPOS DE CRIAR SÉRIE
+                 MODO 1: CAMPOS DE CRIAR SÉRIE (INTACTOS ABAIXO DO CARD VERTICAL)
                  ========================================================== -->
             <div id="modeCreateSeriesContainer" style="display: flex; flex-direction: column;">
                 <div class="upload-title-box">
@@ -9311,6 +9449,76 @@
 
         // Inicializa a exibição dos cards
         renderUploadEpisodesScroll();
+
+        // ==========================================================================
+        // SINCRONIZAÇÃO EM TEMPO REAL: CARD REDONDO E CARD VERTICAL DA SÉRIE
+        // ==========================================================================
+        const uploadHeaderCircleThumb = document.getElementById("uploadHeaderCircleThumb");
+        const uploadHeaderTitleText = document.getElementById("uploadHeaderTitleText");
+        const uploadHeaderSubText = document.getElementById("uploadHeaderSubText");
+        const uploadSeriesVerticalPosterImg = document.getElementById("uploadSeriesVerticalPosterImg");
+        const uploadSeriesVerticalPosterTitle = document.getElementById("uploadSeriesVerticalPosterTitle");
+        const uploadSeriesVerticalPosterGenre = document.getElementById("uploadSeriesVerticalPosterGenre");
+
+        const inputSeriesTitleSync = document.getElementById("uploadSeriesName");
+        const inputSeriesGenresSync = document.getElementById("uploadSeriesGenres");
+        const inputSeriesCoverSync = document.getElementById("uploadFirstEpisodeCover");
+        const inputEpisodeCoverSync = document.getElementById("uploadEpisodeCover");
+
+        // 1. Atualiza os títulos em tempo real ao digitar em "Crie um título"
+        if (inputSeriesTitleSync) {
+            inputSeriesTitleSync.addEventListener("input", (e) => {
+                const text = e.target.value.trim();
+                const displayTitle = text || "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life";
+
+                if (uploadHeaderTitleText) {
+                    uploadHeaderTitleText.textContent = `${displayTitle} - Episódio 1`;
+                }
+                if (uploadHeaderSubText) {
+                    uploadHeaderSubText.textContent = displayTitle;
+                }
+                if (uploadSeriesVerticalPosterTitle) {
+                    uploadSeriesVerticalPosterTitle.textContent = text || "The Laid-Off Chea...";
+                }
+            });
+        }
+
+        // 2. Atualiza o card redondo e o card vertical em tempo real ao digitar ou colar a URL da foto da capa
+        function handleSyncSeriesCoverUrl(url) {
+            const cleanUrl = url.trim();
+            const fallbackImg = "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+            const finalImg = cleanUrl || fallbackImg;
+
+            if (uploadHeaderCircleThumb) {
+                uploadHeaderCircleThumb.src = finalImg;
+            }
+            if (uploadSeriesVerticalPosterImg) {
+                uploadSeriesVerticalPosterImg.src = finalImg;
+            }
+        }
+
+        if (inputSeriesCoverSync) {
+            inputSeriesCoverSync.addEventListener("input", (e) => {
+                handleSyncSeriesCoverUrl(e.target.value);
+            });
+        }
+
+        if (inputEpisodeCoverSync) {
+            inputEpisodeCoverSync.addEventListener("input", (e) => {
+                handleSyncSeriesCoverUrl(e.target.value);
+            });
+        }
+
+        // 3. Atualiza o gênero em tempo real no card vertical ao digitar nos gêneros
+        if (inputSeriesGenresSync) {
+            inputSeriesGenresSync.addEventListener("input", (e) => {
+                const val = e.target.value.trim();
+                if (uploadSeriesVerticalPosterGenre) {
+                    const firstGenre = val ? val.split(",")[0].trim() : "Fantasia";
+                    uploadSeriesVerticalPosterGenre.textContent = firstGenre;
+                }
+            });
+        }
 
         // 2. Seta Rosa (Link 🔗): foca no campo de link do episódio
         if (btnThumbEpisodeLink) {
