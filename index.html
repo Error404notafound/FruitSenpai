@@ -5968,395 +5968,6 @@
             padding: 10px 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-
-        /* ==========================================================================
-           NOVO SISTEMA DE MÚLTIPLOS EPISÓDIOS E POSTAGEM EM SVGS
-           ========================================================================== */
-        .upload-episode-cover-container {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background-color: #212121;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .upload-episode-cover-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-episode-floating-actions {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-            pointer-events: none;
-        }
-
-        .upload-floating-btn-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            pointer-events: auto;
-        }
-
-        .upload-circle-action-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.75);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            outline: none;
-            transition: transform 0.15s ease, background-color 0.15s ease;
-        }
-
-        .upload-circle-action-btn:active {
-            transform: scale(1.1);
-            background-color: rgba(62, 166, 255, 0.4);
-        }
-
-        .upload-circle-action-btn svg {
-            width: 18px;
-            height: 18px;
-            fill: #ffffff;
-        }
-
-        .upload-ep-count-badge {
-            position: absolute;
-            bottom: 10px;
-            left: 12px;
-            background-color: rgba(0, 0, 0, 0.85);
-            color: #ffffff;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 4px;
-            letter-spacing: 0.3px;
-            z-index: 5;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-
-        .upload-episodes-section {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            background-color: #141414;
-        }
-
-        .upload-episodes-header-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .upload-episodes-header-title {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .upload-btn-add-episode-pill {
-            background-color: #272727;
-            color: #3ea6ff;
-            border: 1px solid rgba(62, 166, 255, 0.3);
-            border-radius: 16px;
-            height: 30px;
-            padding: 0 12px;
-            font-size: 12px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-
-        .upload-btn-add-episode-pill svg {
-            width: 14px;
-            height: 14px;
-            fill: currentColor;
-        }
-
-        .upload-episodes-carousel {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            padding: 6px 0 8px 0;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .upload-episodes-carousel::-webkit-scrollbar {
-            display: none;
-        }
-
-        .upload-episode-card-preview {
-            width: 130px;
-            min-width: 130px;
-            background-color: #1a1a1a;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid transparent;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            transition: border-color 0.2s ease, transform 0.15s ease;
-        }
-
-        .upload-episode-card-preview.active-editing {
-            border-color: #3ea6ff;
-            transform: scale(1.02);
-        }
-
-        .upload-episode-card-thumb {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            background-color: #252525;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .upload-episode-card-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-episode-card-kebab {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.75);
-            border: none;
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 5;
-        }
-
-        .upload-episode-card-kebab svg {
-            width: 14px;
-            height: 14px;
-            fill: #ffffff;
-        }
-
-        .upload-episode-card-info {
-            padding: 6px 8px 8px 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .upload-episode-card-title {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .upload-episode-card-sub {
-            font-size: 10px;
-            color: #888888;
-        }
-
-        .upload-series-buttons-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .upload-custom-action-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 14px;
-            background-color: #1a1a1a;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            cursor: pointer;
-            color: #ffffff;
-        }
-
-        .upload-custom-action-row-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .upload-custom-action-row-left svg {
-            width: 20px;
-            height: 20px;
-            fill: #3ea6ff;
-            flex-shrink: 0;
-        }
-
-        .upload-custom-action-texts {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .upload-custom-action-label {
-            font-size: 11px;
-            color: #aaaaaa;
-        }
-
-        .upload-custom-action-value {
-            font-size: 13.5px;
-            font-weight: 600;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .upload-series-preview-box {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 14px;
-            background: linear-gradient(135deg, #1c1c1c 0%, #141414 100%);
-            border-radius: 12px;
-            margin: 4px 16px 12px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .upload-series-preview-thumb {
-            width: 48px;
-            height: 64px;
-            border-radius: 6px;
-            overflow: hidden;
-            background-color: #2a2a2a;
-            flex-shrink: 0;
-        }
-
-        .upload-series-preview-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-series-preview-info {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .upload-series-preview-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .upload-series-preview-badge {
-            background-color: #272111;
-            color: #f59e0b;
-            font-size: 10.5px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 4px;
-            align-self: flex-start;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-        }
-
-        .upload-banner-preview-box {
-            margin: 0 16px 12px 16px;
-            border-radius: 10px;
-            aspect-ratio: 16 / 9;
-            background-color: #1a1a1a;
-            overflow: hidden;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            display: none;
-        }
-
-        .upload-banner-preview-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .yt-modal-btn-blue {
-            background-color: #3ea6ff;
-            color: #0f0f0f;
-            border: none;
-            border-radius: 18px;
-            height: 36px;
-            padding: 0 18px;
-            font-size: 13.5px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: filter 0.15s ease;
-        }
-
-        .yt-modal-btn-blue:active {
-            filter: brightness(0.85);
-        }
-
-        .yt-modal-btn-white {
-            background-color: #ffffff;
-            color: #0f0f0f;
-            border: none;
-            border-radius: 18px;
-            height: 36px;
-            padding: 0 18px;
-            font-size: 13.5px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .yt-modal-btn-white:active {
-            background-color: #e5e5e5;
-        }
     </style>
 </head>
 <body>
@@ -8294,7 +7905,7 @@
         </nav>
 
         <!-- ==========================================================================
-             TELA PRINCIPAL DE POSTAGEM: ADICIONAR DETALHES (COM MULTI-EPISÓDIOS E VISUAL EM SVGS)
+             TELA PRINCIPAL DE POSTAGEM: ADICIONAR DETALHES (COM ABAS DE SÉRIE & EPISÓDIO)
              ========================================================================== -->
         <section class="upload-view-screen" id="viewUploadDetails">
             <!-- Topo com botão voltar -->
@@ -8305,64 +7916,12 @@
                 <span class="upload-top-title">Adicionar detalhes</span>
             </div>
 
-            <!-- CONTAINER SUPERIOR: CAPA DO EPISÓDIO ATUAL COM BOTÕES FLUTUANTES (PRINT A) -->
-            <div class="upload-episode-cover-container">
-                <img id="uploadEpisodeCoverImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800" alt="Capa do Episódio">
-                
-                <!-- Barra de Ações Sobreposta na Capa do Episódio -->
-                <div class="upload-episode-floating-actions">
-                    <!-- Esquerda: (+) Criar Novo, Lápis Capa (Verde), Link Vídeo (Rosa), Faixa Etária (Laranja), Ampulheta Duração (Amarela) -->
-                    <div class="upload-floating-btn-group">
-                        <!-- Seta Vermelha: (+) Adicionar Novo Episódio -->
-                        <button type="button" class="upload-circle-action-btn" id="btnEpAddPlus" title="Adicionar novo episódio do zero">
-                            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                        </button>
-                        <!-- Seta Verde: Lápis para URL da Foto do Episódio -->
-                        <button type="button" class="upload-circle-action-btn" id="btnEpEditCover" title="Alterar foto do episódio">
-                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                        </button>
-                        <!-- Seta Rosa: Link URL do Vídeo do Episódio -->
-                        <button type="button" class="upload-circle-action-btn" id="btnEpEditVideo" title="Link URL do vídeo">
-                            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                        </button>
-                        <!-- Seta Laranja: Classificação Indicativa -->
-                        <button type="button" class="upload-circle-action-btn" id="btnEpEditRating" title="Classificação indicativa">
-                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-                        </button>
-                        <!-- Seta Amarela: Ampulheta de Duração -->
-                        <button type="button" class="upload-circle-action-btn" id="btnEpEditDuration" title="Duração do episódio">
-                            <svg viewBox="0 0 24 24"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zM12 11.5l-4-4V4h8v3.5l-4 4z"/></svg>
-                        </button>
-                    </div>
-
-                    <!-- Direita: Seta Azul (Lápis do Nome do Episódio) -->
-                    <div class="upload-floating-btn-group">
-                        <button type="button" class="upload-circle-action-btn" id="btnEpEditTitle" title="Nomear episódio">
-                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Badges de Identificação na Foto do Episódio -->
-                <div class="upload-ep-count-badge" id="badgeCurrentEpisodeLabel">Episódio 1</div>
-                <div class="yt-duration-badge" id="badgeCurrentEpisodeDuration">24:00</div>
-            </div>
-
-            <!-- CARROSSEL DE PRÉVIA DE ATÉ 100 EPISÓDIOS (PRINT A - SETAS ROXA E BRANCA) -->
-            <div class="upload-episodes-section">
-                <div class="upload-episodes-header-row">
-                    <span class="upload-episodes-header-title">
-                        <span>Prévias dos Episódios</span>
-                        <small style="color:#888; font-weight:400;" id="txtTotalEpisodesCounter">(1)</small>
-                    </span>
-                    <!-- Seta Vermelha: Botão Adicionar -->
-                    <button type="button" class="upload-btn-add-episode-pill" id="btnAddNewEpisodeFromBar">
-                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                        <span>Adicionar</span>
-                    </button>
-                </div>
-                <!-- Scroll Horizontal das Prévias dos Episódios (Setas Roxa e Branca) -->
-                <div class="upload-episodes-carousel" id="uploadEpisodesCarousel"></div>
+            <!-- Preview do Vídeo com botão de edição de capa -->
+            <div class="upload-thumb-area">
+                <img id="uploadVideoThumb" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80" alt="Capa">
+                <button class="upload-thumb-edit-btn" id="btnEditUploadThumb" title="Alterar miniatura">
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                </button>
             </div>
 
             <!-- OS 2 BOTÕES DE MODO (CRIAR SÉRIE / POSTAR EPISÓDIO) -->
@@ -8385,74 +7944,36 @@
             </div>
 
             <!-- ==========================================================
-                 MODO 1: SÉRIE COM BOTÕES SVG EM VEZ DE CAMPOS DE TEXTO CRUS (PRINT B E C)
+                 MODO 1: CAMPOS DE CRIAR SÉRIE
                  ========================================================== -->
             <div id="modeCreateSeriesContainer" style="display: flex; flex-direction: column;">
-                
-                <div class="upload-series-buttons-grid">
-                    <!-- Seta Vermelha (Print B): Lápis para Título da Série -->
-                    <div class="upload-custom-action-row" id="btnSeriesEditTitle">
-                        <div class="upload-custom-action-row-left">
-                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                            <div class="upload-custom-action-texts">
-                                <span class="upload-custom-action-label">Título da Série</span>
-                                <span class="upload-custom-action-value" id="valSeriesTitle">Crie um título da série</span>
-                            </div>
-                        </div>
-                        <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </div>
-
-                    <!-- Seta Verde (Print B): Link para Capa da Série -->
-                    <div class="upload-custom-action-row" id="btnSeriesEditCover">
-                        <div class="upload-custom-action-row-left">
-                            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                            <div class="upload-custom-action-texts">
-                                <span class="upload-custom-action-label">Foto de Capa da Série</span>
-                                <span class="upload-custom-action-value" id="valSeriesCoverUrl">Definir link da capa</span>
-                            </div>
-                        </div>
-                        <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </div>
-
-                    <!-- Seta Rosa (Print B): Tag/Ticket para Gêneros da Série -->
-                    <div class="upload-custom-action-row" id="btnSeriesEditGenres">
-                        <div class="upload-custom-action-row-left">
-                            <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
-                            <div class="upload-custom-action-texts">
-                                <span class="upload-custom-action-label">Gêneros</span>
-                                <span class="upload-custom-action-value" id="valSeriesGenres">Definir gêneros da série</span>
-                            </div>
-                        </div>
-                        <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </div>
-
-                    <!-- Seta Vermelha (Print C): Link para Capa de Exibição (Banner do Topo) -->
-                    <div class="upload-custom-action-row" id="btnSeriesEditBanner">
-                        <div class="upload-custom-action-row-left">
-                            <svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zm-10-7l-3 4.01L6 13.5l-4 5.5h16l-7-7z"/></svg>
-                            <div class="upload-custom-action-texts">
-                                <span class="upload-custom-action-label">Banner de Exibição</span>
-                                <span class="upload-custom-action-value" id="valSeriesBannerUrl">Definir banner horizontal</span>
-                            </div>
-                        </div>
-                        <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                    </div>
+                <div class="upload-title-box">
+                    <input type="text" id="uploadSeriesName" class="upload-title-input" placeholder="Crie um título (insira uma @ para mencionar um canal)">
                 </div>
 
-                <!-- Seta Roxa (Print B): Prévia do Nome da Série e Gênero Aleatório -->
-                <div class="upload-series-preview-box" id="boxSeriesLivePreview">
-                    <div class="upload-series-preview-thumb">
-                        <img id="imgSeriesPreviewThumb" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200" alt="Capa">
-                    </div>
-                    <div class="upload-series-preview-info">
-                        <span class="upload-series-preview-title" id="txtSeriesPreviewTitle">Nome da Série</span>
-                        <span class="upload-series-preview-badge" id="txtSeriesPreviewGenre">Anime</span>
-                    </div>
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadSeriesSynopsis" class="upload-title-input" placeholder="Biografia/Sinopse da série...">
                 </div>
 
-                <!-- Prévia do Banner Horizontal (Print C) -->
-                <div class="upload-banner-preview-box" id="boxBannerLivePreview">
-                    <img id="imgBannerPreviewThumb" src="" alt="Banner Horizontal">
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadSeriesGenres" class="upload-title-input" placeholder="Gêneros (ex: Ação, Aventura, Fantasia)">
+                </div>
+
+                <!-- LINHAS PARA INAUGURAR O PRIMEIRO EPISÓDIO COM CAPA HORIZONTAL SEPARADA -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeCover" class="upload-title-input" placeholder="Capa do 1º episódio (Link da imagem horizontal, opcional)">
+                </div>
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Link do 1º episódio (Embed/Drive/YouTube, opcional)">
+                </div>
+                <!-- Campo de Duração do 1º Episódio ao Criar Série -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeDuration" class="upload-title-input" placeholder="Duração do 1º episódio (ex: 24:00 ou 12 min, opcional)">
+                </div>
+
+                <!-- URL 3: Capa de Exibição da Série (Banner horizontal do topo) -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadHeroBannerUrl" class="upload-title-input" placeholder="Link da capa de exibição (Banner horizontal do topo, opcional)">
                 </div>
 
                 <!-- Botão Seletor: Novo ou recente (Sim / Não) para Exibir no Topo -->
@@ -8466,22 +7987,44 @@
             </div>
 
             <!-- ==========================================================
-                 MODO 2: POSTAR EM SÉRIE JÁ EXISTENTE
+                 MODO 2: CAMPOS DE POSTAR EPISÓDIO (FIEL À CAPTURA 3)
                  ========================================================== -->
             <div id="modePostEpisodeContainer" style="display: none; flex-direction: column;">
                 <div class="upload-title-box">
-                    <input type="text" id="uploadSearchSeries" class="upload-title-input" placeholder="Buscar série existente...">
+                    <input type="text" id="uploadSearchSeries" class="upload-title-input" placeholder="Buscar o nome da série (digite o nome da série)">
                 </div>
                 <div class="series-autocomplete-list" id="seriesSuggestionsList"></div>
 
-                <!-- Botões Legendado / Dublado -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeTitle" class="upload-title-input" placeholder="Digite o nome do episódio (ex: episódio 2 - o grande...)">
+                </div>
+
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeCover" class="upload-title-input" placeholder="Capa do episódio (link URL da imagem)">
+                </div>
+
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeVideoUrl" class="upload-title-input" placeholder="Link do Vídeo (Embed YouTube/Drive/Outros)">
+                </div>
+
+                <!-- Duração opcional -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeDuration" class="upload-title-input" placeholder="Duração do vídeo (opcional, ex: 24:00 ou 12 min)">
+                </div>
+
+                <!-- Tags do episódio -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadEpisodeTags" class="upload-title-input" placeholder="Tags (separadas por vírgula, ex: ação, anime, luta)">
+                </div>
+
+                <!-- Botões Legendado / Dublado (Fiel à captura 3) -->
                 <div class="audio-type-row">
                     <button class="audio-type-pill active" id="btnAudioLegendado" type="button">Legendado</button>
                     <button class="audio-type-pill" id="btnAudioDublado" type="button">Dublado</button>
                 </div>
             </div>
 
-            <!-- DEMAIS CONFIGURAÇÕES DA POSTAGEM (CONTINUAM INALTERADAS) -->
+            <!-- Classificação Indicativa -->
             <button class="upload-opt-row" id="rowUploadRating">
                 <div class="upload-opt-left">
                     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
@@ -8493,6 +8036,7 @@
                 <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
             </button>
 
+            <!-- Especificação da Temporada / Arco Narrativo com Novo SVG Oficial -->
             <button class="upload-opt-row" id="rowUploadSeasonArc" type="button">
                 <div class="upload-opt-left">
                     <svg viewBox="0 0 24 24">
@@ -8508,6 +8052,7 @@
                 <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
             </button>
 
+            <!-- Qualidade de Vídeo / Resolução (Print B6) -->
             <button class="upload-opt-row" id="rowUploadVideoQuality" type="button">
                 <div class="upload-opt-left">
                     <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/></svg>
@@ -8519,6 +8064,7 @@
                 <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
             </button>
 
+            <!-- Visibilidade (G) -->
             <button class="upload-opt-row" id="rowUploadVisibility">
                 <div class="upload-opt-left">
                     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
@@ -8530,6 +8076,7 @@
                 <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
             </button>
 
+            <!-- Selecionar Público (F) -->
             <button class="upload-opt-row" id="rowUploadAudience">
                 <div class="upload-opt-left">
                     <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
@@ -8541,8 +8088,20 @@
                 <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
             </button>
 
-            <!-- Bloco Oculto que Expande com "Mostrar mais" -->
+            <!-- Bloco Oculto que Expande com "Mostrar mais" (A1) -->
             <div id="uploadExpandedSection" style="display: none; flex-direction: column;">
+                <!-- Descrição -->
+                <button class="upload-opt-row" id="rowUploadDescription">
+                    <div class="upload-opt-left">
+                        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                        <div class="upload-opt-texts">
+                            <span class="upload-opt-value">Adicionar descrição</span>
+                        </div>
+                    </div>
+                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                </button>
+
+                <!-- Tipo de Conteúdo (Ao vivo, Série, Filme, Trailer, Reels) -->
                 <button class="upload-opt-row" id="rowUploadContentType" type="button">
                     <div class="upload-opt-left">
                         <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
@@ -8554,11 +8113,13 @@
                     <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
                 </button>
 
+                <!-- Data de Lançamento (Próximo Episódio) -->
                 <div class="upload-title-box" style="padding-top: 10px;">
                     <label style="font-size: 12px; color: var(--yt-text-secondary); display: block; margin-bottom: 4px;">Data do próximo episódio (opcional):</label>
                     <input type="date" id="uploadNextEpDate" class="upload-title-input" style="color-scheme: dark;">
                 </div>
 
+                <!-- Checkbox +18 -->
                 <div style="padding: 10px 16px; display: flex; align-items: center; gap: 10px;">
                     <input type="checkbox" id="uploadIsAdult" style="width: 18px; height: 18px; accent-color: #3ea6ff; cursor: pointer;">
                     <label for="uploadIsAdult" style="font-size: 13.5px; color: #ffffff; cursor: pointer;">É Conteúdo Adulto (+18 - Ecchi/Hentai)?</label>
@@ -8573,123 +8134,12 @@
 
             <!-- Aviso Legal COPPA -->
             <p class="upload-coppa-text">
-                O cumprimento da Lei de Proteção da Privacidade On-line das Crianças (COPPA) e/ou outras legislações é um requisito legal.
+                O cumprimento da Lei de Proteção da Privacidade On-line das Crianças (COPPA) e/ou outras legislações é um requisito legal, não importa a sua localização. É obrigatório informar se o canal tem conteúdo para crianças. <a href="#">O que é considerado conteúdo para crianças?</a>
             </p>
 
             <!-- Botão Enviar Oficial -->
             <button class="upload-submit-btn" id="btnSubmitVideoUpload">Enviar</button>
         </section>
-
-        <!-- ==========================================================================
-             MODAIS DE CONFIGURAÇÃO VISUAL (BOTÃO CONCLUIR AZUL E FECHAR BRANCO)
-             ========================================================================== -->
-        <!-- 1. Modal: Link URL do Vídeo do Episódio (Seta Rosa Print A) -->
-        <div class="yt-center-modal-backdrop" id="modalEpVideoUrl">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Link do Vídeo do Episódio</h3>
-                <input type="url" id="inputModalEpVideoUrl" class="yt-input" placeholder="Cole o link do vídeo (Embed/Drive/YouTube)...">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalEpVideoUrl">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalEpVideoUrl">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Modal: Link URL da Foto de Capa do Episódio (Seta Verde Print A) -->
-        <div class="yt-center-modal-backdrop" id="modalEpCoverUrl">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Foto de Capa do Episódio</h3>
-                <input type="url" id="inputModalEpCoverUrl" class="yt-input" placeholder="Cole o link da foto do episódio...">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalEpCoverUrl">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalEpCoverUrl">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. Modal: Duração do Episódio (Seta Amarela Print A) -->
-        <div class="yt-center-modal-backdrop" id="modalEpDuration">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Duração do Episódio</h3>
-                <input type="text" id="inputModalEpDuration" class="yt-input" placeholder="Ex.: 24:00 ou 12:30">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalEpDuration">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalEpDuration">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. Modal: Nome do Episódio (Seta Azul Print A) -->
-        <div class="yt-center-modal-backdrop" id="modalEpTitle">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Nome do Episódio</h3>
-                <input type="text" id="inputModalEpTitle" class="yt-input" placeholder="Ex.: Episódio 1 - O Início">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalEpTitle">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalEpTitle">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. Modal: Excluir Episódio (Sim ou Não) (Seta Branca Print A) -->
-        <div class="yt-center-modal-backdrop" id="modalDeleteEpConfirm">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Excluir Episódio?</h3>
-                <p style="font-size:13px; color:#aaaaaa; line-height:1.4;">Tem certeza de que deseja remover este episódio da postagem?</p>
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCancelDeleteEp">Não</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnConfirmDeleteEp">Sim</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. Modal: Título da Série (Seta Vermelha Print B) -->
-        <div class="yt-center-modal-backdrop" id="modalSeriesTitle">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Crie um Título da Série</h3>
-                <input type="text" id="inputModalSeriesTitle" class="yt-input" placeholder="Digite o nome da série...">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalSeriesTitle">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalSeriesTitle">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 7. Modal: Link da Capa da Série (Seta Verde Print B) -->
-        <div class="yt-center-modal-backdrop" id="modalSeriesCover">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Link da Capa da Série</h3>
-                <input type="url" id="inputModalSeriesCover" class="yt-input" placeholder="Cole a URL da foto de capa da série...">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalSeriesCover">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalSeriesCover">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. Modal: Gênero da Série (Seta Rosa Print B) -->
-        <div class="yt-center-modal-backdrop" id="modalSeriesGenres">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Gêneros da Série</h3>
-                <input type="text" id="inputModalSeriesGenres" class="yt-input" placeholder="Ex.: Ação, Aventura, Fantasia">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalSeriesGenres">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalSeriesGenres">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. Modal: Link do Banner Horizontal no Topo (Seta Vermelha Print C) -->
-        <div class="yt-center-modal-backdrop" id="modalSeriesBanner">
-            <div class="yt-center-dialog">
-                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Banner Horizontal no Topo</h3>
-                <input type="url" id="inputModalSeriesBanner" class="yt-input" placeholder="Cole a URL do banner horizontal...">
-                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
-                    <button type="button" class="yt-modal-btn-white" id="btnCloseModalSeriesBanner">Fechar</button>
-                    <button type="button" class="yt-modal-btn-blue" id="btnSaveModalSeriesBanner">Concluir</button>
-                </div>
-            </div>
-        </div>
 
         <!-- ==========================================================================
              SUBTELA G & H: DEFINIR A VISIBILIDADE
@@ -9444,49 +8894,12 @@
         }
 
         // ==========================================================================
-        // FLUXO INTEGRADO: MULTI-EPISÓDIOS, SÉRIE VISUAL E GESTÃO DE MODAIS
+        // FLUXO INTEGRADO: CRIAR SÉRIE E POSTAR EPISÓDIO NO MESMO LUGAR
         // ==========================================================================
         const viewUploadDetails = document.getElementById("viewUploadDetails");
         const btnBackFromUpload = document.getElementById("btnBackFromUpload");
-        const uploadEpisodeCoverImg = document.getElementById("uploadEpisodeCoverImg");
-        const badgeCurrentEpisodeLabel = document.getElementById("badgeCurrentEpisodeLabel");
-        const badgeCurrentEpisodeDuration = document.getElementById("badgeCurrentEpisodeDuration");
-        const uploadEpisodesCarousel = document.getElementById("uploadEpisodesCarousel");
-        const txtTotalEpisodesCounter = document.getElementById("txtTotalEpisodesCounter");
-        const btnAddNewEpisodeFromBar = document.getElementById("btnAddNewEpisodeFromBar");
-        const btnEpAddPlus = document.getElementById("btnEpAddPlus");
-        const btnEpEditCover = document.getElementById("btnEpEditCover");
-        const btnEpEditVideo = document.getElementById("btnEpEditVideo");
-        const btnEpEditRating = document.getElementById("btnEpEditRating");
-        const btnEpEditDuration = document.getElementById("btnEpEditDuration");
-        const btnEpEditTitle = document.getElementById("btnEpEditTitle");
-
-        // Botões do Bloco da Série (Print B e C)
-        const btnSeriesEditTitle = document.getElementById("btnSeriesEditTitle");
-        const valSeriesTitle = document.getElementById("valSeriesTitle");
-        const btnSeriesEditCover = document.getElementById("btnSeriesEditCover");
-        const valSeriesCoverUrl = document.getElementById("valSeriesCoverUrl");
-        const btnSeriesEditGenres = document.getElementById("btnSeriesEditGenres");
-        const valSeriesGenres = document.getElementById("valSeriesGenres");
-        const btnSeriesEditBanner = document.getElementById("btnSeriesEditBanner");
-        const valSeriesBannerUrl = document.getElementById("valSeriesBannerUrl");
-
-        // Prévias da Série e Banner (Print B e C)
-        const imgSeriesPreviewThumb = document.getElementById("imgSeriesPreviewThumb");
-        const txtSeriesPreviewTitle = document.getElementById("txtSeriesPreviewTitle");
-        const txtSeriesPreviewGenre = document.getElementById("txtSeriesPreviewGenre");
-        const boxBannerLivePreview = document.getElementById("boxBannerLivePreview");
-        const imgBannerPreviewThumb = document.getElementById("imgBannerPreviewThumb");
-
-        // Elementos Globais de Postagem
-        const tabCreateSeries = document.getElementById("tabCreateSeries");
-        const tabPostEpisode = document.getElementById("tabPostEpisode");
-        const modeCreateSeriesContainer = document.getElementById("modeCreateSeriesContainer");
-        const modePostEpisodeContainer = document.getElementById("modePostEpisodeContainer");
-        const uploadSearchSeries = document.getElementById("uploadSearchSeries");
-        const seriesSuggestionsList = document.getElementById("seriesSuggestionsList");
-        const btnAudioLegendado = document.getElementById("btnAudioLegendado");
-        const btnAudioDublado = document.getElementById("btnAudioDublado");
+        const uploadVideoThumb = document.getElementById("uploadVideoThumb");
+        const btnEditUploadThumb = document.getElementById("btnEditUploadThumb");
         const uploadChannelAvatar = document.getElementById("uploadChannelAvatar");
         const uploadChannelName = document.getElementById("uploadChannelName");
         const uploadChannelHandle = document.getElementById("uploadChannelHandle");
@@ -9496,75 +8909,30 @@
         const iconUploadExpand = document.getElementById("iconUploadExpand");
         const btnSubmitVideoUpload = document.getElementById("btnSubmitVideoUpload");
 
-        // Modais Específicos com Botões Concluir Azul e Fechar Branco
-        const modalEpVideoUrl = document.getElementById("modalEpVideoUrl");
-        const inputModalEpVideoUrl = document.getElementById("inputModalEpVideoUrl");
-        const btnCloseModalEpVideoUrl = document.getElementById("btnCloseModalEpVideoUrl");
-        const btnSaveModalEpVideoUrl = document.getElementById("btnSaveModalEpVideoUrl");
+        // Elementos dos 2 Botões Superiores
+        const tabCreateSeries = document.getElementById("tabCreateSeries");
+        const tabPostEpisode = document.getElementById("tabPostEpisode");
+        const modeCreateSeriesContainer = document.getElementById("modeCreateSeriesContainer");
+        const modePostEpisodeContainer = document.getElementById("modePostEpisodeContainer");
 
-        const modalEpCoverUrl = document.getElementById("modalEpCoverUrl");
-        const inputModalEpCoverUrl = document.getElementById("inputModalEpCoverUrl");
-        const btnCloseModalEpCoverUrl = document.getElementById("btnCloseModalEpCoverUrl");
-        const btnSaveModalEpCoverUrl = document.getElementById("btnSaveModalEpCoverUrl");
+        // Campos do Modo 1: Criar Série
+        const uploadSeriesName = document.getElementById("uploadSeriesName");
+        const uploadSeriesSynopsis = document.getElementById("uploadSeriesSynopsis");
+        const uploadSeriesGenres = document.getElementById("uploadSeriesGenres");
 
-        const modalEpDuration = document.getElementById("modalEpDuration");
-        const inputModalEpDuration = document.getElementById("inputModalEpDuration");
-        const btnCloseModalEpDuration = document.getElementById("btnCloseModalEpDuration");
-        const btnSaveModalEpDuration = document.getElementById("btnSaveModalEpDuration");
+        // Campos do Modo 2: Postar Episódio
+        const uploadSearchSeries = document.getElementById("uploadSearchSeries");
+        const seriesSuggestionsList = document.getElementById("seriesSuggestionsList");
+        const uploadEpisodeTitle = document.getElementById("uploadEpisodeTitle");
+        const uploadEpisodeCover = document.getElementById("uploadEpisodeCover");
+        const uploadEpisodeVideoUrl = document.getElementById("uploadEpisodeVideoUrl");
+        const uploadEpisodeDuration = document.getElementById("uploadEpisodeDuration");
+        const uploadEpisodeTags = document.getElementById("uploadEpisodeTags");
+        const btnAudioLegendado = document.getElementById("btnAudioLegendado");
+        const btnAudioDublado = document.getElementById("btnAudioDublado");
 
-        const modalEpTitle = document.getElementById("modalEpTitle");
-        const inputModalEpTitle = document.getElementById("inputModalEpTitle");
-        const btnCloseModalEpTitle = document.getElementById("btnCloseModalEpTitle");
-        const btnSaveModalEpTitle = document.getElementById("btnSaveModalEpTitle");
-
-        const modalDeleteEpConfirm = document.getElementById("modalDeleteEpConfirm");
-        const btnCancelDeleteEp = document.getElementById("btnCancelDeleteEp");
-        const btnConfirmDeleteEp = document.getElementById("btnConfirmDeleteEp");
-
-        const modalSeriesTitle = document.getElementById("modalSeriesTitle");
-        const inputModalSeriesTitle = document.getElementById("inputModalSeriesTitle");
-        const btnCloseModalSeriesTitle = document.getElementById("btnCloseModalSeriesTitle");
-        const btnSaveModalSeriesTitle = document.getElementById("btnSaveModalSeriesTitle");
-
-        const modalSeriesCover = document.getElementById("modalSeriesCover");
-        const inputModalSeriesCover = document.getElementById("inputModalSeriesCover");
-        const btnCloseModalSeriesCover = document.getElementById("btnCloseModalSeriesCover");
-        const btnSaveModalSeriesCover = document.getElementById("btnSaveModalSeriesCover");
-
-        const modalSeriesGenres = document.getElementById("modalSeriesGenres");
-        const inputModalSeriesGenres = document.getElementById("inputModalSeriesGenres");
-        const btnCloseModalSeriesGenres = document.getElementById("btnCloseModalSeriesGenres");
-        const btnSaveModalSeriesGenres = document.getElementById("btnSaveModalSeriesGenres");
-
-        const modalSeriesBanner = document.getElementById("modalSeriesBanner");
-        const inputModalSeriesBanner = document.getElementById("inputModalSeriesBanner");
-        const btnCloseModalSeriesBanner = document.getElementById("btnCloseModalSeriesBanner");
-        const btnSaveModalSeriesBanner = document.getElementById("btnSaveModalSeriesBanner");
-
-        // Estado da Série Mãe
-        let seriesFormData = {
-            title: "",
-            coverUrl: "",
-            genresList: [],
-            bannerUrl: ""
-        };
-
-        // Lista de Múltiplos Episódios (Suporte de 1 até 100 episódios)
-        let multiEpisodesList = [
-            {
-                id: 1,
-                title: "Episódio 1",
-                coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                videoUrl: "",
-                duration: "24:00",
-                rating: "12+"
-            }
-        ];
-
-        let currentActiveEpisodeIndex = 0;
-        let episodeIndexToDelete = null;
-
-        let currentUploadMode = "series";
+        // Configurações globais
+        let currentUploadMode = "series"; // "series" ou "episode"
         let currentAudioType = "Legendado";
         let selectedSeriesId = null;
         let availableSeriesList = [];
@@ -9573,297 +8941,8 @@
             visibility: "Público",
             audience: "Não é conteúdo para crianças",
             rating: "Livre (L)",
-            thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800"
+            thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80"
         };
-
-        // Renderiza o episódio atualmente selecionado no Container Superior
-        function updateActiveEpisodeTopContainer() {
-            if (multiEpisodesList.length === 0) return;
-            const ep = multiEpisodesList[currentActiveEpisodeIndex];
-
-            const safeCover = ep.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800";
-            uploadEpisodeCoverImg.src = safeCover;
-            badgeCurrentEpisodeLabel.textContent = ep.title || `Episódio ${currentActiveEpisodeIndex + 1}`;
-            badgeCurrentEpisodeDuration.textContent = ep.duration || "24:00";
-        }
-
-        // Renderiza o Carrossel Horizontal das Prévias dos Episódios (Setas Roxa e Branca)
-        function renderEpisodesCarousel() {
-            if (!uploadEpisodesCarousel) return;
-            uploadEpisodesCarousel.innerHTML = "";
-            txtTotalEpisodesCounter.textContent = `(${multiEpisodesList.length})`;
-
-            multiEpisodesList.forEach((ep, index) => {
-                const card = document.createElement("div");
-                const isSelected = (index === currentActiveEpisodeIndex);
-                card.className = `upload-episode-card-preview ${isSelected ? 'active-editing' : ''}`;
-
-                card.innerHTML = `
-                    <div class="upload-episode-card-thumb">
-                        <img src="${escapeHtml(ep.coverUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Episódio">
-                        <div class="yt-duration-badge">${escapeHtml(ep.duration || '24:00')}</div>
-                        <button type="button" class="upload-episode-card-kebab btnKebabDeleteEpisode" data-index="${index}" title="Opções">
-                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                        </button>
-                    </div>
-                    <div class="upload-episode-card-info">
-                        <span class="upload-episode-card-title">${escapeHtml(ep.title || `Episódio ${index + 1}`)}</span>
-                        <span class="upload-episode-card-sub">${ep.videoUrl ? 'Link pronto' : 'Sem vídeo'}</span>
-                    </div>
-                `;
-
-                // Seta Roxa: Clicar no card seleciona o episódio para edição no Container Superior
-                card.addEventListener("click", (e) => {
-                    if (e.target.closest(".btnKebabDeleteEpisode")) return;
-                    currentActiveEpisodeIndex = index;
-                    updateActiveEpisodeTopContainer();
-                    renderEpisodesCarousel();
-                });
-
-                // Seta Branca: Kebab vertical abre modal de excluir (Sim ou Não)
-                const kebabBtn = card.querySelector(".btnKebabDeleteEpisode");
-                if (kebabBtn) {
-                    kebabBtn.addEventListener("click", (e) => {
-                        e.stopPropagation();
-                        episodeIndexToDelete = index;
-                        modalDeleteEpConfirm.classList.add("active");
-                    });
-                }
-
-                uploadEpisodesCarousel.appendChild(card);
-            });
-        }
-
-        // Seta Vermelha: Função para adicionar novo episódio do zero
-        function addNewEpisodeItem() {
-            if (multiEpisodesList.length >= 100) {
-                alert("Limite máximo de 100 episódios atingido!");
-                return;
-            }
-
-            const newNum = multiEpisodesList.length + 1;
-            const newEp = {
-                id: Date.now(),
-                title: `Episódio ${newNum}`,
-                coverUrl: seriesFormData.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                videoUrl: "",
-                duration: "24:00",
-                rating: selectedAgeBadge || "12+"
-            };
-
-            multiEpisodesList.push(newEp);
-            currentActiveEpisodeIndex = multiEpisodesList.length - 1;
-            updateActiveEpisodeTopContainer();
-            renderEpisodesCarousel();
-            showToast(`Episódio ${newNum} adicionado.`);
-        }
-
-        btnEpAddPlus.addEventListener("click", addNewEpisodeItem);
-        btnAddNewEpisodeFromBar.addEventListener("click", addNewEpisodeItem);
-
-        // Confirmação de Exclusão do Episódio
-        btnCancelDeleteEp.addEventListener("click", () => {
-            modalDeleteEpConfirm.classList.remove("active");
-            episodeIndexToDelete = null;
-        });
-
-        btnConfirmDeleteEp.addEventListener("click", () => {
-            if (episodeIndexToDelete !== null && multiEpisodesList.length > 1) {
-                multiEpisodesList.splice(episodeIndexToDelete, 1);
-                if (currentActiveEpisodeIndex >= multiEpisodesList.length) {
-                    currentActiveEpisodeIndex = multiEpisodesList.length - 1;
-                }
-                updateActiveEpisodeTopContainer();
-                renderEpisodesCarousel();
-                showToast("Episódio excluído.");
-            } else {
-                showToast("A série precisa de pelo menos 1 episódio.");
-            }
-            modalDeleteEpConfirm.classList.remove("active");
-            episodeIndexToDelete = null;
-        });
-
-        // 1. Modal Link do Vídeo do Episódio (Seta Rosa Print A)
-        btnEpEditVideo.addEventListener("click", () => {
-            const currentEp = multiEpisodesList[currentActiveEpisodeIndex];
-            inputModalEpVideoUrl.value = currentEp.videoUrl || "";
-            modalEpVideoUrl.classList.add("active");
-            inputModalEpVideoUrl.focus();
-        });
-
-        btnCloseModalEpVideoUrl.addEventListener("click", () => modalEpVideoUrl.classList.remove("active"));
-        btnSaveModalEpVideoUrl.addEventListener("click", () => {
-            const val = inputModalEpVideoUrl.value.trim();
-            multiEpisodesList[currentActiveEpisodeIndex].videoUrl = val;
-            modalEpVideoUrl.classList.remove("active");
-            renderEpisodesCarousel();
-            showToast("Link do vídeo atualizado.");
-        });
-
-        // 2. Modal Foto de Capa do Episódio (Seta Verde Print A)
-        btnEpEditCover.addEventListener("click", () => {
-            const currentEp = multiEpisodesList[currentActiveEpisodeIndex];
-            inputModalEpCoverUrl.value = currentEp.coverUrl || "";
-            modalEpCoverUrl.classList.add("active");
-            inputModalEpCoverUrl.focus();
-        });
-
-        btnCloseModalEpCoverUrl.addEventListener("click", () => modalEpCoverUrl.classList.remove("active"));
-        btnSaveModalEpCoverUrl.addEventListener("click", () => {
-            const val = inputModalEpCoverUrl.value.trim();
-            if (val) {
-                multiEpisodesList[currentActiveEpisodeIndex].coverUrl = val;
-                updateActiveEpisodeTopContainer();
-                renderEpisodesCarousel();
-            }
-            modalEpCoverUrl.classList.remove("active");
-            showToast("Capa do episódio atualizada.");
-        });
-
-        // 3. Modal Duração do Episódio (Seta Amarela Print A)
-        btnEpEditDuration.addEventListener("click", () => {
-            const currentEp = multiEpisodesList[currentActiveEpisodeIndex];
-            inputModalEpDuration.value = currentEp.duration || "24:00";
-            modalEpDuration.classList.add("active");
-            inputModalEpDuration.focus();
-        });
-
-        btnCloseModalEpDuration.addEventListener("click", () => modalEpDuration.classList.remove("active"));
-        btnSaveModalEpDuration.addEventListener("click", () => {
-            const val = inputModalEpDuration.value.trim();
-            if (val) {
-                multiEpisodesList[currentActiveEpisodeIndex].duration = val;
-                updateActiveEpisodeTopContainer();
-                renderEpisodesCarousel();
-            }
-            modalEpDuration.classList.remove("active");
-            showToast("Duração definida.");
-        });
-
-        // 4. Modal Nome do Episódio (Seta Azul Print A)
-        btnEpEditTitle.addEventListener("click", () => {
-            const currentEp = multiEpisodesList[currentActiveEpisodeIndex];
-            inputModalEpTitle.value = currentEp.title || "";
-            modalEpTitle.classList.add("active");
-            inputModalEpTitle.focus();
-        });
-
-        btnCloseModalEpTitle.addEventListener("click", () => modalEpTitle.classList.remove("active"));
-        btnSaveModalEpTitle.addEventListener("click", () => {
-            const val = inputModalEpTitle.value.trim();
-            if (val) {
-                multiEpisodesList[currentActiveEpisodeIndex].title = val;
-                updateActiveEpisodeTopContainer();
-                renderEpisodesCarousel();
-            }
-            modalEpTitle.classList.remove("active");
-            showToast("Nome do episódio salvo.");
-        });
-
-        // 5. Botão Classificação Indicativa (Seta Laranja Print A)
-        btnEpEditRating.addEventListener("click", () => {
-            drawerUploadRating.classList.add("active");
-        });
-
-        // ==========================================================================
-        // GESTÃO DOS DADOS DA SÉRIE COM MODAIS E PRÉVIA DINÂMICA (PRINT B E C)
-        // ==========================================================================
-        function updateSeriesLivePreviewCard() {
-            // Título
-            if (seriesFormData.title) {
-                valSeriesTitle.textContent = seriesFormData.title;
-                txtSeriesPreviewTitle.textContent = seriesFormData.title;
-            } else {
-                valSeriesTitle.textContent = "Crie um título da série";
-                txtSeriesPreviewTitle.textContent = "Nome da Série";
-            }
-
-            // Capa
-            if (seriesFormData.coverUrl) {
-                valSeriesCoverUrl.textContent = "Capa definida";
-                imgSeriesPreviewThumb.src = seriesFormData.coverUrl;
-            } else {
-                valSeriesCoverUrl.textContent = "Definir link da capa";
-                imgSeriesPreviewThumb.src = "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200";
-            }
-
-            // Gêneros e Gênero Aleatório na Prévia (Seta Roxa Print B)
-            if (seriesFormData.genresList.length > 0) {
-                valSeriesGenres.textContent = seriesFormData.genresList.join(", ");
-                const randomGenre = seriesFormData.genresList[Math.floor(Math.random() * seriesFormData.genresList.length)];
-                txtSeriesPreviewGenre.textContent = randomGenre;
-            } else {
-                valSeriesGenres.textContent = "Definir gêneros da série";
-                txtSeriesPreviewGenre.textContent = "Anime";
-            }
-
-            // Banner Horizontal (Print C)
-            if (seriesFormData.bannerUrl) {
-                valSeriesBannerUrl.textContent = "Banner definido";
-                imgBannerPreviewThumb.src = seriesFormData.bannerUrl;
-                boxBannerLivePreview.style.display = "block";
-            } else {
-                valSeriesBannerUrl.textContent = "Definir banner horizontal";
-                boxBannerLivePreview.style.display = "none";
-            }
-        }
-
-        // Seta Vermelha (Print B): Modal Título da Série
-        btnSeriesEditTitle.addEventListener("click", () => {
-            inputModalSeriesTitle.value = seriesFormData.title;
-            modalSeriesTitle.classList.add("active");
-            inputModalSeriesTitle.focus();
-        });
-
-        btnCloseModalSeriesTitle.addEventListener("click", () => modalSeriesTitle.classList.remove("active"));
-        btnSaveModalSeriesTitle.addEventListener("click", () => {
-            seriesFormData.title = inputModalSeriesTitle.value.trim();
-            updateSeriesLivePreviewCard();
-            modalSeriesTitle.classList.remove("active");
-        });
-
-        // Seta Verde (Print B): Modal Capa da Série
-        btnSeriesEditCover.addEventListener("click", () => {
-            inputModalSeriesCover.value = seriesFormData.coverUrl;
-            modalSeriesCover.classList.add("active");
-            inputModalSeriesCover.focus();
-        });
-
-        btnCloseModalSeriesCover.addEventListener("click", () => modalSeriesCover.classList.remove("active"));
-        btnSaveModalSeriesCover.addEventListener("click", () => {
-            seriesFormData.coverUrl = inputModalSeriesCover.value.trim();
-            updateSeriesLivePreviewCard();
-            modalSeriesCover.classList.remove("active");
-        });
-
-        // Seta Rosa (Print B): Modal Gêneros da Série
-        btnSeriesEditGenres.addEventListener("click", () => {
-            inputModalSeriesGenres.value = seriesFormData.genresList.join(", ");
-            modalSeriesGenres.classList.add("active");
-            inputModalSeriesGenres.focus();
-        });
-
-        btnCloseModalSeriesGenres.addEventListener("click", () => modalSeriesGenres.classList.remove("active"));
-        btnSaveModalSeriesGenres.addEventListener("click", () => {
-            const raw = inputModalSeriesGenres.value.trim();
-            seriesFormData.genresList = raw ? raw.split(",").map(g => g.trim()).filter(Boolean) : ["Anime"];
-            updateSeriesLivePreviewCard();
-            modalSeriesGenres.classList.remove("active");
-        });
-
-        // Seta Vermelha (Print C): Modal Banner Horizontal
-        btnSeriesEditBanner.addEventListener("click", () => {
-            inputModalSeriesBanner.value = seriesFormData.bannerUrl;
-            modalSeriesBanner.classList.add("active");
-            inputModalSeriesBanner.focus();
-        });
-
-        btnCloseModalSeriesBanner.addEventListener("click", () => modalSeriesBanner.classList.remove("active"));
-        btnSaveModalSeriesBanner.addEventListener("click", () => {
-            seriesFormData.bannerUrl = inputModalSeriesBanner.value.trim();
-            updateSeriesLivePreviewCard();
-            modalSeriesBanner.classList.remove("active");
-        });
 
         // Alternância entre as abas 'Criar Série' e 'Postar Episódio'
         tabCreateSeries.addEventListener("click", () => {
@@ -9872,6 +8951,7 @@
             tabPostEpisode.classList.remove("active");
             modeCreateSeriesContainer.style.display = "flex";
             modePostEpisodeContainer.style.display = "none";
+            uploadSeriesName.focus();
         });
 
         tabPostEpisode.addEventListener("click", () => {
@@ -9882,6 +8962,19 @@
             modePostEpisodeContainer.style.display = "flex";
             loadSeriesFromFirestore();
             uploadSearchSeries.focus();
+        });
+
+        // 🟢 ATUALIZAÇÃO AUTOMÁTICA DA CAPA AO DIGITAR/COLAR A URL
+        uploadEpisodeCover.addEventListener("input", (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                uploadVideoThumb.src = url;
+                currentUploadSettings.thumbUrl = url;
+            } else {
+                // Imagem padrão caso o campo seja apagado
+                uploadVideoThumb.src = "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80";
+                currentUploadSettings.thumbUrl = uploadVideoThumb.src;
+            }
         });
 
         // Alternância Legendado / Dublado
@@ -9897,7 +8990,7 @@
             btnAudioLegendado.classList.remove("active");
         });
 
-        // Abrir tela de postagem com dados do usuário
+        // 1. O botão (+) da barra inferior abre a tela oficial de postagem
         navCreate.addEventListener("click", () => {
             if (!currentUserEmail) {
                 openAuthModal();
@@ -9907,11 +9000,6 @@
             uploadChannelName.textContent = name;
             uploadChannelHandle.textContent = "@" + name.toLowerCase().replace(/\s+/g, '');
             uploadChannelAvatar.textContent = name.charAt(0).toUpperCase();
-
-            updateActiveEpisodeTopContainer();
-            renderEpisodesCarousel();
-            updateSeriesLivePreviewCard();
-
             viewUploadDetails.classList.add("active");
         });
 
@@ -9927,7 +9015,62 @@
             iconUploadExpand.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
         });
 
-        // Subtelas de Visibilidade e Público
+        // Elementos do Modal do Lápis
+        const drawerEditThumb = document.getElementById("drawerEditThumb");
+        const inputThumbModalUrl = document.getElementById("inputThumbModalUrl");
+        const btnCloseEditThumb = document.getElementById("btnCloseEditThumb");
+        const btnCancelEditThumb = document.getElementById("btnCancelEditThumb");
+        const btnConfirmEditThumb = document.getElementById("btnConfirmEditThumb");
+
+        // 1. Ao clicar no lápis, abre o campo de URL
+        btnEditUploadThumb.addEventListener("click", () => {
+            // Puxa a URL atual (seja a que já estiver na tela ou no input de episódio)
+            inputThumbModalUrl.value = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
+            drawerEditThumb.classList.add("active");
+            inputThumbModalUrl.focus();
+        });
+
+        // 2. Pré-visualização instantânea enquanto digita ou cola a URL no campo
+        inputThumbModalUrl.addEventListener("input", (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                uploadVideoThumb.src = url;
+            }
+        });
+
+        // 3. Confirmar alteração
+        btnConfirmEditThumb.addEventListener("click", () => {
+            const url = inputThumbModalUrl.value.trim();
+            if (url) {
+                currentUploadSettings.thumbUrl = url;
+                uploadVideoThumb.src = url;
+                // Sincroniza também com o campo do episódio se estiver nele
+                if (uploadEpisodeCover) {
+                    uploadEpisodeCover.value = url;
+                }
+            }
+            drawerEditThumb.classList.remove("active");
+        });
+
+        // 4. Fechar ou Cancelar
+        btnCloseEditThumb.addEventListener("click", () => {
+            uploadVideoThumb.src = currentUploadSettings.thumbUrl; // Restaura se não confirmou
+            drawerEditThumb.classList.remove("active");
+        });
+
+        btnCancelEditThumb.addEventListener("click", () => {
+            uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+            drawerEditThumb.classList.remove("active");
+        });
+
+        drawerEditThumb.addEventListener("click", (e) => {
+            if (e.target === drawerEditThumb) {
+                uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+                drawerEditThumb.classList.remove("active");
+            }
+        });
+
+        // Subtelas existentes
         const viewUploadVisibilityScreen = document.getElementById("viewUploadVisibilityScreen");
         const viewUploadAudienceScreen = document.getElementById("viewUploadAudienceScreen");
         document.getElementById("rowUploadVisibility").addEventListener("click", () => viewUploadVisibilityScreen.classList.add("active"));
@@ -9940,6 +9083,7 @@
             });
         });
 
+        // Seleção de Visibilidade
         document.querySelectorAll("#viewUploadVisibilityScreen .upload-radio-item").forEach(item => {
             item.addEventListener("click", () => {
                 document.querySelectorAll("#viewUploadVisibilityScreen .upload-radio-item").forEach(r => r.classList.remove("selected"));
@@ -9950,6 +9094,7 @@
             });
         });
 
+        // Seleção de Público (COPPA)
         document.getElementById("optKidYes").addEventListener("click", () => {
             document.getElementById("optKidYes").classList.add("selected");
             document.getElementById("optKidNo").classList.remove("selected");
@@ -9966,9 +9111,10 @@
             viewUploadAudienceScreen.classList.remove("active");
         });
 
+        // Carregar séries para pesquisa rápida no modo "Postar episódio"
         async function loadSeriesFromFirestore() {
             try {
-                await onSnapshot(collection(db, "series"), (snapshot) => {
+                const snap = await onSnapshot(collection(db, "series"), (snapshot) => {
                     availableSeriesList = [];
                     snapshot.forEach(docSnap => {
                         availableSeriesList.push({ id: docSnap.id, ...docSnap.data() });
@@ -10008,7 +9154,7 @@
             seriesSuggestionsList.style.display = "block";
         });
 
-        // Configuração do Tipo de Conteúdo
+        // Configuração do Tipo de Conteúdo (Ao vivo, Série, Filme, Trailer, Reels)
         const drawerUploadContentType = document.getElementById("drawerUploadContentType");
         const btnCloseUploadContentType = document.getElementById("btnCloseUploadContentType");
         const rowUploadContentType = document.getElementById("rowUploadContentType");
@@ -10035,7 +9181,7 @@
             });
         });
 
-        // Gaveta de Classificação Indicativa
+        // Configuração da Gaveta de Classificação Indicativa (Faixa Etária)
         const drawerUploadRating = document.getElementById("drawerUploadRating");
         const btnCloseUploadRating = document.getElementById("btnCloseUploadRating");
         const rowUploadRating = document.getElementById("rowUploadRating");
@@ -10064,7 +9210,7 @@
             });
         });
 
-        // Sanfona de Temporada e Episódio
+        // Gaveta de Especificação da Temporada e Episódio (Prints B1 a B5)
         const drawerUploadSeasonArc = document.getElementById("drawerUploadSeasonArc");
         const btnCloseUploadSeasonArc = document.getElementById("btnCloseUploadSeasonArc");
         const rowUploadSeasonArc = document.getElementById("rowUploadSeasonArc");
@@ -10100,6 +9246,7 @@
             }
         });
 
+        // Alternância da Sanfona de Temporada (Print B4)
         if (headerToggleSeasonAccordion) {
             headerToggleSeasonAccordion.addEventListener("click", () => {
                 const isOpen = containerSeasonInput.classList.toggle("open");
@@ -10108,6 +9255,7 @@
             });
         }
 
+        // Alternância da Sanfona de Episódio (Print B3)
         if (headerToggleEpisodeAccordion) {
             headerToggleEpisodeAccordion.addEventListener("click", () => {
                 const isOpen = containerEpisodeInput.classList.toggle("open");
@@ -10116,6 +9264,7 @@
             });
         }
 
+        // Atualiza em tempo real o texto da linha: "Temporada 1 episódio 2" (Print B5)
         function updateSeasonArcRowLabel() {
             selectedSeasonNumber = inputSeasonNumberVal.value.trim();
             selectedEpisodeNumber = inputEpisodeNumberVal.value.trim();
@@ -10134,7 +9283,7 @@
         inputSeasonNumberVal.addEventListener("input", updateSeasonArcRowLabel);
         inputEpisodeNumberVal.addEventListener("input", updateSeasonArcRowLabel);
 
-        // Gaveta de Resolução de Vídeo
+        // Gaveta de Resolução de Vídeo (Prints B6 e B7)
         const drawerUploadVideoQuality = document.getElementById("drawerUploadVideoQuality");
         const btnCloseUploadVideoQuality = document.getElementById("btnCloseUploadVideoQuality");
         const rowUploadVideoQuality = document.getElementById("rowUploadVideoQuality");
@@ -10169,9 +9318,7 @@
             });
         });
 
-        // ==========================================================================
-        // SUBMISSÃO FINAL: GRAVA SÉRIE MÃE E TODOS OS MULTI-EPISÓDIOS NO FIRESTORE
-        // ==========================================================================
+        // 2. ENVIAR CONTEÚDO (COM TIPO DE CONTEÚDO VINCULADO À SÉRIE MÃE)
         btnSubmitVideoUpload.addEventListener("click", async () => {
             const isAdult = document.getElementById("uploadIsAdult").checked;
             const nextEpDate = document.getElementById("uploadNextEpDate").value;
@@ -10181,50 +9328,59 @@
                 btnSubmitVideoUpload.textContent = "Enviando...";
 
                 if (currentUploadMode === "series") {
-                    const sTitle = seriesFormData.title.trim();
-                    if (!sTitle) {
-                        alert("Por favor, crie um título para a série!");
-                        btnSeriesEditTitle.click();
+                    // MODO 1: CRIAR SÉRIE (CAPA VERTICAL VAI PARA OS CARROSSÉIS E ABRE O CANAL)
+                    const sName = uploadSeriesName.value.trim();
+                    const sSynopsis = uploadSeriesSynopsis.value.trim();
+                    const sGenres = uploadSeriesGenres.value.trim();
+                    const firstEpCoverInput = document.getElementById("uploadFirstEpisodeCover");
+                    const firstEpUrlInput = document.getElementById("uploadFirstEpisodeUrl");
+                    const firstEpCover = firstEpCoverInput ? firstEpCoverInput.value.trim() : "";
+                    const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
+
+                    if (!sName) {
+                        alert("Por favor, preencha o nome da série!");
+                        uploadSeriesName.focus();
                         return;
                     }
 
-                    const sCover = seriesFormData.coverUrl.trim() || multiEpisodesList[0].coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
-                    const sGenres = seriesFormData.genresList.length > 0 ? seriesFormData.genresList : ["Anime"];
+                    // Leitura da URL da capa de exibição do topo e do seletor Novo/Recente
+                    const heroBannerInput = document.getElementById("uploadHeroBannerUrl");
+                    const heroBannerUrlVal = heroBannerInput ? heroBannerInput.value.trim() : "";
 
-                    // 1. Cadastra a Série Mãe
+                    // Grava a Série mãe no banco (Card vertical para os carrosséis e exibição no banner se Novo/Recente for Sim)
                     await addDoc(collection(db, "series"), {
-                        title: sTitle,
-                        coverUrl: sCover,
-                        heroBannerUrl: seriesFormData.bannerUrl || null,
+                        title: sName,
+                        coverUrl: currentUploadSettings.thumbUrl,
+                        heroBannerUrl: heroBannerUrlVal || null,
                         isRecentFeatured: isRecentFeaturedSelected,
-                        genres: sGenres,
+                        synopsis: sSynopsis,
+                        genres: sGenres ? sGenres.split(",").map(g => g.trim()) : ["Anime"],
                         visibility: currentUploadSettings.visibility,
                         isAdult: isAdult,
                         ratingBadge: selectedAgeBadge || "12+",
                         contentType: selectedContentType || "Anime",
                         nextEpDate: nextEpDate || null,
                         author: currentUserEmail,
-                        episodesCount: multiEpisodesList.length,
+                        episodes: [],
                         createdAt: serverTimestamp()
                     });
 
-                    // 2. Grava todos os Múltiplos Episódios criados na coleção frutas
-                    for (let i = 0; i < multiEpisodesList.length; i++) {
-                        const ep = multiEpisodesList[i];
-                        const epNum = i + 1;
-                        const epName = ep.title ? `${sTitle} - ${ep.title}` : `${sTitle} - Episódio ${epNum}`;
+                    // Se o usuário adicionou o link do primeiro episódio, gera o card horizontal no 'Para você'
+                    if (firstEpUrl) {
+                        const firstEpDurationInput = document.getElementById("uploadFirstEpisodeDuration");
+                        const customFirstEpDuration = firstEpDurationInput && firstEpDurationInput.value.trim() ? firstEpDurationInput.value.trim() : "24:00";
 
                         await addDoc(frutasColecao, {
-                            name: epName,
-                            channel: sTitle,
-                            seriesCover: sCover,
+                            name: `${sName} - Episódio 1`,
+                            channel: sName,
+                            seriesCover: currentUploadSettings.thumbUrl,
                             viewsCount: 0,
                             timeAgo: "agora mesmo",
-                            thumbUrl: ep.coverUrl || sCover,
-                            videoUrl: ep.videoUrl || "",
-                            duration: ep.duration || "24:00",
+                            thumbUrl: firstEpCover || currentUploadSettings.thumbUrl,
+                            videoUrl: firstEpUrl,
+                            duration: customFirstEpDuration,
                             season: selectedSeasonNumber || "1",
-                            episodeNum: String(epNum),
+                            episodeNum: selectedEpisodeNumber || "1",
                             resolutionBadge: selectedResolutionBadge || "HD",
                             ratingBadge: selectedAgeBadge || "12+",
                             isAdult: isAdult,
@@ -10233,54 +9389,70 @@
                         });
                     }
 
-                    // Reseta o formulário
-                    seriesFormData = { title: "", coverUrl: "", genresList: [], bannerUrl: "" };
-                    multiEpisodesList = [
-                        { id: 1, title: "Episódio 1", coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800", videoUrl: "", duration: "24:00", rating: "12+" }
-                    ];
-                    currentActiveEpisodeIndex = 0;
-                    updateSeriesLivePreviewCard();
-                    updateActiveEpisodeTopContainer();
-                    renderEpisodesCarousel();
-
-                    showToast("Série e todos os episódios publicados!");
+                    uploadSeriesName.value = "";
+                    uploadSeriesSynopsis.value = "";
+                    uploadSeriesGenres.value = "";
+                    if (firstEpCoverInput) firstEpCoverInput.value = "";
+                    if (firstEpUrlInput) firstEpUrlInput.value = "";
+                    showToast("Série criada com sucesso!");
 
                 } else {
-                    // Modo 2: Postar em Série Existente
-                    const targetSeries = uploadSearchSeries.value.trim();
-                    if (!targetSeries) {
-                        alert("Por favor, selecione o nome da série!");
+                    // MODO 2: POSTAR EPISÓDIO / REELS / TRAILER (VINCULADO AO NOME DA SÉRIE MÃE)
+                    const epTitle = uploadEpisodeTitle.value.trim();
+                    const epCover = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
+                    const epVideoUrl = uploadEpisodeVideoUrl.value.trim();
+
+                    if (!selectedSeriesId && !uploadSearchSeries.value.trim()) {
+                        alert("Por favor, selecione ou digite a série correspondente!");
                         uploadSearchSeries.focus();
                         return;
                     }
 
-                    for (let i = 0; i < multiEpisodesList.length; i++) {
-                        const ep = multiEpisodesList[i];
-                        const epNum = i + 1;
-                        const epName = ep.title ? `${targetSeries} - ${ep.title}` : `${targetSeries} - Episódio ${epNum}`;
-
-                        await addDoc(frutasColecao, {
-                            name: epName,
-                            channel: targetSeries,
-                            seriesCover: ep.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                            viewsCount: 0,
-                            timeAgo: "agora mesmo",
-                            thumbUrl: ep.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                            videoUrl: ep.videoUrl || "",
-                            duration: ep.duration || "24:00",
-                            audioType: currentAudioType,
-                            season: selectedSeasonNumber || "1",
-                            episodeNum: String(epNum),
-                            resolutionBadge: selectedResolutionBadge || "HD",
-                            ratingBadge: selectedAgeBadge || "12+",
-                            isAdult: isAdult,
-                            contentType: selectedContentType || "Série",
-                            timestamp: serverTimestamp()
-                        });
+                    if (!epTitle) {
+                        alert("Por favor, digite o nome do episódio!");
+                        uploadEpisodeTitle.focus();
+                        return;
                     }
 
+                    const seriesName = uploadSearchSeries.value.trim();
+                    const epDuration = uploadEpisodeDuration && uploadEpisodeDuration.value.trim() ? uploadEpisodeDuration.value.trim() : "24:00";
+                    const epTagsRaw = uploadEpisodeTags ? uploadEpisodeTags.value.trim() : "";
+                    const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
+
+                    let seriesPhoto = "";
+                    const matchedSeries = availableSeriesList.find(s => s.id === selectedSeriesId || (s.title && s.title.toLowerCase() === seriesName.toLowerCase()));
+                    if (matchedSeries && matchedSeries.coverUrl) {
+                        seriesPhoto = matchedSeries.coverUrl;
+                    }
+
+                    await addDoc(frutasColecao, {
+                        name: epTitle,
+                        channel: seriesName,
+                        seriesCover: seriesPhoto || epCover,
+                        viewsCount: 0,
+                        timeAgo: "agora mesmo",
+                        thumbUrl: epCover,
+                        videoUrl: epVideoUrl,
+                        duration: epDuration,
+                        tags: epTagsList,
+                        audioType: currentAudioType,
+                        season: selectedSeasonNumber || "1",
+                        episodeNum: selectedEpisodeNumber || "1",
+                        resolutionBadge: selectedResolutionBadge || "HD",
+                        ratingBadge: selectedAgeBadge || "12+",
+                        isAdult: isAdult,
+                        contentType: selectedContentType || "Série",
+                        timestamp: serverTimestamp()
+                    });
+
+                    uploadEpisodeTitle.value = "";
+                    uploadEpisodeCover.value = "";
+                    uploadEpisodeVideoUrl.value = "";
+                    if (uploadEpisodeDuration) uploadEpisodeDuration.value = "";
+                    if (uploadEpisodeTags) uploadEpisodeTags.value = "";
                     uploadSearchSeries.value = "";
-                    showToast("Episódios publicados na série!");
+                    selectedSeriesId = null;
+                    showToast(`${selectedContentType} publicado com sucesso!`);
                 }
 
                 viewUploadDetails.classList.remove("active");
