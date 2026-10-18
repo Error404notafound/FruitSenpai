@@ -4964,50 +4964,111 @@
             flex-shrink: 0;
         }
 
-        /* Container dos 2 botões sobrepostos na capa (Criar Série / Postar Episódio) */
+        /* Linha Unificada: Canal do Usuário e Botões Lado a Lado */
+        .upload-channel-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 10px 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .upload-channel-left-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .upload-channel-avatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background-color: #9c27b0;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .upload-channel-texts {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1;
+        }
+
+        /* Nome do canal com limite e reticências (...) caso passe de 18 letras */
+        .upload-channel-name {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 135px;
+        }
+
+        /* Handle @ com reticências (...) caso passe do tamanho */
+        .upload-channel-handle {
+            font-size: 11px;
+            color: var(--yt-text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 135px;
+        }
+
+        /* Botões Criar Série e Postar Episódio compactos e sem deformação */
         .upload-tabs-container {
             display: flex;
-            gap: 10px;
-            padding: 10px 16px 14px 16px;
-            background-color: var(--yt-bg-main);
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+            padding: 0;
+            background: none;
         }
 
         .upload-tab-btn {
-            flex: 1;
-            height: 44px;
-            border-radius: 22px;
+            height: 34px;
+            padding: 0 12px;
+            border-radius: 17px;
             border: 1px solid rgba(255, 255, 255, 0.12);
-            background-color: rgba(39, 39, 39, 0.85);
+            background-color: #212121;
             color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
             cursor: pointer;
-            display: flex;
-            flex-direction: column;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            white-space: nowrap;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
             font-family: inherit;
         }
 
         .upload-tab-btn span {
-            font-size: 13.5px;
+            font-size: 12px;
             font-weight: 600;
-            line-height: 1.1;
-        }
-
-        .upload-tab-btn small {
-            font-size: 9.5px;
-            color: var(--yt-text-secondary);
-            margin-top: 1px;
+            line-height: 1;
         }
 
         .upload-tab-btn.active {
             background-color: #3ea6ff;
             color: #0f0f0f;
             border-color: #3ea6ff;
+            font-weight: 700;
         }
 
-        .upload-tab-btn.active small {
-            color: rgba(15, 15, 15, 0.8);
+        .upload-tab-btn.active span {
+            color: #0f0f0f;
         }
 
         /* Badge azul ao lado do nome do canal quando em 'Postar episódio' */
@@ -5169,38 +5230,6 @@
             bottom: 12px;
             right: 12px;
         }
-
-        .upload-channel-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
-        }
-
-        .upload-channel-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: #9c27b0;
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .upload-channel-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .upload-channel-handle {
-            font-size: 12px;
-            color: var(--yt-text-secondary);
-        }
-
         .upload-title-box {
             padding: 0 16px 14px 16px;
         }
@@ -8018,22 +8047,23 @@
                 </button>
             </div>
 
-            <!-- OS 2 BOTÕES DE MODO (CRIAR SÉRIE / POSTAR EPISÓDIO) -->
-            <div class="upload-tabs-container">
-                <button class="upload-tab-btn active" id="tabCreateSeries">
-                    <span>Criar Série</span>
-                </button>
-                <button class="upload-tab-btn" id="tabPostEpisode">
-                    <span>Postar episódio</span>
-                </button>
-            </div>
-
-            <!-- Canal Ativo do Usuário -->
+            <!-- Linha Unificada: Canal do Usuário e Botões Lado a Lado -->
             <div class="upload-channel-row">
-                <div class="upload-channel-avatar" id="uploadChannelAvatar">E</div>
-                <div>
-                    <div class="upload-channel-name" id="uploadChannelName">Error404notafound</div>
-                    <div class="upload-channel-handle" id="uploadChannelHandle">@error404notafound</div>
+                <div class="upload-channel-left-info">
+                    <div class="upload-channel-avatar" id="uploadChannelAvatar">E</div>
+                    <div class="upload-channel-texts">
+                        <div class="upload-channel-name" id="uploadChannelName">Error404notafound</div>
+                        <div class="upload-channel-handle" id="uploadChannelHandle">@error404notafound</div>
+                    </div>
+                </div>
+
+                <div class="upload-tabs-container">
+                    <button class="upload-tab-btn active" id="tabCreateSeries" type="button">
+                        <span>Criar Série</span>
+                    </button>
+                    <button class="upload-tab-btn" id="tabPostEpisode" type="button">
+                        <span>Postar episódio</span>
+                    </button>
                 </div>
             </div>
 
