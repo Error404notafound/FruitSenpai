@@ -4954,364 +4954,22 @@
             color: #ffffff;
         }
 
-        /* Contêiner Superior do Episódio Ativo com Ícones SVG Flutuantes (Print A) */
         .upload-thumb-area {
             width: 100%;
             aspect-ratio: 16 / 9;
             min-height: 200px;
-            background-color: #1e1e1e;
+            background-color: #212121;
             position: relative;
             overflow: hidden;
             flex-shrink: 0;
-        }
-
-        .upload-thumb-area img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-overlay-icon-btn {
-            position: absolute;
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            background-color: rgba(0, 0, 0, 0.65);
-            border: 1.5px solid rgba(255, 255, 255, 0.25);
-            color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 10;
-            transition: transform 0.15s, background-color 0.15s;
-        }
-
-        .upload-overlay-icon-btn:active {
-            transform: scale(1.1);
-            background-color: rgba(0, 0, 0, 0.9);
-        }
-
-        .upload-overlay-icon-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #ffffff;
-        }
-
-        /* Posições dos Ícones no Container Superior (Print A) */
-        .pos-top-left { top: 12px; left: 12px; }
-        .pos-mid-left { top: calc(50% - 19px); left: 12px; }
-        .pos-bottom-left { bottom: 12px; left: 12px; }
-        .pos-top-right { top: 12px; right: 12px; }
-        .pos-mid-right { top: calc(50% - 19px); right: 12px; }
-        .pos-bottom-right { bottom: 12px; right: 12px; }
-
-        /* Barra de Metadados do Episódio no Topo */
-        .upload-active-ep-info-row {
-            padding: 10px 16px 2px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .upload-active-ep-avatar {
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            border-radius: 50%;
-            background-color: #272727;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .upload-active-ep-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-active-ep-texts {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .upload-active-ep-title {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .upload-active-ep-sub {
-            font-size: 11px;
-            color: #aaaaaa;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
         }
 
         /* Container dos 2 botões sobrepostos na capa (Criar Série / Postar Episódio) */
         .upload-tabs-container {
             display: flex;
             gap: 10px;
-            padding: 10px 16px;
+            padding: 10px 16px 14px 16px;
             background-color: var(--yt-bg-main);
-        }
-
-        /* Carrossel de Todos os Episódios (Print A - Até 100 Episódios) */
-        .upload-episodes-section {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            padding: 4px 0 12px 0;
-        }
-
-        .upload-episodes-carousel {
-            display: flex;
-            gap: 12px;
-            padding: 0 16px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .upload-episodes-carousel::-webkit-scrollbar {
-            display: none;
-        }
-
-        .upload-ep-card-item {
-            width: 170px;
-            min-width: 170px;
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .upload-ep-card-thumb-box {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            background-color: #212121;
-            border: 2px solid transparent;
-            transition: border-color 0.15s;
-        }
-
-        .upload-ep-card-item.active .upload-ep-card-thumb-box {
-            border-color: #3ea6ff;
-        }
-
-        .upload-ep-card-thumb-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-ep-card-details-row {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-top: 6px;
-            gap: 4px;
-        }
-
-        .upload-ep-card-texts {
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .upload-ep-card-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .upload-ep-card-meta {
-            font-size: 10.5px;
-            color: #888888;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Seção Dupla de Pré-Visualizações: Banner do Topo e Capa Vertical (Prints B e C) */
-        .upload-previews-dual-row {
-            display: flex;
-            gap: 12px;
-            padding: 8px 16px 14px 16px;
-            align-items: flex-start;
-        }
-
-        /* Coluna da Esquerda: Capa de Exibição / Banner do Topo (Print C) */
-        .upload-hero-preview-box {
-            flex: 1.35;
-            aspect-ratio: 16 / 9;
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: #1a1a1a;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-        }
-
-        .upload-hero-preview-box img {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-hero-preview-overlay {
-            position: relative;
-            z-index: 2;
-            padding: 10px 12px;
-            background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 0%, transparent 100%);
-        }
-
-        .upload-hero-preview-genre {
-            font-size: 10.5px;
-            font-weight: 600;
-            color: #f59e0b;
-        }
-
-        .upload-hero-preview-genre span {
-            color: #ffffff;
-            margin-left: 2px;
-        }
-
-        .upload-hero-preview-title {
-            font-size: 13.5px;
-            font-weight: 800;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Coluna da Direita: Capa da Série Vertical (Print B) */
-        .upload-series-vertical-card-box {
-            flex: 1;
-            aspect-ratio: 2 / 3;
-            border-radius: 12px;
-            overflow: hidden;
-            background-color: #1a1a1a;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .upload-series-vertical-card-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .upload-series-vertical-info {
-            padding: 4px 0 0 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
-            width: 100%;
-        }
-
-        .upload-series-vertical-title {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: #ffffff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .upload-series-vertical-genre {
-            font-size: 10px;
-            color: #888888;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Modal Padrão das Ações (Azul Concluir e Branco Cancelar/Fechar) */
-        .upload-custom-dialog-backdrop {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.75);
-            z-index: 10020;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-        }
-
-        .upload-custom-dialog-backdrop.active {
-            display: flex;
-        }
-
-        .upload-custom-dialog-box {
-            width: 100%;
-            max-width: 360px;
-            background-color: #1c1c1c;
-            border-radius: 16px;
-            padding: 18px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .upload-custom-dialog-actions {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .upload-dialog-btn-close {
-            background-color: transparent;
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 18px;
-            height: 36px;
-            padding: 0 16px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .upload-dialog-btn-done {
-            background-color: #3ea6ff;
-            color: #0f0f0f;
-            border: none;
-            border-radius: 18px;
-            height: 36px;
-            padding: 0 20px;
-            font-size: 13.5px;
-            font-weight: 700;
-            cursor: pointer;
         }
 
         .upload-tab-btn {
@@ -8258,59 +7916,12 @@
                 <span class="upload-top-title">Adicionar detalhes</span>
             </div>
 
-            <!-- Contêiner Superior do Episódio Ativo com os 6 Botões SVG Sobrepostos (Print A) -->
-            <div class="upload-thumb-area" id="uploadActiveEpisodePreviewBox">
-                <img id="uploadVideoThumb" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80" alt="Capa do Episódio">
-
-                <!-- 1. Link URL do Vídeo do Episódio (Seta Rosa Print A) -->
-                <button class="upload-overlay-icon-btn pos-top-left" id="btnOverlayEpVideoUrl" type="button" title="URL do Episódio">
-                    <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                </button>
-
-                <!-- 2. Lápis para Link da Foto do Episódio (Seta Verde Print A) -->
-                <button class="upload-overlay-icon-btn pos-mid-left" id="btnOverlayEpThumbUrl" type="button" title="Capa do Episódio">
+            <!-- Preview do Vídeo com botão de edição de capa -->
+            <div class="upload-thumb-area">
+                <img id="uploadVideoThumb" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80" alt="Capa">
+                <button class="upload-thumb-edit-btn" id="btnEditUploadThumb" title="Alterar miniatura">
                     <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
                 </button>
-
-                <!-- 3. Classificação Indicativa do Episódio (Seta Laranja Print A) -->
-                <button class="upload-overlay-icon-btn pos-bottom-left" id="btnOverlayEpRating" type="button" title="Classificação">
-                    <span id="txtOverlayRatingBadge" style="font-size:11px; font-weight:800;">14+</span>
-                </button>
-
-                <!-- 4. Lápis para Nome do Episódio (Seta Azul Print A) -->
-                <button class="upload-overlay-icon-btn pos-top-right" id="btnOverlayEpTitle" type="button" title="Nome do Episódio">
-                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                </button>
-
-                <!-- 5. Botão + para Criar Novo Episódio do Zero (Seta Vermelha Print A) -->
-                <button class="upload-overlay-icon-btn pos-mid-right" id="btnOverlayAddEpisode" type="button" title="Novo Episódio">
-                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                </button>
-
-                <!-- 6. Ampulheta para Duração do Episódio (Seta Amarela Print A) -->
-                <button class="upload-overlay-icon-btn pos-bottom-right" id="btnOverlayEpDuration" type="button" title="Duração do Episódio">
-                    <svg viewBox="0 0 24 24"><path d="M6 2v6h.01L6 8.01 10 12l-4 4 .01.01H6V22h12v-5.99h-.01L18 16l-4-4 4-3.99-.01-.01H18V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/></svg>
-                </button>
-            </div>
-
-            <!-- Linha de Identificação do Episódio Ativo e Série Mãe -->
-            <div class="upload-active-ep-info-row">
-                <div class="upload-active-ep-avatar" id="uploadActiveSeriesAvatar">
-                    <img id="imgActiveSeriesAvatarThumb" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=100" alt="Série">
-                </div>
-                <div class="upload-active-ep-texts">
-                    <div class="upload-active-ep-title" id="txtActiveEpisodeTitleDisplay">Episódio 1</div>
-                    <div class="upload-active-ep-sub" id="txtActiveSeriesNameDisplay">Série: Dragon Ball Super: Beerus</div>
-                </div>
-            </div>
-
-            <!-- Canal Ativo do Usuário -->
-            <div class="upload-channel-row" style="padding-top:6px; padding-bottom:6px;">
-                <div class="upload-channel-avatar" id="uploadChannelAvatar">E</div>
-                <div>
-                    <div class="upload-channel-name" id="uploadChannelName">Error404notafound10</div>
-                    <div class="upload-channel-handle" id="uploadChannelHandle">@error404notafound10</div>
-                </div>
             </div>
 
             <!-- OS 2 BOTÕES DE MODO (CRIAR SÉRIE / POSTAR EPISÓDIO) -->
@@ -8323,76 +7934,54 @@
                 </button>
             </div>
 
-            <!-- Seção "Todos episódios" (Carrossel Horizontal de até 100 Episódios - Print A) -->
-            <div class="upload-episodes-section">
-                <div class="fs-section-header" style="margin-bottom:8px;">
-                    <div class="fs-section-title-wrap">
-                        <span class="fs-red-bar"></span>
-                        <h3 class="fs-section-title">Todos episódios</h3>
-                        <button class="fs-link-more" type="button">Tudo</button>
-                    </div>
-                    <button class="fs-btn-surprise" id="btnAddNewEpisodeToList" type="button">
-                        <svg style="width:12px;height:12px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                        <span>adicionar</span>
-                    </button>
+            <!-- Canal Ativo do Usuário -->
+            <div class="upload-channel-row">
+                <div class="upload-channel-avatar" id="uploadChannelAvatar">E</div>
+                <div>
+                    <div class="upload-channel-name" id="uploadChannelName">Error404notafound</div>
+                    <div class="upload-channel-handle" id="uploadChannelHandle">@error404notafound</div>
                 </div>
-
-                <div class="upload-episodes-carousel" id="uploadEpisodesCardsCarousel"></div>
             </div>
 
-            <!-- Seção Dupla de Pré-Visualizações Visuais (Prints B e C) -->
-            <div class="upload-previews-dual-row" id="uploadDualVisualPreviewsRow">
-                <!-- Esquerda: Capa de Exibição / Banner do Topo com Link (Print C) -->
-                <div style="flex:1.35; display:flex; flex-direction:column; gap:6px;">
-                    <div class="upload-hero-preview-box" id="boxHeroBannerPreviewVisual">
-                        <img id="imgVisualHeroBannerThumb" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Banner Topo">
-                        <button class="upload-overlay-icon-btn pos-top-left" id="btnOverlayHeroBannerLink" type="button" title="Link da Capa de Exibição">
-                            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                        </button>
-                        <div class="upload-hero-preview-overlay">
-                            <div class="upload-hero-preview-genre">
-                                <span id="txtVisualHeroType">Série</span>
-                                <span id="txtVisualHeroGenre">| Aventura</span>
-                            </div>
-                            <div class="upload-hero-preview-title" id="txtVisualHeroTitle">Dragon Ball Super: Beerus</div>
-                        </div>
-                    </div>
-
-                    <!-- Seletor Novo ou Recente para Exibir no Topo -->
-                    <div class="upload-recent-flag-row" style="margin:0; padding:8px 10px;">
-                        <span style="font-size:11px;">Novo ou recente (Exibir no topo)?</span>
-                        <div class="upload-recent-toggle-group">
-                            <button type="button" class="upload-recent-toggle-btn active" id="btnRecentFlagNo">Não</button>
-                            <button type="button" class="upload-recent-toggle-btn" id="btnRecentFlagYes">Sim</button>
-                        </div>
-                    </div>
+            <!-- ==========================================================
+                 MODO 1: CAMPOS DE CRIAR SÉRIE
+                 ========================================================== -->
+            <div id="modeCreateSeriesContainer" style="display: flex; flex-direction: column;">
+                <div class="upload-title-box">
+                    <input type="text" id="uploadSeriesName" class="upload-title-input" placeholder="Crie um título (insira uma @ para mencionar um canal)">
                 </div>
 
-                <!-- Direita: Capa da Série Vertical com Lápis, Link e Tag (Print B) -->
-                <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-                    <div class="upload-series-vertical-card-box">
-                        <img id="imgVisualSeriesVerticalThumb" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Capa da Série">
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadSeriesSynopsis" class="upload-title-input" placeholder="Biografia/Sinopse da série...">
+                </div>
 
-                        <!-- Lápis para Título da Série (Seta Vermelha Print B) -->
-                        <button class="upload-overlay-icon-btn pos-top-left" id="btnOverlaySeriesTitle" type="button" title="Título da Série">
-                            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-                        </button>
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadSeriesGenres" class="upload-title-input" placeholder="Gêneros (ex: Ação, Aventura, Fantasia)">
+                </div>
 
-                        <!-- Link para Capa da Série (Seta Verde Print B) -->
-                        <button class="upload-overlay-icon-btn pos-mid-left" id="btnOverlaySeriesCoverUrl" type="button" title="Capa da Série">
-                            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                        </button>
+                <!-- LINHAS PARA INAUGURAR O PRIMEIRO EPISÓDIO COM CAPA HORIZONTAL SEPARADA -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeCover" class="upload-title-input" placeholder="Capa do 1º episódio (Link da imagem horizontal, opcional)">
+                </div>
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Link do 1º episódio (Embed/Drive/YouTube, opcional)">
+                </div>
+                <!-- Campo de Duração do 1º Episódio ao Criar Série -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadFirstEpisodeDuration" class="upload-title-input" placeholder="Duração do 1º episódio (ex: 24:00 ou 12 min, opcional)">
+                </div>
 
-                        <!-- Tag / Ticket para Gêneros da Série (Seta Rosa Print B) -->
-                        <button class="upload-overlay-icon-btn pos-bottom-left" id="btnOverlaySeriesGenres" type="button" title="Gêneros">
-                            <svg viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>
-                        </button>
-                    </div>
+                <!-- URL 3: Capa de Exibição da Série (Banner horizontal do topo) -->
+                <div class="upload-title-box" style="padding-top: 0;">
+                    <input type="text" id="uploadHeroBannerUrl" class="upload-title-input" placeholder="Link da capa de exibição (Banner horizontal do topo, opcional)">
+                </div>
 
-                    <!-- Nome da Série e Gênero (Seta Roxa Print B) -->
-                    <div class="upload-series-vertical-info">
-                        <div class="upload-series-vertical-title" id="txtVisualSeriesTitle">Dragon Ball Super: Beerus</div>
-                        <div class="upload-series-vertical-genre" id="txtVisualSeriesGenre">Aventura</div>
+                <!-- Botão Seletor: Novo ou recente (Sim / Não) para Exibir no Topo -->
+                <div class="upload-recent-flag-row">
+                    <span>Novo ou recente (Exibir no topo)?</span>
+                    <div class="upload-recent-toggle-group">
+                        <button type="button" class="upload-recent-toggle-btn active" id="btnRecentFlagNo">Não</button>
+                        <button type="button" class="upload-recent-toggle-btn" id="btnRecentFlagYes">Sim</button>
                     </div>
                 </div>
             </div>
@@ -8551,117 +8140,6 @@
             <!-- Botão Enviar Oficial -->
             <button class="upload-submit-btn" id="btnSubmitVideoUpload">Enviar</button>
         </section>
-
-        <!-- ==========================================================================
-             MODAIS DAS AÇÕES VISUAIS DE POSTAGEM (CONCLUIR AZUL E FECHAR BRANCO)
-             ========================================================================== -->
-        <!-- 1. Modal: Link URL do Vídeo do Episódio -->
-        <div class="upload-custom-dialog-backdrop" id="modalEpVideoUrl">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Link do Episódio</h4>
-                <input type="text" id="inputModalEpVideoUrlVal" class="yt-input" placeholder="Cole o link do vídeo (Embed, YouTube, Drive)">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalEpVideoUrl" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalEpVideoUrl" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 2. Modal: Link da Capa do Episódio -->
-        <div class="upload-custom-dialog-backdrop" id="modalEpThumbUrl">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Foto do Episódio</h4>
-                <input type="text" id="inputModalEpThumbUrlVal" class="yt-input" placeholder="Cole o link da foto do episódio (horizontal)">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalEpThumbUrl" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalEpThumbUrl" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 3. Modal: Nome / Título do Episódio -->
-        <div class="upload-custom-dialog-backdrop" id="modalEpTitle">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Nome do Episódio</h4>
-                <input type="text" id="inputModalEpTitleVal" class="yt-input" placeholder="Ex.: Episódio 1 - O Despertar">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalEpTitle" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalEpTitle" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 4. Modal: Duração do Episódio -->
-        <div class="upload-custom-dialog-backdrop" id="modalEpDuration">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Duração do Episódio</h4>
-                <input type="text" id="inputModalEpDurationVal" class="yt-input" placeholder="Ex.: 23:40 ou 12 min">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalEpDuration" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalEpDuration" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 5. Modal: Título da Série Mãe -->
-        <div class="upload-custom-dialog-backdrop" id="modalSeriesTitle">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Título da Série</h4>
-                <input type="text" id="inputModalSeriesTitleVal" class="yt-input" placeholder="Digite o nome da série">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalSeriesTitle" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalSeriesTitle" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 6. Modal: Capa da Série Vertical -->
-        <div class="upload-custom-dialog-backdrop" id="modalSeriesCoverUrl">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Capa da Série (Vertical)</h4>
-                <input type="text" id="inputModalSeriesCoverUrlVal" class="yt-input" placeholder="Cole o link da capa vertical da série">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalSeriesCoverUrl" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalSeriesCoverUrl" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 7. Modal: Gêneros da Série -->
-        <div class="upload-custom-dialog-backdrop" id="modalSeriesGenres">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Gêneros da Série</h4>
-                <input type="text" id="inputModalSeriesGenresVal" class="yt-input" placeholder="Ex.: Ação, Aventura, Fantasia">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalSeriesGenres" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalSeriesGenres" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 8. Modal: Capa de Exibição (Hero Banner do Topo) -->
-        <div class="upload-custom-dialog-backdrop" id="modalHeroBannerUrl">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Capa de Exibição (Banner Topo)</h4>
-                <input type="text" id="inputModalHeroBannerUrlVal" class="yt-input" placeholder="Cole o link da imagem horizontal do banner">
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCloseModalHeroBannerUrl" type="button">Fechar</button>
-                    <button class="upload-dialog-btn-done" id="btnDoneModalHeroBannerUrl" type="button">Concluir</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 9. Modal: Confirmar Exclusão de Episódio -->
-        <div class="upload-custom-dialog-backdrop" id="modalConfirmDeleteEp">
-            <div class="upload-custom-dialog-box">
-                <h4 style="font-size:16px; font-weight:700; color:#fff;">Excluir este episódio?</h4>
-                <p style="font-size:12.5px; color:#aaa;" id="txtConfirmDeleteEpMessage">Tem certeza de que deseja remover este episódio?</p>
-                <div class="upload-custom-dialog-actions">
-                    <button class="upload-dialog-btn-close" id="btnCancelDeleteEp" type="button">Não</button>
-                    <button class="upload-dialog-btn-done" id="btnConfirmDeleteEp" type="button" style="background:#ff453a; color:#fff;">Sim</button>
-                </div>
-            </div>
-        </div>
 
         <!-- ==========================================================================
              SUBTELA G & H: DEFINIR A VISIBILIDADE
@@ -9453,35 +8931,11 @@
         const btnAudioLegendado = document.getElementById("btnAudioLegendado");
         const btnAudioDublado = document.getElementById("btnAudioDublado");
 
-        // Configurações globais e Estado de Múltiplos Episódios (Prints A, B, C, D e E)
-        let currentUploadMode = "series";
+        // Configurações globais
+        let currentUploadMode = "series"; // "series" ou "episode"
         let currentAudioType = "Legendado";
         let selectedSeriesId = null;
         let availableSeriesList = [];
-
-        // Estado da Lista de até 100 Episódios e da Série Mãe
-        let seriesDraftEpisodes = [
-            {
-                id: "ep_1",
-                title: "Episódio 1",
-                videoUrl: "",
-                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                duration: "23:40",
-                rating: "14+",
-                season: "1",
-                episodeNum: "1"
-            }
-        ];
-        let currentActiveEpisodeIndex = 0;
-        let episodePendingDeleteIndex = null;
-
-        let seriesDraftInfo = {
-            title: "Dragon Ball Super: Beerus",
-            coverUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400",
-            heroBannerUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800",
-            genres: ["Artes Marciais", "Aventura"],
-            isRecentFeatured: false
-        };
 
         let currentUploadSettings = {
             visibility: "Público",
@@ -9561,66 +9015,60 @@
             iconUploadExpand.style.transform = isExpanded ? "rotate(0deg)" : "rotate(180deg)";
         });
 
-        // Elementos do Modal do Lápis (com verificação para não travar o script)
+        // Elementos do Modal do Lápis
         const drawerEditThumb = document.getElementById("drawerEditThumb");
         const inputThumbModalUrl = document.getElementById("inputThumbModalUrl");
         const btnCloseEditThumb = document.getElementById("btnCloseEditThumb");
         const btnCancelEditThumb = document.getElementById("btnCancelEditThumb");
         const btnConfirmEditThumb = document.getElementById("btnConfirmEditThumb");
 
-        if (btnEditUploadThumb) {
-            btnEditUploadThumb.addEventListener("click", () => {
-                inputThumbModalUrl.value = uploadEpisodeCover ? uploadEpisodeCover.value.trim() : currentUploadSettings.thumbUrl;
-                if (drawerEditThumb) drawerEditThumb.classList.add("active");
-                if (inputThumbModalUrl) inputThumbModalUrl.focus();
-            });
-        }
+        // 1. Ao clicar no lápis, abre o campo de URL
+        btnEditUploadThumb.addEventListener("click", () => {
+            // Puxa a URL atual (seja a que já estiver na tela ou no input de episódio)
+            inputThumbModalUrl.value = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
+            drawerEditThumb.classList.add("active");
+            inputThumbModalUrl.focus();
+        });
 
-        if (inputThumbModalUrl) {
-            inputThumbModalUrl.addEventListener("input", (e) => {
-                const url = e.target.value.trim();
-                if (url && uploadVideoThumb) {
-                    uploadVideoThumb.src = url;
+        // 2. Pré-visualização instantânea enquanto digita ou cola a URL no campo
+        inputThumbModalUrl.addEventListener("input", (e) => {
+            const url = e.target.value.trim();
+            if (url) {
+                uploadVideoThumb.src = url;
+            }
+        });
+
+        // 3. Confirmar alteração
+        btnConfirmEditThumb.addEventListener("click", () => {
+            const url = inputThumbModalUrl.value.trim();
+            if (url) {
+                currentUploadSettings.thumbUrl = url;
+                uploadVideoThumb.src = url;
+                // Sincroniza também com o campo do episódio se estiver nele
+                if (uploadEpisodeCover) {
+                    uploadEpisodeCover.value = url;
                 }
-            });
-        }
+            }
+            drawerEditThumb.classList.remove("active");
+        });
 
-        if (btnConfirmEditThumb) {
-            btnConfirmEditThumb.addEventListener("click", () => {
-                const url = inputThumbModalUrl ? inputThumbModalUrl.value.trim() : "";
-                if (url) {
-                    currentUploadSettings.thumbUrl = url;
-                    if (uploadVideoThumb) uploadVideoThumb.src = url;
-                    if (uploadEpisodeCover) {
-                        uploadEpisodeCover.value = url;
-                    }
-                }
-                if (drawerEditThumb) drawerEditThumb.classList.remove("active");
-            });
-        }
+        // 4. Fechar ou Cancelar
+        btnCloseEditThumb.addEventListener("click", () => {
+            uploadVideoThumb.src = currentUploadSettings.thumbUrl; // Restaura se não confirmou
+            drawerEditThumb.classList.remove("active");
+        });
 
-        if (btnCloseEditThumb) {
-            btnCloseEditThumb.addEventListener("click", () => {
-                if (uploadVideoThumb) uploadVideoThumb.src = currentUploadSettings.thumbUrl;
-                if (drawerEditThumb) drawerEditThumb.classList.remove("active");
-            });
-        }
+        btnCancelEditThumb.addEventListener("click", () => {
+            uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+            drawerEditThumb.classList.remove("active");
+        });
 
-        if (btnCancelEditThumb) {
-            btnCancelEditThumb.addEventListener("click", () => {
-                if (uploadVideoThumb) uploadVideoThumb.src = currentUploadSettings.thumbUrl;
-                if (drawerEditThumb) drawerEditThumb.classList.remove("active");
-            });
-        }
-
-        if (drawerEditThumb) {
-            drawerEditThumb.addEventListener("click", (e) => {
-                if (e.target === drawerEditThumb) {
-                    if (uploadVideoThumb) uploadVideoThumb.src = currentUploadSettings.thumbUrl;
-                    drawerEditThumb.classList.remove("active");
-                }
-            });
-        }
+        drawerEditThumb.addEventListener("click", (e) => {
+            if (e.target === drawerEditThumb) {
+                uploadVideoThumb.src = currentUploadSettings.thumbUrl;
+                drawerEditThumb.classList.remove("active");
+            }
+        });
 
         // Subtelas existentes
         const viewUploadVisibilityScreen = document.getElementById("viewUploadVisibilityScreen");
@@ -9870,368 +9318,7 @@
             });
         });
 
-        // ==========================================================================
-        // LÓGICA COMPLETA DE MÚLTIPLOS EPISÓDIOS E MODAIS VISUAIS (PRINTS A, B, C, D, E)
-        // ==========================================================================
-        const uploadActiveEpisodePreviewBox = document.getElementById("uploadActiveEpisodePreviewBox");
-        const uploadVideoThumb = document.getElementById("uploadVideoThumb");
-        const txtOverlayRatingBadge = document.getElementById("txtOverlayRatingBadge");
-        const txtActiveEpisodeTitleDisplay = document.getElementById("txtActiveEpisodeTitleDisplay");
-        const txtActiveSeriesNameDisplay = document.getElementById("txtActiveSeriesNameDisplay");
-        const imgActiveSeriesAvatarThumb = document.getElementById("imgActiveSeriesAvatarThumb");
-        const uploadEpisodesCardsCarousel = document.getElementById("uploadEpisodesCardsCarousel");
-        const btnAddNewEpisodeToList = document.getElementById("btnAddNewEpisodeToList");
-
-        // Elementos dos Cards Laterais de Pré-Visualização
-        const imgVisualHeroBannerThumb = document.getElementById("imgVisualHeroBannerThumb");
-        const txtVisualHeroType = document.getElementById("txtVisualHeroType");
-        const txtVisualHeroGenre = document.getElementById("txtVisualHeroGenre");
-        const txtVisualHeroTitle = document.getElementById("txtVisualHeroTitle");
-        const imgVisualSeriesVerticalThumb = document.getElementById("imgVisualSeriesVerticalThumb");
-        const txtVisualSeriesTitle = document.getElementById("txtVisualSeriesTitle");
-        const txtVisualSeriesGenre = document.getElementById("txtVisualSeriesGenre");
-
-        // Botões de Ação Sobrepostos no Topo (Print A)
-        const btnOverlayEpVideoUrl = document.getElementById("btnOverlayEpVideoUrl");
-        const btnOverlayEpThumbUrl = document.getElementById("btnOverlayEpThumbUrl");
-        const btnOverlayEpRating = document.getElementById("btnOverlayEpRating");
-        const btnOverlayEpTitle = document.getElementById("btnOverlayEpTitle");
-        const btnOverlayAddEpisode = document.getElementById("btnOverlayAddEpisode");
-        const btnOverlayEpDuration = document.getElementById("btnOverlayEpDuration");
-
-        // Botões de Ação na Capa da Série e Banner (Prints B e C)
-        const btnOverlaySeriesTitle = document.getElementById("btnOverlaySeriesTitle");
-        const btnOverlaySeriesCoverUrl = document.getElementById("btnOverlaySeriesCoverUrl");
-        const btnOverlaySeriesGenres = document.getElementById("btnOverlaySeriesGenres");
-        const btnOverlayHeroBannerLink = document.getElementById("btnOverlayHeroBannerLink");
-
-        // Modais com Concluir Azul e Fechar Branco
-        const modalEpVideoUrl = document.getElementById("modalEpVideoUrl");
-        const inputModalEpVideoUrlVal = document.getElementById("inputModalEpVideoUrlVal");
-        const btnDoneModalEpVideoUrl = document.getElementById("btnDoneModalEpVideoUrl");
-        const btnCloseModalEpVideoUrl = document.getElementById("btnCloseModalEpVideoUrl");
-
-        const modalEpThumbUrl = document.getElementById("modalEpThumbUrl");
-        const inputModalEpThumbUrlVal = document.getElementById("inputModalEpThumbUrlVal");
-        const btnDoneModalEpThumbUrl = document.getElementById("btnDoneModalEpThumbUrl");
-        const btnCloseModalEpThumbUrl = document.getElementById("btnCloseModalEpThumbUrl");
-
-        const modalEpTitle = document.getElementById("modalEpTitle");
-        const inputModalEpTitleVal = document.getElementById("inputModalEpTitleVal");
-        const btnDoneModalEpTitle = document.getElementById("btnDoneModalEpTitle");
-        const btnCloseModalEpTitle = document.getElementById("btnCloseModalEpTitle");
-
-        const modalEpDuration = document.getElementById("modalEpDuration");
-        const inputModalEpDurationVal = document.getElementById("inputModalEpDurationVal");
-        const btnDoneModalEpDuration = document.getElementById("btnDoneModalEpDuration");
-        const btnCloseModalEpDuration = document.getElementById("btnCloseModalEpDuration");
-
-        const modalSeriesTitle = document.getElementById("modalSeriesTitle");
-        const inputModalSeriesTitleVal = document.getElementById("inputModalSeriesTitleVal");
-        const btnDoneModalSeriesTitle = document.getElementById("btnDoneModalSeriesTitle");
-        const btnCloseModalSeriesTitle = document.getElementById("btnCloseModalSeriesTitle");
-
-        const modalSeriesCoverUrl = document.getElementById("modalSeriesCoverUrl");
-        const inputModalSeriesCoverUrlVal = document.getElementById("inputModalSeriesCoverUrlVal");
-        const btnDoneModalSeriesCoverUrl = document.getElementById("btnDoneModalSeriesCoverUrl");
-        const btnCloseModalSeriesCoverUrl = document.getElementById("btnCloseModalSeriesCoverUrl");
-
-        const modalSeriesGenres = document.getElementById("modalSeriesGenres");
-        const inputModalSeriesGenresVal = document.getElementById("inputModalSeriesGenresVal");
-        const btnDoneModalSeriesGenres = document.getElementById("btnDoneModalSeriesGenres");
-        const btnCloseModalSeriesGenres = document.getElementById("btnCloseModalSeriesGenres");
-
-        const modalHeroBannerUrl = document.getElementById("modalHeroBannerUrl");
-        const inputModalHeroBannerUrlVal = document.getElementById("inputModalHeroBannerUrlVal");
-        const btnDoneModalHeroBannerUrl = document.getElementById("btnDoneModalHeroBannerUrl");
-        const btnCloseModalHeroBannerUrl = document.getElementById("btnCloseModalHeroBannerUrl");
-
-        const modalConfirmDeleteEp = document.getElementById("modalConfirmDeleteEp");
-        const btnConfirmDeleteEp = document.getElementById("btnConfirmDeleteEp");
-        const btnCancelDeleteEp = document.getElementById("btnCancelDeleteEp");
-
-        // Atualiza a interface superior com os dados do episódio selecionado
-        function updateActiveEpisodeTopUI() {
-            if (seriesDraftEpisodes.length === 0) return;
-            const ep = seriesDraftEpisodes[currentActiveEpisodeIndex];
-
-            if (uploadVideoThumb) uploadVideoThumb.src = ep.thumbUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800";
-            if (txtOverlayRatingBadge) txtOverlayRatingBadge.textContent = ep.rating || "14+";
-            if (txtActiveEpisodeTitleDisplay) txtActiveEpisodeTitleDisplay.textContent = ep.title || `Episódio ${currentActiveEpisodeIndex + 1}`;
-            if (txtActiveSeriesNameDisplay) txtActiveSeriesNameDisplay.textContent = `Série: ${seriesDraftInfo.title}`;
-            if (imgActiveSeriesAvatarThumb) imgActiveSeriesAvatarThumb.src = seriesDraftInfo.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=100";
-
-            renderEpisodesCarouselCards();
-            updateDualPreviewsUI();
-        }
-
-        // Atualiza os Cards Laterais de Prévia (Hero Banner e Capa Vertical - Prints B e C)
-        function updateDualPreviewsUI() {
-            if (imgVisualHeroBannerThumb) imgVisualHeroBannerThumb.src = seriesDraftInfo.heroBannerUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
-            if (txtVisualHeroTitle) txtVisualHeroTitle.textContent = seriesDraftInfo.title || "Dragon Ball Super: Beerus";
-            if (txtVisualHeroGenre) txtVisualHeroGenre.textContent = `| ${seriesDraftInfo.genres && seriesDraftInfo.genres.length > 0 ? seriesDraftInfo.genres[0] : 'Aventura'}`;
-
-            if (imgVisualSeriesVerticalThumb) imgVisualSeriesVerticalThumb.src = seriesDraftInfo.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
-            if (txtVisualSeriesTitle) txtVisualSeriesTitle.textContent = seriesDraftInfo.title || "Dragon Ball Super: Beerus";
-            if (txtVisualSeriesGenre) txtVisualSeriesGenre.textContent = seriesDraftInfo.genres && seriesDraftInfo.genres.length > 0 ? seriesDraftInfo.genres.join(", ") : "Fantasia";
-        }
-
-        // Renderiza o Carrossel Horizontal de até 100 Episódios (Print A)
-        function renderEpisodesCarouselCards() {
-            if (!uploadEpisodesCardsCarousel) return;
-            uploadEpisodesCardsCarousel.innerHTML = "";
-
-            seriesDraftEpisodes.forEach((ep, idx) => {
-                const card = document.createElement("div");
-                card.className = `upload-ep-card-item ${idx === currentActiveEpisodeIndex ? 'active' : ''}`;
-
-                card.innerHTML = `
-                    <div class="upload-ep-card-thumb-box">
-                        <img src="${escapeHtml(ep.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
-                        <span class="fs-badge-date">${ep.rating || "14+"}</span>
-                        <div class="yt-duration-badge">${escapeHtml(ep.duration || "24:00")}</div>
-                    </div>
-                    <div class="upload-ep-card-details-row">
-                        <div class="upload-ep-card-texts">
-                            <div class="upload-ep-card-title">${escapeHtml(seriesDraftInfo.title)} - ${escapeHtml(ep.title)}</div>
-                            <div class="upload-ep-card-meta">${ep.season || "1"}ª Temporada | ${ep.episodeNum || (idx + 1)}º Episódio</div>
-                        </div>
-                        <button class="fs-kebab-btn-mini btnDeleteEpKebab" type="button" aria-label="Opções">
-                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                        </button>
-                    </div>
-                `;
-
-                // Clicar no card reabre este episódio no contêiner superior para edição (Seta Roxa Print A)
-                card.onclick = (e) => {
-                    if (e.target.closest(".btnDeleteEpKebab")) return;
-                    currentActiveEpisodeIndex = idx;
-                    updateActiveEpisodeTopUI();
-                };
-
-                // Kebab para excluir o episódio com confirmação (Seta Branca Print A)
-                const kebab = card.querySelector(".btnDeleteEpKebab");
-                if (kebab) {
-                    kebab.onclick = (e) => {
-                        e.stopPropagation();
-                        episodePendingDeleteIndex = idx;
-                        modalConfirmDeleteEp.classList.add("active");
-                    };
-                }
-
-                uploadEpisodesCardsCarousel.appendChild(card);
-            });
-        }
-
-        // Adiciona um novo episódio do zero (Seta Vermelha Print A e Botão "+ adicionar")
-        function addNewEpisodeToDraft() {
-            if (seriesDraftEpisodes.length >= 100) {
-                alert("Limite máximo de 100 episódios atingido.");
-                return;
-            }
-            const nextNum = seriesDraftEpisodes.length + 1;
-            const newEp = {
-                id: `ep_${Date.now()}_${nextNum}`,
-                title: `Episódio ${nextNum}`,
-                videoUrl: "",
-                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                duration: "24:00",
-                rating: "14+",
-                season: "1",
-                episodeNum: String(nextNum)
-            };
-            seriesDraftEpisodes.push(newEp);
-            currentActiveEpisodeIndex = seriesDraftEpisodes.length - 1;
-            updateActiveEpisodeTopUI();
-            showToast(`Episódio ${nextNum} adicionado. Preencha os dados no topo!`);
-        }
-
-        if (btnAddNewEpisodeToList) btnAddNewEpisodeToList.addEventListener("click", addNewEpisodeToDraft);
-        if (btnOverlayAddEpisode) btnOverlayAddEpisode.addEventListener("click", addNewEpisodeToDraft);
-
-        // Ações de Confirmação de Exclusão de Episódio
-        if (btnCancelDeleteEp) {
-            btnCancelDeleteEp.addEventListener("click", () => {
-                modalConfirmDeleteEp.classList.remove("active");
-                episodePendingDeleteIndex = null;
-            });
-        }
-
-        if (btnConfirmDeleteEp) {
-            btnConfirmDeleteEp.addEventListener("click", () => {
-                modalConfirmDeleteEp.classList.remove("active");
-                if (episodePendingDeleteIndex !== null && seriesDraftEpisodes.length > 1) {
-                    seriesDraftEpisodes.splice(episodePendingDeleteIndex, 1);
-                    currentActiveEpisodeIndex = Math.max(0, currentActiveEpisodeIndex - 1);
-                    updateActiveEpisodeTopUI();
-                    showToast("Episódio removido.");
-                } else {
-                    showToast("A série deve conter pelo menos 1 episódio.");
-                }
-                episodePendingDeleteIndex = null;
-            });
-        }
-
-        // 1. Link do Vídeo do Episódio (Seta Rosa Print A)
-        if (btnOverlayEpVideoUrl) {
-            btnOverlayEpVideoUrl.addEventListener("click", () => {
-                const ep = seriesDraftEpisodes[currentActiveEpisodeIndex];
-                inputModalEpVideoUrlVal.value = ep.videoUrl || "";
-                modalEpVideoUrl.classList.add("active");
-                inputModalEpVideoUrlVal.focus();
-            });
-        }
-        if (btnCloseModalEpVideoUrl) btnCloseModalEpVideoUrl.addEventListener("click", () => modalEpVideoUrl.classList.remove("active"));
-        if (btnDoneModalEpVideoUrl) {
-            btnDoneModalEpVideoUrl.addEventListener("click", () => {
-                const val = inputModalEpVideoUrlVal.value.trim();
-                seriesDraftEpisodes[currentActiveEpisodeIndex].videoUrl = val;
-                modalEpVideoUrl.classList.remove("active");
-                updateActiveEpisodeTopUI();
-                showToast("Link do vídeo atualizado!");
-            });
-        }
-
-        // 2. Link da Capa do Episódio (Seta Verde Print A)
-        if (btnOverlayEpThumbUrl) {
-            btnOverlayEpThumbUrl.addEventListener("click", () => {
-                const ep = seriesDraftEpisodes[currentActiveEpisodeIndex];
-                inputModalEpThumbUrlVal.value = ep.thumbUrl || "";
-                modalEpThumbUrl.classList.add("active");
-                inputModalEpThumbUrlVal.focus();
-            });
-        }
-        if (btnCloseModalEpThumbUrl) btnCloseModalEpThumbUrl.addEventListener("click", () => modalEpThumbUrl.classList.remove("active"));
-        if (btnDoneModalEpThumbUrl) {
-            btnDoneModalEpThumbUrl.addEventListener("click", () => {
-                const val = inputModalEpThumbUrlVal.value.trim();
-                if (val) seriesDraftEpisodes[currentActiveEpisodeIndex].thumbUrl = val;
-                modalEpThumbUrl.classList.remove("active");
-                updateActiveEpisodeTopUI();
-            });
-        }
-
-        // 3. Classificação Indicativa do Episódio (Seta Laranja Print A)
-        if (btnOverlayEpRating) {
-            btnOverlayEpRating.addEventListener("click", () => {
-                drawerUploadRating.classList.add("active");
-            });
-        }
-
-        // 4. Nome / Título do Episódio (Seta Azul Print A)
-        if (btnOverlayEpTitle) {
-            btnOverlayEpTitle.addEventListener("click", () => {
-                const ep = seriesDraftEpisodes[currentActiveEpisodeIndex];
-                inputModalEpTitleVal.value = ep.title || "";
-                modalEpTitle.classList.add("active");
-                inputModalEpTitleVal.focus();
-            });
-        }
-        if (btnCloseModalEpTitle) btnCloseModalEpTitle.addEventListener("click", () => modalEpTitle.classList.remove("active"));
-        if (btnDoneModalEpTitle) {
-            btnDoneModalEpTitle.addEventListener("click", () => {
-                const val = inputModalEpTitleVal.value.trim();
-                if (val) seriesDraftEpisodes[currentActiveEpisodeIndex].title = val;
-                modalEpTitle.classList.remove("active");
-                updateActiveEpisodeTopUI();
-            });
-        }
-
-        // 5. Duração do Episódio (Seta Amarela Print A)
-        if (btnOverlayEpDuration) {
-            btnOverlayEpDuration.addEventListener("click", () => {
-                const ep = seriesDraftEpisodes[currentActiveEpisodeIndex];
-                inputModalEpDurationVal.value = ep.duration || "24:00";
-                modalEpDuration.classList.add("active");
-                inputModalEpDurationVal.focus();
-            });
-        }
-        if (btnCloseModalEpDuration) btnCloseModalEpDuration.addEventListener("click", () => modalEpDuration.classList.remove("active"));
-        if (btnDoneModalEpDuration) {
-            btnDoneModalEpDuration.addEventListener("click", () => {
-                const val = inputModalEpDurationVal.value.trim();
-                if (val) seriesDraftEpisodes[currentActiveEpisodeIndex].duration = val;
-                modalEpDuration.classList.remove("active");
-                updateActiveEpisodeTopUI();
-            });
-        }
-
-        // 6. Título da Série Mãe (Seta Vermelha Print B)
-        if (btnOverlaySeriesTitle) {
-            btnOverlaySeriesTitle.addEventListener("click", () => {
-                inputModalSeriesTitleVal.value = seriesDraftInfo.title || "";
-                modalSeriesTitle.classList.add("active");
-                inputModalSeriesTitleVal.focus();
-            });
-        }
-        if (btnCloseModalSeriesTitle) btnCloseModalSeriesTitle.addEventListener("click", () => modalSeriesTitle.classList.remove("active"));
-        if (btnDoneModalSeriesTitle) {
-            btnDoneModalSeriesTitle.addEventListener("click", () => {
-                const val = inputModalSeriesTitleVal.value.trim();
-                if (val) seriesDraftInfo.title = val;
-                modalSeriesTitle.classList.remove("active");
-                updateActiveEpisodeTopUI();
-            });
-        }
-
-        // 7. Capa Vertical da Série (Seta Verde Print B)
-        if (btnOverlaySeriesCoverUrl) {
-            btnOverlaySeriesCoverUrl.addEventListener("click", () => {
-                inputModalSeriesCoverUrlVal.value = seriesDraftInfo.coverUrl || "";
-                modalSeriesCoverUrl.classList.add("active");
-                inputModalSeriesCoverUrlVal.focus();
-            });
-        }
-        if (btnCloseModalSeriesCoverUrl) btnCloseModalSeriesCoverUrl.addEventListener("click", () => modalSeriesCoverUrl.classList.remove("active"));
-        if (btnDoneModalSeriesCoverUrl) {
-            btnDoneModalSeriesCoverUrl.addEventListener("click", () => {
-                const val = inputModalSeriesCoverUrlVal.value.trim();
-                if (val) seriesDraftInfo.coverUrl = val;
-                modalSeriesCoverUrl.classList.remove("active");
-                updateActiveEpisodeTopUI();
-            });
-        }
-
-        // 8. Gêneros da Série (Seta Rosa Print B)
-        if (btnOverlaySeriesGenres) {
-            btnOverlaySeriesGenres.addEventListener("click", () => {
-                inputModalSeriesGenresVal.value = seriesDraftInfo.genres ? seriesDraftInfo.genres.join(", ") : "";
-                modalSeriesGenres.classList.add("active");
-                inputModalSeriesGenresVal.focus();
-            });
-        }
-        if (btnCloseModalSeriesGenres) btnCloseModalSeriesGenres.addEventListener("click", () => modalSeriesGenres.classList.remove("active"));
-        if (btnDoneModalSeriesGenres) {
-            btnDoneModalSeriesGenres.addEventListener("click", () => {
-                const val = inputModalSeriesGenresVal.value.trim();
-                if (val) seriesDraftInfo.genres = val.split(",").map(g => g.trim());
-                modalSeriesGenres.classList.remove("active");
-                updateActiveEpisodeTopUI();
-            });
-        }
-
-        // 9. Capa de Exibição / Banner do Topo (Seta Vermelha Print C)
-        if (btnOverlayHeroBannerLink) {
-            btnOverlayHeroBannerLink.addEventListener("click", () => {
-                inputModalHeroBannerUrlVal.value = seriesDraftInfo.heroBannerUrl || "";
-                modalHeroBannerUrl.classList.add("active");
-                inputModalHeroBannerUrlVal.focus();
-            });
-        }
-        if (btnCloseModalHeroBannerUrl) btnCloseModalHeroBannerUrl.addEventListener("click", () => modalHeroBannerUrl.classList.remove("active"));
-        if (btnDoneModalHeroBannerUrl) {
-            btnDoneModalHeroBannerUrl.addEventListener("click", () => {
-                const val = inputModalHeroBannerUrlVal.value.trim();
-                if (val) seriesDraftInfo.heroBannerUrl = val;
-                modalHeroBannerUrl.classList.remove("active");
-                updateActiveEpisodeTopUI();
-            });
-        }
-
-        // Inicializa o estado visual assim que o script carrega
-        updateActiveEpisodeTopUI();
-
-        // 2. ENVIAR CONTEÚDO (GRAVA A SÉRIE E TODOS OS EPISÓDIOS NO FIREBASE)
+        // 2. ENVIAR CONTEÚDO (COM TIPO DE CONTEÚDO VINCULADO À SÉRIE MÃE)
         btnSubmitVideoUpload.addEventListener("click", async () => {
             const isAdult = document.getElementById("uploadIsAdult").checked;
             const nextEpDate = document.getElementById("uploadNextEpDate").value;
@@ -10241,21 +9328,33 @@
                 btnSubmitVideoUpload.textContent = "Enviando...";
 
                 if (currentUploadMode === "series") {
-                    // MODO 1: CRIAR SÉRIE COM TODOS OS EPISÓDIOS DO CARROSSEL
-                    const sName = seriesDraftInfo.title.trim();
+                    // MODO 1: CRIAR SÉRIE (CAPA VERTICAL VAI PARA OS CARROSSÉIS E ABRE O CANAL)
+                    const sName = uploadSeriesName.value.trim();
+                    const sSynopsis = uploadSeriesSynopsis.value.trim();
+                    const sGenres = uploadSeriesGenres.value.trim();
+                    const firstEpCoverInput = document.getElementById("uploadFirstEpisodeCover");
+                    const firstEpUrlInput = document.getElementById("uploadFirstEpisodeUrl");
+                    const firstEpCover = firstEpCoverInput ? firstEpCoverInput.value.trim() : "";
+                    const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
+
                     if (!sName) {
                         alert("Por favor, preencha o nome da série!");
+                        uploadSeriesName.focus();
                         return;
                     }
 
-                    // 1. Grava a Série mãe no Firestore
+                    // Leitura da URL da capa de exibição do topo e do seletor Novo/Recente
+                    const heroBannerInput = document.getElementById("uploadHeroBannerUrl");
+                    const heroBannerUrlVal = heroBannerInput ? heroBannerInput.value.trim() : "";
+
+                    // Grava a Série mãe no banco (Card vertical para os carrosséis e exibição no banner se Novo/Recente for Sim)
                     await addDoc(collection(db, "series"), {
                         title: sName,
-                        coverUrl: seriesDraftInfo.coverUrl,
-                        heroBannerUrl: seriesDraftInfo.heroBannerUrl || null,
+                        coverUrl: currentUploadSettings.thumbUrl,
+                        heroBannerUrl: heroBannerUrlVal || null,
                         isRecentFeatured: isRecentFeaturedSelected,
-                        synopsis: `Assista a todos os episódios oficiais de ${sName} no FruitSenpai.`,
-                        genres: seriesDraftInfo.genres || ["Anime"],
+                        synopsis: sSynopsis,
+                        genres: sGenres ? sGenres.split(",").map(g => g.trim()) : ["Anime"],
                         visibility: currentUploadSettings.visibility,
                         isAdult: isAdult,
                         ratingBadge: selectedAgeBadge || "12+",
@@ -10266,32 +9365,39 @@
                         createdAt: serverTimestamp()
                     });
 
-                    // 2. Grava cada um dos episódios configurados no carrossel dentro da coleção frutas
-                    for (let i = 0; i < seriesDraftEpisodes.length; i++) {
-                        const ep = seriesDraftEpisodes[i];
+                    // Se o usuário adicionou o link do primeiro episódio, gera o card horizontal no 'Para você'
+                    if (firstEpUrl) {
+                        const firstEpDurationInput = document.getElementById("uploadFirstEpisodeDuration");
+                        const customFirstEpDuration = firstEpDurationInput && firstEpDurationInput.value.trim() ? firstEpDurationInput.value.trim() : "24:00";
+
                         await addDoc(frutasColecao, {
-                            name: `${sName} - ${ep.title}`,
+                            name: `${sName} - Episódio 1`,
                             channel: sName,
-                            seriesCover: seriesDraftInfo.coverUrl,
+                            seriesCover: currentUploadSettings.thumbUrl,
                             viewsCount: 0,
                             timeAgo: "agora mesmo",
-                            thumbUrl: ep.thumbUrl,
-                            videoUrl: ep.videoUrl || "",
-                            duration: ep.duration || "24:00",
-                            season: ep.season || "1",
-                            episodeNum: ep.episodeNum || String(i + 1),
+                            thumbUrl: firstEpCover || currentUploadSettings.thumbUrl,
+                            videoUrl: firstEpUrl,
+                            duration: customFirstEpDuration,
+                            season: selectedSeasonNumber || "1",
+                            episodeNum: selectedEpisodeNumber || "1",
                             resolutionBadge: selectedResolutionBadge || "HD",
-                            ratingBadge: ep.rating || selectedAgeBadge || "12+",
+                            ratingBadge: selectedAgeBadge || "12+",
                             isAdult: isAdult,
                             contentType: "episode",
                             timestamp: serverTimestamp()
                         });
                     }
 
-                    showToast(`Série "${sName}" e ${seriesDraftEpisodes.length} episódios publicados!`);
+                    uploadSeriesName.value = "";
+                    uploadSeriesSynopsis.value = "";
+                    uploadSeriesGenres.value = "";
+                    if (firstEpCoverInput) firstEpCoverInput.value = "";
+                    if (firstEpUrlInput) firstEpUrlInput.value = "";
+                    showToast("Série criada com sucesso!");
 
                 } else {
-                    // MODO 2: POSTAR EPISÓDIO INDIVIDUAL
+                    // MODO 2: POSTAR EPISÓDIO / REELS / TRAILER (VINCULADO AO NOME DA SÉRIE MÃE)
                     const epTitle = uploadEpisodeTitle.value.trim();
                     const epCover = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
                     const epVideoUrl = uploadEpisodeVideoUrl.value.trim();
@@ -10342,7 +9448,11 @@
                     uploadEpisodeTitle.value = "";
                     uploadEpisodeCover.value = "";
                     uploadEpisodeVideoUrl.value = "";
-                    showToast("Episódio publicado com sucesso!");
+                    if (uploadEpisodeDuration) uploadEpisodeDuration.value = "";
+                    if (uploadEpisodeTags) uploadEpisodeTags.value = "";
+                    uploadSearchSeries.value = "";
+                    selectedSeriesId = null;
+                    showToast(`${selectedContentType} publicado com sucesso!`);
                 }
 
                 viewUploadDetails.classList.remove("active");
@@ -10355,6 +9465,7 @@
                 btnSubmitVideoUpload.textContent = "Enviar";
             }
         });
+                    
 
         // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (4 LINHAS X 2 COLUNAS), MAIS RECENTES NO TOPO
         onSnapshot(frutasColecao, (snapshot) => {
