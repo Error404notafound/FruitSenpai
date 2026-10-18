@@ -5230,6 +5230,166 @@
             bottom: 12px;
             right: 12px;
         }
+
+        /* ==========================================================================
+           SEÇÃO SCROLL HORIZONTAL DE EPISÓDIOS (FIEL AO PRINT)
+           ========================================================================== */
+        .upload-episodes-shelf {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 8px 0 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+        }
+
+        .upload-episodes-shelf-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .upload-episodes-shelf-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-episodes-red-bar {
+            width: 3.5px;
+            height: 14px;
+            background-color: #e50914;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        .upload-episodes-shelf-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: -0.2px;
+        }
+
+        .upload-episodes-shelf-all {
+            color: #888888;
+            font-size: 11.5px;
+            font-weight: 500;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .upload-btn-shelf-add {
+            border: 1px solid rgba(229, 9, 20, 0.45);
+            background: rgba(30, 10, 10, 0.6);
+            color: #ffffff;
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.15s;
+        }
+
+        .upload-btn-shelf-add:active {
+            transform: scale(1.05);
+            background: rgba(229, 9, 20, 0.3);
+        }
+
+        .upload-episodes-scroll {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 0 16px;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .upload-episodes-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .upload-ep-shelf-card {
+            width: 145px;
+            min-width: 145px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.15s ease;
+        }
+
+        .upload-ep-shelf-card:active {
+            transform: scale(0.98);
+        }
+
+        .upload-ep-shelf-thumb {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #202020;
+        }
+
+        .upload-ep-shelf-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .upload-ep-shelf-badge-age {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+            font-size: 9.5px;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            line-height: 1;
+        }
+
+        .upload-ep-shelf-badge-time {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 4px;
+            border-radius: 4px;
+            line-height: 1;
+        }
+
+        .upload-ep-shelf-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.25;
+        }
+
+        .upload-ep-shelf-sub {
+            font-size: 10px;
+            color: #888888;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
         .upload-title-box {
             padding: 0 16px 14px 16px;
         }
@@ -8067,6 +8227,23 @@
                 </div>
             </div>
 
+            <!-- Seção de Novos Episódios Adicionados (Fiel ao Print) -->
+            <div class="upload-episodes-shelf">
+                <div class="upload-episodes-shelf-header">
+                    <div class="upload-episodes-shelf-left">
+                        <span class="upload-episodes-red-bar"></span>
+                        <h3 class="upload-episodes-shelf-title">Novos episódios</h3>
+                        <button class="upload-episodes-shelf-all" type="button">Tudo</button>
+                    </div>
+                    <button class="upload-btn-shelf-add" id="btnAddNewEpisodeShelf" type="button">
+                        <span>+ adicionar</span>
+                    </button>
+                </div>
+
+                <!-- Scroll Horizontal dos Cards dos Episódios -->
+                <div class="upload-episodes-scroll" id="uploadEpisodesScroll"></div>
+            </div>
+
             <!-- ==========================================================
                  MODO 1: CAMPOS DE CRIAR SÉRIE
                  ========================================================== -->
@@ -9040,17 +9217,100 @@
         const btnThumbRating = document.getElementById("btnThumbRating");
         const btnThumbDuration = document.getElementById("btnThumbDuration");
 
-        // 1. Seta Ciano (+): foca no campo de adicionar vídeo
-        if (btnThumbAddEpisode) {
-            btnThumbAddEpisode.addEventListener("click", () => {
-                const target = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
-                if (target) {
-                    target.focus();
-                    target.scrollIntoView({ behavior: "smooth", block: "center" });
-                }
-                showToast("Adicionar episódio");
+        // Elementos da Seção de Scroll dos Episódios Adicionados
+        const uploadEpisodesScroll = document.getElementById("uploadEpisodesScroll");
+        const btnAddNewEpisodeShelf = document.getElementById("btnAddNewEpisodeShelf");
+
+        // Lista dinâmica de episódios adicionados (inicia com os exemplos do print)
+        let addedEpisodesList = [
+            {
+                title: "The Laid-Off Cheat-Grantin...",
+                season: "1ª Temporada",
+                episode: "1º Episódio",
+                age: "14+",
+                duration: "23:40",
+                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400"
+            },
+            {
+                title: "The Laid-Off Cheat-Grantin...",
+                season: "1ª Temporada",
+                episode: "2º Episódio",
+                age: "14+",
+                duration: "23:40",
+                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400"
+            }
+        ];
+
+        // Renderiza o carrossel horizontal de episódios
+        function renderUploadEpisodesScroll() {
+            if (!uploadEpisodesScroll) return;
+            uploadEpisodesScroll.innerHTML = "";
+
+            addedEpisodesList.forEach((ep) => {
+                const card = document.createElement("div");
+                card.className = "upload-ep-shelf-card";
+                card.innerHTML = `
+                    <div class="upload-ep-shelf-thumb">
+                        <img src="${escapeHtml(ep.thumbUrl)}" alt="${escapeHtml(ep.title)}">
+                        <span class="upload-ep-shelf-badge-age">${escapeHtml(ep.age)}</span>
+                        <div class="upload-ep-shelf-badge-time">${escapeHtml(ep.duration)}</div>
+                    </div>
+                    <div class="upload-ep-shelf-title" title="${escapeHtml(ep.title)}">${escapeHtml(ep.title)}</div>
+                    <div class="upload-ep-shelf-sub">${escapeHtml(ep.season)} | ${escapeHtml(ep.episode)}</div>
+                `;
+                uploadEpisodesScroll.appendChild(card);
             });
         }
+
+        // Função que cria um novo card dinâmico no scroll
+        function handleCreateNewEpisodeCard() {
+            const currentTitleInput = document.getElementById("uploadSeriesName") || document.getElementById("uploadEpisodeTitle");
+            const seriesName = (currentTitleInput && currentTitleInput.value.trim()) ? currentTitleInput.value.trim() : "The Laid-Off Cheat-Grantin...";
+            const currentThumbImg = document.getElementById("uploadVideoThumb");
+            const thumbUrl = (currentThumbImg && currentThumbImg.src) ? currentThumbImg.src : "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+            const currentDurationInput = document.getElementById("uploadFirstEpisodeDuration") || document.getElementById("uploadEpisodeDuration");
+            const duration = (currentDurationInput && currentDurationInput.value.trim()) ? currentDurationInput.value.trim() : "23:40";
+
+            const nextEpNumber = addedEpisodesList.length + 1;
+
+            addedEpisodesList.push({
+                title: seriesName,
+                season: "1ª Temporada",
+                episode: `${nextEpNumber}º Episódio`,
+                age: "14+",
+                duration: duration,
+                thumbUrl: thumbUrl
+            });
+
+            renderUploadEpisodesScroll();
+
+            // Rola suavemente até o novo card criado
+            setTimeout(() => {
+                uploadEpisodesScroll.scrollTo({
+                    left: uploadEpisodesScroll.scrollWidth,
+                    behavior: "smooth"
+                });
+            }, 100);
+
+            showToast(`Episódio ${nextEpNumber} adicionado!`);
+        }
+
+        // 1. Seta Ciano (+) no topo da capa: adiciona novo card no scroll
+        if (btnThumbAddEpisode) {
+            btnThumbAddEpisode.addEventListener("click", () => {
+                handleCreateNewEpisodeCard();
+            });
+        }
+
+        // 2. Botão "+ adicionar" da barra de Novos episódios: adiciona novo card no scroll
+        if (btnAddNewEpisodeShelf) {
+            btnAddNewEpisodeShelf.addEventListener("click", () => {
+                handleCreateNewEpisodeCard();
+            });
+        }
+
+        // Inicializa a exibição dos cards
+        renderUploadEpisodesScroll();
 
         // 2. Seta Rosa (Link 🔗): foca no campo de link do episódio
         if (btnThumbEpisodeLink) {
