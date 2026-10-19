@@ -8750,15 +8750,6 @@
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadHeroBannerUrl" class="upload-title-input" placeholder="Link da capa de exibição (Banner horizontal do topo, opcional)">
                 </div>
-
-                <!-- Botão Seletor: Novo ou recente (Sim / Não) para Exibir no Topo -->
-                <div class="upload-recent-flag-row">
-                    <span>Novo ou recente (Exibir no topo)?</span>
-                    <div class="upload-recent-toggle-group">
-                        <button type="button" class="upload-recent-toggle-btn active" id="btnRecentFlagNo">Não</button>
-                        <button type="button" class="upload-recent-toggle-btn" id="btnRecentFlagYes">Sim</button>
-                    </div>
-                </div>
             </div>
 
             <!-- ==========================================================
@@ -9890,18 +9881,6 @@
             });
         }
 
-        // Sincroniza a foto do episódio ativo quando alterada pelo lápis do topo
-        const originalBtnConfirmEditThumb = btnConfirmEditThumb ? btnConfirmEditThumb.onclick : null;
-        if (btnConfirmEditThumb) {
-            btnConfirmEditThumb.addEventListener("click", () => {
-                const url = inputThumbModalUrl ? inputThumbModalUrl.value.trim() : "";
-                if (url && addedEpisodesList[currentActiveEpisodeIndex]) {
-                    addedEpisodesList[currentActiveEpisodeIndex].thumbUrl = url;
-                    renderUploadEpisodesScroll();
-                }
-            });
-        }
-
         // Inicializa a exibição com apenas o Episódio 1 real
         renderUploadEpisodesScroll();
 
@@ -10258,12 +10237,12 @@
         btnConfirmEditThumb.addEventListener("click", () => {
             const url = inputThumbModalUrl.value.trim();
             if (url) {
-                // Atualiza a área 16:9 assinalada com o X vermelho como Capa do Episódio
+                // Atualiza a área 16:9 superior como Capa do Episódio
                 uploadVideoThumb.src = url;
 
-                // Atualiza a capa dos episódios no carrossel horizontal de Novos Episódios
-                if (typeof addedEpisodesList !== "undefined" && addedEpisodesList.length > 0) {
-                    addedEpisodesList[0].thumbUrl = url;
+                // Atualiza a capa do episódio ativo selecionado no carrossel horizontal
+                if (typeof addedEpisodesList !== "undefined" && addedEpisodesList[currentActiveEpisodeIndex]) {
+                    addedEpisodesList[currentActiveEpisodeIndex].thumbUrl = url;
                     if (typeof renderUploadEpisodesScroll === "function") {
                         renderUploadEpisodesScroll();
                     }
