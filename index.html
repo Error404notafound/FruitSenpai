@@ -5320,11 +5320,61 @@
             flex-direction: column;
             cursor: pointer;
             flex-shrink: 0;
-            transition: transform 0.15s ease;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+            border-radius: 10px;
+            padding: 2px;
+            border: 2px solid transparent;
         }
 
         .upload-ep-shelf-card:active {
             transform: scale(0.98);
+        }
+
+        /* Destaque visual no card do episódio que está ativo para edição no topo */
+        .upload-ep-shelf-card.active-editing-shelf {
+            border-color: #3ea6ff;
+            background-color: rgba(62, 166, 255, 0.08);
+        }
+
+        /* Botão Fechar Azul do Modal */
+        .btn-modal-blue-close {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 18px;
+            height: 36px;
+            padding: 0 18px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: filter 0.15s ease;
+        }
+
+        .btn-modal-blue-close:active {
+            filter: brightness(0.85);
+        }
+
+        /* Botão Concluir Branco do Modal */
+        .btn-modal-white-confirm {
+            background-color: #ffffff;
+            color: #0f0f0f;
+            border: none;
+            border-radius: 18px;
+            height: 36px;
+            padding: 0 18px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-modal-white-confirm:active {
+            background-color: #e5e5e5;
         }
 
         .upload-ep-shelf-thumb {
@@ -8866,6 +8916,18 @@
             <button class="upload-submit-btn" id="btnSubmitVideoUpload">Enviar</button>
         </section>
 
+        <!-- Modal da Seta Vermelha: Nome do Episódio com Botão (Fechar) Azul e (Concluir) Branco -->
+        <div class="yt-center-modal-backdrop" id="modalEpisodeNameEdit">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Nome do Episódio</h3>
+                <input type="text" id="inputModalEpisodeNameVal" class="yt-input" placeholder="Digite o nome deste episódio...">
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+                    <button type="button" class="btn-modal-blue-close" id="btnCloseModalEpisodeName">Fechar</button>
+                    <button type="button" class="btn-modal-white-confirm" id="btnSaveModalEpisodeName">Concluir</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ==========================================================================
              SUBTELA G & H: DEFINIR A VISIBILIDADE
              ========================================================================== -->
@@ -9645,70 +9707,117 @@
         const uploadEpisodesScroll = document.getElementById("uploadEpisodesScroll");
         const btnAddNewEpisodeShelf = document.getElementById("btnAddNewEpisodeShelf");
 
-        // Lista dinâmica de episódios adicionados (inicia com os exemplos do print)
+        // Índice do episódio atualmente em edição no card superior
+        let currentActiveEpisodeIndex = 0;
+
+        // Sem mockups: Inicia APENAS com o Episódio 1 verdadeiro
         let addedEpisodesList = [
             {
-                title: "The Laid-Off Cheat-Grantin...",
+                title: "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life - Episódio 1",
+                seriesName: "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
                 season: "1ª Temporada",
                 episode: "1º Episódio",
+                episodeNum: 1,
                 age: "14+",
                 duration: "23:40",
-                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400"
-            },
-            {
-                title: "The Laid-Off Cheat-Grantin...",
-                season: "1ª Temporada",
-                episode: "2º Episódio",
-                age: "14+",
-                duration: "23:40",
-                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400"
+                videoUrl: "",
+                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800"
             }
         ];
 
-        // Renderiza o carrossel horizontal de episódios
+        // Carrega o episódio clicado no card superior da página de postagem para edição
+        function loadEpisodeIntoTopEditor(index) {
+            if (!addedEpisodesList[index]) return;
+            currentActiveEpisodeIndex = index;
+            const ep = addedEpisodesList[index];
+
+            // 1. Atualiza a foto horizontal superior (sem bordas arredondadas)
+            if (uploadVideoThumb) {
+                uploadVideoThumb.src = ep.thumbUrl;
+            }
+
+            // 2. Atualiza a prévia superior de texto abaixo da capa
+            if (uploadHeaderTitleText) {
+                uploadHeaderTitleText.textContent = ep.title;
+            }
+
+            // 3. Atualiza os campos de duração e vídeo com os dados do episódio selecionado
+            const durationInput = document.getElementById("uploadFirstEpisodeDuration") || document.getElementById("uploadEpisodeDuration");
+            if (durationInput) {
+                durationInput.value = ep.duration;
+            }
+
+            const videoUrlInput = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
+            if (videoUrlInput) {
+                videoUrlInput.value = ep.videoUrl || "";
+            }
+
+            renderUploadEpisodesScroll();
+            showToast(`Editando no topo: ${ep.episode}`);
+        }
+
+        // Renderiza os episódios reais no scroll com as informações em tempo real (Setas Verde, Amarela e Laranja)
         function renderUploadEpisodesScroll() {
             if (!uploadEpisodesScroll) return;
             uploadEpisodesScroll.innerHTML = "";
 
-            addedEpisodesList.forEach((ep) => {
+            addedEpisodesList.forEach((ep, index) => {
                 const card = document.createElement("div");
-                card.className = "upload-ep-shelf-card";
+                const isSelected = (index === currentActiveEpisodeIndex);
+                card.className = `upload-ep-shelf-card ${isSelected ? 'active-editing-shelf' : ''}`;
+
                 card.innerHTML = `
                     <div class="upload-ep-shelf-thumb">
                         <img src="${escapeHtml(ep.thumbUrl)}" alt="${escapeHtml(ep.title)}">
+                        <!-- Seta Verde: Classificação Indicativa em tempo real -->
                         <span class="upload-ep-shelf-badge-age">${escapeHtml(ep.age)}</span>
+                        <!-- Seta Amarela: Duração do Episódio em tempo real -->
                         <div class="upload-ep-shelf-badge-time">${escapeHtml(ep.duration)}</div>
                     </div>
+                    <!-- Seta Laranja: Nome do Episódio em tempo real -->
                     <div class="upload-ep-shelf-title" title="${escapeHtml(ep.title)}">${escapeHtml(ep.title)}</div>
                     <div class="upload-ep-shelf-sub">${escapeHtml(ep.season)} | ${escapeHtml(ep.episode)}</div>
                 `;
+
+                // Ao clicar no card, ele abre no topo para edição (Episódio 1, 2, 5, etc.)
+                card.addEventListener("click", () => {
+                    loadEpisodeIntoTopEditor(index);
+                });
+
                 uploadEpisodesScroll.appendChild(card);
             });
         }
 
-        // Função que cria um novo card dinâmico no scroll
+        // Cria novos episódios reais ao clicar no + ou em + adicionar
         function handleCreateNewEpisodeCard() {
             const currentTitleInput = document.getElementById("uploadSeriesName") || document.getElementById("uploadEpisodeTitle");
-            const seriesName = (currentTitleInput && currentTitleInput.value.trim()) ? currentTitleInput.value.trim() : "The Laid-Off Cheat-Grantin...";
-            const currentThumbImg = document.getElementById("uploadVideoThumb");
-            const thumbUrl = (currentThumbImg && currentThumbImg.src) ? currentThumbImg.src : "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+            const seriesName = (currentTitleInput && currentTitleInput.value.trim()) ? currentTitleInput.value.trim() : "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life";
+            
             const currentDurationInput = document.getElementById("uploadFirstEpisodeDuration") || document.getElementById("uploadEpisodeDuration");
             const duration = (currentDurationInput && currentDurationInput.value.trim()) ? currentDurationInput.value.trim() : "23:40";
 
             const nextEpNumber = addedEpisodesList.length + 1;
+            const currentAgeBadge = selectedAgeBadge || "14+";
+            const currentThumb = uploadVideoThumb ? uploadVideoThumb.src : "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800";
 
-            addedEpisodesList.push({
-                title: seriesName,
+            const newEpisodeObj = {
+                title: `${seriesName} - Episódio ${nextEpNumber}`,
+                seriesName: seriesName,
                 season: "1ª Temporada",
                 episode: `${nextEpNumber}º Episódio`,
-                age: "14+",
+                episodeNum: nextEpNumber,
+                age: currentAgeBadge,
                 duration: duration,
-                thumbUrl: thumbUrl
-            });
+                videoUrl: "",
+                thumbUrl: currentThumb
+            };
 
-            renderUploadEpisodesScroll();
+            addedEpisodesList.push(newEpisodeObj);
 
-            // Rola suavemente até o novo card criado
+            // Abre automaticamente o novo episódio criado no topo para edição imediata
+            loadEpisodeIntoTopEditor(addedEpisodesList.length - 1);
+
+            // Rola suavemente até o novo card no carrossel
             setTimeout(() => {
                 uploadEpisodesScroll.scrollTo({
                     left: uploadEpisodesScroll.scrollWidth,
@@ -9716,24 +9825,84 @@
                 });
             }, 100);
 
-            showToast(`Episódio ${nextEpNumber} adicionado!`);
+            showToast(`Episódio ${nextEpNumber} criado e aberto no topo!`);
         }
 
-        // 1. Seta Ciano (+) no topo da capa: adiciona novo card no scroll
+        // 1. Seta Ciano (+) no topo da capa: Adiciona episódio real
         if (btnThumbAddEpisode) {
             btnThumbAddEpisode.addEventListener("click", () => {
                 handleCreateNewEpisodeCard();
             });
         }
 
-        // 2. Botão "+ adicionar" da barra de Novos episódios: adiciona novo card no scroll
+        // 2. Botão "+ adicionar" da barra de Novos episódios: Adiciona episódio real
         if (btnAddNewEpisodeShelf) {
             btnAddNewEpisodeShelf.addEventListener("click", () => {
                 handleCreateNewEpisodeCard();
             });
         }
 
-        // Inicializa a exibição dos cards
+        // Seta Vermelha: SVG de lápis do canto direito do card superior abre o modal de nome do episódio
+        const modalEpisodeNameEdit = document.getElementById("modalEpisodeNameEdit");
+        const inputModalEpisodeNameVal = document.getElementById("inputModalEpisodeNameVal");
+        const btnCloseModalEpisodeName = document.getElementById("btnCloseModalEpisodeName");
+        const btnSaveModalEpisodeName = document.getElementById("btnSaveModalEpisodeName");
+
+        if (btnThumbEditTitle) {
+            btnThumbEditTitle.addEventListener("click", () => {
+                const currentEp = addedEpisodesList[currentActiveEpisodeIndex];
+                if (modalEpisodeNameEdit && inputModalEpisodeNameVal && currentEp) {
+                    inputModalEpisodeNameVal.value = currentEp.title;
+                    modalEpisodeNameEdit.classList.add("active");
+                    inputModalEpisodeNameVal.focus();
+                }
+            });
+        }
+
+        // Botão (Fechar) Azul do Modal
+        if (btnCloseModalEpisodeName) {
+            btnCloseModalEpisodeName.addEventListener("click", () => {
+                if (modalEpisodeNameEdit) {
+                    modalEpisodeNameEdit.classList.remove("active");
+                }
+            });
+        }
+
+        // Botão (Concluir) Branco do Modal: Salva e atualiza o card e a prévia em tempo real
+        if (btnSaveModalEpisodeName) {
+            btnSaveModalEpisodeName.addEventListener("click", () => {
+                const val = inputModalEpisodeNameVal ? inputModalEpisodeNameVal.value.trim() : "";
+                if (val && addedEpisodesList[currentActiveEpisodeIndex]) {
+                    addedEpisodesList[currentActiveEpisodeIndex].title = val;
+
+                    // Atualiza a prévia superior
+                    if (uploadHeaderTitleText) {
+                        uploadHeaderTitleText.textContent = val;
+                    }
+
+                    // Atualiza o nome do card no carrossel em tempo real (Seta Laranja)
+                    renderUploadEpisodesScroll();
+                    showToast("Nome do episódio atualizado!");
+                }
+                if (modalEpisodeNameEdit) {
+                    modalEpisodeNameEdit.classList.remove("active");
+                }
+            });
+        }
+
+        // Sincroniza a foto do episódio ativo quando alterada pelo lápis do topo
+        const originalBtnConfirmEditThumb = btnConfirmEditThumb ? btnConfirmEditThumb.onclick : null;
+        if (btnConfirmEditThumb) {
+            btnConfirmEditThumb.addEventListener("click", () => {
+                const url = inputThumbModalUrl ? inputThumbModalUrl.value.trim() : "";
+                if (url && addedEpisodesList[currentActiveEpisodeIndex]) {
+                    addedEpisodesList[currentActiveEpisodeIndex].thumbUrl = url;
+                    renderUploadEpisodesScroll();
+                }
+            });
+        }
+
+        // Inicializa a exibição com apenas o Episódio 1 real
         renderUploadEpisodesScroll();
 
         // ==========================================================================
