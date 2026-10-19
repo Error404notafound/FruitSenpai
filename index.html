@@ -8590,9 +8590,9 @@
                     <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2.3 6.4l-1.3 1.3-2.8-2.8 1.3-1.3c.4-.4 1-.4 1.4 0l1.4 1.4c.4.4.4 1 0 1.4zm-2.7 2.7l-5.6 5.6H6.1v-2.3l5.6-5.6 2.3 2.3z"/></svg>
                 </button>
 
-                <!-- 4. Seta Amarela (Inferior Esquerdo): Botão Classificação Indicativa -->
-                <button class="upload-thumb-action-btn upload-btn-bottom-left" id="btnThumbRating" title="Classificação indicativa" type="button">
-                    <svg viewBox="0 0 24 24"><circle cx="10" cy="13" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M17 5v5m-2.5-2.5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                <!-- 4. Seta Vermelha (Inferior Esquerdo): Botão Lixeira (Excluir Episódio Ativo) -->
+                <button class="upload-thumb-action-btn upload-btn-bottom-left" id="btnThumbDeleteEpisode" title="Excluir episódio" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                 </button>
 
                 <!-- 5. Seta Vermelha (Inferior Direito): Botão Ampulheta (⏳) -->
@@ -8915,6 +8915,18 @@
                 <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
                     <button type="button" class="btn-modal-blue-close" id="btnCloseModalEpisodeName">Fechar</button>
                     <button type="button" class="btn-modal-white-confirm" id="btnSaveModalEpisodeName">Concluir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de Confirmação: Excluir Episódio com Botão (Não) Azul e (Sim) Branco -->
+        <div class="yt-center-modal-backdrop" id="modalDeleteEpisodeConfirm">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Deseja excluir esse episódio?</h3>
+                <p style="font-size:13px; color:#aaaaaa; line-height:1.4;">Esta ação removerá este episódio da sua lista de publicação.</p>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:10px;">
+                    <button type="button" class="btn-modal-blue-close" id="btnCancelDeleteEpisode">Não</button>
+                    <button type="button" class="btn-modal-white-confirm" id="btnConfirmDeleteEpisode">Sim</button>
                 </div>
             </div>
         </div>
@@ -9687,12 +9699,17 @@
         const iconUploadExpand = document.getElementById("iconUploadExpand");
         const btnSubmitVideoUpload = document.getElementById("btnSubmitVideoUpload");
 
-        // Seletores e eventos dos 5 botões das setas sobre a capa
+        // Seletores e eventos dos botões flutuantes sobre a capa
         const btnThumbAddEpisode = document.getElementById("btnThumbAddEpisode");
         const btnThumbEpisodeLink = document.getElementById("btnThumbEpisodeLink");
         const btnThumbEditTitle = document.getElementById("btnThumbEditTitle");
-        const btnThumbRating = document.getElementById("btnThumbRating");
+        const btnThumbDeleteEpisode = document.getElementById("btnThumbDeleteEpisode");
         const btnThumbDuration = document.getElementById("btnThumbDuration");
+
+        // Elementos do Modal de Excluir Episódio (Não Azul / Sim Branco)
+        const modalDeleteEpisodeConfirm = document.getElementById("modalDeleteEpisodeConfirm");
+        const btnCancelDeleteEpisode = document.getElementById("btnCancelDeleteEpisode");
+        const btnConfirmDeleteEpisode = document.getElementById("btnConfirmDeleteEpisode");
 
         // Elementos da Seção de Scroll dos Episódios Adicionados
         const uploadEpisodesScroll = document.getElementById("uploadEpisodesScroll");
@@ -9732,10 +9749,10 @@
                 uploadHeaderTitleText.textContent = ep.title;
             }
 
-            // 3. Atualiza os campos de duração e vídeo com os dados do episódio selecionado
+            // 3. Atualiza o campo de duração individual com o valor específico deste episódio
             const durationInput = document.getElementById("uploadFirstEpisodeDuration") || document.getElementById("uploadEpisodeDuration");
             if (durationInput) {
-                durationInput.value = ep.duration;
+                durationInput.value = ep.duration || "23:40";
             }
 
             const videoUrlInput = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
@@ -9830,6 +9847,82 @@
         if (btnAddNewEpisodeShelf) {
             btnAddNewEpisodeShelf.addEventListener("click", () => {
                 handleCreateNewEpisodeCard();
+            });
+        }
+
+        // Seta Vermelha: Lixeira abre modal "Deseja excluir esse episódio?"
+        if (btnThumbDeleteEpisode) {
+            btnThumbDeleteEpisode.addEventListener("click", () => {
+                if (addedEpisodesList.length <= 1) {
+                    showToast("A série precisa ter pelo menos 1 episódio.");
+                    return;
+                }
+                if (modalDeleteEpisodeConfirm) {
+                    modalDeleteEpisodeConfirm.classList.add("active");
+                }
+            });
+        }
+
+        // Botão (Não) Azul do Modal: apenas fecha o modal
+        if (btnCancelDeleteEpisode) {
+            btnCancelDeleteEpisode.addEventListener("click", () => {
+                if (modalDeleteEpisodeConfirm) {
+                    modalDeleteEpisodeConfirm.classList.remove("active");
+                }
+            });
+        }
+
+        // Botão (Sim) Branco do Modal: exclui o episódio ativo e reordena os cards
+        if (btnConfirmDeleteEpisode) {
+            btnConfirmDeleteEpisode.addEventListener("click", () => {
+                if (addedEpisodesList.length > 1) {
+                    const deletedNumber = currentActiveEpisodeIndex + 1;
+                    addedEpisodesList.splice(currentActiveEpisodeIndex, 1);
+
+                    // Reajusta o índice ativo para o episódio anterior ou o primeiro
+                    if (currentActiveEpisodeIndex >= addedEpisodesList.length) {
+                        currentActiveEpisodeIndex = addedEpisodesList.length - 1;
+                    }
+
+                    // Atualiza a numeração dos episódios restantes
+                    addedEpisodesList.forEach((ep, idx) => {
+                        ep.episodeNum = idx + 1;
+                        ep.episode = `${idx + 1}º Episódio`;
+                    });
+
+                    // Carrega o episódio atualizado no card superior
+                    loadEpisodeIntoTopEditor(currentActiveEpisodeIndex);
+                    renderUploadEpisodesScroll();
+
+                    showToast(`Episódio ${deletedNumber} excluído.`);
+                }
+                if (modalDeleteEpisodeConfirm) {
+                    modalDeleteEpisodeConfirm.classList.remove("active");
+                }
+            });
+        }
+
+        // Sincronização em Tempo Real: Duração Individual para o Episódio Ativo (Seta Verde)
+        const inputFirstEpisodeDuration = document.getElementById("uploadFirstEpisodeDuration");
+        const inputEpisodeDuration = document.getElementById("uploadEpisodeDuration");
+
+        function syncActiveEpisodeDuration(val) {
+            const cleanDuration = val.trim() || "23:40";
+            if (addedEpisodesList[currentActiveEpisodeIndex]) {
+                addedEpisodesList[currentActiveEpisodeIndex].duration = cleanDuration;
+                renderUploadEpisodesScroll();
+            }
+        }
+
+        if (inputFirstEpisodeDuration) {
+            inputFirstEpisodeDuration.addEventListener("input", (e) => {
+                syncActiveEpisodeDuration(e.target.value);
+            });
+        }
+
+        if (inputEpisodeDuration) {
+            inputEpisodeDuration.addEventListener("input", (e) => {
+                syncActiveEpisodeDuration(e.target.value);
             });
         }
 
@@ -10406,10 +10499,22 @@
         document.querySelectorAll(".optUploadRating").forEach(opt => {
             opt.addEventListener("click", () => {
                 const ratingLabel = opt.getAttribute("data-rating");
-                selectedAgeBadge = opt.getAttribute("data-badge");
+                selectedAgeBadge = opt.getAttribute("data-badge") || "14+";
                 currentUploadSettings.rating = ratingLabel;
                 if (valUploadRating) valUploadRating.textContent = ratingLabel;
+
+                // A classificação indicativa é ÚNICA para todos os episódios: atualiza todos os cards em tempo real (Seta Ciano)
+                if (typeof addedEpisodesList !== "undefined" && addedEpisodesList.length > 0) {
+                    addedEpisodesList.forEach(ep => {
+                        ep.age = selectedAgeBadge;
+                    });
+                    if (typeof renderUploadEpisodesScroll === "function") {
+                        renderUploadEpisodesScroll();
+                    }
+                }
+
                 drawerUploadRating.classList.remove("active");
+                showToast(`Classificação definida para ${selectedAgeBadge}`);
             });
         });
 
