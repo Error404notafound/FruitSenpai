@@ -5462,10 +5462,18 @@
             box-sizing: border-box;
         }
 
-        /* Mini Banner de Exibição (Fiel à Seta Verde) */
-        .upload-hero-mini-banner-card {
+        /* Coluna da Esquerda: Contém o Mini Banner + o Seletor Novo ou Recente */
+        .upload-preview-left-col {
             flex: 1;
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Mini Banner de Exibição (Fiel à Seta Verde) */
+        .upload-hero-mini-banner-card {
+            width: 100%;
             aspect-ratio: 16 / 10;
             border-radius: 12px;
             overflow: hidden;
@@ -5573,6 +5581,55 @@
             fill: currentColor;
         }
 
+        /* Seletor "Novo ou recente" perfeitamente ajustado logo abaixo do banner */
+        .upload-recent-flag-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background-color: #141414;
+            border-radius: 10px;
+            margin: 0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            width: 100%;
+            box-sizing: border-box;
+            gap: 6px;
+        }
+
+        .upload-recent-flag-row span {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .upload-recent-toggle-group {
+            display: flex;
+            background-color: #121212;
+            border-radius: 14px;
+            padding: 2px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            flex-shrink: 0;
+        }
+
+        .upload-recent-toggle-btn {
+            border: none;
+            background: none;
+            color: #888888;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .upload-recent-toggle-btn.active {
+            background-color: #3ea6ff;
+            color: #0f0f0f;
+        }
+
+        /* Coluna da Direita: Card Vertical da Série */
         .upload-series-vertical-card {
             width: 115px;
             min-width: 115px;
@@ -8545,32 +8602,43 @@
             <!-- 2. Prévia Inferior: Mini Banner da Página Principal e Card Vertical Lado a Lado -->
             <div class="upload-series-vertical-preview-area">
                 
-                <!-- Mini Banner de Exibição (Seta Vermelha e Seta Verde) -->
-                <div class="upload-hero-mini-banner-card" id="cardMiniHeroBanner">
-                    <img id="imgMiniHeroBanner" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600" alt="Banner de Exibição">
-                    
-                    <!-- Seta Vermelha: Botão Link que leva ao campo 'link da capa de exibição' -->
-                    <button class="upload-hero-mini-link-btn" id="btnMiniBannerLink" title="Ir para link da capa de exibição" type="button">
-                        <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
-                    </button>
+                <!-- Coluna Esquerda: Mini Banner + Seletor "Novo ou recente" Logo Abaixo Dele -->
+                <div class="upload-preview-left-col">
+                    <div class="upload-hero-mini-banner-card" id="cardMiniHeroBanner">
+                        <img id="imgMiniHeroBanner" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600" alt="Banner de Exibição">
+                        
+                        <!-- Seta Vermelha: Botão Link que leva ao campo 'link da capa de exibição' -->
+                        <button class="upload-hero-mini-link-btn" id="btnMiniBannerLink" title="Ir para link da capa de exibição" type="button">
+                            <svg viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg>
+                        </button>
 
-                    <!-- Overlay com Gênero, Título e Indicador (Seta Verde) -->
-                    <div class="upload-hero-mini-overlay">
-                        <div class="upload-hero-mini-genre">
-                            <span id="txtMiniBannerContentType" style="color:#f59e0b;">Série</span>
-                            <span>|</span>
-                            <span id="txtMiniBannerGenre">Aventura</span>
+                        <!-- Overlay com Gênero, Título e Indicador -->
+                        <div class="upload-hero-mini-overlay">
+                            <div class="upload-hero-mini-genre">
+                                <span id="txtMiniBannerContentType" style="color:#f59e0b;">Série</span>
+                                <span>|</span>
+                                <span id="txtMiniBannerGenre">Aventura</span>
+                            </div>
+                            <div class="upload-hero-mini-title" id="txtMiniBannerTitle">Dragon Ball Super: Beerus</div>
+                            <div class="upload-hero-mini-dots">
+                                <span class="upload-hero-mini-dot active"></span>
+                                <span class="upload-hero-mini-dot"></span>
+                                <span class="upload-hero-mini-dot"></span>
+                            </div>
                         </div>
-                        <div class="upload-hero-mini-title" id="txtMiniBannerTitle">Dragon Ball Super: Beerus</div>
-                        <div class="upload-hero-mini-dots">
-                            <span class="upload-hero-mini-dot active"></span>
-                            <span class="upload-hero-mini-dot"></span>
-                            <span class="upload-hero-mini-dot"></span>
+                    </div>
+
+                    <!-- Seletor Novo ou Recente Posicionado Logo Abaixo do Banner (Seta Vermelha) -->
+                    <div class="upload-recent-flag-row">
+                        <span>Novo ou recente (Exibir no topo)?</span>
+                        <div class="upload-recent-toggle-group">
+                            <button type="button" class="upload-recent-toggle-btn active" id="btnRecentFlagNo">Não</button>
+                            <button type="button" class="upload-recent-toggle-btn" id="btnRecentFlagYes">Sim</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Card Vertical da Série com os 4 Botões SVG -->
+                <!-- Coluna Direita: Card Vertical da Série com os 4 Botões SVG -->
                 <div class="upload-series-vertical-card">
                     <div class="upload-series-vertical-thumb">
                         <img id="uploadSeriesVerticalPosterImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400" alt="Capa da Série">
@@ -8601,7 +8669,7 @@
             </div>
 
             <!-- ==========================================================
-                 MODO 1: CAMPOS DE CRIAR SÉRIE (INTACTOS ABAIXO DO CARD VERTICAL)
+                 MODO 1: CAMPOS DE CRIAR SÉRIE (INTACTOS ABAIXO DAS PRÉVIAS)
                  ========================================================== -->
             <div id="modeCreateSeriesContainer" style="display: flex; flex-direction: column;">
                 <div class="upload-title-box">
