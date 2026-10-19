@@ -10605,7 +10605,7 @@
             });
         });
 
-        // 2. ENVIAR CONTEÚDO (COM TIPO DE CONTEÚDO VINCULADO À SÉRIE MÃE)
+        // 2. ENVIAR CONTEÚDO (RESOLVE OS 3 PROBLEMAS: CAPA DA SÉRIE, CAPA DO EPISÓDIO E TODOS OS 12 EPISÓDIOS)
         btnSubmitVideoUpload.addEventListener("click", async () => {
             const isAdult = document.getElementById("uploadIsAdult").checked;
             const nextEpDate = document.getElementById("uploadNextEpDate").value;
@@ -10615,14 +10615,13 @@
                 btnSubmitVideoUpload.textContent = "Enviando...";
 
                 if (currentUploadMode === "series") {
-                    // MODO 1: CRIAR SÉRIE (CAPA VERTICAL VAI PARA OS CARROSSÉIS E ABRE O CANAL)
+                    // MODO 1: CRIAR SÉRIE
                     const sName = uploadSeriesName.value.trim();
                     const sSynopsis = uploadSeriesSynopsis.value.trim();
                     const sGenres = uploadSeriesGenres.value.trim();
-                    const firstEpCoverInput = document.getElementById("uploadFirstEpisodeCover");
+                    const seriesCoverInput = document.getElementById("uploadFirstEpisodeCover");
+                    const heroBannerInput = document.getElementById("uploadHeroBannerUrl");
                     const firstEpUrlInput = document.getElementById("uploadFirstEpisodeUrl");
-                    const firstEpCover = firstEpCoverInput ? firstEpCoverInput.value.trim() : "";
-                    const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
 
                     if (!sName) {
                         alert("Por favor, preencha o nome da série!");
@@ -10630,21 +10629,26 @@
                         return;
                     }
 
-                    // Leitura da URL da capa de exibição do topo e do seletor Novo/Recente
-                    const heroBannerInput = document.getElementById("uploadHeroBannerUrl");
-                    const heroBannerUrlVal = heroBannerInput ? heroBannerInput.value.trim() : "";
+                    // CORREÇÃO 2: A Capa da Série oficial que vai para 'Animes mais recentes'
+                    const seriesCoverImgEl = document.getElementById("uploadSeriesVerticalPosterImg");
+                    const seriesCoverUrl = (seriesCoverInput && seriesCoverInput.value.trim()) 
+                        ? seriesCoverInput.value.trim() 
+                        : (seriesCoverImgEl ? seriesCoverImgEl.src : "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400");
 
-                    // Grava a Série mãe no banco (Card vertical para os carrosséis e exibição no banner se Novo/Recente for Sim)
+                    const heroBannerUrlVal = heroBannerInput ? heroBannerInput.value.trim() : "";
+                    const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
+
+                    // 1. Grava a Série mãe no Firestore com a CAPA DA SÉRIE CORRETA
                     await addDoc(collection(db, "series"), {
                         title: sName,
-                        coverUrl: currentUploadSettings.thumbUrl,
+                        coverUrl: seriesCoverUrl,
                         heroBannerUrl: heroBannerUrlVal || null,
                         isRecentFeatured: isRecentFeaturedSelected,
                         synopsis: sSynopsis,
-                        genres: sGenres ? sGenres.split(",").map(g => g.trim()) : ["Anime"],
+                        genres: sGenres ? sGenres.split(",").map(g => g.trim()).filter(Boolean) : ["Anime"],
                         visibility: currentUploadSettings.visibility,
                         isAdult: isAdult,
-                        ratingBadge: selectedAgeBadge || "12+",
+                        ratingBadge: selectedAgeBadge || "14+",
                         contentType: selectedContentType || "Anime",
                         nextEpDate: nextEpDate || null,
                         author: currentUserEmail,
@@ -10652,24 +10656,40 @@
                         createdAt: serverTimestamp()
                     });
 
-                    // Se o usuário adicionou o link do primeiro episódio, gera o card horizontal no 'Para você'
-                    if (firstEpUrl) {
-                        const firstEpDurationInput = document.getElementById("uploadFirstEpisodeDuration");
-                        const customFirstEpDuration = firstEpDurationInput && firstEpDurationInput.value.trim() ? firstEpDurationInput.value.trim() : "24:00";
+                    // CORREÇÃO 3: Grava TODOS os episódios criados na lista (todos os 12 de uma vez só!)
+                    const episodesToSave = (typeof addedEpisodesList !== "undefined" && addedEpisodesList.length > 0)
+                        ? addedEpisodesList
+                        : [{
+                            title: `${sName} - Episódio 1`,
+                            episodeNum: 1,
+                            duration: "24:00",
+                            thumbUrl: uploadVideoThumb.src,
+                            videoUrl: firstEpUrl
+                        }];
+
+                    for (let i = 0; i < episodesToSave.length; i++) {
+                        const ep = episodesToSave[i];
+                        const epNum = ep.episodeNum || (i + 1);
+                        const epName = ep.title || `${sName} - Episódio ${epNum}`;
+
+                        // CORREÇÃO 1: A capa do card do episódio é a foto do EPISÓDIO (16:9), NÃO a foto da série!
+                        const epThumb = ep.thumbUrl || (uploadVideoThumb ? uploadVideoThumb.src : "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800");
+                        const epDuration = ep.duration || "24:00";
+                        const epVideo = ep.videoUrl || firstEpUrl || "";
 
                         await addDoc(frutasColecao, {
-                            name: `${sName} - Episódio 1`,
+                            name: epName,
                             channel: sName,
-                            seriesCover: currentUploadSettings.thumbUrl,
+                            seriesCover: seriesCoverUrl, // Capa da série usada para o avatar redondo
                             viewsCount: 0,
                             timeAgo: "agora mesmo",
-                            thumbUrl: firstEpCover || currentUploadSettings.thumbUrl,
-                            videoUrl: firstEpUrl,
-                            duration: customFirstEpDuration,
+                            thumbUrl: epThumb, // Capa horizontal do episódio
+                            videoUrl: epVideo,
+                            duration: epDuration,
                             season: selectedSeasonNumber || "1",
-                            episodeNum: selectedEpisodeNumber || "1",
+                            episodeNum: String(epNum),
                             resolutionBadge: selectedResolutionBadge || "HD",
-                            ratingBadge: selectedAgeBadge || "12+",
+                            ratingBadge: selectedAgeBadge || "14+",
                             isAdult: isAdult,
                             contentType: "episode",
                             timestamp: serverTimestamp()
@@ -10679,32 +10699,37 @@
                     uploadSeriesName.value = "";
                     uploadSeriesSynopsis.value = "";
                     uploadSeriesGenres.value = "";
-                    if (firstEpCoverInput) firstEpCoverInput.value = "";
+                    if (seriesCoverInput) seriesCoverInput.value = "";
                     if (firstEpUrlInput) firstEpUrlInput.value = "";
-                    showToast("Série criada com sucesso!");
+
+                    // Reseta a lista para o estado limpo
+                    addedEpisodesList = [
+                        {
+                            title: "Episódio 1",
+                            seriesName: "",
+                            season: "1ª Temporada",
+                            episode: "1º Episódio",
+                            episodeNum: 1,
+                            age: "14+",
+                            duration: "23:40",
+                            videoUrl: "",
+                            thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800"
+                        }
+                    ];
+                    currentActiveEpisodeIndex = 0;
+                    renderUploadEpisodesScroll();
+
+                    showToast(`Série e todos os ${episodesToSave.length} episódios publicados!`);
 
                 } else {
-                    // MODO 2: POSTAR EPISÓDIO / REELS / TRAILER (VINCULADO AO NOME DA SÉRIE MÃE)
-                    const epTitle = uploadEpisodeTitle.value.trim();
-                    const epCover = uploadEpisodeCover.value.trim() || currentUploadSettings.thumbUrl;
-                    const epVideoUrl = uploadEpisodeVideoUrl.value.trim();
+                    // MODO 2: POSTAR EPISÓDIO EM SÉRIE EXISTENTE
+                    const seriesName = uploadSearchSeries.value.trim();
 
-                    if (!selectedSeriesId && !uploadSearchSeries.value.trim()) {
+                    if (!selectedSeriesId && !seriesName) {
                         alert("Por favor, selecione ou digite a série correspondente!");
                         uploadSearchSeries.focus();
                         return;
                     }
-
-                    if (!epTitle) {
-                        alert("Por favor, digite o nome do episódio!");
-                        uploadEpisodeTitle.focus();
-                        return;
-                    }
-
-                    const seriesName = uploadSearchSeries.value.trim();
-                    const epDuration = uploadEpisodeDuration && uploadEpisodeDuration.value.trim() ? uploadEpisodeDuration.value.trim() : "24:00";
-                    const epTagsRaw = uploadEpisodeTags ? uploadEpisodeTags.value.trim() : "";
-                    const epTagsList = epTagsRaw ? epTagsRaw.split(",").map(t => t.trim().toLowerCase()) : [];
 
                     let seriesPhoto = "";
                     const matchedSeries = availableSeriesList.find(s => s.id === selectedSeriesId || (s.title && s.title.toLowerCase() === seriesName.toLowerCase()));
@@ -10712,34 +10737,47 @@
                         seriesPhoto = matchedSeries.coverUrl;
                     }
 
-                    await addDoc(frutasColecao, {
-                        name: epTitle,
-                        channel: seriesName,
-                        seriesCover: seriesPhoto || epCover,
-                        viewsCount: 0,
-                        timeAgo: "agora mesmo",
-                        thumbUrl: epCover,
-                        videoUrl: epVideoUrl,
-                        duration: epDuration,
-                        tags: epTagsList,
-                        audioType: currentAudioType,
-                        season: selectedSeasonNumber || "1",
-                        episodeNum: selectedEpisodeNumber || "1",
-                        resolutionBadge: selectedResolutionBadge || "HD",
-                        ratingBadge: selectedAgeBadge || "12+",
-                        isAdult: isAdult,
-                        contentType: selectedContentType || "Série",
-                        timestamp: serverTimestamp()
-                    });
+                    const episodesToSave = (typeof addedEpisodesList !== "undefined" && addedEpisodesList.length > 0)
+                        ? addedEpisodesList
+                        : [{
+                            title: uploadEpisodeTitle.value.trim() || `${seriesName} - Episódio 1`,
+                            episodeNum: 1,
+                            duration: uploadEpisodeDuration.value.trim() || "24:00",
+                            thumbUrl: uploadVideoThumb.src,
+                            videoUrl: uploadEpisodeVideoUrl.value.trim()
+                        }];
 
-                    uploadEpisodeTitle.value = "";
-                    uploadEpisodeCover.value = "";
-                    uploadEpisodeVideoUrl.value = "";
-                    if (uploadEpisodeDuration) uploadEpisodeDuration.value = "";
-                    if (uploadEpisodeTags) uploadEpisodeTags.value = "";
+                    for (let i = 0; i < episodesToSave.length; i++) {
+                        const ep = episodesToSave[i];
+                        const epNum = ep.episodeNum || (i + 1);
+                        const epName = ep.title || `${seriesName} - Episódio ${epNum}`;
+                        const epThumb = ep.thumbUrl || uploadVideoThumb.src;
+                        const epDuration = ep.duration || (uploadEpisodeDuration ? uploadEpisodeDuration.value.trim() : "24:00");
+                        const epVideo = ep.videoUrl || (uploadEpisodeVideoUrl ? uploadEpisodeVideoUrl.value.trim() : "");
+
+                        await addDoc(frutasColecao, {
+                            name: epName,
+                            channel: seriesName,
+                            seriesCover: seriesPhoto || epThumb,
+                            viewsCount: 0,
+                            timeAgo: "agora mesmo",
+                            thumbUrl: epThumb,
+                            videoUrl: epVideo,
+                            duration: epDuration,
+                            audioType: currentAudioType,
+                            season: selectedSeasonNumber || "1",
+                            episodeNum: String(epNum),
+                            resolutionBadge: selectedResolutionBadge || "HD",
+                            ratingBadge: selectedAgeBadge || "14+",
+                            isAdult: isAdult,
+                            contentType: selectedContentType || "Série",
+                            timestamp: serverTimestamp()
+                        });
+                    }
+
                     uploadSearchSeries.value = "";
                     selectedSeriesId = null;
-                    showToast(`${selectedContentType} publicado com sucesso!`);
+                    showToast(`${episodesToSave.length} episódios publicados!`);
                 }
 
                 viewUploadDetails.classList.remove("active");
