@@ -8398,9 +8398,9 @@
                     <input type="text" id="uploadSeriesGenres" class="upload-title-input" placeholder="Gêneros (ex: Ação, Aventura, Fantasia)">
                 </div>
 
-                <!-- LINHAS PARA INAUGURAR O PRIMEIRO EPISÓDIO COM CAPA HORIZONTAL SEPARADA -->
+                <!-- Campo da Seta Verde: URL da Capa da Série (Card Vertical e Card Redondo) -->
                 <div class="upload-title-box" style="padding-top: 0;">
-                    <input type="text" id="uploadFirstEpisodeCover" class="upload-title-input" placeholder="Capa do 1º episódio (Link da imagem horizontal, opcional)">
+                    <input type="text" id="uploadFirstEpisodeCover" class="upload-title-input" placeholder="Capa da série (Link da imagem do card vertical)">
                 </div>
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Link do 1º episódio (Embed/Drive/YouTube, opcional)">
@@ -9483,28 +9483,25 @@
             });
         }
 
-        // 2. Atualiza o card redondo e o card vertical em tempo real ao digitar ou colar a URL da foto da capa
+        // 2. Seta Verde: Atualiza o Card Vertical e o Card Redondo da Série ao digitar a URL
         function handleSyncSeriesCoverUrl(url) {
             const cleanUrl = url.trim();
             const fallbackImg = "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
             const finalImg = cleanUrl || fallbackImg;
 
+            // Atualiza a imagem do Card Redondo no topo
             if (uploadHeaderCircleThumb) {
                 uploadHeaderCircleThumb.src = finalImg;
             }
+            // Atualiza a imagem do Card Vertical da série na prévia inferior
             if (uploadSeriesVerticalPosterImg) {
                 uploadSeriesVerticalPosterImg.src = finalImg;
             }
         }
 
+        // O campo da seta verde atualiza exclusivamente a capa da série
         if (inputSeriesCoverSync) {
             inputSeriesCoverSync.addEventListener("input", (e) => {
-                handleSyncSeriesCoverUrl(e.target.value);
-            });
-        }
-
-        if (inputEpisodeCoverSync) {
-            inputEpisodeCoverSync.addEventListener("input", (e) => {
                 handleSyncSeriesCoverUrl(e.target.value);
             });
         }
@@ -9692,13 +9689,21 @@
             }
         });
 
-        // 3. Confirmar alteração
+        // 3. Confirmar alteração da Capa do Episódio (Seta Vermelha)
         btnConfirmEditThumb.addEventListener("click", () => {
             const url = inputThumbModalUrl.value.trim();
             if (url) {
-                currentUploadSettings.thumbUrl = url;
+                // Atualiza a área 16:9 assinalada com o X vermelho como Capa do Episódio
                 uploadVideoThumb.src = url;
-                // Sincroniza também com o campo do episódio se estiver nele
+
+                // Atualiza a capa dos episódios no carrossel horizontal de Novos Episódios
+                if (typeof addedEpisodesList !== "undefined" && addedEpisodesList.length > 0) {
+                    addedEpisodesList[0].thumbUrl = url;
+                    if (typeof renderUploadEpisodesScroll === "function") {
+                        renderUploadEpisodesScroll();
+                    }
+                }
+
                 if (uploadEpisodeCover) {
                     uploadEpisodeCover.value = url;
                 }
