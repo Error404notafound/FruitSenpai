@@ -10165,28 +10165,7 @@
             });
         }
 
-        // 3. Seta Verde (Editar 📝): foca no título
-        if (btnThumbEditTitle) {
-            btnThumbEditTitle.addEventListener("click", () => {
-                const target = document.getElementById("uploadSeriesName") || document.getElementById("uploadEpisodeTitle");
-                if (target) {
-                    target.focus();
-                    target.scrollIntoView({ behavior: "smooth", block: "center" });
-                }
-            });
-        }
-
-        // 4. Seta Amarela (Classificação): abre a gaveta de Classificação Indicativa
-        if (btnThumbRating) {
-            btnThumbRating.addEventListener("click", () => {
-                const drawerRating = document.getElementById("drawerUploadRating");
-                if (drawerRating) {
-                    drawerRating.classList.add("active");
-                }
-            });
-        }
-
-        // 5. Seta Vermelha (Ampulheta ⏳): foca no campo de duração
+        // 5. Seta Ampulheta (⏳): foca no campo de duração
         if (btnThumbDuration) {
             btnThumbDuration.addEventListener("click", () => {
                 const target = document.getElementById("uploadFirstEpisodeDuration") || document.getElementById("uploadEpisodeDuration");
@@ -11777,7 +11756,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         currentPlaylistQueueIndex = 0;
                     } else {
                         isPlaylistQueueActive = false;
-                        watchPlaylistQueueBar.style.display = "none";
+                        if (watchPlaylistDrawerSheet) {
+                            watchPlaylistDrawerSheet.classList.remove("active");
+                        }
+                        if (watchPlaylistMiniBar) {
+                            watchPlaylistMiniBar.classList.remove("active");
+                        }
                         return;
                     }
                 }
