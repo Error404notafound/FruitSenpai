@@ -6618,6 +6618,373 @@
             padding: 10px 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
+
+        /* ==========================================================================
+           TELA COMPLETA DO YOUTUBE SHORTS / REELS (PRINTS A ATÉ F1)
+           ========================================================================== */
+        .yt-shorts-screen-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            height: 100dvh;
+            background-color: #000000;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            overflow: hidden;
+        }
+
+        .yt-shorts-screen-view.active {
+            display: flex;
+        }
+
+        /* Container de Rolagem Vertical dos Shorts (Snap Scroll) */
+        .shorts-vertical-feed-container {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+            position: relative;
+        }
+
+        .shorts-vertical-feed-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Card Individual do Shorts em Tela Cheia */
+        .short-full-slide-item {
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            background-color: #000000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .short-media-wrapper {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .short-media-wrapper iframe,
+        .short-media-wrapper video,
+        .short-media-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: none;
+            display: block;
+        }
+
+        /* Topo dos Shorts (Prints F e F1) */
+        .shorts-top-header-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            z-index: 30;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.65) 0%, transparent 100%);
+        }
+
+        .shorts-top-header-bar.search-expanded {
+            background-color: #0f0f0f;
+        }
+
+        .shorts-header-search-box {
+            display: none;
+            flex: 1;
+            align-items: center;
+            background-color: #212121;
+            border-radius: 20px;
+            height: 38px;
+            padding: 0 12px;
+            margin: 0 8px;
+            gap: 8px;
+        }
+
+        .shorts-header-search-box input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .shorts-header-search-box svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
+        /* Coluna Lateral de Ações (Curtir, Comentar, Compartilhar - Prints A e B) */
+        .shorts-right-actions-column {
+            position: absolute;
+            right: 12px;
+            bottom: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            z-index: 25;
+        }
+
+        .shorts-action-button-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .shorts-action-button-unit svg {
+            width: 28px;
+            height: 28px;
+            fill: #ffffff;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+            transition: transform 0.15s ease;
+        }
+
+        .shorts-action-button-unit:active svg {
+            transform: scale(1.15);
+        }
+
+        .shorts-action-label-text {
+            font-size: 11px;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Mini-card quadrado da foto da série no canto inferior direito (Print A) */
+        .shorts-series-mini-card-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
+            background-color: #212121;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+            display: block;
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+
+        .shorts-series-mini-card-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Rodapé de Informações do Shorts (Print A) */
+        .shorts-bottom-meta-overlay {
+            position: absolute;
+            left: 0;
+            right: 64px;
+            bottom: 12px;
+            padding: 0 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 25;
+            pointer-events: none;
+        }
+
+        .shorts-bottom-meta-overlay * {
+            pointer-events: auto;
+        }
+
+        .shorts-audio-badge-pill {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: #ffffff;
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 12px;
+            align-self: flex-start;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .shorts-channel-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .shorts-channel-avatar-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #333333;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .shorts-channel-avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .shorts-channel-handle-link {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #ffffff;
+            cursor: pointer;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 160px;
+        }
+
+        /* Botão Inscrever-se (Print C e C1) */
+        .shorts-subscribe-pill-btn {
+            height: 28px;
+            padding: 0 12px;
+            border-radius: 14px;
+            border: none;
+            background-color: #ffffff;
+            color: #0f0f0f;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            white-space: nowrap;
+        }
+
+        .shorts-subscribe-pill-btn.subscribed {
+            background-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            backdrop-filter: blur(8px);
+        }
+
+        .shorts-episode-title-text {
+            font-size: 13px;
+            font-weight: 500;
+            color: #ffffff;
+            line-height: 1.35;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Linha Vermelha de Progresso e Cronômetro (Seta Laranja Print A) */
+        .shorts-progress-track {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.3);
+            z-index: 35;
+        }
+
+        .shorts-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #ff0000;
+            position: relative;
+            transition: width 0.1s linear;
+        }
+
+        .shorts-progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            right: -4px;
+            top: -3px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background-color: #ff0000;
+        }
+
+        /* Gaveta do Kebab Oficial dos Shorts (Print D1) */
+        .shorts-kebab-drawer-sheet {
+            height: auto;
+            max-height: 80vh;
+            background-color: #212121;
+            border-radius: 16px 16px 0 0;
+            padding: 10px 0 24px 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .shorts-kebab-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 18px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .shorts-kebab-item-row:active {
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .shorts-kebab-item-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .shorts-kebab-item-left svg {
+            width: 22px;
+            height: 22px;
+            fill: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .shorts-kebab-item-left span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        .shorts-kebab-item-right-arrow {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #aaaaaa;
+            font-size: 13px;
+        }
+
+        .shorts-kebab-item-right-arrow svg {
+            width: 16px;
+            height: 16px;
+            fill: #aaaaaa;
+        }
     </style>
 </head>
 <body>
@@ -8512,6 +8879,154 @@
             </div>
         </section>
         
+        <!-- ==========================================================================
+             TELA OFICIAL DO YOUTUBE SHORTS / REELS (PRINTS A ATÉ F1)
+             ========================================================================== -->
+        <section class="yt-subview yt-shorts-screen-view" id="viewShortsScreen">
+            <!-- Topo com Voltar, Lupa e Kebab (Prints F e F1) -->
+            <div class="shorts-top-header-bar" id="shortsTopHeaderBar">
+                <button class="yt-icon-btn" id="btnBackFromShorts" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                </button>
+
+                <!-- Barra de pesquisa expansível (Print F1) -->
+                <div class="shorts-header-search-box" id="shortsHeaderSearchBox">
+                    <input type="text" id="inputShortsSearchTerm" placeholder="Pesquisar no YouTube">
+                    <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                </div>
+
+                <div class="yt-header-actions" id="shortsHeaderIconsRight">
+                    <button class="yt-icon-btn" id="btnShortsSearchTrigger" type="button" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </button>
+                    <button class="yt-icon-btn" id="btnShortsKebabMenu" type="button" aria-label="Mais opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Feed Vertical de Rolagem Suave dos Shorts -->
+            <div class="shorts-vertical-feed-container" id="shortsVerticalFeedContainer"></div>
+
+            <!-- Barra Vermelha de Progresso e Cronômetro (Seta Laranja Print A) -->
+            <div class="shorts-progress-track">
+                <div class="shorts-progress-bar-fill" id="shortsProgressBarFill"></div>
+            </div>
+        </section>
+
+        <!-- GAVETA PRINT D1: MENU DE OPÇÕES DO SHORTS (100% SVG NATIVO) -->
+        <div class="accounts-drawer" id="drawerShortsKebab" style="z-index: 10020;">
+            <div class="accounts-sheet shorts-kebab-drawer-sheet">
+                <div class="yt-sheet-drag-handle"></div>
+
+                <!-- 1. Descrição -->
+                <div class="shorts-kebab-item-row" id="btnShortsOptDesc">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+                        <span>Descrição</span>
+                    </div>
+                </div>
+
+                <!-- 2. Salvar na playlist -->
+                <div class="shorts-kebab-item-row" id="btnShortsOptSavePlaylist">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span>Salvar na playlist</span>
+                    </div>
+                </div>
+
+                <!-- 3. Legendas -->
+                <div class="shorts-kebab-item-row">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M19 4H5c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 7H9.5v-.5h-2v3h2V13H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V13H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>
+                        <span>Legendas</span>
+                    </div>
+                    <div class="shorts-kebab-item-right-arrow">
+                        <span>Desativado</span>
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                    </div>
+                </div>
+
+                <!-- 4. Faixa de áudio -->
+                <div class="shorts-kebab-item-row">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        <span>Faixa de áudio</span>
+                    </div>
+                    <div class="shorts-kebab-item-right-arrow">
+                        <span>Português (BR) original</span>
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                    </div>
+                </div>
+
+                <!-- 5. Velocidade da reprodução -->
+                <div class="shorts-kebab-item-row">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                        <span>Velocidade da reprodução</span>
+                    </div>
+                    <div class="shorts-kebab-item-right-arrow">
+                        <span>Normal</span>
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                    </div>
+                </div>
+
+                <!-- 6. Não tenho interesse -->
+                <div class="shorts-kebab-item-row" id="btnShortsOptNotInterested">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm5.31-3.1L6.1 5.69C7.45 4.63 9.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>
+                        <span>Não tenho interesse</span>
+                    </div>
+                </div>
+
+                <!-- 7. Denunciar -->
+                <div class="shorts-kebab-item-row" id="btnShortsOptReport">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                        <span>Denunciar</span>
+                    </div>
+                </div>
+
+                <!-- 8. Enviar feedback -->
+                <div class="shorts-kebab-item-row" id="btnShortsOptFeedback">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                        <span>Enviar feedback</span>
+                    </div>
+                </div>
+
+                <!-- 9. Abrir no app -->
+                <div class="shorts-kebab-item-row" id="btnShortsOptOpenApp">
+                    <div class="shorts-kebab-item-left">
+                        <svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                        <span>Abrir no app</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT E1: COMENTÁRIOS DO SHORTS (FIEL AO DESIGN) -->
+        <div class="accounts-drawer" id="drawerShortsComments" style="z-index: 10020;">
+            <div class="accounts-sheet yt-comments-drawer-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <h3 style="font-size:16px; font-weight:700; color:#ffffff;">Comentários</h3>
+                        <span id="txtShortsCommentsTotalCount" style="color:#aaaaaa; font-size:13px;">0</span>
+                    </div>
+                    <button class="yt-icon-btn" id="btnCloseShortsCommentsDrawer" type="button" aria-label="Fechar">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </button>
+                </div>
+
+                <div class="yt-comments-list" id="shortsCommentsListContainer"></div>
+
+                <div class="yt-comment-input-bar">
+                    <input type="text" id="inputShortsNewCommentText" class="yt-input" placeholder="Adicione um comentário...">
+                    <button class="yt-btn-primary" id="btnSendShortsComment" style="padding:8px 16px; flex-shrink:0;">Enviar</button>
+                </div>
+            </div>
+        </div>
+
         <!-- ==========================================================================
              BARRA INFERIOR DE NAVEGAÇÃO FIXA (BOTTOM NAVIGATION BAR)
              ========================================================================== -->
@@ -11371,14 +11886,428 @@
             openScreen("home", false);
         });
 
-        // Clicar em "Shorts"
+        // ==========================================================================
+        // SISTEMA COMPLETO DE SHORTS / REELS (PRINTS A ATÉ F1)
+        // ==========================================================================
+        const viewShortsScreen = document.getElementById("viewShortsScreen");
+        const btnBackFromShorts = document.getElementById("btnBackFromShorts");
+        const shortsVerticalFeedContainer = document.getElementById("shortsVerticalFeedContainer");
+        const shortsProgressBarFill = document.getElementById("shortsProgressBarFill");
+
+        const shortsTopHeaderBar = document.getElementById("shortsTopHeaderBar");
+        const shortsHeaderSearchBox = document.getElementById("shortsHeaderSearchBox");
+        const shortsHeaderIconsRight = document.getElementById("shortsHeaderIconsRight");
+        const btnShortsSearchTrigger = document.getElementById("btnShortsSearchTrigger");
+        const inputShortsSearchTerm = document.getElementById("inputShortsSearchTerm");
+        const btnShortsKebabMenu = document.getElementById("btnShortsKebabMenu");
+
+        const drawerShortsKebab = document.getElementById("drawerShortsKebab");
+        const drawerShortsComments = document.getElementById("drawerShortsComments");
+        const btnCloseShortsCommentsDrawer = document.getElementById("btnCloseShortsCommentsDrawer");
+        const txtShortsCommentsTotalCount = document.getElementById("txtShortsCommentsTotalCount");
+        const shortsCommentsListContainer = document.getElementById("shortsCommentsListContainer");
+        const inputShortsNewCommentText = document.getElementById("inputShortsNewCommentText");
+        const btnSendShortsComment = document.getElementById("btnSendShortsComment");
+
+        let currentActiveShortsList = [];
+        let currentShortsSlideIndex = 0;
+        let shortsAutoScrollTimer = null;
+        let shortsProgressInterval = null;
+
+        // Caminhos dos SVGs oficiais do Coração (Prints B e B1)
+        const svgHeartOutline = '<path d="M14.5 3c-1.74 0-3.41.81-4.5 2.09C8.91 3.81 7.24 3 5.5 3 2.42 3 0 5.42 0 8.5c0 3.78 3.4 6.86 8.55 11.54L10 21.35l1.45-1.32C16.6 15.36 20 12.28 20 8.5 20 5.42 17.58 3 14.5 3zm-4.4 15.55l-.1.1-.1-.1C5.14 14.24 2 11.39 2 8.5 2 6.5 3.5 5 5.5 5c1.54 0 3.04.99 3.57 2.36h1.87C11.46 5.99 12.96 5 14.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/>';
+        const svgHeartFilled = '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>';
+
+        // Abre a Tela Oficial do Shorts ao clicar no botão da barra inferior
         document.getElementById("navShorts").addEventListener("click", () => {
             document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
             document.getElementById("navShorts").classList.add("active");
-            openScreen("home");
-            const shortsShelf = document.querySelector(".yt-shorts-shelf");
-            if (shortsShelf) shortsShelf.scrollIntoView({ behavior: "smooth" });
+            openShortsFullScreen();
         });
+
+        if (btnBackFromShorts) {
+            btnBackFromShorts.addEventListener("click", () => {
+                stopShortsPlaybackTimers();
+                openScreen("home");
+            });
+        }
+
+        function openShortsFullScreen() {
+            openScreen(viewShortsScreen);
+            window.scrollTo(0, 0);
+            loadShortsVideosFromFirestore();
+        }
+
+        // Carrega os vídeos aleatórios marcados como shorts ou reels
+        function loadShortsVideosFromFirestore() {
+            onSnapshot(frutasColecao, (snap) => {
+                const reels = [];
+                snap.forEach(d => {
+                    const data = { id: d.id, ...d.data() };
+                    const isReel = (data.contentType === "Reels" || data.contentType === "Shorts" || data.isShort || (data.duration && data.duration.startsWith("0:")));
+                    if (isReel || data.videoUrl) {
+                        reels.push(data);
+                    }
+                });
+
+                // Embaralha aleatoriamente
+                reels.sort(() => 0.5 - Math.random());
+
+                if (reels.length === 0) {
+                    currentActiveShortsList = [
+                        {
+                            id: "demo_short_1",
+                            name: "Achados da reciclagem de São Paulo...",
+                            channel: "alemdareciclagem",
+                            seriesCover: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400",
+                            thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
+                            videoUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
+                            duration: "02:21",
+                            likesCount: 22000
+                        }
+                    ];
+                } else {
+                    currentActiveShortsList = reels;
+                }
+
+                renderShortsVerticalSlides();
+            });
+        }
+
+        // Renderiza cada Slide em Tela Cheia com os botões fiéis
+        function renderShortsVerticalSlides() {
+            shortsVerticalFeedContainer.innerHTML = "";
+
+            currentActiveShortsList.forEach((item, index) => {
+                const slide = document.createElement("div");
+                slide.className = "short-full-slide-item";
+                slide.setAttribute("data-index", index);
+
+                const seriesTitle = item.channel || "Série";
+                const seriesHandle = "@" + seriesTitle.toLowerCase().replace(/\s+/g, '');
+                const epTitle = item.name || "Achados da reciclagem...";
+                const seriesCover = item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
+                const likesNumber = formatNumber(item.likesCount || 22000);
+
+                slide.innerHTML = `
+                    <div class="short-media-wrapper">
+                        ${item.videoUrl && item.videoUrl.includes("embed") 
+                            ? `<iframe src="${item.videoUrl}?autoplay=1&controls=0&loop=1" allow="autoplay; fullscreen"></iframe>`
+                            : `<img src="${item.thumbUrl || seriesCover}" alt="Short">`
+                        }
+                    </div>
+
+                    <!-- Coluna de Ações à Direita (Prints A e B) -->
+                    <div class="shorts-right-actions-column">
+                        <!-- Coração Curtir (Prints B e B1) -->
+                        <button class="shorts-action-button-unit btnShortLikeTrigger" type="button">
+                            <svg class="svgShortHeartIcon" viewBox="0 0 24 24">${svgHeartOutline}</svg>
+                            <span class="shorts-action-label-text lblShortLikesCount">${likesNumber}</span>
+                        </button>
+
+                        <!-- Comentários (Print E) -->
+                        <button class="shorts-action-button-unit btnShortCommentsTrigger" type="button">
+                            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                            <span class="shorts-action-label-text">135</span>
+                        </button>
+
+                        <!-- Compartilhar -->
+                        <button class="shorts-action-button-unit btnShortShareTrigger" type="button">
+                            <svg viewBox="0 0 24 24"><path d="M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z"/></svg>
+                            <span class="shorts-action-label-text">Compart...</span>
+                        </button>
+
+                        <!-- Mini-card da Foto de Capa da Série no Canto Inferior Direito (Seta Azul Print A) -->
+                        <div class="shorts-series-mini-card-btn btnOpenSeriesFromShort" title="Ver série">
+                            <img src="${seriesCover}" alt="Capa da Série">
+                        </div>
+                    </div>
+
+                    <!-- Rodapé de Informações (Print A) -->
+                    <div class="shorts-bottom-meta-overlay">
+                        <div class="shorts-audio-badge-pill">Dublagem automática</div>
+                        <div class="shorts-channel-row">
+                            <!-- Foto Redonda da Série (Seta Azul Print A) -->
+                            <div class="shorts-channel-avatar-circle btnOpenSeriesFromShort">
+                                <img src="${seriesCover}" alt="Avatar">
+                            </div>
+                            <!-- Nome da Série (Seta Rosa Print A) -->
+                            <span class="shorts-channel-handle-link btnOpenSeriesFromShort">${seriesHandle}</span>
+                            <!-- Botão Inscrever-se (Prints C e C1) -->
+                            <button class="shorts-subscribe-pill-btn btnShortSubscribeTrigger" type="button">Inscrever-se</button>
+                        </div>
+                        <!-- Nome do Episódio (Seta Verde Print A) -->
+                        <div class="shorts-episode-title-text">${epTitle}</div>
+                    </div>
+                `;
+
+                // Setas Azuis e Rosa: Clicar abre a página oficial da respectiva série
+                slide.querySelectorAll(".btnOpenSeriesFromShort").forEach(el => {
+                    el.addEventListener("click", () => {
+                        stopShortsPlaybackTimers();
+                        openSeriesChannel(seriesTitle);
+                    });
+                });
+
+                // Curtir / Like com Coração (Prints B e B1)
+                const btnLike = slide.querySelector(".btnShortLikeTrigger");
+                const svgHeart = slide.querySelector(".svgShortHeartIcon");
+                const lblLikes = slide.querySelector(".lblShortLikesCount");
+                let isLiked = false;
+
+                btnLike.addEventListener("click", async () => {
+                    isLiked = !isLiked;
+                    if (isLiked) {
+                        svgHeart.innerHTML = svgHeartFilled;
+                        svgHeart.style.fill = "#ffffff";
+                        lblLikes.textContent = formatNumber((item.likesCount || 22000) + 1);
+                        showToast("Adicionado aos seus favoritos");
+                    } else {
+                        svgHeart.innerHTML = svgHeartOutline;
+                        svgHeart.style.fill = "#ffffff";
+                        lblLikes.textContent = formatNumber(item.likesCount || 22000);
+                    }
+                });
+
+                // Botão Inscrever-se (Prints C e C1)
+                const btnSub = slide.querySelector(".btnShortSubscribeTrigger");
+                let isSubbed = false;
+
+                btnSub.addEventListener("click", () => {
+                    isSubbed = !isSubbed;
+                    if (isSubbed) {
+                        btnSub.textContent = "Inscrito";
+                        btnSub.classList.add("subscribed");
+                        showToast(`Inscrito em ${seriesTitle}`);
+                    } else {
+                        btnSub.textContent = "Inscrever-se";
+                        btnSub.classList.remove("subscribed");
+                    }
+                });
+
+                // Abrir Comentários (Print E)
+                const btnComm = slide.querySelector(".btnShortCommentsTrigger");
+                btnComm.addEventListener("click", () => {
+                    loadShortsComments(item.id);
+                    drawerShortsComments.classList.add("active");
+                });
+
+                // Compartilhar
+                const btnShare = slide.querySelector(".btnShortShareTrigger");
+                btnShare.addEventListener("click", () => {
+                    navigator.clipboard.writeText(item.urlSelvagem || window.location.href);
+                    showToast("Link do Reels copiado!");
+                });
+
+                shortsVerticalFeedContainer.appendChild(slide);
+            });
+
+            // Ativa o primeiro slide e o cronômetro com scroll automático
+            setupShortsScrollDetection();
+            startShortPlaybackAt(0);
+        }
+
+        // Detecta qual slide está visível durante a rolagem com o dedo
+        function setupShortsScrollDetection() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const idx = parseInt(entry.target.getAttribute("data-index"), 10);
+                        if (!isNaN(idx) && idx !== currentShortsSlideIndex) {
+                            startShortPlaybackAt(idx);
+                        }
+                    }
+                });
+            }, {
+                root: shortsVerticalFeedContainer,
+                threshold: 0.6
+            });
+
+            document.querySelectorAll(".short-full-slide-item").forEach(slide => {
+                observer.observe(slide);
+            });
+        }
+
+        // Inicia o cronômetro exato do vídeo com avanço automático da barra vermelha (Seta Laranja)
+        function startShortPlaybackAt(index) {
+            currentShortsSlideIndex = index;
+            stopShortsPlaybackTimers();
+
+            const currentShort = currentActiveShortsList[index];
+            if (!currentShort) return;
+
+            // Duração do episódio definida pelo usuário (ex: 02:21)
+            const durationMs = parseDurationToMs(currentShort.duration) || 15000;
+            const startTime = Date.now();
+
+            shortsProgressBarFill.style.width = "0%";
+
+            // Animação contínua da barra vermelha
+            shortsProgressInterval = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const percent = Math.min(100, (elapsed / durationMs) * 100);
+                shortsProgressBarFill.style.width = `${percent}%`;
+            }, 100);
+
+            // Quando o tempo termina: dá scroll vertical automático para o próximo Reels
+            shortsAutoScrollTimer = setTimeout(() => {
+                advanceToNextShortSlide();
+            }, durationMs);
+        }
+
+        function advanceToNextShortSlide() {
+            const nextIndex = currentShortsSlideIndex + 1;
+            if (nextIndex < currentActiveShortsList.length) {
+                const nextSlideEl = document.querySelector(`.short-full-slide-item[data-index="${nextIndex}"]`);
+                if (nextSlideEl) {
+                    nextSlideEl.scrollIntoView({ behavior: "smooth" });
+                }
+            } else {
+                // Ao chegar no fim, reinicia o primeiro
+                const firstSlideEl = document.querySelector(`.short-full-slide-item[data-index="0"]`);
+                if (firstSlideEl) firstSlideEl.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+
+        function stopShortsPlaybackTimers() {
+            if (shortsAutoScrollTimer) clearTimeout(shortsAutoScrollTimer);
+            if (shortsProgressInterval) clearInterval(shortsProgressInterval);
+        }
+
+        // Lupa do Topo que Expande a Barra de Pesquisa (Prints F e F1)
+        if (btnShortsSearchTrigger) {
+            btnShortsSearchTrigger.addEventListener("click", () => {
+                const isExpanded = shortsHeaderSearchBox.style.display === "flex";
+                if (!isExpanded) {
+                    shortsHeaderSearchBox.style.display = "flex";
+                    shortsTopHeaderBar.classList.add("search-expanded");
+                    inputShortsSearchTerm.focus();
+                } else {
+                    shortsHeaderSearchBox.style.display = "none";
+                    shortsTopHeaderBar.classList.remove("search-expanded");
+                }
+            });
+        }
+
+        // Kebab do Topo que Abre o Modal com os 9 SVGs (Prints D e D1)
+        if (btnShortsKebabMenu) {
+            btnShortsKebabMenu.addEventListener("click", () => {
+                drawerShortsKebab.classList.add("active");
+            });
+        }
+
+        // Fechar ao clicar fora da gaveta do Kebab ou de Comentários
+        if (drawerShortsKebab) {
+            drawerShortsKebab.addEventListener("click", (e) => {
+                if (e.target === drawerShortsKebab) drawerShortsKebab.classList.remove("active");
+            });
+        }
+
+        if (drawerShortsComments) {
+            drawerShortsComments.addEventListener("click", (e) => {
+                if (e.target === drawerShortsComments) drawerShortsComments.classList.remove("active");
+            });
+        }
+
+        if (btnCloseShortsCommentsDrawer) {
+            btnCloseShortsCommentsDrawer.addEventListener("click", () => {
+                drawerShortsComments.classList.remove("active");
+            });
+        }
+
+        // Ações dos itens do Kebab dos Shorts (Print D1)
+        const btnShortsOptDesc = document.getElementById("btnShortsOptDesc");
+        const btnShortsOptSavePlaylist = document.getElementById("btnShortsOptSavePlaylist");
+        const btnShortsOptNotInterested = document.getElementById("btnShortsOptNotInterested");
+        const btnShortsOptReport = document.getElementById("btnShortsOptReport");
+        const btnShortsOptFeedback = document.getElementById("btnShortsOptFeedback");
+        const btnShortsOptOpenApp = document.getElementById("btnShortsOptOpenApp");
+
+        if (btnShortsOptDesc) {
+            btnShortsOptDesc.addEventListener("click", () => {
+                drawerShortsKebab.classList.remove("active");
+                const currentShort = currentActiveShortsList[currentShortsSlideIndex];
+                if (currentShort) alert(`Descrição:\n${currentShort.name}\nSérie: ${currentShort.channel || 'Oficial'}`);
+            });
+        }
+
+        if (btnShortsOptSavePlaylist) {
+            btnShortsOptSavePlaylist.addEventListener("click", () => {
+                drawerShortsKebab.classList.remove("active");
+                loadUserPlaylists();
+                drawerSavePlaylist.classList.add("active");
+            });
+        }
+
+        if (btnShortsOptNotInterested) {
+            btnShortsOptNotInterested.addEventListener("click", () => {
+                drawerShortsKebab.classList.remove("active");
+                showToast("Vídeo ocultado com sucesso.");
+                advanceToNextShortSlide();
+            });
+        }
+
+        if (btnShortsOptReport) {
+            btnShortsOptReport.addEventListener("click", () => {
+                drawerShortsKebab.classList.remove("active");
+                showToast("Denúncia enviada.");
+            });
+        }
+
+        if (btnShortsOptFeedback) {
+            btnShortsOptFeedback.addEventListener("click", () => {
+                drawerShortsKebab.classList.remove("active");
+                showToast("Agradecemos pelo seu feedback.");
+            });
+        }
+
+        if (btnShortsOptOpenApp) {
+            btnShortsOptOpenApp.addEventListener("click", () => {
+                drawerShortsKebab.classList.remove("active");
+                window.open("https://youtube.com/shorts", "_blank");
+            });
+        }
+
+        // Carrega comentários do Shorts ativo
+        function loadShortsComments(shortId) {
+            shortsCommentsListContainer.innerHTML = "";
+            onSnapshot(collection(db, `frutas/${shortId}/comments`), (snap) => {
+                shortsCommentsListContainer.innerHTML = "";
+                txtShortsCommentsTotalCount.textContent = snap.size;
+
+                snap.forEach(d => {
+                    const c = d.data();
+                    const row = document.createElement("div");
+                    row.className = "yt-comment-row";
+                    row.innerHTML = `
+                        <div class="yt-comment-avatar">${(c.user || "U").charAt(0).toUpperCase()}</div>
+                        <div class="yt-comment-texts">
+                            <span class="yt-comment-user">@${escapeHtml(c.user ? c.user.split('@')[0] : 'usuario')}</span>
+                            <span class="yt-comment-body">${escapeHtml(c.text)}</span>
+                        </div>
+                    `;
+                    shortsCommentsListContainer.appendChild(row);
+                });
+            });
+        }
+
+        if (btnSendShortsComment) {
+            btnSendShortsComment.addEventListener("click", async () => {
+                const text = inputShortsNewCommentText.value.trim();
+                const currentShort = currentActiveShortsList[currentShortsSlideIndex];
+                if (!text || !currentShort) return;
+                if (!currentUserEmail) return openAuthModal();
+
+                try {
+                    await addDoc(collection(db, `frutas/${currentShort.id}/comments`), {
+                        text: text,
+                        user: currentUserEmail,
+                        createdAt: serverTimestamp()
+                    });
+                    inputShortsNewCommentText.value = "";
+                } catch(e) {}
+            });
+        }
 
         // Clicar em "Inscrições"
         if (navSubscriptions) {
