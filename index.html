@@ -2838,9 +2838,13 @@
             margin-top: 4px;
         }
 
-        .channel-subscribe-full-btn.subscribed {
-            background-color: #272727;
-            color: #aaaaaa;
+        /* Botão Inscrito Preto Oficial (Tanto no Player quanto na Página da Série) */
+        .channel-subscribe-full-btn.subscribed,
+        .yt-btn-subscribe.subscribed {
+            background-color: #272727 !important;
+            color: #f1f1f1 !important;
+            border: 1px solid rgba(255, 255, 255, 0.15) !important;
+            font-weight: 700 !important;
         }
 
         .channel-tabs-bar {
@@ -12394,14 +12398,24 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Compartilhar Nativo
+        // Seta Vermelha: Copia o ID Selvagem do vídeo em vez da URL do site
         if (btnWatchShare) {
-            btnWatchShare.addEventListener("click", () => {
-                if (navigator.share) {
-                    navigator.share({ title: watchVideoTitle.textContent, url: window.location.href }).catch(() => {});
-                } else {
-                    navigator.clipboard.writeText(window.location.href);
-                    showToast("Link copiado para a área de transferência!");
+            btnWatchShare.addEventListener("click", async () => {
+                if (!currentWatchVideoId) return;
+
+                try {
+                    btnWatchShare.disabled = true;
+                    // Gera ou recupera o ID Selvagem oficial curto do vídeo
+                    const wildId = await createWildShareId("video", currentWatchVideoId);
+                    await navigator.clipboard.writeText(wildId);
+                    showToast(`ID Selvagem copiado: ${wildId}`);
+                } catch (err) {
+                    // Fallback rápido caso a conexão oscile
+                    const fallbackCode = `FS-${currentWatchVideoId.substring(0, 5).toUpperCase()}`;
+                    await navigator.clipboard.writeText(fallbackCode);
+                    showToast(`ID Selvagem copiado: ${fallbackCode}`);
+                } finally {
+                    btnWatchShare.disabled = false;
                 }
             });
         }
@@ -12506,15 +12520,26 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Verifica se o usuário logado já curtiu ou descurtiu este vídeo anteriormente
             checkUserVideoVoteState(videoId);
 
-            // Avatar da Série
+            // Seta Verde: Avatar da Série com clique para abrir a Página Oficial da Série
             const coverImg = videoData.seriesCover || videoData.thumbUrl || "";
             if (watchChannelAvatar) {
+                watchChannelAvatar.style.cursor = "pointer";
                 if (coverImg) {
                     watchChannelAvatar.innerHTML = `<img src="${escapeHtml(coverImg)}" alt="${escapeHtml(seriesLabel)}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; display:block;">`;
                 } else {
                     watchChannelAvatar.innerHTML = `<div style="width:36px; height:36px; border-radius:50%; background:#272727; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">${seriesLabel.charAt(0).toUpperCase()}</div>`;
                 }
+
+                // Clicar na foto redonda leva à página da respectiva série
+                watchChannelAvatar.onclick = () => {
+                    if (watchIframe) watchIframe.src = "";
+                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+                    openSeriesChannel(seriesLabel);
+                };
             }
+
+            // Sincroniza o estado de inscrição e a contagem real na abertura do player
+            checkSeriesSubscriptionRealtime(seriesLabel);
 
             // PREENCHE A GAVETA DE DESCRIÇÃO (Capturas 3, 4, 5 e 6)
             const descTitle = document.getElementById("descModalVideoTitle");
@@ -13377,13 +13402,151 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
+        // ==========================================================================
+        // SISTEMA REAL DE INSCRIÇÕES E CONTAGEM (SETAS ROXA E LARANJA)
+        // ==========================================================================
+        const btnSubscribe = document.getElementById("btnSubscribe");
+        let activeSeriesSubscriptionsDocId = null;
+        let isCurrentSeriesSubscribed = false;
+
+        // Formata a contagem real de inscritos (0 inscritos, 1 inscrito, 2 inscritos...)
+        function formatSubscribersCountText(count) {
+            const num = Number(count) || 0;
+            if (num === 0) return "0 inscritos";
+            if (num === 1) return "1 inscrito";
+            return `${formatNumber(num)} inscritos`;
+        }
+
+        // Atualiza o visual dos botões de inscrição (Branco = Inscrever-se / Preto = Inscrito)
+        function updateSubscriptionButtonsUI(isSubscribed) {
+            isCurrentSeriesSubscribed = isSubscribed;
+
+            // 1. Botão da Página do Player (Seta Roxa)
+            if (btnSubscribe) {
+                btnSubscribe.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
+                btnSubscribe.classList.toggle("subscribed", isSubscribed);
+            }
+
+            // 2. Botão da Página da Série
+            if (btnChannelSubscribe) {
+                btnChannelSubscribe.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
+                btnChannelSubscribe.classList.toggle("subscribed", isSubscribed);
+            }
+        }
+
+        // Verifica a inscrição real no Firebase e exibe a contagem real de 0 até X inscritos (Seta Laranja)
+        async function checkSeriesSubscriptionRealtime(seriesName) {
+            if (!seriesName) return;
+            const cleanSeries = seriesName.trim();
+
+            const subsCounterEl = document.getElementById("channelSubsCountText");
+            const drawerSubsCounterEl = document.getElementById("drawerSeriesInfoSubs");
+
+            // Busca os dados da série no Firestore para obter a contagem real de inscritos
+            try {
+                let currentSeriesDoc = null;
+                const snap = await onSnapshot(collection(db, "series"), (snapshot) => {
+                    snapshot.forEach(docSnap => {
+                        const data = docSnap.data();
+                        if (data.title && data.title.toLowerCase() === cleanSeries.toLowerCase()) {
+                            currentSeriesDoc = { id: docSnap.id, ...data };
+                            activeSeriesSubscriptionsDocId = docSnap.id;
+                        }
+                    });
+
+                    const totalSubs = (currentSeriesDoc && currentSeriesDoc.subscribersCount) ? currentSeriesDoc.subscribersCount : 0;
+                    const formattedText = formatSubscribersCountText(totalSubs);
+
+                    // Seta Laranja: Contagem real na página da série
+                    if (subsCounterEl) subsCounterEl.textContent = formattedText;
+                    if (drawerSubsCounterEl) drawerSubsCounterEl.textContent = formattedText;
+                });
+            } catch(e) {}
+
+            // Verifica se o usuário logado está inscrito
+            if (!currentUserEmail || !auth.currentUser) {
+                updateSubscriptionButtonsUI(false);
+                return;
+            }
+
+            try {
+                const subRef = doc(db, `users/${auth.currentUser.uid}/series_subscriptions`, cleanSeries.replace(/[^a-zA-Z0-9]/g, '_'));
+                const subSnap = await getDoc(subRef);
+                updateSubscriptionButtonsUI(subSnap.exists());
+            } catch(e) {
+                updateSubscriptionButtonsUI(false);
+            }
+        }
+
+        // Alterna entre Inscrever-se (Botão Branco) e Inscrito (Botão Preto) salvando no banco
+        async function toggleSeriesSubscriptionAction() {
+            if (!currentUserEmail || !auth.currentUser) {
+                openAuthModal();
+                return;
+            }
+
+            const targetSeries = currentActiveSeriesName || (watchVideoTitle ? watchVideoTitle.textContent.split(" - ")[0].trim() : "");
+            if (!targetSeries) return;
+
+            try {
+                const subDocId = targetSeries.replace(/[^a-zA-Z0-9]/g, '_');
+                const userSubRef = doc(db, `users/${auth.currentUser.uid}/series_subscriptions`, subDocId);
+                const subSnap = await getDoc(userSubRef);
+
+                let seriesRef = null;
+                if (activeSeriesSubscriptionsDocId) {
+                    seriesRef = doc(db, "series", activeSeriesSubscriptionsDocId);
+                }
+
+                let currentTotalSubs = 0;
+                if (seriesRef) {
+                    const sSnap = await getDoc(seriesRef);
+                    if (sSnap.exists()) {
+                        currentTotalSubs = Number(sSnap.data().subscribersCount || 0);
+                    }
+                }
+
+                if (subSnap.exists()) {
+                    // Já era inscrito -> Desinscrever (Volta ao Botão Branco "Inscrever-se")
+                    await deleteDoc(userSubRef);
+                    currentTotalSubs = Math.max(0, currentTotalSubs - 1);
+                    updateSubscriptionButtonsUI(false);
+                    showToast("Inscrição cancelada.");
+                } else {
+                    // Não era inscrito -> Inscrever (Muda para Botão Preto "Inscrito")
+                    await setDoc(userSubRef, {
+                        seriesTitle: targetSeries,
+                        subscribedAt: serverTimestamp()
+                    });
+                    currentTotalSubs = currentTotalSubs + 1;
+                    updateSubscriptionButtonsUI(true);
+                    showToast("Inscrição confirmada!");
+                }
+
+                // Salva a contagem real no documento da série
+                if (seriesRef) {
+                    await setDoc(seriesRef, { subscribersCount: currentTotalSubs }, { merge: true });
+                }
+
+                const subsCounterEl = document.getElementById("channelSubsCountText");
+                const drawerSubsCounterEl = document.getElementById("drawerSeriesInfoSubs");
+                const formattedCount = formatSubscribersCountText(currentTotalSubs);
+                if (subsCounterEl) subsCounterEl.textContent = formattedCount;
+                if (drawerSubsCounterEl) drawerSubsCounterEl.textContent = formattedCount;
+
+            } catch(err) {
+                console.error("Erro ao alterar inscrição:", err);
+            }
+        }
+
+        // Ouvinte do Botão no Player (Seta Roxa)
+        if (btnSubscribe) {
+            btnSubscribe.addEventListener("click", toggleSeriesSubscriptionAction);
+        }
+
+        // Ouvinte do Botão na Página da Série
         if (btnChannelSubscribe) {
-            btnChannelSubscribe.addEventListener("click", () => {
-                isSeriesSubscribed = !isSeriesSubscribed;
-                btnChannelSubscribe.textContent = isSeriesSubscribed ? "Inscrito" : "Inscrever-se";
-                btnChannelSubscribe.classList.toggle("subscribed", isSeriesSubscribed);
-                showToast(isSeriesSubscribed ? "Inscrição adicionada" : "Inscrição cancelada");
-            });
+            btnChannelSubscribe.addEventListener("click", toggleSeriesSubscriptionAction);
         }
 
         // Abre o Canal da Série e consolida todos os posts filhos
@@ -13446,13 +13609,13 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 document.getElementById("channelBannerImg").src = finalThumb;
                 document.getElementById("channelAvatarImg").src = finalThumb;
 
-                // Contadores e Metadados Reais
                 const totalVideosCount = currentActiveSeriesEpisodes.length;
                 document.getElementById("channelVideosCountText").textContent = `${totalVideosCount} vídeos`;
                 document.getElementById("drawerSeriesInfoVideos").textContent = `${totalVideosCount} vídeos`;
-                document.getElementById("channelSubsCountText").textContent = "584 inscritos";
-                document.getElementById("drawerSeriesInfoSubs").textContent = "584 inscritos";
                 document.getElementById("drawerSeriesInfoTotalViews").textContent = `${totalAccumulatedViews.toLocaleString('pt-BR')} visualizações`;
+
+                // Seta Laranja: Sincroniza a contagem REAL de 0 até X inscritos
+                checkSeriesSubscriptionRealtime(cleanName);
 
                 const synopsis = (matchedSeriesData && matchedSeriesData.synopsis) || `Assista todos os episódios oficiais de ${cleanName} postados pela comunidade FruitSenpai.`;
                 document.getElementById("channelDescShort").textContent = synopsis;
@@ -15795,26 +15958,43 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
-            // 2. Se for um ID Selvagem de Compartilhamento (FS-...)
+            // X Vermelho: Resolve o ID Selvagem de vídeo e abre o player na hora
             if (term.toUpperCase().startsWith("FS-")) {
                 try {
                     const snap = await getDoc(doc(db, "compartilhamentos", term.toUpperCase()));
                     if (snap.exists()) {
                         const data = snap.data();
-                        if (data.tipo === "serie") {
+                        if (data.tipo === "video") {
+                            const videoSnap = await getDoc(doc(db, "frutas", data.idOriginal));
+                            if (videoSnap.exists()) {
+                                openWatchScreen(videoSnap.data(), videoSnap.id);
+                                showToast(`Vídeo aberto pelo ID Selvagem ${term.toUpperCase()}`);
+                                return;
+                            }
+                        } else if (data.tipo === "serie") {
                             openSeriesChannel(data.idOriginal);
+                            showToast(`Série aberta pelo ID Selvagem ${term.toUpperCase()}`);
+                            return;
                         } else if (data.tipo === "grupo") {
                             openGroupDetailPage(data.idOriginal);
+                            return;
                         } else if (data.tipo === "playlist") {
                             openPlaylistDetailPage(data.idOriginal, "Playlist");
-                        } else {
-                            openScreen("home");
+                            return;
                         }
-                        showToast(`Redirecionado pelo ID Selvagem ${term.toUpperCase()}`);
-                        return;
                     }
                 } catch(e) {}
             }
+
+            // Suporte caso colem o ID direto do documento de vídeo
+            try {
+                const directVideoSnap = await getDoc(doc(db, "frutas", term));
+                if (directVideoSnap.exists()) {
+                    openWatchScreen(directVideoSnap.data(), directVideoSnap.id);
+                    showToast("Vídeo aberto pelo ID com sucesso!");
+                    return;
+                }
+            } catch(e) {}
 
             // 3. Busca normal
             showToast(`Buscando por: ${term}`);
