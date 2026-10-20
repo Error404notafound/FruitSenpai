@@ -11206,7 +11206,7 @@
                             resolutionBadge: selectedResolutionBadge || "HD",
                             ratingBadge: selectedAgeBadge || "14+",
                             isAdult: isAdult,
-                            contentType: "episode",
+                            contentType: selectedContentType || "episode",
                             timestamp: serverTimestamp()
                         });
                     }
@@ -11938,45 +11938,42 @@
             loadShortsVideosFromFirestore();
         }
 
-        // Carrega os vídeos aleatórios marcados como shorts ou reels
+        // Carrega EXCLUSIVAMENTE os vídeos marcados como "Reels" na página de postagem
         function loadShortsVideosFromFirestore() {
             onSnapshot(frutasColecao, (snap) => {
                 const reels = [];
                 snap.forEach(d => {
                     const data = { id: d.id, ...d.data() };
-                    const isReel = (data.contentType === "Reels" || data.contentType === "Shorts" || data.isShort || (data.duration && data.duration.startsWith("0:")));
-                    if (isReel || data.videoUrl) {
+                    // Filtro estrito: apenas vídeos cadastrados como "Reels"
+                    if (data.contentType === "Reels") {
                         reels.push(data);
                     }
                 });
 
-                // Embaralha aleatoriamente
+                // Ordena os Reels aleatoriamente
                 reels.sort(() => 0.5 - Math.random());
-
-                if (reels.length === 0) {
-                    currentActiveShortsList = [
-                        {
-                            id: "demo_short_1",
-                            name: "Achados da reciclagem de São Paulo...",
-                            channel: "alemdareciclagem",
-                            seriesCover: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400",
-                            thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                            videoUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800",
-                            duration: "02:21",
-                            likesCount: 22000
-                        }
-                    ];
-                } else {
-                    currentActiveShortsList = reels;
-                }
+                currentActiveShortsList = reels;
 
                 renderShortsVerticalSlides();
             });
         }
 
-        // Renderiza cada Slide em Tela Cheia com os botões fiéis
+        // Renderiza cada Slide em Tela Cheia com dados reais (Zero números falsos)
         function renderShortsVerticalSlides() {
             shortsVerticalFeedContainer.innerHTML = "";
+
+            if (currentActiveShortsList.length === 0) {
+                stopShortsPlaybackTimers();
+                shortsProgressBarFill.style.width = "0%";
+                shortsVerticalFeedContainer.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:24px; color:#ffffff;">
+                        <svg style="width:48px;height:48px;fill:#ff0000;margin-bottom:12px;" viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
+                        <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Nenhum Reels publicado ainda</h3>
+                        <p style="font-size:12.5px; color:#aaaaaa; max-width:260px;">Ao postar um episódio, selecione "Reels" em Tipo de conteúdo para que ele apareça aqui.</p>
+                    </div>
+                `;
+                return;
+            }
 
             currentActiveShortsList.forEach((item, index) => {
                 const slide = document.createElement("div");
@@ -11985,30 +11982,32 @@
 
                 const seriesTitle = item.channel || "Série";
                 const seriesHandle = "@" + seriesTitle.toLowerCase().replace(/\s+/g, '');
-                const epTitle = item.name || "Achados da reciclagem...";
+                const epTitle = item.name || "Reels";
                 const seriesCover = item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
-                const likesNumber = formatNumber(item.likesCount || 22000);
+                
+                // Contagem real de likes (inicia em 0 ou no total do banco de dados)
+                let initialLikes = Number(item.likesCount || 0);
 
                 slide.innerHTML = `
                     <div class="short-media-wrapper">
                         ${item.videoUrl && item.videoUrl.includes("embed") 
                             ? `<iframe src="${item.videoUrl}?autoplay=1&controls=0&loop=1" allow="autoplay; fullscreen"></iframe>`
-                            : `<img src="${item.thumbUrl || seriesCover}" alt="Short">`
+                            : `<img src="${item.thumbUrl || seriesCover}" alt="Reels">`
                         }
                     </div>
 
-                    <!-- Coluna de Ações à Direita (Prints A e B) -->
+                    <!-- Coluna de Ações à Direita com Dados 100% Reais -->
                     <div class="shorts-right-actions-column">
-                        <!-- Coração Curtir (Prints B e B1) -->
+                        <!-- Coração Curtir com Contagem Real (Prints B e B1) -->
                         <button class="shorts-action-button-unit btnShortLikeTrigger" type="button">
                             <svg class="svgShortHeartIcon" viewBox="0 0 24 24">${svgHeartOutline}</svg>
-                            <span class="shorts-action-label-text lblShortLikesCount">${likesNumber}</span>
+                            <span class="shorts-action-label-text lblShortLikesCount">${formatNumber(initialLikes)}</span>
                         </button>
 
-                        <!-- Comentários (Print E) -->
+                        <!-- Comentários com Contagem Real (Print E) -->
                         <button class="shorts-action-button-unit btnShortCommentsTrigger" type="button">
                             <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
-                            <span class="shorts-action-label-text">135</span>
+                            <span class="shorts-action-label-text lblShortCommentsCount">0</span>
                         </button>
 
                         <!-- Compartilhar -->
@@ -12041,6 +12040,12 @@
                     </div>
                 `;
 
+                // Monitora a contagem real de comentários desse vídeo no Firebase
+                const lblComments = slide.querySelector(".lblShortCommentsCount");
+                onSnapshot(collection(db, `frutas/${item.id}/comments`), (snapComm) => {
+                    lblComments.textContent = formatNumber(snapComm.size);
+                });
+
                 // Setas Azuis e Rosa: Clicar abre a página oficial da respectiva série
                 slide.querySelectorAll(".btnOpenSeriesFromShort").forEach(el => {
                     el.addEventListener("click", () => {
@@ -12049,23 +12054,40 @@
                     });
                 });
 
-                // Curtir / Like com Coração (Prints B e B1)
+                // Curtir / Like Real com Coração salvando no Firestore (Prints B e B1)
                 const btnLike = slide.querySelector(".btnShortLikeTrigger");
                 const svgHeart = slide.querySelector(".svgShortHeartIcon");
                 const lblLikes = slide.querySelector(".lblShortLikesCount");
                 let isLiked = false;
 
                 btnLike.addEventListener("click", async () => {
+                    if (!currentUserEmail) {
+                        openAuthModal();
+                        return;
+                    }
+
                     isLiked = !isLiked;
+                    let currentLikesCount = Number(item.likesCount || 0);
+
                     if (isLiked) {
                         svgHeart.innerHTML = svgHeartFilled;
                         svgHeart.style.fill = "#ffffff";
-                        lblLikes.textContent = formatNumber((item.likesCount || 22000) + 1);
+                        currentLikesCount = currentLikesCount + 1;
                         showToast("Adicionado aos seus favoritos");
                     } else {
                         svgHeart.innerHTML = svgHeartOutline;
                         svgHeart.style.fill = "#ffffff";
-                        lblLikes.textContent = formatNumber(item.likesCount || 22000);
+                        currentLikesCount = Math.max(0, currentLikesCount - 1);
+                    }
+
+                    item.likesCount = currentLikesCount;
+                    lblLikes.textContent = formatNumber(currentLikesCount);
+
+                    // Atualiza a contagem real no documento do Firestore
+                    try {
+                        await setDoc(doc(db, "frutas", item.id), { likesCount: currentLikesCount }, { merge: true });
+                    } catch(err) {
+                        console.error("Erro ao curtir reels:", err);
                     }
                 });
 
