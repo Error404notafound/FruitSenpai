@@ -10720,8 +10720,9 @@
                         const epDuration = ep.duration || "24:00";
                         const epVideo = ep.videoUrl || firstEpUrl || "";
 
-                        // Gera o Link Selvagem disfarçado e único com validação anti-repetição
+                        // Gera o Código e a URL Própria da Página do Player deste Episódio
                         const wildData = await generateUniqueWildLinkData();
+                        const pagePlayerUrl = `https://fruitsenpai/player/${wildData.code}`;
 
                         const newEpDocRef = await addDoc(frutasColecao, {
                             name: epName,
@@ -10731,8 +10732,10 @@
                             timeAgo: "agora mesmo",
                             thumbUrl: epThumb,
                             videoUrl: epVideo,
+                            codigoSelvagem: wildData.code,
+                            urlSelvagem: pagePlayerUrl,
                             wildCode: wildData.code,
-                            wildLink: wildData.link,
+                            wildLink: pagePlayerUrl,
                             duration: epDuration,
                             season: selectedSeasonNumber || "1",
                             episodeNum: String(epNum),
@@ -10854,10 +10857,10 @@
         });
                     
 
-        // Cache global em memória de todos os episódios para abertura instantânea pelo Link Selvagem
+        // Cache global em memória de todas as páginas de episódios do Firebase
         let loadedEpisodesCache = [];
 
-        // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (4 LINHAS X 2 COLUNAS), MAIS RECENTES NO TOPO
+        // 3. ONSNAPSHOT EM TEMPO REAL: REGISTRA A PÁGINA E A URL SELVAGEM DE CADA EPISÓDIO
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
             dynamicFirebaseFeed.innerHTML = "";
@@ -10865,13 +10868,20 @@
             const episodeList = [];
 
             snapshot.forEach((docSnap) => {
-                const item = docSnap.data();
-                if (item.videoUrl || item.contentType === "episode") {
-                    episodeList.push({ id: docSnap.id, ...item });
+                const item = { id: docSnap.id, ...docSnap.data() };
+
+                // Garante que todo episódio (inclusive os já postados como FS-0ZNNK) tenha sua URL e Código de Página
+                if (!item.codigoSelvagem) {
+                    item.codigoSelvagem = item.wildCode || item.wildId || `FS-${docSnap.id.substring(0, 5).toUpperCase()}`;
                 }
+                if (!item.urlSelvagem) {
+                    item.urlSelvagem = item.wildLink || `https://fruitsenpai/player/${item.codigoSelvagem}`;
+                }
+
+                episodeList.push(item);
             });
 
-            // Mantém todos os episódios acessíveis imediatamente pelo buscador
+            // Mantém todos os episódios disponíveis para busca instantânea pela URL ou Código
             loadedEpisodesCache = episodeList;
 
             // Ordena os mais recentes primeiro
@@ -12461,22 +12471,23 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        let currentWatchVideoWildLink = "";
+        let currentWatchVideoPageUrl = "";
 
-        // Seta Vermelha: Copia o Link Selvagem disfarçado (ex: https://fruitsenpai/vídeo/...)
+        // Seta Vermelha: Copia a URL Própria da Página do Player deste Episódio
         if (btnWatchShare) {
             btnWatchShare.addEventListener("click", async () => {
-                if (!currentWatchVideoWildLink && currentWatchVideoId) {
-                    currentWatchVideoWildLink = `https://fruitsenpai/vídeo/${currentWatchVideoId}`;
+                if (!currentWatchVideoPageUrl && currentWatchVideoId) {
+                    const fallbackCode = `FS-${currentWatchVideoId.substring(0, 5).toUpperCase()}`;
+                    currentWatchVideoPageUrl = `https://fruitsenpai/player/${fallbackCode}`;
                 }
 
-                if (!currentWatchVideoWildLink) return;
+                if (!currentWatchVideoPageUrl) return;
 
                 try {
-                    await navigator.clipboard.writeText(currentWatchVideoWildLink);
-                    showToast("Link Selvagem copiado!");
+                    await navigator.clipboard.writeText(currentWatchVideoPageUrl);
+                    showToast("URL da página do episódio copiada!");
                 } catch (err) {
-                    prompt("Copie seu Link Selvagem:", currentWatchVideoWildLink);
+                    prompt("Copie a URL da página do episódio:", currentWatchVideoPageUrl);
                 }
             });
         }
@@ -12549,9 +12560,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             currentWatchVideoId = videoId;
             openScreen(viewWatchVideo);
 
-            // Monta o link selvagem oficial deste episódio
-            const code = videoData.wildCode || videoData.wildId || videoId;
-            currentWatchVideoWildLink = videoData.wildLink || `https://fruitsenpai/vídeo/${code}`;
+            // Identifica a URL Própria da Página do Player deste Episódio
+            const epCode = videoData.codigoSelvagem || videoData.wildCode || videoData.wildId || `FS-${videoId.substring(0, 5).toUpperCase()}`;
+            currentWatchVideoPageUrl = videoData.urlSelvagem || `https://fruitsenpai/player/${epCode}`;
 
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
@@ -16002,84 +16013,81 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             newTabShortcutsCarousel.appendChild(div);
         }
 
-        // Busca Universal: Abre diretamente o Player do Episódio pelo Link Selvagem ou ID
+        // Busca da Página Específica do Player: Abre na hora pelo Link, Código ou Nome
         async function executeUniversalWildSearch() {
-            const rawTerm = inputUniversalWildSearch.value.trim();
-            if (!rawTerm) return;
+            const rawInput = inputUniversalWildSearch.value.trim();
+            if (!rawInput) return;
 
-            // Remove prefixos de URL disfarçada (https://fruitsenpai/vídeo/, https://fruitsenpai/video/, etc.)
-            let cleanCode = rawTerm
-                .replace(/^https?:\/\/fruitsenpai\/(?:vídeo|video)\//i, "")
-                .replace(/^fruitsenpai\/(?:vídeo|video)\//i, "")
-                .replace(/^https?:\/\/.*[?&]v=/i, "")
-                .trim();
+            const cleanSearch = rawInput.toLowerCase();
+            const upperSearch = rawInput.toUpperCase();
 
-            const upperCode = cleanCode.toUpperCase();
-            const lowerCode = cleanCode.toLowerCase();
-
-            // 1. Localização Instantânea na memória dos episódios
+            // 1. Procura a página correspondente na lista de episódios do Firebase
             let matchedEpisode = loadedEpisodesCache.find(ep => {
                 if (!ep) return false;
-                const epCode = (ep.wildCode || "").toLowerCase();
-                const epLink = (ep.wildLink || "").toLowerCase();
-                const epWildId = (ep.wildId || "").toUpperCase();
-                const epId = (ep.id || "").toLowerCase();
 
-                // Reconhece tanto o link quanto o código exato (inclusive o FS-0ZNNK do seu print)
-                return epCode === lowerCode ||
-                       epLink === rawTerm.toLowerCase() ||
-                       epWildId === upperCode ||
-                       epId === lowerCode ||
-                       (upperCode.startsWith("FS-") && epId.toUpperCase().startsWith(upperCode.replace("FS-", ""))) ||
-                       (upperCode.startsWith("FS-") && epWildId.includes(upperCode));
+                const epUrl = (ep.urlSelvagem || ep.wildLink || "").toLowerCase();
+                const epCode = (ep.codigoSelvagem || ep.wildCode || ep.wildId || "").toLowerCase();
+                const epId = (ep.id || "").toLowerCase();
+                const epName = (ep.name || "").toLowerCase();
+                const epChannel = (ep.channel || "").toLowerCase();
+
+                // A) Se colou a URL completa da página do player
+                if (epUrl && (cleanSearch.includes(epUrl) || epUrl.includes(cleanSearch))) {
+                    return true;
+                }
+
+                // B) Se colou ou digitou o código (ex: FS-0ZNNK do seu print)
+                if (epCode && (cleanSearch === epCode || cleanSearch.includes(epCode) || epCode.includes(cleanSearch))) {
+                    return true;
+                }
+
+                // C) Se digitou o ID com prefixo FS- e o ID do documento começa com esses caracteres
+                if (upperSearch.startsWith("FS-")) {
+                    const codePart = upperSearch.replace("FS-", "").toLowerCase();
+                    if (epId.startsWith(codePart) || epCode.toUpperCase().includes(upperSearch)) {
+                        return true;
+                    }
+                }
+
+                // D) Se bate direto com o ID do documento no banco
+                if (epId && (cleanSearch === epId || cleanSearch.includes(epId))) {
+                    return true;
+                }
+
+                // E) Se digitou o nome do episódio ou nome da série
+                if (epName && (epName === cleanSearch || cleanSearch.includes(epName) || epName.includes(cleanSearch))) {
+                    return true;
+                }
+
+                return false;
             });
 
-            // 2. Se não estiver no cache imediato, busca na tabela rápida de compartilhamentos
+            // 2. Se não estava em cache, tenta buscar diretamente no Firestore por ID
             if (!matchedEpisode) {
                 try {
-                    const shareSnap = await getDoc(doc(db, "compartilhamentos", cleanCode));
-                    if (shareSnap.exists()) {
-                        const sData = shareSnap.data();
-                        if (sData.tipo === "video") {
-                            matchedEpisode = {
-                                id: sData.idOriginal || cleanCode,
-                                name: sData.episodeName,
-                                channel: sData.seriesName,
-                                thumbUrl: sData.thumbUrl,
-                                videoUrl: sData.videoUrl,
-                                duration: sData.duration
-                            };
-                        }
-                    }
-                } catch (e) {}
-            }
-
-            // 3. Se não achou na tabela, tenta buscar pelo ID original do documento de vídeo no Firestore
-            if (!matchedEpisode && cleanCode) {
-                try {
-                    const directSnap = await getDoc(doc(db, "frutas", cleanCode));
+                    const directSnap = await getDoc(doc(db, "frutas", rawInput));
                     if (directSnap.exists()) {
                         matchedEpisode = { id: directSnap.id, ...directSnap.data() };
                     }
-                } catch (e) {}
+                } catch(e) {}
             }
 
-            // SE ENCONTROU O EPISÓDIO: Abre diretamente a tela do Player daquele episódio!
+            // 3. SE ENCONTROU A PÁGINA: Abre diretamente o Player daquele Episódio!
             if (matchedEpisode) {
                 inputUniversalWildSearch.value = "";
                 openWatchScreen(matchedEpisode, matchedEpisode.id);
-                showToast(`Abrindo: ${matchedEpisode.name}`);
+                showToast(`Abrindo página do episódio: ${matchedEpisode.name}`);
                 return;
             }
 
             // Se for um ID Temporário de Perfil (FS-TEMP-...)
-            if (upperCode.startsWith("FS-TEMP-")) {
-                processTempIdLogin(rawTerm);
+            if (upperSearch.startsWith("FS-TEMP-")) {
+                processTempIdLogin(rawInput);
                 return;
             }
 
-            // Caso seja apenas um texto normal de pesquisa, filtra o feed
-            showToast(`Buscando por: ${rawTerm}`);
+            // Caso seja outro termo de busca geral, abre a home filtrada
+            showToast(`Buscando por: ${rawInput}`);
             openScreen("home");
         }
 
