@@ -11187,8 +11187,9 @@
                         const epNum = ep.episodeNum || (i + 1);
                         const epName = ep.title || `${sName} - Episódio ${epNum}`;
 
-                        // CORREÇÃO 1: A capa do card do episódio é a foto do EPISÓDIO (16:9), NÃO a foto da série!
-                        const epThumb = ep.thumbUrl || (uploadVideoThumb ? uploadVideoThumb.src : "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800");
+                        // Se for Reels, não injeta a capa padrão do lago
+                        const isReelPost = (selectedContentType === "Reels");
+                        const epThumb = isReelPost ? "" : (ep.thumbUrl || (uploadVideoThumb ? uploadVideoThumb.src : ""));
                         const epDuration = ep.duration || "24:00";
                         const epVideo = ep.videoUrl || firstEpUrl || "";
 
@@ -11198,7 +11199,7 @@
                             seriesCover: seriesCoverUrl, // Capa da série usada para o avatar redondo
                             viewsCount: 0,
                             timeAgo: "agora mesmo",
-                            thumbUrl: epThumb, // Capa horizontal do episódio
+                            thumbUrl: epThumb,
                             videoUrl: epVideo,
                             duration: epDuration,
                             season: selectedSeasonNumber || "1",
@@ -11307,7 +11308,7 @@
         });
                     
 
-        // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (4 LINHAS X 2 COLUNAS), MAIS RECENTES NO TOPO
+        // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (REELS NÃO APARECEM NO PARA VOCÊ)
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
             dynamicFirebaseFeed.innerHTML = "";
@@ -11316,7 +11317,10 @@
 
             snapshot.forEach((docSnap) => {
                 const item = docSnap.data();
-                // Exibe no 'Para você' somente itens que são episódios reais (com link de vídeo ou contentType episode)
+
+                // Reels não entram no feed "Para você"
+                if (item.contentType === "Reels") return;
+
                 if (item.videoUrl || item.contentType === "episode") {
                     episodeList.push({ id: docSnap.id, ...item });
                 }
@@ -11958,7 +11962,21 @@
             });
         }
 
-        // Renderiza cada Slide em Tela Cheia com dados reais (Zero números falsos)
+        // Converte qualquer link de vídeo (YouTube normal, Shorts, Drive ou Embed direto) em URL reproduzível
+        function getEmbedShortsVideoUrl(rawUrl) {
+            if (!rawUrl) return "";
+            let url = rawUrl.trim();
+            const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+            if (ytMatch && ytMatch[1]) {
+                return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&controls=0&loop=1&playlist=${ytMatch[1]}`;
+            }
+            if (url.includes("drive.google.com")) {
+                return url.replace(/\/view.*$/, "/preview");
+            }
+            return url;
+        }
+
+        // Renderiza cada Slide em Tela Cheia com dados reais (Zero números falsos e sem foto tampando)
         function renderShortsVerticalSlides() {
             shortsVerticalFeedContainer.innerHTML = "";
 
@@ -11983,16 +12001,17 @@
                 const seriesTitle = item.channel || "Série";
                 const seriesHandle = "@" + seriesTitle.toLowerCase().replace(/\s+/g, '');
                 const epTitle = item.name || "Reels";
-                const seriesCover = item.seriesCover || item.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
-                
+                const seriesCover = item.seriesCover || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400";
+                const embedVideoSrc = getEmbedShortsVideoUrl(item.videoUrl);
+
                 // Contagem real de likes (inicia em 0 ou no total do banco de dados)
                 let initialLikes = Number(item.likesCount || 0);
 
                 slide.innerHTML = `
                     <div class="short-media-wrapper">
-                        ${item.videoUrl && item.videoUrl.includes("embed") 
-                            ? `<iframe src="${item.videoUrl}?autoplay=1&controls=0&loop=1" allow="autoplay; fullscreen"></iframe>`
-                            : `<img src="${item.thumbUrl || seriesCover}" alt="Reels">`
+                        ${embedVideoSrc 
+                            ? `<iframe src="${embedVideoSrc}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`
+                            : (item.thumbUrl ? `<img src="${item.thumbUrl}" alt="Reels">` : '')
                         }
                     </div>
 
@@ -16192,6 +16211,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
                 snapshot.forEach(docSnap => {
                     const data = { id: docSnap.id, ...docSnap.data() };
+
+                    // Reels não entram na lista de "Novos episódios"
+                    if (data.contentType === "Reels") return;
+
                     if (data.videoUrl || data.contentType === "episode") {
                         epList.push(data);
                     }
