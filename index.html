@@ -16083,67 +16083,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             openScreen("home");
         }
 
-                // 1. Busca na coleção rápida de compartilhamentos
-                try {
-                    const snap = await getDoc(doc(db, "compartilhamentos", wildTerm));
-                    if (snap.exists()) {
-                        const data = snap.data();
-                        if (data.tipo === "video") {
-                            // Carrega o episódio real e abre o player
-                            let targetEp = null;
-                            if (data.idOriginal) {
-                                const vSnap = await getDoc(doc(db, "frutas", data.idOriginal));
-                                if (vSnap.exists()) {
-                                    targetEp = { id: vSnap.id, ...vSnap.data() };
-                                }
-                            }
-                            if (!targetEp) {
-                                targetEp = {
-                                    id: data.idOriginal || wildTerm,
-                                    name: data.episodeName,
-                                    channel: data.seriesName,
-                                    thumbUrl: data.thumbUrl,
-                                    videoUrl: data.videoUrl,
-                                    duration: data.duration,
-                                    wildId: wildTerm
-                                };
-                            }
-                            openWatchScreen(targetEp, targetEp.id);
-                            showToast(`Abrindo episódio: ${targetEp.name}`);
-                            return;
-                        } else if (data.tipo === "serie") {
-                            openSeriesChannel(data.idOriginal);
-                            return;
-                        } else if (data.tipo === "grupo") {
-                            openGroupDetailPage(data.idOriginal);
-                            return;
-                        } else if (data.tipo === "playlist") {
-                            openPlaylistDetailPage(data.idOriginal, "Playlist");
-                            return;
-                        }
-                    }
-                } catch(e) {}
-
-                // 2. Busca diretamente na coleção de episódios pelo campo wildId invisível
-                try {
-                    const snapVids = await onSnapshot(frutasColecao, (vids) => {
-                        vids.forEach(docSnap => {
-                            const epData = { id: docSnap.id, ...docSnap.data() };
-                            if (epData.wildId && epData.wildId.toUpperCase() === wildTerm) {
-                                openWatchScreen(epData, epData.id);
-                                showToast(`Abrindo episódio: ${epData.name}`);
-                                return;
-                            }
-                        });
-                    });
-                } catch(e) {}
-            }
-
-            // 3. Busca normal
-            showToast(`Buscando por: ${term}`);
-            openScreen("home");
-        }
-
         btnSubmitWildSearch.addEventListener("click", executeUniversalWildSearch);
         inputUniversalWildSearch.addEventListener("keydown", (e) => {
             if (e.key === "Enter") executeUniversalWildSearch();
