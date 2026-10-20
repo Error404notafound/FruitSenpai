@@ -10610,33 +10610,46 @@
         });
 
         // ==========================================================================
-        // GERADOR DE ID SELVAGEM ÚNICO COM VALIDAÇÃO ANTI-REPETIÇÃO
+        // GERADOR DE LINK SELVAGEM DISFARÇADO COM VALIDAÇÃO ANTI-REPETIÇÃO
         // ==========================================================================
-        async function generateUniqueWildId() {
-            const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        async function generateUniqueWildLinkData() {
+            const chars = "abcdefghjkmnpqrstuvwxyz23456789";
             let isUnique = false;
-            let wildId = "";
+            let uniqueCode = "";
 
             while (!isUnique) {
                 let code = "";
-                for (let i = 0; i < 5; i++) {
+                // Gera uma sequência aleatória de 12 caracteres (ex: ausoossj1627)
+                for (let i = 0; i < 12; i++) {
                     code += chars.charAt(Math.floor(Math.random() * chars.length));
                 }
-                wildId = `FS-${code}`;
 
+                const testLink = `https://fruitsenpai/vídeo/${code}`;
+
+                // 1. Validação na memória local
+                const existsLocally = loadedEpisodesCache.some(ep => (ep.wildCode === code || ep.wildLink === testLink));
+                if (existsLocally) continue;
+
+                // 2. Validação no Firestore para garantir que o código nunca se repita
                 try {
-                    const checkDoc = await getDoc(doc(db, "compartilhamentos", wildId));
-                    if (!checkDoc.exists()) {
+                    const checkSnap = await getDoc(doc(db, "compartilhamentos", code));
+                    if (!checkSnap.exists()) {
+                        uniqueCode = code;
                         isUnique = true;
                     }
                 } catch (e) {
+                    uniqueCode = code;
                     isUnique = true;
                 }
             }
-            return wildId;
+
+            return {
+                code: uniqueCode,
+                link: `https://fruitsenpai/vídeo/${uniqueCode}`
+            };
         }
 
-        // 2. ENVIAR CONTEÚDO (COM ID SELVAGEM INVISÍVEL EMBUTIDO EM CADA EPISÓDIO)
+        // 2. ENVIAR CONTEÚDO (COM LINK SELVAGEM DISFARÇADO EMBUTIDO EM CADA EPISÓDIO)
         btnSubmitVideoUpload.addEventListener("click", async () => {
             const isAdult = document.getElementById("uploadIsAdult").checked;
             const nextEpDate = document.getElementById("uploadNextEpDate").value;
@@ -10707,8 +10720,8 @@
                         const epDuration = ep.duration || "24:00";
                         const epVideo = ep.videoUrl || firstEpUrl || "";
 
-                        // Gera o ID Selvagem único e sem repetição para este episódio
-                        const epWildId = await generateUniqueWildId();
+                        // Gera o Link Selvagem disfarçado e único com validação anti-repetição
+                        const wildData = await generateUniqueWildLinkData();
 
                         const newEpDocRef = await addDoc(frutasColecao, {
                             name: epName,
@@ -10718,7 +10731,8 @@
                             timeAgo: "agora mesmo",
                             thumbUrl: epThumb,
                             videoUrl: epVideo,
-                            wildId: epWildId,
+                            wildCode: wildData.code,
+                            wildLink: wildData.link,
                             duration: epDuration,
                             season: selectedSeasonNumber || "1",
                             episodeNum: String(epNum),
@@ -10729,8 +10743,8 @@
                             timestamp: serverTimestamp()
                         });
 
-                        // Registra o ID Selvagem na tabela universal de busca rápida
-                        await setDoc(doc(db, "compartilhamentos", epWildId), {
+                        // Registra o Link Selvagem para busca direta e instantânea
+                        await setDoc(doc(db, "compartilhamentos", wildData.code), {
                             tipo: "video",
                             idOriginal: newEpDocRef.id,
                             episodeName: epName,
@@ -10738,7 +10752,8 @@
                             thumbUrl: epThumb,
                             videoUrl: epVideo,
                             duration: epDuration,
-                            wildId: epWildId,
+                            wildCode: wildData.code,
+                            wildLink: wildData.link,
                             createdAt: serverTimestamp()
                         });
                     }
@@ -10839,6 +10854,9 @@
         });
                     
 
+        // Cache global em memória de todos os episódios para abertura instantânea pelo Link Selvagem
+        let loadedEpisodesCache = [];
+
         // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (4 LINHAS X 2 COLUNAS), MAIS RECENTES NO TOPO
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
@@ -10848,11 +10866,13 @@
 
             snapshot.forEach((docSnap) => {
                 const item = docSnap.data();
-                // Exibe no 'Para você' somente itens que são episódios reais (com link de vídeo ou contentType episode)
                 if (item.videoUrl || item.contentType === "episode") {
                     episodeList.push({ id: docSnap.id, ...item });
                 }
             });
+
+            // Mantém todos os episódios acessíveis imediatamente pelo buscador
+            loadedEpisodesCache = episodeList;
 
             // Ordena os mais recentes primeiro
             episodeList.sort((a, b) => {
@@ -12441,22 +12461,22 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        let currentWatchVideoWildId = "";
+        let currentWatchVideoWildLink = "";
 
-        // Seta Vermelha: Copia o ID Selvagem invisível do episódio para a área de transferência
+        // Seta Vermelha: Copia o Link Selvagem disfarçado (ex: https://fruitsenpai/vídeo/...)
         if (btnWatchShare) {
             btnWatchShare.addEventListener("click", async () => {
-                if (!currentWatchVideoWildId && currentWatchVideoId) {
-                    currentWatchVideoWildId = `FS-${currentWatchVideoId.substring(0, 5).toUpperCase()}`;
+                if (!currentWatchVideoWildLink && currentWatchVideoId) {
+                    currentWatchVideoWildLink = `https://fruitsenpai/vídeo/${currentWatchVideoId}`;
                 }
 
-                if (!currentWatchVideoWildId) return;
+                if (!currentWatchVideoWildLink) return;
 
                 try {
-                    await navigator.clipboard.writeText(currentWatchVideoWildId);
-                    showToast(`ID Selvagem copiado: ${currentWatchVideoWildId}`);
+                    await navigator.clipboard.writeText(currentWatchVideoWildLink);
+                    showToast("Link Selvagem copiado!");
                 } catch (err) {
-                    prompt("Copie seu ID Selvagem:", currentWatchVideoWildId);
+                    prompt("Copie seu Link Selvagem:", currentWatchVideoWildLink);
                 }
             });
         }
@@ -12529,8 +12549,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             currentWatchVideoId = videoId;
             openScreen(viewWatchVideo);
 
-            // Armazena o ID Selvagem invisível do episódio para ser copiado no botão compartilhar
-            currentWatchVideoWildId = videoData.wildId || `FS-${videoId.substring(0, 5).toUpperCase()}`;
+            // Monta o link selvagem oficial deste episódio
+            const code = videoData.wildCode || videoData.wildId || videoId;
+            currentWatchVideoWildLink = videoData.wildLink || `https://fruitsenpai/vídeo/${code}`;
 
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
@@ -15981,20 +16002,86 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             newTabShortcutsCarousel.appendChild(div);
         }
 
-        // Busca Universal: Resolve ID Temporário ou ID Selvagem de Compartilhamento
+        // Busca Universal: Abre diretamente o Player do Episódio pelo Link Selvagem ou ID
         async function executeUniversalWildSearch() {
-            const term = inputUniversalWildSearch.value.trim();
-            if (!term) return;
+            const rawTerm = inputUniversalWildSearch.value.trim();
+            if (!rawTerm) return;
 
-            // 1. Se for um ID Temporário de Perfil (FS-TEMP-...)
-            if (term.toUpperCase().startsWith("FS-TEMP-")) {
-                processTempIdLogin(term);
+            // Remove prefixos de URL disfarçada (https://fruitsenpai/vídeo/, https://fruitsenpai/video/, etc.)
+            let cleanCode = rawTerm
+                .replace(/^https?:\/\/fruitsenpai\/(?:vídeo|video)\//i, "")
+                .replace(/^fruitsenpai\/(?:vídeo|video)\//i, "")
+                .replace(/^https?:\/\/.*[?&]v=/i, "")
+                .trim();
+
+            const upperCode = cleanCode.toUpperCase();
+            const lowerCode = cleanCode.toLowerCase();
+
+            // 1. Localização Instantânea na memória dos episódios
+            let matchedEpisode = loadedEpisodesCache.find(ep => {
+                if (!ep) return false;
+                const epCode = (ep.wildCode || "").toLowerCase();
+                const epLink = (ep.wildLink || "").toLowerCase();
+                const epWildId = (ep.wildId || "").toUpperCase();
+                const epId = (ep.id || "").toLowerCase();
+
+                // Reconhece tanto o link quanto o código exato (inclusive o FS-0ZNNK do seu print)
+                return epCode === lowerCode ||
+                       epLink === rawTerm.toLowerCase() ||
+                       epWildId === upperCode ||
+                       epId === lowerCode ||
+                       (upperCode.startsWith("FS-") && epId.toUpperCase().startsWith(upperCode.replace("FS-", ""))) ||
+                       (upperCode.startsWith("FS-") && epWildId.includes(upperCode));
+            });
+
+            // 2. Se não estiver no cache imediato, busca na tabela rápida de compartilhamentos
+            if (!matchedEpisode) {
+                try {
+                    const shareSnap = await getDoc(doc(db, "compartilhamentos", cleanCode));
+                    if (shareSnap.exists()) {
+                        const sData = shareSnap.data();
+                        if (sData.tipo === "video") {
+                            matchedEpisode = {
+                                id: sData.idOriginal || cleanCode,
+                                name: sData.episodeName,
+                                channel: sData.seriesName,
+                                thumbUrl: sData.thumbUrl,
+                                videoUrl: sData.videoUrl,
+                                duration: sData.duration
+                            };
+                        }
+                    }
+                } catch (e) {}
+            }
+
+            // 3. Se não achou na tabela, tenta buscar pelo ID original do documento de vídeo no Firestore
+            if (!matchedEpisode && cleanCode) {
+                try {
+                    const directSnap = await getDoc(doc(db, "frutas", cleanCode));
+                    if (directSnap.exists()) {
+                        matchedEpisode = { id: directSnap.id, ...directSnap.data() };
+                    }
+                } catch (e) {}
+            }
+
+            // SE ENCONTROU O EPISÓDIO: Abre diretamente a tela do Player daquele episódio!
+            if (matchedEpisode) {
+                inputUniversalWildSearch.value = "";
+                openWatchScreen(matchedEpisode, matchedEpisode.id);
+                showToast(`Abrindo: ${matchedEpisode.name}`);
                 return;
             }
 
-            // X Vermelho: Ao colar o ID Selvagem do episódio, abre o player daquele episódio na hora
-            if (term.toUpperCase().startsWith("FS-")) {
-                const wildTerm = term.toUpperCase();
+            // Se for um ID Temporário de Perfil (FS-TEMP-...)
+            if (upperCode.startsWith("FS-TEMP-")) {
+                processTempIdLogin(rawTerm);
+                return;
+            }
+
+            // Caso seja apenas um texto normal de pesquisa, filtra o feed
+            showToast(`Buscando por: ${rawTerm}`);
+            openScreen("home");
+        }
 
                 // 1. Busca na coleção rápida de compartilhamentos
                 try {
