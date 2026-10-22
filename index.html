@@ -12073,56 +12073,76 @@
                     });
                 });
 
-                // Curtir / Like Real com Coração salvando no Firestore (Prints B e B1)
-                const btnLike = slide.querySelector(".btnShortLikeTrigger");
-                const svgHeart = slide.querySelector(".svgShortHeartIcon");
-                const lblLikes = slide.querySelector(".lblShortLikesCount");
-                let isLiked = false;
+                // 1. Botão Inscrever-se: Sincronizado e com barreira de login se deslogado
+                const btnSub = slide.querySelector(".btnShortSubscribeTrigger");
+                syncSeriesSubscriptionUI(seriesTitle, btnSub);
 
-                btnLike.addEventListener("click", async () => {
+                btnSub.addEventListener("click", () => {
                     if (!currentUserEmail) {
                         openAuthModal();
                         return;
                     }
-
-                    isLiked = !isLiked;
-                    let currentLikesCount = Number(item.likesCount || 0);
-
-                    if (isLiked) {
-                        svgHeart.innerHTML = svgHeartFilled;
-                        svgHeart.style.fill = "#ffffff";
-                        currentLikesCount = currentLikesCount + 1;
-                        showToast("Adicionado aos seus favoritos");
-                    } else {
-                        svgHeart.innerHTML = svgHeartOutline;
-                        svgHeart.style.fill = "#ffffff";
-                        currentLikesCount = Math.max(0, currentLikesCount - 1);
-                    }
-
-                    item.likesCount = currentLikesCount;
-                    lblLikes.textContent = formatNumber(currentLikesCount);
-
-                    // Atualiza a contagem real no documento do Firestore
-                    try {
-                        await setDoc(doc(db, "frutas", item.id), { likesCount: currentLikesCount }, { merge: true });
-                    } catch(err) {
-                        console.error("Erro ao curtir reels:", err);
-                    }
+                    handleUnifiedSeriesSubscription(seriesTitle);
                 });
 
-                // Botão Inscrever-se (Prints C e C1)
-                const btnSub = slide.querySelector(".btnShortSubscribeTrigger");
-                let isSubbed = false;
+                // 2. Botão Curtir / Like: 1 ÚNICO voto por conta (sem duplicar likes)
+                const btnLike = slide.querySelector(".btnShortLikeTrigger");
+                const svgHeart = slide.querySelector(".svgShortHeartIcon");
+                const lblLikes = slide.querySelector(".lblShortLikesCount");
 
-                btnSub.addEventListener("click", () => {
-                    isSubbed = !isSubbed;
-                    if (isSubbed) {
-                        btnSub.textContent = "Inscrito";
-                        btnSub.classList.add("subscribed");
-                        showToast(`Inscrito em ${seriesTitle}`);
-                    } else {
-                        btnSub.textContent = "Inscrever-se";
-                        btnSub.classList.remove("subscribed");
+                // Verifica se a conta logada já deu like neste Reels no banco
+                let userHasLikedShort = false;
+                if (currentUserEmail && auth.currentUser) {
+                    getDoc(doc(db, `frutas/${item.id}/likes`, auth.currentUser.uid)).then(snap => {
+                        if (snap.exists()) {
+                            userHasLikedShort = true;
+                            svgHeart.innerHTML = svgHeartFilled;
+                        }
+                    }).catch(() => {});
+                }
+
+                btnLike.addEventListener("click", async () => {
+                    // Deslogado -> Abre o modal de login
+                    if (!currentUserEmail || !auth.currentUser) {
+                        openAuthModal();
+                        return;
+                    }
+
+                    try {
+                        const userLikeDocRef = doc(db, `frutas/${item.id}/likes`, auth.currentUser.uid);
+                        const videoDocRef = doc(db, "frutas", item.id);
+
+                        // Pega o número atual do banco de dados
+                        const vDocSnap = await getDoc(videoDocRef);
+                        let currentLikes = 0;
+                        if (vDocSnap.exists()) {
+                            currentLikes = Number(vDocSnap.data().likesCount || 0);
+                        }
+
+                        if (userHasLikedShort) {
+                            // Já curtiu: cancela a curtida (diminui 1 like e nunca duplica)
+                            await deleteDoc(userLikeDocRef);
+                            currentLikes = Math.max(0, currentLikes - 1);
+                            userHasLikedShort = false;
+                            svgHeart.innerHTML = svgHeartOutline;
+                            showToast("Removido dos favoritos");
+                        } else {
+                            // Não curtiu: registra 1 único like para este usuário
+                            await setDoc(userLikeDocRef, {
+                                user: currentUserEmail,
+                                createdAt: serverTimestamp()
+                            });
+                            currentLikes = currentLikes + 1;
+                            userHasLikedShort = true;
+                            svgHeart.innerHTML = svgHeartFilled;
+                            showToast("Adicionado aos seus favoritos");
+                        }
+
+                        item.likesCount = currentLikes;
+                        lblLikes.textContent = formatNumber(currentLikes);
+                        await setDoc(videoDocRef, { likesCount: currentLikes }, { merge: true });
+                    } catch (err) {
+                        console.error("Erro ao curtir:", err);
                     }
                 });
 
@@ -13476,14 +13496,31 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Verifica se o usuário logado já curtiu ou descurtiu este vídeo anteriormente
             checkUserVideoVoteState(videoId);
 
-            // Avatar da Série
+            // Avatar da Série: Clicar leva diretamente à página da série
             const coverImg = videoData.seriesCover || videoData.thumbUrl || "";
             if (watchChannelAvatar) {
+                watchChannelAvatar.style.cursor = "pointer";
                 if (coverImg) {
                     watchChannelAvatar.innerHTML = `<img src="${escapeHtml(coverImg)}" alt="${escapeHtml(seriesLabel)}" style="width:36px; height:36px; border-radius:50%; object-fit:cover; display:block;">`;
                 } else {
                     watchChannelAvatar.innerHTML = `<div style="width:36px; height:36px; border-radius:50%; background:#272727; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">${seriesLabel.charAt(0).toUpperCase()}</div>`;
                 }
+
+                // Clicar na foto redonda ao lado de "Inscrever-se" abre a página da série
+                watchChannelAvatar.onclick = () => {
+                    if (watchIframe) watchIframe.src = "";
+                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+                    openSeriesChannel(seriesLabel);
+                };
+            }
+
+            // Sincroniza o botão de Inscrever-se da tela do player
+            const btnPlayerSub = document.getElementById("btnSubscribe");
+            if (btnPlayerSub) {
+                syncSeriesSubscriptionUI(seriesLabel, btnPlayerSub);
+                btnPlayerSub.onclick = () => {
+                    handleUnifiedSeriesSubscription(seriesLabel);
+                };
             }
 
             // PREENCHE A GAVETA DE DESCRIÇÃO (Capturas 3, 4, 5 e 6)
@@ -14347,13 +14384,117 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
+        // ==========================================================================
+        // SISTEMA UNIFICADO DE INSCRIÇÕES E CONTAGEM REAL (PLAYER, CANAL E SHORTS)
+        // ==========================================================================
+        function getStoredSubscribedSeries() {
+            const key = currentUserEmail ? `subs_${currentUserEmail}` : "subs_guest";
+            try {
+                return JSON.parse(localStorage.getItem(key) || "[]");
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function setStoredSubscribedSeries(list) {
+            const key = currentUserEmail ? `subs_${currentUserEmail}` : "subs_guest";
+            localStorage.setItem(key, JSON.stringify(list));
+        }
+
+        function formatSubscribersCountDisplay(count) {
+            const num = Number(count) || 0;
+            if (num === 0) return "0 inscritos";
+            if (num === 1) return "1 inscrito";
+            return `${formatNumber(num)} inscritos`;
+        }
+
+        // Sincroniza o botão visual e os textos de inscritos da série
+        async function syncSeriesSubscriptionUI(seriesTitle, targetButtonEl) {
+            if (!seriesTitle) return;
+            const cleanTitle = seriesTitle.trim();
+
+            const mySubs = getStoredSubscribedSeries();
+            const isSubscribed = currentUserEmail ? mySubs.includes(cleanTitle) : false;
+
+            if (targetButtonEl) {
+                targetButtonEl.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
+                targetButtonEl.classList.toggle("subscribed", isSubscribed);
+            }
+
+            // Atualiza também os botões de outras telas se estiverem no DOM
+            const btnPlayerSub = document.getElementById("btnSubscribe");
+            if (btnPlayerSub && btnPlayerSub !== targetButtonEl) {
+                btnPlayerSub.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
+                btnPlayerSub.classList.toggle("subscribed", isSubscribed);
+            }
+
+            if (btnChannelSubscribe && btnChannelSubscribe !== targetButtonEl) {
+                btnChannelSubscribe.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
+                btnChannelSubscribe.classList.toggle("subscribed", isSubscribed);
+            }
+        }
+
+        // Ação unificada de inscrição com validação de login e contagem real no Firestore
+        async function handleUnifiedSeriesSubscription(seriesTitle) {
+            // Se deslogado: abre na hora o modal de login
+            if (!currentUserEmail || !auth.currentUser) {
+                openAuthModal();
+                return;
+            }
+
+            const cleanTitle = seriesTitle.trim();
+            if (!cleanTitle) return;
+
+            let mySubs = getStoredSubscribedSeries();
+            const wasSubscribed = mySubs.includes(cleanTitle);
+            const nowSubscribed = !wasSubscribed;
+
+            if (nowSubscribed) {
+                mySubs.push(cleanTitle);
+            } else {
+                mySubs = mySubs.filter(s => s !== cleanTitle);
+            }
+            setStoredSubscribedSeries(mySubs);
+
+            // Atualiza botões imediatamente na interface
+            syncSeriesSubscriptionUI(cleanTitle);
+
+            // Busca a série correspondente no Firestore para atualizar a contagem real
+            try {
+                const seriesQuerySnap = await onSnapshot(collection(db, "series"), async (snapshot) => {
+                    let seriesDocId = null;
+                    let currentSubsCount = 0;
+
+                    snapshot.forEach(docSnap => {
+                        const d = docSnap.data();
+                        if (d.title && d.title.toLowerCase() === cleanTitle.toLowerCase()) {
+                            seriesDocId = docSnap.id;
+                            currentSubsCount = Number(d.subscribersCount || 0);
+                        }
+                    });
+
+                    if (seriesDocId) {
+                        const newCount = nowSubscribed ? (currentSubsCount + 1) : Math.max(0, currentSubsCount - 1);
+                        await setDoc(doc(db, "series", seriesDocId), { subscribersCount: newCount }, { merge: true });
+
+                        const countLabel = formatSubscribersCountDisplay(newCount);
+                        const channelSubsEl = document.getElementById("channelSubsCountText");
+                        const drawerSubsEl = document.getElementById("drawerSeriesInfoSubs");
+                        if (channelSubsEl) channelSubsEl.textContent = countLabel;
+                        if (drawerSubsEl) drawerSubsEl.textContent = countLabel;
+                    }
+                });
+            } catch (err) {
+                console.error("Erro na contagem de inscritos:", err);
+            }
+
+            showToast(nowSubscribed ? `Inscrição adicionada em ${cleanTitle}` : `Inscrição cancelada`);
+        }
+
         if (btnChannelSubscribe) {
-            btnChannelSubscribe.addEventListener("click", () => {
-                isSeriesSubscribed = !isSeriesSubscribed;
-                btnChannelSubscribe.textContent = isSeriesSubscribed ? "Inscrito" : "Inscrever-se";
-                btnChannelSubscribe.classList.toggle("subscribed", isSeriesSubscribed);
-                showToast(isSeriesSubscribed ? "Inscrição adicionada" : "Inscrição cancelada");
-            });
+            btnChannelSubscribe.onclick = () => {
+                handleUnifiedSeriesSubscription(currentActiveSeriesName);
+            };
         }
 
         // Abre o Canal da Série e consolida todos os posts filhos
@@ -14376,7 +14517,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             viewSeriesChannel.classList.add("active");
             window.scrollTo(0, 0);
 
-            // Busca os dados da série mãe cadastrada no Firestore
+            // Sincroniza o estado do botão Inscrever-se nesta série
+            syncSeriesSubscriptionUI(cleanName, btnChannelSubscribe);
+
+            // Busca os dados da série mãe cadastrada no Firestore para obter a contagem real
             let matchedSeriesData = null;
             try {
                 const seriesSnap = await onSnapshot(collection(db, "series"), (snapshot) => {
@@ -14384,6 +14528,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         const sData = docSnap.data();
                         if (sData.title && sData.title.toLowerCase() === cleanName.toLowerCase()) {
                             matchedSeriesData = sData;
+                            const realSubs = Number(sData.subscribersCount || 0);
+                            const realSubsText = formatSubscribersCountDisplay(realSubs);
+                            document.getElementById("channelSubsCountText").textContent = realSubsText;
+                            document.getElementById("drawerSeriesInfoSubs").textContent = realSubsText;
                         }
                     });
                 });
@@ -14420,8 +14568,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 const totalVideosCount = currentActiveSeriesEpisodes.length;
                 document.getElementById("channelVideosCountText").textContent = `${totalVideosCount} vídeos`;
                 document.getElementById("drawerSeriesInfoVideos").textContent = `${totalVideosCount} vídeos`;
-                document.getElementById("channelSubsCountText").textContent = "584 inscritos";
-                document.getElementById("drawerSeriesInfoSubs").textContent = "584 inscritos";
                 document.getElementById("drawerSeriesInfoTotalViews").textContent = `${totalAccumulatedViews.toLocaleString('pt-BR')} visualizações`;
 
                 const synopsis = (matchedSeriesData && matchedSeriesData.synopsis) || `Assista todos os episódios oficiais de ${cleanName} postados pela comunidade FruitSenpai.`;
