@@ -2838,9 +2838,13 @@
             margin-top: 4px;
         }
 
-        .channel-subscribe-full-btn.subscribed {
-            background-color: #272727;
-            color: #aaaaaa;
+        /* Estilo Oficial do Botão Preto "Inscrito" no Player e no Canal da Série */
+        .channel-subscribe-full-btn.subscribed,
+        .yt-btn-subscribe.subscribed {
+            background-color: #272727 !important;
+            color: #f1f1f1 !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            font-weight: 700 !important;
         }
 
         .channel-tabs-bar {
@@ -14385,10 +14389,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         // ==========================================================================
-        // SISTEMA DEFINITIVO: 1 INSCRIÇÃO POR CONTA (SEM DUPLICAÇÃO E SEM LOOP)
+        // SISTEMA DE INSCRIÇÃO INSTANTÂNEA: 1 VEZ POR CONTA (NUNCA CONGELA)
         // ==========================================================================
-        let isSubscriptionActionPending = false;
-
         function getStoredSubscribedSeries() {
             const key = currentUserEmail ? `subs_${currentUserEmail}` : "subs_guest";
             try {
@@ -14410,9 +14412,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             return `${formatNumber(num)} inscritos`;
         }
 
-        // Atualiza todos os botões de inscrição visíveis no site de uma vez só
+        // Atualiza imediatamente a aparência dos botões em todas as telas
         function updateAllSubscriptionButtonsOnScreen(seriesTitle, isSubscribed) {
-            // 1. Botão do Player de Vídeo
+            // 1. Botão da Página do Player de Vídeo
             const btnPlayerSub = document.getElementById("btnSubscribe");
             if (btnPlayerSub) {
                 btnPlayerSub.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
@@ -14440,13 +14442,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Sincroniza a inscrição com o banco do Firestore e com a interface
-        async function syncSeriesSubscriptionUI(seriesTitle, targetButtonEl) {
+        // Sincroniza o estado visual com o cache da conta
+        function syncSeriesSubscriptionUI(seriesTitle, targetButtonEl) {
             if (!seriesTitle) return;
             const cleanTitle = seriesTitle.trim();
 
-            // Deslogado: sempre mostra botão branco "Inscrever-se"
-            if (!currentUserEmail || !auth.currentUser) {
+            if (!currentUserEmail) {
                 if (targetButtonEl) {
                     targetButtonEl.textContent = "Inscrever-se";
                     targetButtonEl.classList.remove("subscribed");
@@ -14454,37 +14455,19 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
-            // 1. Renderização instantânea pelo cache local
-            const localSubs = getStoredSubscribedSeries();
-            const isSubbedLocally = localSubs.includes(cleanTitle);
+            const mySubs = getStoredSubscribedSeries();
+            const isSubscribed = mySubs.includes(cleanTitle);
+
             if (targetButtonEl) {
-                targetButtonEl.textContent = isSubbedLocally ? "Inscrito" : "Inscrever-se";
-                targetButtonEl.classList.toggle("subscribed", isSubbedLocally);
+                targetButtonEl.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
+                targetButtonEl.classList.toggle("subscribed", isSubscribed);
             }
-
-            // 2. Confirmação direta no Firestore pelo UID da conta
-            try {
-                const subDocKey = cleanTitle.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
-                const userSubRef = doc(db, `users/${auth.currentUser.uid}/series_subscriptions`, subDocKey);
-                const userSubSnap = await getDoc(userSubRef);
-                const isReallySubscribed = userSubSnap.exists();
-
-                updateAllSubscriptionButtonsOnScreen(cleanTitle, isReallySubscribed);
-
-                // Alinha o cache local com a verdade do banco
-                if (isReallySubscribed && !localSubs.includes(cleanTitle)) {
-                    localSubs.push(cleanTitle);
-                    setStoredSubscribedSeries(localSubs);
-                } else if (!isReallySubscribed && localSubs.includes(cleanTitle)) {
-                    setStoredSubscribedSeries(localSubs.filter(s => s !== cleanTitle));
-                }
-            } catch (err) {}
         }
 
-        // Alterna entre Inscrever-se e Inscrito com bloqueio absoluto de duplicidade
+        // Ação de Inscrever-se / Desinscrever-se (Resposta visual no mesmo milissegundo)
         async function handleUnifiedSeriesSubscription(seriesTitle) {
             // Se o usuário não estiver logado: abre imediatamente o modal de login
-            if (!currentUserEmail || !auth.currentUser) {
+            if (!currentUserEmail) {
                 openAuthModal();
                 return;
             }
@@ -14492,79 +14475,67 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             const cleanTitle = (seriesTitle || "").trim();
             if (!cleanTitle) return;
 
-            // Bloqueia múltiplos cliques rápidos
-            if (isSubscriptionActionPending) return;
-            isSubscriptionActionPending = true;
+            // 1. RESPOSTA VISUAL IMEDIATA (OPTIMISTIC UI): NUNCA CONGELA O BOTÃO
+            let mySubs = getStoredSubscribedSeries();
+            const isCurrentlySubscribed = mySubs.includes(cleanTitle);
+            const willSubscribe = !isCurrentlySubscribed;
 
+            if (willSubscribe) {
+                mySubs.push(cleanTitle);
+            } else {
+                mySubs = mySubs.filter(s => s !== cleanTitle);
+            }
+            setStoredSubscribedSeries(mySubs);
+
+            // Muda o botão de cor e texto instantaneamente
+            updateAllSubscriptionButtonsOnScreen(cleanTitle, willSubscribe);
+
+            // Ajusta o contador de inscritos na tela de imediato
+            const channelSubsEl = document.getElementById("channelSubsCountText");
+            const drawerSubsEl = document.getElementById("drawerSeriesInfoSubs");
+            let currentDisplayedSubs = 0;
+            if (channelSubsEl) {
+                const matchDigits = channelSubsEl.textContent.match(/\d+/);
+                currentDisplayedSubs = matchDigits ? Number(matchDigits[0]) : 0;
+            }
+            const updatedDisplayCount = willSubscribe ? (currentDisplayedSubs + 1) : Math.max(0, currentDisplayedSubs - 1);
+            const formattedLabel = formatSubscribersCountDisplay(updatedDisplayCount);
+            if (channelSubsEl) channelSubsEl.textContent = formattedLabel;
+            if (drawerSubsEl) drawerSubsEl.textContent = formattedLabel;
+
+            showToast(willSubscribe ? `Inscrição confirmada em ${cleanTitle}!` : `Inscrição cancelada.`);
+
+            // 2. SINCRONIZAÇÃO EM SEGUNDO PLANO COM O BANCO DE DADOS (SEM TRAVAR A TELA)
             try {
-                const subDocKey = cleanTitle.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
-                const userSubRef = doc(db, `users/${auth.currentUser.uid}/series_subscriptions`, subDocKey);
-
-                // Consulta a inscrição atual da conta no banco
-                const userSubSnap = await getDoc(userSubRef);
-                const isAlreadySubscribed = userSubSnap.exists();
-                const willSubscribe = !isAlreadySubscribed;
-
-                // Localiza o documento da série mãe sem loop de onSnapshot
-                let seriesDocId = null;
-                const matchedSeries = availableSeriesList.find(s => s.title && s.title.toLowerCase().trim() === cleanTitle.toLowerCase());
-                if (matchedSeries) {
-                    seriesDocId = matchedSeries.id;
-                }
-
-                let currentTotalSubs = 0;
-                if (seriesDocId) {
-                    const sDocSnap = await getDoc(doc(db, "series", seriesDocId));
-                    if (sDocSnap.exists()) {
-                        currentTotalSubs = Number(sDocSnap.data().subscribersCount || 0);
-                    }
-                }
-
-                let newTotalSubs = 0;
+                const userKey = auth.currentUser ? auth.currentUser.uid : currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                const subDocKey = `${userKey}___${cleanTitle.toLowerCase().replace(/[^a-z0-9_-]/g, '_')}`;
+                const subDocRef = doc(db, "series_subscriptions", subDocKey);
 
                 if (willSubscribe) {
-                    // REGISTRA 1 ÚNICA INSCRIÇÃO PARA ESTA CONTA
-                    await setDoc(userSubRef, {
-                        series: cleanTitle,
+                    await setDoc(subDocRef, {
                         user: currentUserEmail,
+                        series: cleanTitle,
                         subscribedAt: serverTimestamp()
                     });
-                    newTotalSubs = currentTotalSubs + 1;
                 } else {
-                    // CANCELA A INSCRIÇÃO DA CONTA
-                    await deleteDoc(userSubRef);
-                    newTotalSubs = Math.max(0, currentTotalSubs - 1);
+                    await deleteDoc(subDocRef);
                 }
 
-                // Salva a contagem real única no documento da série
-                if (seriesDocId) {
-                    await setDoc(doc(db, "series", seriesDocId), { subscribersCount: newTotalSubs }, { merge: true });
-                    if (matchedSeries) matchedSeries.subscribersCount = newTotalSubs;
+                // Atualiza o documento mãe da série se existir no banco
+                let matchedSeries = availableSeriesList.find(s => s.title && s.title.toLowerCase().trim() === cleanTitle.toLowerCase());
+                if (matchedSeries && matchedSeries.id) {
+                    const seriesDocRef = doc(db, "series", matchedSeries.id);
+                    const sSnap = await getDoc(seriesDocRef);
+                    let dbSubs = 0;
+                    if (sSnap.exists()) {
+                        dbSubs = Number(sSnap.data().subscribersCount || 0);
+                    }
+                    const finalDbSubs = willSubscribe ? (dbSubs + 1) : Math.max(0, dbSubs - 1);
+                    await setDoc(seriesDocRef, { subscribersCount: finalDbSubs }, { merge: true });
+                    matchedSeries.subscribersCount = finalDbSubs;
                 }
-
-                // Atualiza o cache local da conta
-                let localSubs = getStoredSubscribedSeries();
-                if (willSubscribe) {
-                    if (!localSubs.includes(cleanTitle)) localSubs.push(cleanTitle);
-                } else {
-                    localSubs = localSubs.filter(s => s !== cleanTitle);
-                }
-                setStoredSubscribedSeries(localSubs);
-
-                // Atualiza todos os botões e contadores da tela
-                updateAllSubscriptionButtonsOnScreen(cleanTitle, willSubscribe);
-
-                const countLabel = formatSubscribersCountDisplay(newTotalSubs);
-                const channelSubsEl = document.getElementById("channelSubsCountText");
-                const drawerSubsEl = document.getElementById("drawerSeriesInfoSubs");
-                if (channelSubsEl) channelSubsEl.textContent = countLabel;
-                if (drawerSubsEl) drawerSubsEl.textContent = countLabel;
-
-                showToast(willSubscribe ? `Inscrição confirmada em ${cleanTitle}!` : `Inscrição cancelada.`);
             } catch (err) {
-                console.error("Erro na inscrição:", err);
-            } finally {
-                isSubscriptionActionPending = false;
+                console.error("Erro na sincronização da inscrição:", err);
             }
         }
 
@@ -14573,6 +14544,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 handleUnifiedSeriesSubscription(currentActiveSeriesName);
             };
         }
+
+        
 
         // Abre o Canal da Série e consolida todos os posts filhos
         async function openSeriesChannel(seriesName) {
