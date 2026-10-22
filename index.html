@@ -14385,8 +14385,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         // ==========================================================================
-        // SISTEMA UNIFICADO DE INSCRIÇÕES E CONTAGEM REAL (PLAYER, CANAL E SHORTS)
+        // SISTEMA DEFINITIVO: 1 INSCRIÇÃO POR CONTA (SEM DUPLICAÇÃO E SEM LOOP)
         // ==========================================================================
+        let isSubscriptionActionPending = false;
+
         function getStoredSubscribedSeries() {
             const key = currentUserEmail ? `subs_${currentUserEmail}` : "subs_guest";
             try {
@@ -14408,87 +14410,162 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             return `${formatNumber(num)} inscritos`;
         }
 
-        // Sincroniza o botão visual e os textos de inscritos da série
-        async function syncSeriesSubscriptionUI(seriesTitle, targetButtonEl) {
-            if (!seriesTitle) return;
-            const cleanTitle = seriesTitle.trim();
-
-            const mySubs = getStoredSubscribedSeries();
-            const isSubscribed = currentUserEmail ? mySubs.includes(cleanTitle) : false;
-
-            if (targetButtonEl) {
-                targetButtonEl.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
-                targetButtonEl.classList.toggle("subscribed", isSubscribed);
-            }
-
-            // Atualiza também os botões de outras telas se estiverem no DOM
+        // Atualiza todos os botões de inscrição visíveis no site de uma vez só
+        function updateAllSubscriptionButtonsOnScreen(seriesTitle, isSubscribed) {
+            // 1. Botão do Player de Vídeo
             const btnPlayerSub = document.getElementById("btnSubscribe");
-            if (btnPlayerSub && btnPlayerSub !== targetButtonEl) {
+            if (btnPlayerSub) {
                 btnPlayerSub.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
                 btnPlayerSub.classList.toggle("subscribed", isSubscribed);
             }
 
-            if (btnChannelSubscribe && btnChannelSubscribe !== targetButtonEl) {
+            // 2. Botão da Página do Canal da Série
+            if (btnChannelSubscribe) {
                 btnChannelSubscribe.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
                 btnChannelSubscribe.classList.toggle("subscribed", isSubscribed);
             }
+
+            // 3. Botões nos slides do Shorts/Reels
+            document.querySelectorAll(".short-full-slide-item").forEach(slide => {
+                const subBtn = slide.querySelector(".btnShortSubscribeTrigger");
+                const handleEl = slide.querySelector(".shorts-channel-handle-link");
+                if (subBtn && handleEl) {
+                    const slideSeries = handleEl.textContent.replace("@", "").trim().toLowerCase();
+                    const targetClean = seriesTitle.trim().toLowerCase().replace(/\s+/g, '');
+                    if (slideSeries === targetClean) {
+                        subBtn.textContent = isSubscribed ? "Inscrito" : "Inscrever-se";
+                        subBtn.classList.toggle("subscribed", isSubscribed);
+                    }
+                }
+            });
         }
 
-        // Ação unificada de inscrição com validação de login e contagem real no Firestore
+        // Sincroniza a inscrição com o banco do Firestore e com a interface
+        async function syncSeriesSubscriptionUI(seriesTitle, targetButtonEl) {
+            if (!seriesTitle) return;
+            const cleanTitle = seriesTitle.trim();
+
+            // Deslogado: sempre mostra botão branco "Inscrever-se"
+            if (!currentUserEmail || !auth.currentUser) {
+                if (targetButtonEl) {
+                    targetButtonEl.textContent = "Inscrever-se";
+                    targetButtonEl.classList.remove("subscribed");
+                }
+                return;
+            }
+
+            // 1. Renderização instantânea pelo cache local
+            const localSubs = getStoredSubscribedSeries();
+            const isSubbedLocally = localSubs.includes(cleanTitle);
+            if (targetButtonEl) {
+                targetButtonEl.textContent = isSubbedLocally ? "Inscrito" : "Inscrever-se";
+                targetButtonEl.classList.toggle("subscribed", isSubbedLocally);
+            }
+
+            // 2. Confirmação direta no Firestore pelo UID da conta
+            try {
+                const subDocKey = cleanTitle.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                const userSubRef = doc(db, `users/${auth.currentUser.uid}/series_subscriptions`, subDocKey);
+                const userSubSnap = await getDoc(userSubRef);
+                const isReallySubscribed = userSubSnap.exists();
+
+                updateAllSubscriptionButtonsOnScreen(cleanTitle, isReallySubscribed);
+
+                // Alinha o cache local com a verdade do banco
+                if (isReallySubscribed && !localSubs.includes(cleanTitle)) {
+                    localSubs.push(cleanTitle);
+                    setStoredSubscribedSeries(localSubs);
+                } else if (!isReallySubscribed && localSubs.includes(cleanTitle)) {
+                    setStoredSubscribedSeries(localSubs.filter(s => s !== cleanTitle));
+                }
+            } catch (err) {}
+        }
+
+        // Alterna entre Inscrever-se e Inscrito com bloqueio absoluto de duplicidade
         async function handleUnifiedSeriesSubscription(seriesTitle) {
-            // Se deslogado: abre na hora o modal de login
+            // Se o usuário não estiver logado: abre imediatamente o modal de login
             if (!currentUserEmail || !auth.currentUser) {
                 openAuthModal();
                 return;
             }
 
-            const cleanTitle = seriesTitle.trim();
+            const cleanTitle = (seriesTitle || "").trim();
             if (!cleanTitle) return;
 
-            let mySubs = getStoredSubscribedSeries();
-            const wasSubscribed = mySubs.includes(cleanTitle);
-            const nowSubscribed = !wasSubscribed;
+            // Bloqueia múltiplos cliques rápidos
+            if (isSubscriptionActionPending) return;
+            isSubscriptionActionPending = true;
 
-            if (nowSubscribed) {
-                mySubs.push(cleanTitle);
-            } else {
-                mySubs = mySubs.filter(s => s !== cleanTitle);
-            }
-            setStoredSubscribedSeries(mySubs);
-
-            // Atualiza botões imediatamente na interface
-            syncSeriesSubscriptionUI(cleanTitle);
-
-            // Busca a série correspondente no Firestore para atualizar a contagem real
             try {
-                const seriesQuerySnap = await onSnapshot(collection(db, "series"), async (snapshot) => {
-                    let seriesDocId = null;
-                    let currentSubsCount = 0;
+                const subDocKey = cleanTitle.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+                const userSubRef = doc(db, `users/${auth.currentUser.uid}/series_subscriptions`, subDocKey);
 
-                    snapshot.forEach(docSnap => {
-                        const d = docSnap.data();
-                        if (d.title && d.title.toLowerCase() === cleanTitle.toLowerCase()) {
-                            seriesDocId = docSnap.id;
-                            currentSubsCount = Number(d.subscribersCount || 0);
-                        }
-                    });
+                // Consulta a inscrição atual da conta no banco
+                const userSubSnap = await getDoc(userSubRef);
+                const isAlreadySubscribed = userSubSnap.exists();
+                const willSubscribe = !isAlreadySubscribed;
 
-                    if (seriesDocId) {
-                        const newCount = nowSubscribed ? (currentSubsCount + 1) : Math.max(0, currentSubsCount - 1);
-                        await setDoc(doc(db, "series", seriesDocId), { subscribersCount: newCount }, { merge: true });
+                // Localiza o documento da série mãe sem loop de onSnapshot
+                let seriesDocId = null;
+                const matchedSeries = availableSeriesList.find(s => s.title && s.title.toLowerCase().trim() === cleanTitle.toLowerCase());
+                if (matchedSeries) {
+                    seriesDocId = matchedSeries.id;
+                }
 
-                        const countLabel = formatSubscribersCountDisplay(newCount);
-                        const channelSubsEl = document.getElementById("channelSubsCountText");
-                        const drawerSubsEl = document.getElementById("drawerSeriesInfoSubs");
-                        if (channelSubsEl) channelSubsEl.textContent = countLabel;
-                        if (drawerSubsEl) drawerSubsEl.textContent = countLabel;
+                let currentTotalSubs = 0;
+                if (seriesDocId) {
+                    const sDocSnap = await getDoc(doc(db, "series", seriesDocId));
+                    if (sDocSnap.exists()) {
+                        currentTotalSubs = Number(sDocSnap.data().subscribersCount || 0);
                     }
-                });
-            } catch (err) {
-                console.error("Erro na contagem de inscritos:", err);
-            }
+                }
 
-            showToast(nowSubscribed ? `Inscrição adicionada em ${cleanTitle}` : `Inscrição cancelada`);
+                let newTotalSubs = 0;
+
+                if (willSubscribe) {
+                    // REGISTRA 1 ÚNICA INSCRIÇÃO PARA ESTA CONTA
+                    await setDoc(userSubRef, {
+                        series: cleanTitle,
+                        user: currentUserEmail,
+                        subscribedAt: serverTimestamp()
+                    });
+                    newTotalSubs = currentTotalSubs + 1;
+                } else {
+                    // CANCELA A INSCRIÇÃO DA CONTA
+                    await deleteDoc(userSubRef);
+                    newTotalSubs = Math.max(0, currentTotalSubs - 1);
+                }
+
+                // Salva a contagem real única no documento da série
+                if (seriesDocId) {
+                    await setDoc(doc(db, "series", seriesDocId), { subscribersCount: newTotalSubs }, { merge: true });
+                    if (matchedSeries) matchedSeries.subscribersCount = newTotalSubs;
+                }
+
+                // Atualiza o cache local da conta
+                let localSubs = getStoredSubscribedSeries();
+                if (willSubscribe) {
+                    if (!localSubs.includes(cleanTitle)) localSubs.push(cleanTitle);
+                } else {
+                    localSubs = localSubs.filter(s => s !== cleanTitle);
+                }
+                setStoredSubscribedSeries(localSubs);
+
+                // Atualiza todos os botões e contadores da tela
+                updateAllSubscriptionButtonsOnScreen(cleanTitle, willSubscribe);
+
+                const countLabel = formatSubscribersCountDisplay(newTotalSubs);
+                const channelSubsEl = document.getElementById("channelSubsCountText");
+                const drawerSubsEl = document.getElementById("drawerSeriesInfoSubs");
+                if (channelSubsEl) channelSubsEl.textContent = countLabel;
+                if (drawerSubsEl) drawerSubsEl.textContent = countLabel;
+
+                showToast(willSubscribe ? `Inscrição confirmada em ${cleanTitle}!` : `Inscrição cancelada.`);
+            } catch (err) {
+                console.error("Erro na inscrição:", err);
+            } finally {
+                isSubscriptionActionPending = false;
+            }
         }
 
         if (btnChannelSubscribe) {
