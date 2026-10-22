@@ -12157,11 +12157,23 @@
                     drawerShortsComments.classList.add("active");
                 });
 
-                // Compartilhar
+                // Compartilhar: Gera o link oficial com ?v= compatível com GitHub Pages
                 const btnShare = slide.querySelector(".btnShortShareTrigger");
-                btnShare.addEventListener("click", () => {
-                    navigator.clipboard.writeText(item.urlSelvagem || window.location.href);
-                    showToast("Link do Reels copiado!");
+                btnShare.addEventListener("click", async () => {
+                    const shareUrl = generateShareableVideoUrl(item.id);
+                    if (navigator.share) {
+                        navigator.share({
+                            title: item.name || "Reels",
+                            url: shareUrl
+                        }).catch(() => {});
+                    } else {
+                        try {
+                            await navigator.clipboard.writeText(shareUrl);
+                            showToast("Link do Reels copiado!");
+                        } catch (err) {
+                            prompt("Copie o link:", shareUrl);
+                        }
+                    }
                 });
 
                 shortsVerticalFeedContainer.appendChild(slide);
@@ -13388,14 +13400,31 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Compartilhar Nativo
+        // Função que gera a URL real compartilhável no padrão oficial do YouTube e compatível com GitHub Pages
+        function generateShareableVideoUrl(videoId) {
+            const baseUrl = window.location.origin + window.location.pathname;
+            return `${baseUrl}?v=${videoId}`;
+        }
+
+        // Compartilhar Oficial: Copia o link real no padrão ?v= compatível com GitHub Pages
         if (btnWatchShare) {
-            btnWatchShare.addEventListener("click", () => {
+            btnWatchShare.addEventListener("click", async () => {
+                if (!currentWatchVideoId) return;
+
+                const shareUrl = generateShareableVideoUrl(currentWatchVideoId);
+
                 if (navigator.share) {
-                    navigator.share({ title: watchVideoTitle.textContent, url: window.location.href }).catch(() => {});
+                    navigator.share({
+                        title: watchVideoTitle ? watchVideoTitle.textContent : "FruitSenpai",
+                        url: shareUrl
+                    }).catch(() => {});
                 } else {
-                    navigator.clipboard.writeText(window.location.href);
-                    showToast("Link copiado para a área de transferência!");
+                    try {
+                        await navigator.clipboard.writeText(shareUrl);
+                        showToast("Link do vídeo copiado!");
+                    } catch (err) {
+                        prompt("Copie o link do vídeo:", shareUrl);
+                    }
                 }
             });
         }
@@ -17461,7 +17490,27 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         });
 
+        // Leitor de Link Compartilhado: Abre o Player direto se o usuário entrar via link (?v=...)
+        async function checkUrlParamsAndOpenVideoOnLoad() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetVideoId = urlParams.get("v") || urlParams.get("video") || urlParams.get("fruta");
+
+            if (targetVideoId) {
+                try {
+                    const videoSnap = await getDoc(doc(db, "frutas", targetVideoId));
+                    if (videoSnap.exists()) {
+                        const videoData = { id: videoSnap.id, ...videoSnap.data() };
+                        openWatchScreen(videoData, videoData.id);
+                        showToast(`Carregando: ${videoData.name}`);
+                    }
+                } catch (err) {
+                    console.error("Erro ao carregar vídeo do link:", err);
+                }
+            }
+        }
+
         initAppTabsAndStorage();
+        checkUrlParamsAndOpenVideoOnLoad();
     </script>
 </body>
   </html>
