@@ -7006,7 +7006,7 @@
             display: flex;
         }
 
-        /* Trilho Superior de Avatares das Séries Seguidas (Print B e B1) */
+        /* Trilho Superior de Avatares das Séries Seguidas: Rola e some ao arrastar para cima */
         .subs-top-channels-bar {
             display: flex;
             align-items: center;
@@ -7016,9 +7016,9 @@
             scrollbar-width: none;
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             background-color: var(--yt-bg-main);
-            position: sticky;
-            top: var(--yt-header-h);
-            z-index: 40;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .subs-top-channels-bar::-webkit-scrollbar {
@@ -7472,10 +7472,10 @@
 
         <!-- Ações do Cabeçalho com Suporte Dinâmico (Prints A, B e C) -->
         <div class="yt-header-actions">
-            <!-- Sininho de Notificação (Exibido apenas quando logado no Print B; oculto no Print A) -->
+            <!-- Sininho de Notificação: Inicia oculto e recebe contagem semanal real de 1+ a 99+ -->
             <button class="yt-icon-btn" aria-label="Notificações" id="btnBell" style="display:none;">
                 <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
-                <span class="badge-notification">9+</span>
+                <span class="badge-notification" id="bellNotificationBadge" style="display:none;"></span>
             </button>
 
             <!-- Lupa de Pesquisa -->
@@ -12420,8 +12420,24 @@
                 headerWrapper.style.display = "block";
                 btnBell.style.display = currentUserEmail ? "flex" : "none";
                 btnSettingsTop.style.display = "none";
+                btnHeaderNewTabPlus.style.display = "flex";
+                btnHeaderTabCounter.style.display = "flex";
+                btnHeaderBrowserMenu.style.display = "flex";
+                document.getElementById("btnSearch").style.display = "flex";
                 feedContainer.style.display = "flex";
                 chipsBar.style.display = "flex";
+            }
+            // Na tela de Inscrições: Exibe o Logo FruitSenpai à esquerda e a Lupa de Pesquisa à direita (Fiel ao Print)
+            else if (screen === viewSubscriptions) {
+                headerWrapper.style.display = "block";
+                chipsBar.style.display = "none";
+                btnBell.style.display = "none";
+                btnSettingsTop.style.display = "none";
+                btnHeaderNewTabPlus.style.display = "none";
+                btnHeaderTabCounter.style.display = "none";
+                btnHeaderBrowserMenu.style.display = "none";
+                document.getElementById("btnSearch").style.display = "flex";
+                viewSubscriptions.classList.add("active");
             }
             // Na tela Você (A2): Esconde o sino e exibe apenas 1 lupa e 1 engrenagem
             else if (screen === viewYou) {
@@ -13085,14 +13101,15 @@
                         }
                     });
 
-                    // 1. ATUALIZAÇÃO REAL DO SININHO NO TOPO (1+ a 99+)
-                    const bellBadge = document.querySelector("#btnBell .badge-notification");
+                    // 1. ATUALIZAÇÃO DO SININHO: Contagem legítima de postagens da semana (ex: 20+)
+                    const bellBadge = document.getElementById("bellNotificationBadge") || document.querySelector("#btnBell .badge-notification");
                     if (bellBadge) {
-                        if (totalNewWeeklyEpisodesCount > 0) {
+                        if (currentUserEmail && totalNewWeeklyEpisodesCount > 0) {
                             bellBadge.textContent = totalNewWeeklyEpisodesCount > 99 ? "99+" : `${totalNewWeeklyEpisodesCount}+`;
                             bellBadge.style.display = "flex";
                         } else {
                             bellBadge.style.display = "none";
+                            bellBadge.textContent = "";
                         }
                     }
 
@@ -13153,7 +13170,7 @@
             subsTopChannelsBar.appendChild(arrowBtn);
         }
 
-        // Renderiza a página "Todas as inscrições" (Print B2)
+        // Renderiza a página "Todas as inscrições" com clique na foto/nome levando à série (Print B2)
         function renderAllSubscriptionsPage(subscribedList, seriesMap, latestTimeMap, weekMs, now) {
             if (!allSubsVerticalContainer) return;
             allSubsVerticalContainer.innerHTML = "";
@@ -13168,14 +13185,22 @@
                 row.className = "all-subs-channel-row";
                 row.innerHTML = `
                     <div class="all-subs-channel-left">
-                        <div class="all-subs-avatar">
+                        <div class="all-subs-avatar btnOpenSeriesFromAllSubsRow">
                             <img src="${escapeHtml(cover)}" alt="${escapeHtml(seriesName)}">
                         </div>
-                        <span class="all-subs-name-text" title="${escapeHtml(seriesName)}">${escapeHtml(seriesName)}</span>
+                        <span class="all-subs-name-text btnOpenSeriesFromAllSubsRow" title="${escapeHtml(seriesName)}">${escapeHtml(seriesName)}</span>
                     </div>
                     <!-- Bolinha no Print B2 indicando novos vídeos de até 1 semana -->
                     <span class="all-subs-status-dot ${hasNewEpisodeInWeek ? '' : 'hidden'}"></span>
                 `;
+
+                // Clicar na foto redonda ou no nome da série abre a página oficial da série
+                row.querySelectorAll(".btnOpenSeriesFromAllSubsRow").forEach(el => {
+                    el.onclick = (e) => {
+                        e.stopPropagation();
+                        openSeriesChannel(seriesName);
+                    };
+                });
 
                 row.onclick = () => {
                     openSeriesChannel(seriesName);
