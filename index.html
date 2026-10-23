@@ -11048,6 +11048,9 @@
         const db = getFirestore(app);
         const frutasColecao = collection(db, "frutas");
 
+        // Cache global de episódios declarado no topo para evitar erro de inicialização
+        let loadedEpisodesCache = [];
+
         // Elementos do DOM
         const fruitInput = document.getElementById("fruitInput");
         const fruitChannel = document.getElementById("fruitChannel");
@@ -12180,7 +12183,7 @@
         });
                     
 
-        // 3. ONSNAPSHOT EM TEMPO REAL: ATUALIZA O FEED E O SININHO DIRETO NA PÁGINA INICIAL
+        // 3. ONSNAPSHOT EM TEMPO REAL: EXIBE O "PARA VOCÊ" E ATUALIZA O SININHO NA HORA
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
             dynamicFirebaseFeed.innerHTML = "";
@@ -12200,11 +12203,77 @@
                 }
             });
 
-            // Mantém o cache de episódios atualizado na memória
+            // Atualiza o cache global na memória
             loadedEpisodesCache = allDatabaseEpisodes;
 
-            // Atualiza o sininho de notificações em tempo real direto na tela inicial
+            // Ordena os mais recentes primeiro
+            episodeList.sort((a, b) => {
+                const timeA = a.timestamp && a.timestamp.seconds ? a.timestamp.seconds : 0;
+                const timeB = b.timestamp && b.timestamp.seconds ? b.timestamp.seconds : 0;
+                return timeB - timeA;
+            });
+
+            // Limite de 8 vídeos no 'Para você'
+            const top8Episodes = episodeList.slice(0, 8);
+
+            top8Episodes.forEach((item) => {
+                const card = document.createElement("article");
+                card.className = "fs-video-card-mini";
+                const ageRating = item.ratingBadge || (item.isAdult ? "18+" : "12+");
+
+                // Foto de Capa da Série no avatar redondo
+                const seriesAvatarPhoto = item.seriesCover || item.thumbUrl || "";
+
+                // Tempo relativo real calculado da postagem
+                const realTimeAgoText = formatTimeAgo(item.timestamp || item.createdAt);
+
+                card.innerHTML = `
+                    <div class="yt-thumbnail-wrapper" style="cursor:pointer;">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
+                        <span class="fs-badge-age">${escapeHtml(ageRating)}</span>
+                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                    </div>
+                    <div class="fs-video-info-mini">
+                        <div class="fs-channel-avatar-mini">
+                            ${seriesAvatarPhoto 
+                                ? `<img src="${escapeHtml(seriesAvatarPhoto)}" alt="${escapeHtml(item.channel || 'Série')}">` 
+                                : `<span style="background:#cc0000; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;">${(item.channel || "F").charAt(0).toUpperCase()}</span>`
+                            }
+                        </div>
+                        <div class="fs-video-details-mini" style="cursor:pointer;">
+                            <h4 class="fs-video-title-mini">${escapeHtml(item.name)}</h4>
+                            <div class="fs-video-meta-mini">
+                                <span>${escapeHtml(item.channel || "Fruit Senpai")}</span>
+                                <span>${formatNumber(item.viewsCount || 0)} visualizações • ${realTimeAgoText}</span>
+                            </div>
+                        </div>
+                        <button class="fs-kebab-btn-mini btnOpenVideoOptions" data-id="${item.id}" type="button" aria-label="Mais opções">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    </div>
+                `;
+
+                // Clique no card abre o player do vídeo
+                card.onclick = (e) => {
+                    if (e.target.closest(".btnOpenVideoOptions")) return;
+                    openWatchScreen(item, item.id);
+                };
+
+                const kebabBtn = card.querySelector(".btnOpenVideoOptions");
+                if (kebabBtn) {
+                    kebabBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        currentWatchVideoId = item.id;
+                        drawerVideoKebab.classList.add("active");
+                    };
+                }
+
+                dynamicFirebaseFeed.appendChild(card);
+            });
+
+            // Atualiza o sininho de notificações imediatamente na tela inicial
             updateWeeklyNotificationsBellCount();
+        });
 
             // Ordena os mais recentes primeiro
             episodeList.sort((a, b) => {
@@ -19302,21 +19371,27 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         // ==========================================================================
-        // CÁLCULO DO SININHO EM TEMPO REAL DIRETO NA PÁGINA INICIAL (SEM ABRIR NADA)
+        // CÁLCULO DO SININHO COM LEITURA IMEDIATA (DIRETO NO FEED INICIAL)
         // ==========================================================================
         function updateWeeklyNotificationsBellCount() {
             const bellBadge = document.getElementById("bellNotificationBadge") || document.querySelector("#btnBell .badge-notification");
             if (!bellBadge) return;
 
-            // Se estiver deslogado, oculta o badge
-            if (!currentUserEmail) {
-                bellBadge.style.display = "none";
-                bellBadge.textContent = "";
-                return;
+            // Busca as inscrições salvas no aparelho mesmo antes do Firebase Auth terminar de carregar
+            let mySubs = getStoredSubscribedSeries();
+            if (!mySubs || mySubs.length === 0) {
+                for (let i = 0; i < localStorage.length; i++) {
+                    const k = localStorage.key(i);
+                    if (k && k.startsWith("subs_")) {
+                        try {
+                            const list = JSON.parse(localStorage.getItem(k) || "[]");
+                            if (list.length > 0) { mySubs = list; break; }
+                        } catch(e) {}
+                    }
+                }
             }
 
-            const mySubs = getStoredSubscribedSeries();
-            if (mySubs.length === 0) {
+            if (!mySubs || mySubs.length === 0) {
                 bellBadge.style.display = "none";
                 bellBadge.textContent = "";
                 return;
@@ -19339,7 +19414,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 });
             }
 
-            // Exibe a contagem real (ex: 1+, 20+, até 99+) na mesma hora na tela inicial
+            // Exibe a contagem real na mesma hora no topo do Início
             if (totalWeeklyNewPosts > 0) {
                 bellBadge.textContent = totalWeeklyNewPosts > 99 ? "99+" : `${totalWeeklyNewPosts}+`;
                 bellBadge.style.display = "flex";
