@@ -7466,6 +7466,211 @@
             cursor: pointer;
             padding: 4px 8px;
         }
+
+        /* ==========================================================================
+           TELA OFICIAL DE NOTIFICAÇÕES (PRINTS A1, A2, B2, B3, C)
+           ========================================================================== */
+        .notifs-page-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: calc(100vh - var(--yt-bottom-nav-h));
+            background-color: var(--yt-bg-main);
+            padding-bottom: 90px;
+        }
+
+        .notifs-page-view.active {
+            display: flex;
+        }
+
+        /* Barra de Abas (Todos, Comentários, Menções) */
+        .notifs-pills-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px 12px 16px;
+            position: sticky;
+            top: 48px;
+            background-color: var(--yt-bg-main);
+            z-index: 40;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .notifs-pill-btn {
+            background-color: #272727;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            height: 32px;
+            padding: 0 14px;
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .notifs-pill-btn.active {
+            background-color: #ffffff;
+            color: #0f0f0f;
+            font-weight: 700;
+        }
+
+        /* Título Separador de Datas (Importante, Hoje, Ontem, etc.) */
+        .notifs-date-header {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #ffffff;
+            padding: 16px 16px 8px 16px;
+        }
+
+        /* Linha de Notificação de Vídeo / Episódio (Print A1) */
+        .notif-item-row {
+            display: flex;
+            align-items: flex-start;
+            padding: 10px 16px;
+            gap: 12px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notif-item-row:active {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Bolinha Azul de Notificação Não Aberta */
+        .notif-blue-dot {
+            width: 7px;
+            height: 7px;
+            min-width: 7px;
+            border-radius: 50%;
+            background-color: #3ea6ff;
+            margin-top: 14px;
+        }
+
+        .notif-blue-dot.hidden {
+            visibility: hidden;
+        }
+
+        .notif-avatar-circle {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .notif-avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .notif-texts-box {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .notif-series-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .notif-episode-name {
+            font-size: 13px;
+            color: #dddddd;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .notif-time-ago {
+            font-size: 11.5px;
+            color: #aaaaaa;
+            margin-top: 2px;
+        }
+
+        .notif-thumb-box {
+            width: 106px;
+            min-width: 106px;
+            height: 60px;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            flex-shrink: 0;
+        }
+
+        .notif-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .notif-kebab-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .notif-kebab-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
+        /* Notificação de Comentário (Print B2) */
+        .notif-comment-text {
+            font-size: 13px;
+            color: #dddddd;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* Tela Vazia de Menções (Print C) */
+        .notif-empty-mentions-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px;
+            text-align: center;
+            color: #777777;
+            gap: 16px;
+        }
+
+        .notif-empty-mentions-box svg {
+            width: 110px;
+            height: 110px;
+            fill: #444444;
+        }
+
+        .notif-empty-mentions-box span {
+            font-size: 15px;
+            font-weight: 500;
+            color: #aaaaaa;
+        }
     </style>
 </head>
 <body>
@@ -9606,6 +9811,92 @@
         <div class="undo-hide-snackbar" id="snackbarUndoHideShorts">
             <span>Shorts oculto</span>
             <button class="undo-hide-btn" id="btnUndoHideShortsAction" type="button">Desfazer</button>
+        </div>
+
+        <!-- ==========================================================================
+             TELA OFICIAL DE NOTIFICAÇÕES (PRINTS A1, A2, B2, B3, C)
+             ========================================================================== -->
+        <section class="yt-subview notifs-page-view" id="viewNotifications">
+            <!-- Topo Oficial de Notificações com Voltar, Cast, Lupa e Kebab -->
+            <div style="height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:#0f0f0f; position:sticky; top:0; z-index:50;">
+                <div style="display:flex; align-items:center; gap:16px;">
+                    <button class="yt-icon-btn" id="btnBackFromNotifications" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span style="font-size:18px; font-weight:700; color:#ffffff;">Notificações</span>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn" type="button" aria-label="Transmitir"><svg viewBox="0 0 24 24"><path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></button>
+                    <button class="yt-icon-btn" type="button" aria-label="Pesquisar"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
+                    <button class="yt-icon-btn" type="button" aria-label="Mais opções"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                </div>
+            </div>
+
+            <!-- Barra de Filtros: Todos, Comentários, Menções -->
+            <div class="notifs-pills-bar">
+                <button class="notifs-pill-btn active" id="pillNotifsTodos" type="button">Todos</button>
+                <button class="notifs-pill-btn" id="pillNotifsComentarios" type="button">Comentários</button>
+                <button class="notifs-pill-btn" id="pillNotifsMencoes" type="button">Menções</button>
+            </div>
+
+            <!-- Conteúdo Dinâmico das Notificações -->
+            <div id="notifsDynamicContainer" style="display:flex; flex-direction:column;"></div>
+        </section>
+
+        <!-- GAVETA PRINT A2: OPÇÕES DA NOTIFICAÇÃO DE VÍDEO (100% SVG) -->
+        <div class="accounts-drawer" id="drawerNotifItemA2" style="z-index: 10030;">
+            <div class="accounts-sheet" style="padding: 10px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnNotifA2SaveWatchLater">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        <span style="font-size:14.5px;">Salvar em "Assistir mais tarde"</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnNotifA2Hide">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        <span style="font-size:14.5px;">Ocultar esta notificação</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnNotifA2ShowLess">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
+                        <span style="font-size:14.5px;" id="lblNotifA2ShowLess">Mostrar menos</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnNotifA2DisableSeries">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zM4.34 2.93L2.93 4.34l18.14 18.14 1.41-1.41L4.34 2.93z"/></svg>
+                        <span style="font-size:14.5px;" id="lblNotifA2DisableSeries">Desativar todas as notificações</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT B3: OPÇÕES DA NOTIFICAÇÃO DE COMENTÁRIO (100% SVG) -->
+        <div class="accounts-drawer" id="drawerNotifCommentB3" style="z-index: 10030;">
+            <div class="accounts-sheet" style="padding: 10px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnNotifB3Hide">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        <span style="font-size:14.5px;">Ocultar esta notificação</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnNotifB3MuteUser">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zM4.34 2.93L2.93 4.34l18.14 18.14 1.41-1.41L4.34 2.93z"/></svg>
+                        <span style="font-size:14.5px;" id="lblNotifB3MuteUser">Desativar som do usuário</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnNotifB3MuteActivity">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zM4.34 2.93L2.93 4.34l18.14 18.14 1.41-1.41L4.34 2.93z"/></svg>
+                        <span style="font-size:14.5px;" id="lblNotifB3MuteActivity">Desativar notificações de atividade</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ==========================================================================
@@ -12012,6 +12303,18 @@
         const btnBell = document.getElementById("btnBell");
         const btnSettingsTop = document.getElementById("btnSettingsTop");
 
+        // O Sininho abre a página oficial de Notificações
+        if (btnBell) {
+            btnBell.addEventListener("click", () => {
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
+                openScreen(viewNotifications);
+                loadNotificationsPage("todos");
+            });
+        }
+
         // Elementos da Tela Você
         const youLoggedOut = document.getElementById("youLoggedOut");
         const youLoggedIn = document.getElementById("youLoggedIn");
@@ -12426,7 +12729,7 @@
 
             feedContainer.style.display = "none";
             chipsBar.style.display = "none";
-            document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view, .notifs-page-view").forEach(s => s.classList.remove("active"));
 
             // Na tela Inicial (Home): Mostra logotipo, lupa e o sino (apenas se logado)
             if (screen === "home") {
@@ -18653,6 +18956,339 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 checkUrlParamsAndOpenVideoOnLoad();
             }
         });
+
+        // ==========================================================================
+        // LÓGICA DE NOTIFICAÇÕES (TODOS, COMENTÁRIOS, MENÇÕES) - ZERO GASTO EXTRA
+        // ==========================================================================
+        const viewNotifications = document.getElementById("viewNotifications");
+        const btnBackFromNotifications = document.getElementById("btnBackFromNotifications");
+        const notifsDynamicContainer = document.getElementById("notifsDynamicContainer");
+
+        const pillNotifsTodos = document.getElementById("pillNotifsTodos");
+        const pillNotifsComentarios = document.getElementById("pillNotifsComentarios");
+        const pillNotifsMencoes = document.getElementById("pillNotifsMencoes");
+
+        const drawerNotifItemA2 = document.getElementById("drawerNotifItemA2");
+        const btnNotifA2SaveWatchLater = document.getElementById("btnNotifA2SaveWatchLater");
+        const btnNotifA2Hide = document.getElementById("btnNotifA2Hide");
+        const lblNotifA2ShowLess = document.getElementById("lblNotifA2ShowLess");
+        const lblNotifA2DisableSeries = document.getElementById("lblNotifA2DisableSeries");
+
+        const drawerNotifCommentB3 = document.getElementById("drawerNotifCommentB3");
+        const btnNotifB3Hide = document.getElementById("btnNotifB3Hide");
+        const lblNotifB3MuteUser = document.getElementById("lblNotifB3MuteUser");
+
+        let activeNotifsTab = "todos";
+        let currentTargetNotifEp = null;
+        let currentTargetNotifComment = null;
+        let hiddenNotifsIdsSet = new Set();
+
+        function getReadNotifsIdsSet() {
+            const key = currentUserEmail ? `read_notifs_${currentUserEmail}` : "read_notifs_guest";
+            try {
+                return new Set(JSON.parse(localStorage.getItem(key) || "[]"));
+            } catch(e) {
+                return new Set();
+            }
+        }
+
+        function markNotifAsReadInStorage(id) {
+            const key = currentUserEmail ? `read_notifs_${currentUserEmail}` : "read_notifs_guest";
+            const set = getReadNotifsIdsSet();
+            set.add(id);
+            localStorage.setItem(key, JSON.stringify(Array.from(set)));
+        }
+
+        if (btnBackFromNotifications) {
+            btnBackFromNotifications.addEventListener("click", () => {
+                openScreen("home");
+            });
+        }
+
+        // Fechar gavetas ao clicar fora delas
+        if (drawerNotifItemA2) {
+            drawerNotifItemA2.addEventListener("click", (e) => {
+                if (e.target === drawerNotifItemA2) drawerNotifItemA2.classList.remove("active");
+            });
+        }
+
+        if (drawerNotifCommentB3) {
+            drawerNotifCommentB3.addEventListener("click", (e) => {
+                if (e.target === drawerNotifCommentB3) drawerNotifCommentB3.classList.remove("active");
+            });
+        }
+
+        // Alternância entre as 3 abas
+        function switchNotifsTab(tabName) {
+            activeNotifsTab = tabName;
+            [pillNotifsTodos, pillNotifsComentarios, pillNotifsMencoes].forEach(p => p.classList.remove("active"));
+
+            if (tabName === "todos") pillNotifsTodos.classList.add("active");
+            else if (tabName === "comentarios") pillNotifsComentarios.classList.add("active");
+            else if (tabName === "mencoes") pillNotifsMencoes.classList.add("active");
+
+            loadNotificationsPage(tabName);
+        }
+
+        pillNotifsTodos.addEventListener("click", () => switchNotifsTab("todos"));
+        pillNotifsComentarios.addEventListener("click", () => switchNotifsTab("comentarios"));
+        pillNotifsMencoes.addEventListener("click", () => switchNotifsTab("mencoes"));
+
+        // Carrega o conteúdo aproveitando a memória existente (zero leituras extras no Firebase)
+        function loadNotificationsPage(tabName) {
+            if (!notifsDynamicContainer) return;
+            notifsDynamicContainer.innerHTML = "";
+
+            if (tabName === "todos") {
+                renderNotificationsTodosTab();
+            } else if (tabName === "comentarios") {
+                renderNotificationsCommentsTab();
+            } else if (tabName === "mencoes") {
+                renderNotificationsMentionsTab();
+            }
+        }
+
+        // 1. ABA "TODOS" (PRINT A1 E A2)
+        function renderNotificationsTodosTab() {
+            const mySubs = getStoredSubscribedSeries();
+            const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+            const readSet = getReadNotifsIdsSet();
+
+            // Filtra vídeos das séries seguidas dos últimos 7 dias usando o cache da memória
+            const weeklyNotifs = loadedEpisodesCache.filter(ep => {
+                if (hiddenNotifsIdsSet.has(ep.id)) return false;
+                const seriesName = (ep.channel || "").trim();
+                const isSubbed = mySubs.some(s => s.toLowerCase() === seriesName.toLowerCase());
+                if (!isSubbed) return false;
+
+                const epTime = ep.timestamp?.seconds ? (ep.timestamp.seconds * 1000) : (ep.createdAt?.seconds ? (ep.createdAt.seconds * 1000) : new Date(ep.timestamp || ep.createdAt || 0).getTime());
+                return (now - epTime) <= ONE_WEEK_MS && (now - epTime) >= 0;
+            });
+
+            if (weeklyNotifs.length === 0) {
+                notifsDynamicContainer.innerHTML = `<div style="padding:60px 24px; text-align:center; color:#888; font-size:14px;">Nenhuma nova notificação esta semana.</div>`;
+                return;
+            }
+
+            // Separa os 3 mais vistos da semana para "Importante"
+            const sortedByViews = [...weeklyNotifs].sort((a, b) => Number(b.viewsCount || 0) - Number(a.viewsCount || 0));
+            const importanteList = sortedByViews.slice(0, 3);
+            const importanteIds = new Set(importanteList.map(item => item.id));
+
+            // Agrupa os demais por dias (Hoje, Ontem, etc.)
+            const remaining = weeklyNotifs.filter(item => !importanteIds.has(item.id));
+            remaining.sort((a, b) => {
+                const tA = (a.timestamp && a.timestamp.seconds) ? a.timestamp.seconds : 0;
+                const tB = (b.timestamp && b.timestamp.seconds) ? b.timestamp.seconds : 0;
+                return tB - tA;
+            });
+
+            // Seção Importante
+            if (importanteList.length > 0) {
+                const hImp = document.createElement("div");
+                hImp.className = "notifs-date-header";
+                hImp.textContent = "Importante";
+                notifsDynamicContainer.appendChild(hImp);
+
+                importanteList.forEach(ep => {
+                    notifsDynamicContainer.appendChild(createNotificationItemRow(ep, readSet));
+                });
+            }
+
+            // Seções por Data
+            const groupsByDateLabel = {};
+            remaining.forEach(ep => {
+                const epTime = ep.timestamp?.seconds ? (ep.timestamp.seconds * 1000) : (ep.createdAt?.seconds ? (ep.createdAt.seconds * 1000) : new Date(ep.timestamp || ep.createdAt || 0).getTime());
+                const diffHours = Math.floor((now - epTime) / (3600 * 1000));
+                const diffDays = Math.floor(diffHours / 24);
+
+                let label = "Hoje";
+                if (diffDays === 1) label = "Ontem";
+                else if (diffDays === 2) label = "Anteontem";
+                else if (diffDays > 2) label = `há ${diffDays} dias`;
+
+                if (!groupsByDateLabel[label]) groupsByDateLabel[label] = [];
+                groupsByDateLabel[label].push(ep);
+            });
+
+            Object.keys(groupsByDateLabel).forEach(label => {
+                const hDate = document.createElement("div");
+                hDate.className = "notifs-date-header";
+                hDate.textContent = label;
+                notifsDynamicContainer.appendChild(hDate);
+
+                groupsByDateLabel[label].forEach(ep => {
+                    notifsDynamicContainer.appendChild(createNotificationItemRow(ep, readSet));
+                });
+            });
+        }
+
+        // Cria o card de linha da notificação (Print A1)
+        function createNotificationItemRow(ep, readSet) {
+            const isRead = readSet.has(ep.id);
+            const row = document.createElement("div");
+            row.className = "notif-item-row";
+            row.setAttribute("data-notif-id", ep.id);
+
+            const seriesName = ep.channel || "Série";
+            const seriesAvatar = ep.seriesCover || ep.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200";
+            const epThumb = ep.thumbUrl || seriesAvatar;
+
+            row.innerHTML = `
+                <!-- Bolinha Azul: Some ao abrir o episódio (Seta Verde Print A1) -->
+                <span class="notif-blue-dot ${isRead ? 'hidden' : ''}"></span>
+                <div class="notif-avatar-circle">
+                    <img src="${escapeHtml(seriesAvatar)}" alt="Avatar">
+                </div>
+                <div class="notif-texts-box">
+                    <!-- Seta Vermelha: Nome da Série (1 linha com ...) -->
+                    <div class="notif-series-title">${escapeHtml(seriesName)}</div>
+                    <!-- Seta Azul: Enviado: Nome do Episódio (2 linhas com ...) -->
+                    <div class="notif-episode-name">Enviado: ${escapeHtml(ep.name || 'Novo episódio')}</div>
+                    <!-- Seta Laranja: Horário relativo -->
+                    <div class="notif-time-ago">${formatTimeAgo(ep.timestamp || ep.createdAt)}</div>
+                </div>
+                <!-- Seta Rosa: Card horizontal da capa do episódio -->
+                <div class="notif-thumb-box">
+                    <img src="${escapeHtml(epThumb)}" alt="Capa">
+                </div>
+                <!-- Seta Branca: Kebab Vertical -->
+                <button class="notif-kebab-btn btnNotifItemKebabTrigger" type="button" aria-label="Opções">
+                    <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </button>
+            `;
+
+            // Ao clicar no card, marca a bolinha como lida e abre o player
+            row.onclick = (e) => {
+                if (e.target.closest(".btnNotifItemKebabTrigger")) return;
+                markNotifAsReadInStorage(ep.id);
+                const dot = row.querySelector(".notif-blue-dot");
+                if (dot) dot.classList.add("hidden");
+                openWatchScreen(ep, ep.id);
+            };
+
+            const kebab = row.querySelector(".btnNotifItemKebabTrigger");
+            if (kebab) {
+                kebab.onclick = (e) => {
+                    e.stopPropagation();
+                    currentTargetNotifEp = ep;
+                    lblNotifA2ShowLess.textContent = `Mostrar menos de ${seriesName}`;
+                    lblNotifA2DisableSeries.textContent = `Desativar todas as notificações de ${seriesName}`;
+                    drawerNotifItemA2.classList.add("active");
+                };
+            }
+
+            return row;
+        }
+
+        // Ações do Modal Print A2
+        if (btnNotifA2SaveWatchLater) {
+            btnNotifA2SaveWatchLater.onclick = () => {
+                drawerNotifItemA2.classList.remove("active");
+                showToast("Salvo em Assistir mais tarde");
+            };
+        }
+
+        if (btnNotifA2Hide) {
+            btnNotifA2Hide.onclick = () => {
+                drawerNotifItemA2.classList.remove("active");
+                if (currentTargetNotifEp) {
+                    hiddenNotifsIdsSet.add(currentTargetNotifEp.id);
+                    const el = document.querySelector(`.notif-item-row[data-notif-id="${currentTargetNotifEp.id}"]`);
+                    if (el) el.style.display = "none";
+                    showToast("Notificação ocultada");
+                }
+            };
+        }
+
+        // 2. ABA "COMENTÁRIOS" (PRINT B2 E B3)
+        function renderNotificationsCommentsTab() {
+            // Puxa os episódios postados pelo próprio usuário logado
+            const myEpisodes = loadedEpisodesCache.filter(ep => ep.author === currentUserEmail || ep.channel === getNameFromEmail(currentUserEmail));
+
+            if (myEpisodes.length === 0) {
+                notifsDynamicContainer.innerHTML = `<div style="padding:60px 24px; text-align:center; color:#888; font-size:14px;">Você ainda não postou episódios para receber comentários.</div>`;
+                return;
+            }
+
+            // Consulta apenas os comentários dos vídeos do usuário
+            myEpisodes.forEach(ep => {
+                onSnapshot(collection(db, `frutas/${ep.id}/comments`), (snap) => {
+                    snap.forEach(d => {
+                        const comm = d.data();
+                        const row = document.createElement("div");
+                        row.className = "notif-item-row";
+
+                        const userHandle = `@${(comm.user || 'usuario').split('@')[0]}`;
+                        const userInitial = userHandle.charAt(1).toUpperCase();
+
+                        row.innerHTML = `
+                            <!-- Seta Rosa Print B2: Avatar do usuário -->
+                            <div class="notif-avatar-circle" style="background:#cc0000; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">
+                                ${userInitial}
+                            </div>
+                            <div class="notif-texts-box">
+                                <!-- Seta Amarela Print B2: Nome do usuário -->
+                                <div class="notif-series-title">${escapeHtml(userHandle)}</div>
+                                <!-- Seta Verde Print B2: Comentou: "texto" -->
+                                <div class="notif-comment-text">Comentou: "${escapeHtml(comm.text)}"</div>
+                                <!-- Seta Azul Print B2: Data real do comentário -->
+                                <div class="notif-time-ago">${formatTimeAgo(comm.createdAt)}</div>
+                            </div>
+                            <!-- Miniatura do vídeo -->
+                            <div class="notif-thumb-box">
+                                <img src="${escapeHtml(ep.thumbUrl || ep.seriesCover || '')}" alt="Capa">
+                            </div>
+                            <button class="notif-kebab-btn btnNotifCommentKebabTrigger" type="button">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
+                        `;
+
+                        row.onclick = (e) => {
+                            if (e.target.closest(".btnNotifCommentKebabTrigger")) return;
+                            openWatchScreen(ep, ep.id);
+                        };
+
+                        const kebab = row.querySelector(".btnNotifCommentKebabTrigger");
+                        if (kebab) {
+                            kebab.onclick = (e) => {
+                                e.stopPropagation();
+                                currentTargetNotifComment = { ...comm, element: row };
+                                lblNotifB3MuteUser.textContent = `Desativar som de ${userHandle}`;
+                                drawerNotifCommentB3.classList.add("active");
+                            };
+                        }
+
+                        notifsDynamicContainer.appendChild(row);
+                    });
+                });
+            });
+        }
+
+        // Ações do Modal Print B3
+        if (btnNotifB3Hide) {
+            btnNotifB3Hide.onclick = () => {
+                drawerNotifCommentB3.classList.remove("active");
+                if (currentTargetNotifComment && currentTargetNotifComment.element) {
+                    currentTargetNotifComment.element.style.display = "none";
+                    showToast("Notificação ocultada");
+                }
+            };
+        }
+
+        // 3. ABA "MENÇÕES" (PRINT C)
+        function renderNotificationsMentionsTab() {
+            // Como menções ainda não possuem posts marcados, exibe fielmente a tela do Print C
+            notifsDynamicContainer.innerHTML = `
+                <div class="notif-empty-mentions-box">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.46.65.89 1.7 1.46 2.96 1.46 1.93 0 3.5-1.57 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
+                    </svg>
+                    <span>Ainda não há menções</span>
+                </div>
+            `;
+        }
 
         initAppTabsAndStorage();
         checkUrlParamsAndOpenVideoOnLoad();
