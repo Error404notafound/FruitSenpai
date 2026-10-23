@@ -9497,7 +9497,7 @@
         <!-- ==========================================================================
              TELA OFICIAL DA ABA DE INSCRIÇÕES (PRINTS A, A1, B, B1)
              ========================================================================== -->
-        <section class="subs-feed-view" id="viewSubscriptions">
+        <section class="yt-subview subs-feed-view" id="viewSubscriptions">
             <!-- Trilho Superior de Avatares das Séries Seguidas com Bolinha Azul (Print B e B1) -->
             <div class="subs-top-channels-bar" id="subsTopChannelsBar"></div>
 
@@ -12412,7 +12412,7 @@
 
             feedContainer.style.display = "none";
             chipsBar.style.display = "none";
-            document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view").forEach(s => s.classList.remove("active"));
 
             // Na tela Inicial (Home): Mostra logotipo, lupa e o sino (apenas se logado)
             if (screen === "home") {
@@ -12471,10 +12471,10 @@
             openScreen(viewYou);
         });
 
-        // Clicar em "Início" fecha qualquer criação ou grupo aberto e vai direto ao Feed Principal
+        // Clicar em "Início" fecha qualquer criação, grupo ou inscrições e vai direto ao Feed Principal
         document.getElementById("navHome").addEventListener("click", () => {
             screenNavigationHistory = [];
-            document.querySelectorAll(".group-screen-view").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".group-screen-view, .subs-feed-view, .all-subs-page-view, .all-subs-shorts-view").forEach(s => s.classList.remove("active"));
             document.querySelectorAll(".accounts-drawer").forEach(d => d.classList.remove("active"));
             document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
             document.getElementById("navHome").classList.add("active");
