@@ -12180,23 +12180,31 @@
         });
                     
 
-        // 3. ONSNAPSHOT EM TEMPO REAL: LIMITADO A 8 EPISÓDIOS (REELS NÃO APARECEM NO PARA VOCÊ)
+        // 3. ONSNAPSHOT EM TEMPO REAL: ATUALIZA O FEED E O SININHO DIRETO NA PÁGINA INICIAL
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
             dynamicFirebaseFeed.innerHTML = "";
 
             const episodeList = [];
+            const allDatabaseEpisodes = [];
 
             snapshot.forEach((docSnap) => {
-                const item = docSnap.data();
+                const item = { id: docSnap.id, ...docSnap.data() };
+                allDatabaseEpisodes.push(item);
 
                 // Reels não entram no feed "Para você"
                 if (item.contentType === "Reels") return;
 
                 if (item.videoUrl || item.contentType === "episode") {
-                    episodeList.push({ id: docSnap.id, ...item });
+                    episodeList.push(item);
                 }
             });
+
+            // Mantém o cache de episódios atualizado na memória
+            loadedEpisodesCache = allDatabaseEpisodes;
+
+            // Atualiza o sininho de notificações em tempo real direto na tela inicial
+            updateWeeklyNotificationsBellCount();
 
             // Ordena os mais recentes primeiro
             episodeList.sort((a, b) => {
@@ -12363,6 +12371,9 @@
                 navSubscriptions.style.display = "flex";
                 navYouIconLoggedOut.style.display = "none";
                 navYouAvatarLoggedIn.style.display = "flex";
+
+                // Atualiza a contagem semanal do sininho na hora em que o usuário faz login
+                updateWeeklyNotificationsBellCount();
 
                 const channelName = getNameFromEmail(currentUserEmail);
                 const initialLetter = channelName.charAt(0).toUpperCase();
@@ -19290,8 +19301,57 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             `;
         }
 
+        // ==========================================================================
+        // CÁLCULO DO SININHO EM TEMPO REAL DIRETO NA PÁGINA INICIAL (SEM ABRIR NADA)
+        // ==========================================================================
+        function updateWeeklyNotificationsBellCount() {
+            const bellBadge = document.getElementById("bellNotificationBadge") || document.querySelector("#btnBell .badge-notification");
+            if (!bellBadge) return;
+
+            // Se estiver deslogado, oculta o badge
+            if (!currentUserEmail) {
+                bellBadge.style.display = "none";
+                bellBadge.textContent = "";
+                return;
+            }
+
+            const mySubs = getStoredSubscribedSeries();
+            if (mySubs.length === 0) {
+                bellBadge.style.display = "none";
+                bellBadge.textContent = "";
+                return;
+            }
+
+            const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+            let totalWeeklyNewPosts = 0;
+
+            if (typeof loadedEpisodesCache !== "undefined" && Array.isArray(loadedEpisodesCache)) {
+                loadedEpisodesCache.forEach(ep => {
+                    const seriesName = (ep.channel || "").trim();
+                    const isSubscribed = mySubs.some(s => s.toLowerCase() === seriesName.toLowerCase());
+                    if (!isSubscribed) return;
+
+                    const epTime = ep.timestamp?.seconds ? (ep.timestamp.seconds * 1000) : (ep.createdAt?.seconds ? (ep.createdAt.seconds * 1000) : new Date(ep.timestamp || ep.createdAt || 0).getTime());
+                    if ((now - epTime) <= ONE_WEEK_MS && (now - epTime) >= 0) {
+                        totalWeeklyNewPosts++;
+                    }
+                });
+            }
+
+            // Exibe a contagem real (ex: 1+, 20+, até 99+) na mesma hora na tela inicial
+            if (totalWeeklyNewPosts > 0) {
+                bellBadge.textContent = totalWeeklyNewPosts > 99 ? "99+" : `${totalWeeklyNewPosts}+`;
+                bellBadge.style.display = "flex";
+            } else {
+                bellBadge.style.display = "none";
+                bellBadge.textContent = "";
+            }
+        }
+
         initAppTabsAndStorage();
         checkUrlParamsAndOpenVideoOnLoad();
+        updateWeeklyNotificationsBellCount();
     </script>
 </body>
   </html>
