@@ -9508,7 +9508,7 @@
         <!-- ==========================================================================
              TELA "TODAS AS INSCRIÇÕES" (PRINT B2 - ABERTA PELA SETA AZUL '>')
              ========================================================================== -->
-        <section class="all-subs-page-view" id="viewAllSubscriptionsList">
+        <section class="yt-subview all-subs-page-view" id="viewAllSubscriptionsList">
             <div style="height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:#0f0f0f; position:sticky; top:0; z-index:50;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <button class="yt-icon-btn" id="btnBackFromAllSubs" type="button" aria-label="Voltar">
@@ -9532,7 +9532,7 @@
         <!-- ==========================================================================
              TELA "VER TUDO" DOS SHORTS DAS INSCRIÇÕES (PRINT A3)
              ========================================================================== -->
-        <section class="all-subs-shorts-view" id="viewAllSubscribedShorts">
+        <section class="yt-subview all-subs-shorts-view" id="viewAllSubscribedShorts">
             <div style="height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:#000000; position:sticky; top:0; z-index:50;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <button class="yt-icon-btn" id="btnBackFromSubsShorts" type="button" aria-label="Voltar">
@@ -12412,8 +12412,7 @@
 
             feedContainer.style.display = "none";
             chipsBar.style.display = "none";
-            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
-            document.querySelectorAll(".group-screen-view").forEach(s => s.classList.remove("active"));
+            document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view").forEach(s => s.classList.remove("active"));
 
             // Na tela Inicial (Home): Mostra logotipo, lupa e o sino (apenas se logado)
             if (screen === "home") {
@@ -13020,10 +13019,16 @@
             });
         }
 
+        // Seta de Voltar (←) em Todas as Inscrições: Fecha a tela e retorna às Inscrições
         if (btnBackFromAllSubs) {
-            btnBackFromAllSubs.addEventListener("click", () => {
+            btnBackFromAllSubs.onclick = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (viewAllSubscriptionsList) {
+                    viewAllSubscriptionsList.classList.remove("active");
+                }
                 openScreen(viewSubscriptions, false);
-            });
+            };
         }
 
         if (btnBackFromSubsShorts) {
@@ -13170,7 +13175,7 @@
             subsTopChannelsBar.appendChild(arrowBtn);
         }
 
-        // Renderiza a página "Todas as inscrições" com clique na foto/nome levando à série (Print B2)
+        // Renderiza a página "Todas as inscrições" com clique na foto/nome fechando a lista e abrindo a série
         function renderAllSubscriptionsPage(subscribedList, seriesMap, latestTimeMap, weekMs, now) {
             if (!allSubsVerticalContainer) return;
             allSubsVerticalContainer.innerHTML = "";
@@ -13194,17 +13199,21 @@
                     <span class="all-subs-status-dot ${hasNewEpisodeInWeek ? '' : 'hidden'}"></span>
                 `;
 
-                // Clicar na foto redonda ou no nome da série abre a página oficial da série
-                row.querySelectorAll(".btnOpenSeriesFromAllSubsRow").forEach(el => {
-                    el.onclick = (e) => {
-                        e.stopPropagation();
-                        openSeriesChannel(seriesName);
-                    };
-                });
-
-                row.onclick = () => {
+                // Clicar na foto redonda, no nome ou na linha fecha a lista e abre a página da série
+                const goToSeriesAction = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (viewAllSubscriptionsList) {
+                        viewAllSubscriptionsList.classList.remove("active");
+                    }
                     openSeriesChannel(seriesName);
                 };
+
+                row.querySelectorAll(".btnOpenSeriesFromAllSubsRow").forEach(el => {
+                    el.onclick = goToSeriesAction;
+                });
+
+                row.onclick = goToSeriesAction;
 
                 allSubsVerticalContainer.appendChild(row);
             });
