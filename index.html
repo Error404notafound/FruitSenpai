@@ -11345,6 +11345,12 @@
                 card.className = "fs-video-card-mini";
                 const ageRating = item.ratingBadge || (item.isAdult ? "18+" : "12+");
 
+                // Seta Azul: Foto de Capa da Série no card redondo (com fallback da primeira letra se não houver foto)
+                const seriesAvatarPhoto = item.seriesCover || item.thumbUrl || "";
+
+                // Seta Verde: Cálculo exato do tempo relativo real da postagem
+                const realTimeAgoText = formatTimeAgo(item.timestamp || item.createdAt);
+
                 card.innerHTML = `
                     <div class="yt-thumbnail-wrapper" style="cursor:pointer;">
                         <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
@@ -11352,14 +11358,17 @@
                         <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                     </div>
                     <div class="fs-video-info-mini">
-                        <div class="fs-channel-avatar-mini" style="background:#cc0000;">
-                            ${(item.channel || "F").charAt(0).toUpperCase()}
+                        <div class="fs-channel-avatar-mini">
+                            ${seriesAvatarPhoto 
+                                ? `<img src="${escapeHtml(seriesAvatarPhoto)}" alt="${escapeHtml(item.channel || 'Série')}">` 
+                                : `<span style="background:#cc0000; width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;">${(item.channel || "F").charAt(0).toUpperCase()}</span>`
+                            }
                         </div>
                         <div class="fs-video-details-mini" style="cursor:pointer;">
                             <h4 class="fs-video-title-mini">${escapeHtml(item.name)}</h4>
                             <div class="fs-video-meta-mini">
                                 <span>${escapeHtml(item.channel || "Fruit Senpai")}</span>
-                                <span>${formatNumber(item.viewsCount || 0)} visualizações • ${item.timeAgo || "agora"}</span>
+                                <span>${formatNumber(item.viewsCount || 0)} visualizações • ${realTimeAgoText}</span>
                             </div>
                         </div>
                         <button class="fs-kebab-btn-mini btnOpenVideoOptions" data-id="${item.id}" type="button" aria-label="Mais opções">
@@ -13497,6 +13506,13 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             currentWatchVideoId = videoId;
             openScreen(viewWatchVideo);
 
+            // Atualiza a URL na barra do navegador para o link oficial do vídeo com ?v=ID
+            const cleanBaseUrl = window.location.origin + window.location.pathname;
+            const videoUrlWithQuery = `${cleanBaseUrl}?v=${videoId}`;
+            if (window.location.search !== `?v=${videoId}`) {
+                window.history.pushState({ videoId: videoId }, "", videoUrlWithQuery);
+            }
+
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
 
@@ -13591,6 +13607,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 btnBackFromWatch.onclick = () => {
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+
+                    // Restaura a URL para a página principal limpa sem o ?v=
+                    const cleanBaseUrl = window.location.origin + window.location.pathname;
+                    window.history.pushState({}, "", cleanBaseUrl);
+
                     openScreen("home");
                 };
             }
@@ -17508,6 +17529,23 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 }
             }
         }
+
+        // Sincroniza a navegação do botão Voltar do próprio celular ou do navegador
+        window.addEventListener("popstate", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const vParam = urlParams.get("v");
+
+            if (!vParam) {
+                // Se a URL voltou a ser a principal, fecha o player se estiver aberto
+                if (viewWatchVideo && viewWatchVideo.classList.contains("active")) {
+                    if (watchIframe) watchIframe.src = "";
+                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+                    openScreen("home", false);
+                }
+            } else if (vParam !== currentWatchVideoId) {
+                checkUrlParamsAndOpenVideoOnLoad();
+            }
+        });
 
         initAppTabsAndStorage();
         checkUrlParamsAndOpenVideoOnLoad();
