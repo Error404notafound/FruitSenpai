@@ -6989,6 +6989,469 @@
             height: 16px;
             fill: #aaaaaa;
         }
+
+        /* ==========================================================================
+           ESTILOS DA ABA DE INSCRIÇÕES (PRINTS A, A1, A2, A3, B, B1, B2, B3)
+           ========================================================================== */
+        .subs-feed-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: calc(100vh - var(--yt-bottom-nav-h));
+            background-color: var(--yt-bg-main);
+            padding-bottom: 90px;
+        }
+
+        .subs-feed-view.active {
+            display: flex;
+        }
+
+        /* Trilho Superior de Avatares das Séries Seguidas (Print B e B1) */
+        .subs-top-channels-bar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: var(--yt-bg-main);
+            position: sticky;
+            top: var(--yt-header-h);
+            z-index: 40;
+        }
+
+        .subs-top-channels-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .sub-channel-unit {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            width: 50px;
+        }
+
+        .sub-channel-avatar-box {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .sub-channel-avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Bolinha Azul: Novo episódio nos últimos 7 dias (Seta vermelha Print B1) */
+        .sub-blue-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #3ea6ff;
+            margin-top: 4px;
+            display: block;
+        }
+
+        .sub-blue-dot.hidden {
+            visibility: hidden;
+        }
+
+        /* Seta Azul (>) no canto direito do trilho de canais */
+        .sub-channels-arrow-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .sub-channels-arrow-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #ffffff;
+        }
+
+        /* Card Grande de Vídeo do Feed de Inscrições (Print B e B1) */
+        .sub-video-feed-card {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin-bottom: 18px;
+            cursor: pointer;
+        }
+
+        .sub-video-thumb-wrap {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #1a1a1a;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sub-video-thumb-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .sub-video-info-block {
+            display: flex;
+            padding: 12px 14px 4px 14px;
+            gap: 12px;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .sub-video-channel-avatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .sub-video-channel-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .sub-video-texts {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sub-video-title {
+            font-size: 14.5px;
+            font-weight: 500;
+            line-height: 1.35;
+            color: #ffffff;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .sub-video-meta-row {
+            font-size: 12px;
+            color: #aaaaaa;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .sub-video-kebab-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sub-video-kebab-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
+        /* Seção de Shorts dentro das Inscrições (Print A e A1) */
+        .subs-shorts-shelf-block {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0 16px 0;
+            margin: 10px 0 16px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .subs-shorts-shelf-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px 12px 14px;
+        }
+
+        .subs-shorts-shelf-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .subs-shorts-shelf-left svg {
+            width: 22px;
+            height: 22px;
+            fill: #ff0000;
+        }
+
+        .subs-shorts-see-all-btn {
+            color: #3ea6ff;
+            font-size: 13.5px;
+            font-weight: 700;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .subs-shorts-carousel {
+            display: flex;
+            gap: 12px;
+            padding: 0 14px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .subs-shorts-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .subs-short-shelf-card {
+            width: 145px;
+            min-width: 145px;
+            aspect-ratio: 9 / 16;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background-color: #1a1a1a;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            flex-shrink: 0;
+        }
+
+        .subs-short-shelf-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .subs-short-shelf-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 8px 10px 10px 10px;
+        }
+
+        .subs-short-shelf-top {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .subs-short-kebab-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        .subs-short-kebab-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));
+        }
+
+        .subs-short-shelf-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 2px;
+        }
+
+        .subs-short-shelf-views {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Tela "Todas as inscrições" (Print B2) */
+        .all-subs-page-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: var(--yt-bg-main);
+            padding-bottom: 90px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            z-index: 9998;
+            overflow-y: auto;
+        }
+
+        .all-subs-page-view.active {
+            display: flex;
+        }
+
+        .all-subs-list-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            padding-top: 4px;
+        }
+
+        .all-subs-channel-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            cursor: pointer;
+        }
+
+        .all-subs-channel-row:active {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .all-subs-channel-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .all-subs-avatar {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+            flex-shrink: 0;
+        }
+
+        .all-subs-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .all-subs-name-text {
+            font-size: 14.5px;
+            font-weight: 500;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 12px;
+        }
+
+        /* Bolinha Branca da Direita no Print B2: Novos vídeos da semana */
+        .all-subs-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .all-subs-status-dot.hidden {
+            display: none;
+        }
+
+        /* Tela "Ver tudo" dos Shorts das Inscrições (Print A3) */
+        .all-subs-shorts-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #000000;
+            padding-bottom: 80px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 480px;
+            z-index: 9998;
+            overflow-y: auto;
+        }
+
+        .all-subs-shorts-view.active {
+            display: flex;
+        }
+
+        .all-subs-shorts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px 10px;
+            padding: 12px 14px;
+        }
+
+        /* Barra de Desfazer Shorts Ocultado (5 segundos) */
+        .undo-hide-snackbar {
+            position: fixed;
+            bottom: calc(var(--yt-bottom-nav-h) + 16px);
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #212121;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.85);
+            z-index: 12000;
+            width: calc(100% - 32px);
+            max-width: 448px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .undo-hide-snackbar.active {
+            display: flex;
+        }
+
+        .undo-hide-btn {
+            background: none;
+            border: none;
+            color: #3ea6ff;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
     </style>
 </head>
 <body>
@@ -9029,6 +9492,106 @@
                     <button class="yt-btn-primary" id="btnSendShortsComment" style="padding:8px 16px; flex-shrink:0;">Enviar</button>
                 </div>
             </div>
+        </div>
+
+        <!-- ==========================================================================
+             TELA OFICIAL DA ABA DE INSCRIÇÕES (PRINTS A, A1, B, B1)
+             ========================================================================== -->
+        <section class="subs-feed-view" id="viewSubscriptions">
+            <!-- Trilho Superior de Avatares das Séries Seguidas com Bolinha Azul (Print B e B1) -->
+            <div class="subs-top-channels-bar" id="subsTopChannelsBar"></div>
+
+            <!-- Feed Completo das Inscrições: Vídeos Recentes e Carrossel de Shorts -->
+            <div id="subsFeedContentContainer" style="display:flex; flex-direction:column; padding-top:6px;"></div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA "TODAS AS INSCRIÇÕES" (PRINT B2 - ABERTA PELA SETA AZUL '>')
+             ========================================================================== -->
+        <section class="all-subs-page-view" id="viewAllSubscriptionsList">
+            <div style="height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:#0f0f0f; position:sticky; top:0; z-index:50;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button class="yt-icon-btn" id="btnBackFromAllSubs" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <img src="https://raw.githubusercontent.com/Error404notafound/FruitSenpai/main/20261001_022059.png" alt="Logo" class="fruit-logo-img">
+                        <span style="font-size:17px; font-weight:700; color:#ffffff;">Todas as inscrições</span>
+                    </div>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
+                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                </div>
+            </div>
+
+            <!-- Lista de Todas as Séries que o Usuário Segue (Print B2) -->
+            <div class="all-subs-list-container" id="allSubsVerticalContainer"></div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA "VER TUDO" DOS SHORTS DAS INSCRIÇÕES (PRINT A3)
+             ========================================================================== -->
+        <section class="all-subs-shorts-view" id="viewAllSubscribedShorts">
+            <div style="height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:#000000; position:sticky; top:0; z-index:50;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button class="yt-icon-btn" id="btnBackFromSubsShorts" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span style="font-size:18px; font-weight:700; color:#ffffff;">Shorts</span>
+                </div>
+            </div>
+            <div class="all-subs-shorts-grid" id="allSubsShortsGridContainer"></div>
+        </section>
+
+        <!-- GAVETA PRINT A2: OPÇÕES DO SHORTS NO FEED (OCULTAR E FEEDBACK - 100% SVG) -->
+        <div class="accounts-drawer" id="drawerSubsShortKebab" style="z-index: 10025;">
+            <div class="accounts-sheet" style="padding: 10px 0 22px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnActionHideShorts">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm5.31-3.1L6.1 5.69C7.45 4.63 9.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>
+                        <span style="font-size:14.5px;">Ocultar</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnActionFeedbackShorts">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                        <span style="font-size:14.5px;">Enviar feedback</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT B3: OPÇÕES DO VÍDEO NO FEED DAS INSCRIÇÕES (100% SVG) -->
+        <div class="accounts-drawer" id="drawerSubsVideoKebab" style="z-index: 10025;">
+            <div class="accounts-sheet" style="padding: 10px 0 22px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnSubsKebabWatchLater">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        <span style="font-size:14.5px;">Salvar em "Assistir mais tarde"</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnSubsKebabPlaylist">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span style="font-size:14.5px;">Salvar na playlist</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnSubsKebabHide">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31C15.55 19.37 13.85 20 12 20zm5.31-3.1L6.1 5.69C7.45 4.63 9.15 4 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"/></svg>
+                        <span style="font-size:14.5px;">Ocultar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Snackbar Temporário de 5 segundos com botão Desfazer (Print A2) -->
+        <div class="undo-hide-snackbar" id="snackbarUndoHideShorts">
+            <span>Shorts oculto</span>
+            <button class="undo-hide-btn" id="btnUndoHideShortsAction" type="button">Desfazer</button>
         </div>
 
         <!-- ==========================================================================
@@ -12395,12 +12958,508 @@
             });
         }
 
-        // Clicar em "Inscrições"
+        // ==========================================================================
+        // FLUXO COMPLETO DA ABA DE INSCRIÇÕES (PRINTS A, A1, A2, A3, B, B1, B2, B3)
+        // ==========================================================================
+        const viewSubscriptions = document.getElementById("viewSubscriptions");
+        const subsTopChannelsBar = document.getElementById("subsTopChannelsBar");
+        const subsFeedContentContainer = document.getElementById("subsFeedContentContainer");
+
+        const viewAllSubscriptionsList = document.getElementById("viewAllSubscriptionsList");
+        const allSubsVerticalContainer = document.getElementById("allSubsVerticalContainer");
+        const btnBackFromAllSubs = document.getElementById("btnBackFromAllSubs");
+
+        const viewAllSubscribedShorts = document.getElementById("viewAllSubscribedShorts");
+        const allSubsShortsGridContainer = document.getElementById("allSubsShortsGridContainer");
+        const btnBackFromSubsShorts = document.getElementById("btnBackFromSubsShorts");
+
+        const drawerSubsShortKebab = document.getElementById("drawerSubsShortKebab");
+        const btnActionHideShorts = document.getElementById("btnActionHideShorts");
+        const btnActionFeedbackShorts = document.getElementById("btnActionFeedbackShorts");
+        const snackbarUndoHideShorts = document.getElementById("snackbarUndoHideShorts");
+        const btnUndoHideShortsAction = document.getElementById("btnUndoHideShortsAction");
+
+        const drawerSubsVideoKebab = document.getElementById("drawerSubsVideoKebab");
+        const btnSubsKebabWatchLater = document.getElementById("btnSubsKebabWatchLater");
+        const btnSubsKebabPlaylist = document.getElementById("btnSubsKebabPlaylist");
+        const btnSubsKebabHide = document.getElementById("btnSubsKebabHide");
+
+        let currentShortBeingHidden = null;
+        let currentFeedVideoForKebab = null;
+        let undoHideTimeout = null;
+        let hiddenShortsIdsSet = new Set();
+        let hiddenFeedVideosIdsSet = new Set();
+
+        // Clicar em "Inscrições" abre a tela oficial de Inscrições
         if (navSubscriptions) {
             navSubscriptions.addEventListener("click", () => {
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
                 document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
                 navSubscriptions.classList.add("active");
-                showToast("Aba Inscrições");
+                openScreen(viewSubscriptions);
+                loadSubscriptionsFeedRealtime();
+            });
+        }
+
+        if (btnBackFromAllSubs) {
+            btnBackFromAllSubs.addEventListener("click", () => {
+                openScreen(viewSubscriptions, false);
+            });
+        }
+
+        if (btnBackFromSubsShorts) {
+            btnBackFromSubsShorts.addEventListener("click", () => {
+                openScreen(viewSubscriptions, false);
+            });
+        }
+
+        // Fechar gavetas ao clicar fora delas
+        if (drawerSubsShortKebab) {
+            drawerSubsShortKebab.addEventListener("click", (e) => {
+                if (e.target === drawerSubsShortKebab) drawerSubsShortKebab.classList.remove("active");
+            });
+        }
+
+        if (drawerSubsVideoKebab) {
+            drawerSubsVideoKebab.addEventListener("click", (e) => {
+                if (e.target === drawerSubsVideoKebab) drawerSubsVideoKebab.classList.remove("active");
+            });
+        }
+
+        // Carrega o feed das séries que o usuário segue em tempo real
+        function loadSubscriptionsFeedRealtime() {
+            if (!currentUserEmail) return;
+
+            const mySubscribedSeriesList = getStoredSubscribedSeries();
+            const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+            const now = Date.now();
+
+            onSnapshot(collection(db, "series"), (seriesSnap) => {
+                onSnapshot(frutasColecao, (episodesSnap) => {
+                    const allSeriesMap = {};
+                    seriesSnap.forEach(d => {
+                        const sData = { id: d.id, ...d.data() };
+                        if (sData.title) {
+                            allSeriesMap[sData.title.trim().toLowerCase()] = sData;
+                        }
+                    });
+
+                    // Agrupa todos os episódios das séries seguidas
+                    const subscribedSeriesFeedEpisodes = [];
+                    const subscribedSeriesReels = [];
+                    const seriesLatestUploadTimeMap = {};
+                    let totalNewWeeklyEpisodesCount = 0;
+
+                    episodesSnap.forEach(d => {
+                        const ep = { id: d.id, ...d.data() };
+                        const seriesName = (ep.channel || "").trim();
+                        const isSubscribed = mySubscribedSeriesList.some(s => s.toLowerCase() === seriesName.toLowerCase());
+
+                        if (isSubscribed) {
+                            const epTimestampMs = ep.timestamp?.seconds ? (ep.timestamp.seconds * 1000) : (ep.createdAt?.seconds ? (ep.createdAt.seconds * 1000) : new Date(ep.timestamp || ep.createdAt || 0).getTime());
+                            const isWithinSevenDays = (now - epTimestampMs) <= ONE_WEEK_MS && (now - epTimestampMs) >= 0;
+
+                            // Registra o episódio mais recente para a bolinha azul
+                            const curLatest = seriesLatestUploadTimeMap[seriesName.toLowerCase()] || 0;
+                            if (epTimestampMs > curLatest) {
+                                seriesLatestUploadTimeMap[seriesName.toLowerCase()] = epTimestampMs;
+                            }
+
+                            // Contagem semanal do sininho (zera a cada semana)
+                            if (isWithinSevenDays) {
+                                totalNewWeeklyEpisodesCount++;
+                            }
+
+                            if (ep.contentType === "Reels") {
+                                if (!hiddenShortsIdsSet.has(ep.id)) {
+                                    subscribedSeriesReels.push(ep);
+                                }
+                            } else {
+                                if (!hiddenFeedVideosIdsSet.has(ep.id)) {
+                                    subscribedSeriesFeedEpisodes.push(ep);
+                                }
+                            }
+                        }
+                    });
+
+                    // 1. ATUALIZAÇÃO REAL DO SININHO NO TOPO (1+ a 99+)
+                    const bellBadge = document.querySelector("#btnBell .badge-notification");
+                    if (bellBadge) {
+                        if (totalNewWeeklyEpisodesCount > 0) {
+                            bellBadge.textContent = totalNewWeeklyEpisodesCount > 99 ? "99+" : `${totalNewWeeklyEpisodesCount}+`;
+                            bellBadge.style.display = "flex";
+                        } else {
+                            bellBadge.style.display = "none";
+                        }
+                    }
+
+                    // 2. RENDERIZA O TRILHO SUPERIOR DE AVATARES COM BOLINHA AZUL (PRINT B E B1)
+                    renderSubscribedChannelsTopBar(mySubscribedSeriesList, allSeriesMap, seriesLatestUploadTimeMap, ONE_WEEK_MS, now);
+
+                    // 3. RENDERIZA A LISTA "TODAS AS INSCRIÇÕES" (PRINT B2)
+                    renderAllSubscriptionsPage(mySubscribedSeriesList, allSeriesMap, seriesLatestUploadTimeMap, ONE_WEEK_MS, now);
+
+                    // 4. RENDERIZA OS 20 ÚLTIMOS VÍDEOS E O CARROSSEL DE SHORTS (PRINT A1 E B1)
+                    renderSubscriptionsFeedContent(subscribedSeriesFeedEpisodes, subscribedSeriesReels, allSeriesMap);
+                });
+            });
+        }
+
+        // Renderiza o trilho superior de fotos redondas das séries seguidas
+        function renderSubscribedChannelsTopBar(subscribedList, seriesMap, latestTimeMap, weekMs, now) {
+            if (!subsTopChannelsBar) return;
+            subsTopChannelsBar.innerHTML = "";
+
+            if (subscribedList.length === 0) {
+                subsTopChannelsBar.innerHTML = `<span style="font-size:12px; color:#aaa; padding:6px 0;">Você ainda não se inscreveu em nenhuma série.</span>`;
+                return;
+            }
+
+            subscribedList.forEach(seriesName => {
+                const sData = seriesMap[seriesName.toLowerCase()] || {};
+                const cover = sData.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200";
+                const latestTime = latestTimeMap[seriesName.toLowerCase()] || 0;
+                const hasNewEpisodeInWeek = (now - latestTime) <= weekMs && latestTime > 0;
+
+                const unit = document.createElement("div");
+                unit.className = "sub-channel-unit";
+                unit.innerHTML = `
+                    <div class="sub-channel-avatar-box">
+                        <img src="${escapeHtml(cover)}" alt="${escapeHtml(seriesName)}">
+                    </div>
+                    <!-- Bolinha Azul: Aparece apenas se houver post na última semana (Print B1) -->
+                    <span class="sub-blue-dot ${hasNewEpisodeInWeek ? '' : 'hidden'}"></span>
+                `;
+
+                unit.onclick = () => {
+                    openSeriesChannel(seriesName);
+                };
+
+                subsTopChannelsBar.appendChild(unit);
+            });
+
+            // Botão Seta Azul (>) no canto direito do trilho (Print B1)
+            const arrowBtn = document.createElement("button");
+            arrowBtn.className = "sub-channels-arrow-btn";
+            arrowBtn.type = "button";
+            arrowBtn.title = "Todas as inscrições";
+            arrowBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>`;
+            arrowBtn.onclick = () => {
+                openScreen(viewAllSubscriptionsList, false);
+            };
+            subsTopChannelsBar.appendChild(arrowBtn);
+        }
+
+        // Renderiza a página "Todas as inscrições" (Print B2)
+        function renderAllSubscriptionsPage(subscribedList, seriesMap, latestTimeMap, weekMs, now) {
+            if (!allSubsVerticalContainer) return;
+            allSubsVerticalContainer.innerHTML = "";
+
+            subscribedList.forEach(seriesName => {
+                const sData = seriesMap[seriesName.toLowerCase()] || {};
+                const cover = sData.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200";
+                const latestTime = latestTimeMap[seriesName.toLowerCase()] || 0;
+                const hasNewEpisodeInWeek = (now - latestTime) <= weekMs && latestTime > 0;
+
+                const row = document.createElement("div");
+                row.className = "all-subs-channel-row";
+                row.innerHTML = `
+                    <div class="all-subs-channel-left">
+                        <div class="all-subs-avatar">
+                            <img src="${escapeHtml(cover)}" alt="${escapeHtml(seriesName)}">
+                        </div>
+                        <span class="all-subs-name-text" title="${escapeHtml(seriesName)}">${escapeHtml(seriesName)}</span>
+                    </div>
+                    <!-- Bolinha no Print B2 indicando novos vídeos de até 1 semana -->
+                    <span class="all-subs-status-dot ${hasNewEpisodeInWeek ? '' : 'hidden'}"></span>
+                `;
+
+                row.onclick = () => {
+                    openSeriesChannel(seriesName);
+                };
+
+                allSubsVerticalContainer.appendChild(row);
+            });
+        }
+
+        // Renderiza os 20 últimos vídeos e o carrossel de Shorts das Inscrições
+        function renderSubscriptionsFeedContent(feedEpisodes, reelsList, seriesMap) {
+            if (!subsFeedContentContainer) return;
+            subsFeedContentContainer.innerHTML = "";
+
+            // Ordena os vídeos mais recentes primeiro
+            feedEpisodes.sort((a, b) => {
+                const timeA = (a.timestamp && a.timestamp.seconds) ? a.timestamp.seconds : 0;
+                const timeB = (b.timestamp && b.timestamp.seconds) ? b.timestamp.seconds : 0;
+                return timeB - timeA;
+            });
+
+            // Limite exato dos 20 últimos posts
+            const top20Episodes = feedEpisodes.slice(0, 20);
+
+            if (top20Episodes.length === 0 && reelsList.length === 0) {
+                subsFeedContentContainer.innerHTML = `<div style="padding:40px 16px; text-align:center; color:#888; font-size:13.5px;">Nenhum vídeo novo das séries que você segue.</div>`;
+                return;
+            }
+
+            top20Episodes.forEach((ep, index) => {
+                const seriesName = ep.channel || "Série";
+                const sData = seriesMap[seriesName.toLowerCase()] || {};
+                const seriesAvatar = sData.coverUrl || ep.seriesCover || ep.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200";
+
+                const card = document.createElement("article");
+                card.className = "sub-video-feed-card";
+                card.setAttribute("data-video-id", ep.id);
+
+                card.innerHTML = `
+                    <div class="sub-video-thumb-wrap">
+                        <img src="${escapeHtml(ep.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800')}" alt="Capa">
+                        <div class="yt-duration-badge">${escapeHtml(formatDurationBadge(ep.duration))}</div>
+                    </div>
+                    <div class="sub-video-info-block">
+                        <div class="sub-video-channel-avatar btnOpenSeriesFromFeedItem">
+                            <img src="${escapeHtml(seriesAvatar)}" alt="${escapeHtml(seriesName)}">
+                        </div>
+                        <div class="sub-video-texts">
+                            <h3 class="sub-video-title">${escapeHtml(ep.name || 'Episódio')}</h3>
+                            <div class="sub-video-meta-row">
+                                <span class="btnOpenSeriesFromFeedItem" style="cursor:pointer; color:#ffffff; font-weight:500;">${escapeHtml(seriesName)}</span>
+                                <span>•</span>
+                                <span>${formatNumber(ep.viewsCount || 0)} visualizações</span>
+                                <span>•</span>
+                                <span>${formatTimeAgo(ep.timestamp || ep.createdAt)}</span>
+                            </div>
+                        </div>
+                        <button class="sub-video-kebab-btn btnFeedVideoKebab" type="button" aria-label="Mais opções">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    </div>
+                `;
+
+                card.onclick = (e) => {
+                    if (e.target.closest(".btnFeedVideoKebab") || e.target.closest(".btnOpenSeriesFromFeedItem")) return;
+                    openWatchScreen(ep, ep.id);
+                };
+
+                card.querySelectorAll(".btnOpenSeriesFromFeedItem").forEach(el => {
+                    el.onclick = (e) => {
+                        e.stopPropagation();
+                        openSeriesChannel(seriesName);
+                    };
+                });
+
+                const kebabBtn = card.querySelector(".btnFeedVideoKebab");
+                if (kebabBtn) {
+                    kebabBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        currentFeedVideoForKebab = ep;
+                        drawerSubsVideoKebab.classList.add("active");
+                    };
+                }
+
+                subsFeedContentContainer.appendChild(card);
+
+                // Insere a seção de Shorts após o primeiro vídeo (Print A e A1)
+                if (index === 0 && reelsList.length > 0) {
+                    const shortsShelf = renderSubsShortsShelf(reelsList);
+                    subsFeedContentContainer.appendChild(shortsShelf);
+                }
+            });
+
+            // Se não houver vídeos comuns mas houver Reels
+            if (top20Episodes.length === 0 && reelsList.length > 0) {
+                const shortsShelf = renderSubsShortsShelf(reelsList);
+                subsFeedContentContainer.appendChild(shortsShelf);
+            }
+        }
+
+        // Renderiza o Carrossel Horizontal de Shorts (Print A1)
+        function renderSubsShortsShelf(reels) {
+            const shelf = document.createElement("div");
+            shelf.className = "subs-shorts-shelf-block";
+
+            shelf.innerHTML = `
+                <div class="subs-shorts-shelf-header">
+                    <div class="subs-shorts-shelf-left">
+                        <svg viewBox="0 0 24 24"><path d="M17.77 10.32l-1.2-.5L18 9.06c1.84-.96 2.53-3.23 1.56-5.06s-3.24-2.53-5.07-1.56L6 6.94c-1.29.68-2.07 2.04-2 3.49.07 1.42.93 2.67 2.22 3.25.03.01 1.2.5 1.2.5L6 14.93c-1.83.97-2.53 3.24-1.56 5.07.97 1.83 3.24 2.53 5.07 1.56l8.5-4.5c1.29-.68 2.06-2.04 1.99-3.49-.07-1.42-.94-2.68-2.23-3.25zM10 14.5v-5l4.5 2.5-4.5 2.5z"/></svg>
+                        <span>Shorts</span>
+                    </div>
+                    <!-- Seta Vermelha do Print A1: Ver tudo -->
+                    <button class="subs-shorts-see-all-btn" id="btnSeeAllSubsShorts" type="button">Ver tudo</button>
+                </div>
+                <div class="subs-shorts-carousel" id="subsShortsCarouselRow"></div>
+            `;
+
+            const row = shelf.querySelector("#subsShortsCarouselRow");
+
+            reels.forEach(shortItem => {
+                const card = document.createElement("div");
+                card.className = "subs-short-shelf-card";
+                card.setAttribute("data-short-id", shortItem.id);
+
+                const cover = shortItem.thumbUrl || shortItem.seriesCover || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300";
+                const viewsFormatted = formatNumber(shortItem.viewsCount || 0);
+
+                card.innerHTML = `
+                    <img src="${escapeHtml(cover)}" alt="Short">
+                    <div class="subs-short-shelf-overlay">
+                        <div class="subs-short-shelf-top">
+                            <!-- Kebab Vertical Circulado em Azul (Print A1) -->
+                            <button class="subs-short-kebab-btn btnSubsShortKebabTrigger" type="button" aria-label="Opções">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
+                        </div>
+                        <div>
+                            <!-- Seta Verde do Print A1: Nome do Reels -->
+                            <div class="subs-short-shelf-title">${escapeHtml(shortItem.name || 'Reels')}</div>
+                            <!-- Seta Rosa do Print A1: Contagem Real de Visualizações -->
+                            <div class="subs-short-shelf-views">${viewsFormatted} visualizações</div>
+                        </div>
+                    </div>
+                `;
+
+                // Clicar no card abre o player do Shorts em tela cheia
+                card.onclick = (e) => {
+                    if (e.target.closest(".btnSubsShortKebabTrigger")) return;
+                    currentActiveShortsList = [shortItem, ...reels.filter(r => r.id !== shortItem.id)];
+                    openShortsFullScreen();
+                };
+
+                // Kebab abre o modal Print A2
+                const kebab = card.querySelector(".btnSubsShortKebabTrigger");
+                if (kebab) {
+                    kebab.onclick = (e) => {
+                        e.stopPropagation();
+                        currentShortBeingHidden = shortItem;
+                        drawerSubsShortKebab.classList.add("active");
+                    };
+                }
+
+                row.appendChild(card);
+            });
+
+            // "Ver tudo" abre a tela do Print A3
+            shelf.querySelector("#btnSeeAllSubsShorts").onclick = () => {
+                renderAllSubscribedShortsGrid(reels);
+                openScreen(viewAllSubscribedShorts, false);
+            };
+
+            return shelf;
+        }
+
+        // Renderiza a grade completa da tela Print A3 ("Ver tudo" dos Shorts)
+        function renderAllSubscribedShortsGrid(reels) {
+            if (!allSubsShortsGridContainer) return;
+            allSubsShortsGridContainer.innerHTML = "";
+
+            reels.forEach(shortItem => {
+                const card = document.createElement("div");
+                card.className = "subs-short-shelf-card";
+                card.style.width = "100%";
+                card.style.minWidth = "0";
+
+                const cover = shortItem.thumbUrl || shortItem.seriesCover || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300";
+                const viewsFormatted = formatNumber(shortItem.viewsCount || 0);
+
+                card.innerHTML = `
+                    <img src="${escapeHtml(cover)}" alt="Short">
+                    <div class="subs-short-shelf-overlay">
+                        <div class="subs-short-shelf-top"></div>
+                        <div>
+                            <div class="subs-short-shelf-title">${escapeHtml(shortItem.name || 'Reels')}</div>
+                            <div class="subs-short-shelf-views">${viewsFormatted} visualizações</div>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    currentActiveShortsList = [shortItem, ...reels.filter(r => r.id !== shortItem.id)];
+                    openShortsFullScreen();
+                };
+
+                allSubsShortsGridContainer.appendChild(card);
+            });
+        }
+
+        // Ações do Modal Print A2 (Ocultar Shorts)
+        if (btnActionHideShorts) {
+            btnActionHideShorts.addEventListener("click", () => {
+                drawerSubsShortKebab.classList.remove("active");
+                if (!currentShortBeingHidden) return;
+
+                const hiddenId = currentShortBeingHidden.id;
+                hiddenShortsIdsSet.add(hiddenId);
+
+                // Oculta visualmente o card
+                const cardEl = document.querySelector(`.subs-short-shelf-card[data-short-id="${hiddenId}"]`);
+                if (cardEl) cardEl.style.display = "none";
+
+                // Exibe o snackbar temporário de 5 segundos com botão Desfazer
+                snackbarUndoHideShorts.classList.add("active");
+                if (undoHideTimeout) clearTimeout(undoHideTimeout);
+                undoHideTimeout = setTimeout(() => {
+                    snackbarUndoHideShorts.classList.remove("active");
+                }, 5000);
+            });
+        }
+
+        // Botão Desfazer do Snackbar temporário
+        if (btnUndoHideShortsAction) {
+            btnUndoHideShortsAction.addEventListener("click", () => {
+                if (currentShortBeingHidden) {
+                    hiddenShortsIdsSet.delete(currentShortBeingHidden.id);
+                    const cardEl = document.querySelector(`.subs-short-shelf-card[data-short-id="${currentShortBeingHidden.id}"]`);
+                    if (cardEl) cardEl.style.display = "block";
+                }
+                snackbarUndoHideShorts.classList.remove("active");
+                if (undoHideTimeout) clearTimeout(undoHideTimeout);
+                showToast("Ação desfeita.");
+            });
+        }
+
+        if (btnActionFeedbackShorts) {
+            btnActionFeedbackShorts.addEventListener("click", () => {
+                drawerSubsShortKebab.classList.remove("active");
+                showToast("Agradecemos pelo seu feedback.");
+            });
+        }
+
+        // Ações do Modal Print B3 (Opções do Vídeo no Feed)
+        if (btnSubsKebabWatchLater) {
+            btnSubsKebabWatchLater.addEventListener("click", async () => {
+                drawerSubsVideoKebab.classList.remove("active");
+                if (currentFeedVideoForKebab) {
+                    showToast("Salvo em Assistir mais tarde");
+                }
+            });
+        }
+
+        if (btnSubsKebabPlaylist) {
+            btnSubsKebabPlaylist.addEventListener("click", () => {
+                drawerSubsVideoKebab.classList.remove("active");
+                if (currentFeedVideoForKebab) {
+                    currentWatchVideoId = currentFeedVideoForKebab.id;
+                    loadUserPlaylists();
+                    drawerSavePlaylist.classList.add("active");
+                }
+            });
+        }
+
+        if (btnSubsKebabHide) {
+            btnSubsKebabHide.addEventListener("click", () => {
+                drawerSubsVideoKebab.classList.remove("active");
+                if (!currentFeedVideoForKebab) return;
+
+                const videoId = currentFeedVideoForKebab.id;
+                hiddenFeedVideosIdsSet.add(videoId);
+
+                const cardEl = document.querySelector(`.sub-video-feed-card[data-video-id="${videoId}"]`);
+                if (cardEl) cardEl.style.display = "none";
+
+                showToast("Vídeo ocultado do seu feed.");
             });
         }
 
