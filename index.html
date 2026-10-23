@@ -7006,7 +7006,7 @@
             display: flex;
         }
 
-        /* Trilho Superior de Avatares das Séries Seguidas: Rola e some ao arrastar para cima */
+        /* Trilho Superior de Avatares das Séries Seguidas: Altura fixa e círculos perfeitos (Zero esmagamento) */
         .subs-top-channels-bar {
             display: flex;
             align-items: center;
@@ -7019,6 +7019,9 @@
             position: relative;
             width: 100%;
             box-sizing: border-box;
+            flex-shrink: 0;
+            min-height: 74px;
+            height: 74px;
         }
 
         .subs-top-channels-bar::-webkit-scrollbar {
@@ -7029,20 +7032,27 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             cursor: pointer;
             position: relative;
             flex-shrink: 0;
             width: 50px;
+            min-width: 50px;
+            height: 100%;
         }
 
         .sub-channel-avatar-box {
             width: 46px;
             height: 46px;
+            min-width: 46px;
+            min-height: 46px;
+            aspect-ratio: 1 / 1;
             border-radius: 50%;
             overflow: hidden;
             background-color: #272727;
             position: relative;
             border: 1px solid rgba(255, 255, 255, 0.12);
+            flex-shrink: 0;
         }
 
         .sub-channel-avatar-box img {
@@ -7050,16 +7060,20 @@
             height: 100%;
             object-fit: cover;
             display: block;
+            border-radius: 50%;
         }
 
         /* Bolinha Azul: Novo episódio nos últimos 7 dias (Seta vermelha Print B1) */
         .sub-blue-dot {
             width: 7px;
             height: 7px;
+            min-width: 7px;
+            min-height: 7px;
             border-radius: 50%;
             background-color: #3ea6ff;
             margin-top: 4px;
             display: block;
+            flex-shrink: 0;
         }
 
         .sub-blue-dot.hidden {
