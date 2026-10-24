@@ -6710,8 +6710,10 @@
 
         .shorts-top-header-bar.search-expanded {
             background-color: #0f0f0f;
+            background: #0f0f0f;
         }
 
+        /* Pílula de busca do Reels idêntica ao Print C */
         .shorts-header-search-box {
             display: none;
             flex: 1;
@@ -6719,9 +6721,10 @@
             background-color: #212121;
             border-radius: 20px;
             height: 38px;
-            padding: 0 12px;
-            margin: 0 8px;
+            padding: 0 14px;
+            margin: 0 6px 0 4px;
             gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         .shorts-header-search-box input {
@@ -6731,6 +6734,7 @@
             color: #ffffff;
             font-size: 14px;
             outline: none;
+            font-family: inherit;
         }
 
         .shorts-header-search-box svg {
@@ -9949,22 +9953,30 @@
              TELA OFICIAL DO YOUTUBE SHORTS / REELS (PRINTS A ATÉ F1)
              ========================================================================== -->
         <section class="yt-subview yt-shorts-screen-view" id="viewShortsScreen">
-            <!-- Topo com Voltar, Lupa e Kebab (Prints F e F1) -->
+            <!-- Topo Oficial do Reels com Pesquisa Idêntica ao Print C -->
             <div class="shorts-top-header-bar" id="shortsTopHeaderBar">
                 <button class="yt-icon-btn" id="btnBackFromShorts" type="button" aria-label="Voltar">
                     <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
                 </button>
 
-                <!-- Barra de pesquisa expansível (Print F1) -->
+                <!-- Pílula de Pesquisa no Reels (Fiel ao Print C) -->
                 <div class="shorts-header-search-box" id="shortsHeaderSearchBox">
                     <input type="text" id="inputShortsSearchTerm" placeholder="Pesquisar no FruitSenpai">
-                    <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    <button class="yt-icon-btn" id="btnExecuteShortsSearchInPill" type="button" style="padding:0;">
+                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </button>
                 </div>
 
                 <div class="yt-header-actions" id="shortsHeaderIconsRight">
+                    <!-- Lupa externa inicial que ativa a pílula -->
                     <button class="yt-icon-btn" id="btnShortsSearchTrigger" type="button" aria-label="Pesquisar">
                         <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
                     </button>
+                    <!-- Microfone de Voz no Reels (Print C) -->
+                    <button class="yt-icon-btn" id="btnShortsVoiceTrigger" type="button" aria-label="Pesquisa por voz" style="display:none;">
+                        <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+                    </button>
+                    <!-- Kebab 3 Pontinhos -->
                     <button class="yt-icon-btn" id="btnShortsKebabMenu" type="button" aria-label="Mais opções">
                         <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                     </button>
@@ -13690,18 +13702,72 @@
             if (shortsProgressInterval) clearInterval(shortsProgressInterval);
         }
 
-        // Lupa do Topo que Expande a Barra de Pesquisa (Prints F e F1)
+        // Lupa do Topo que Ativa a Barra de Pesquisa Idêntica ao Print C
+        const btnExecuteShortsSearchInPill = document.getElementById("btnExecuteShortsSearchInPill");
+        const btnShortsVoiceTrigger = document.getElementById("btnShortsVoiceTrigger");
+
+        function openShortsSearchInputMode() {
+            shortsHeaderSearchBox.style.display = "flex";
+            shortsTopHeaderBar.classList.add("search-expanded");
+            btnShortsSearchTrigger.style.display = "none"; // Oculta a lupa externa para não duplicar
+            if (btnShortsVoiceTrigger) btnShortsVoiceTrigger.style.display = "flex";
+            inputShortsSearchTerm.focus();
+        }
+
+        function closeShortsSearchInputMode() {
+            shortsHeaderSearchBox.style.display = "none";
+            shortsTopHeaderBar.classList.remove("search-expanded");
+            btnShortsSearchTrigger.style.display = "flex";
+            if (btnShortsVoiceTrigger) btnShortsVoiceTrigger.style.display = "none";
+            inputShortsSearchTerm.value = "";
+        }
+
         if (btnShortsSearchTrigger) {
             btnShortsSearchTrigger.addEventListener("click", () => {
-                const isExpanded = shortsHeaderSearchBox.style.display === "flex";
-                if (!isExpanded) {
-                    shortsHeaderSearchBox.style.display = "flex";
-                    shortsTopHeaderBar.classList.add("search-expanded");
-                    inputShortsSearchTerm.focus();
-                } else {
-                    shortsHeaderSearchBox.style.display = "none";
-                    shortsTopHeaderBar.classList.remove("search-expanded");
+                openShortsSearchInputMode();
+            });
+        }
+
+        // Ao clicar no microfone dentro do Reels, abre a pesquisa por voz
+        if (btnShortsVoiceTrigger) {
+            btnShortsVoiceTrigger.addEventListener("click", () => {
+                if (btnTriggerVoiceSearchModal) {
+                    btnTriggerVoiceSearchModal.click();
                 }
+            });
+        }
+
+        // Pesquisa os Reels diretamente na tela cheia ao dar Enter ou tocar na lupa interna
+        function executeShortsInternalSearch() {
+            const query = inputShortsSearchTerm.value.trim().toLowerCase();
+            if (!query) {
+                loadShortsVideosFromFirestore();
+                return;
+            }
+
+            // Filtra exclusivamente os Reels que correspondem ao termo digitado
+            const matchingReels = currentActiveShortsList.filter(item => {
+                const nameStr = (item.name || "").toLowerCase();
+                const chanStr = (item.channel || "").toLowerCase();
+                return nameStr.includes(query) || chanStr.includes(query);
+            });
+
+            currentActiveShortsList = matchingReels;
+            renderShortsVerticalSlides();
+            showToast(`Reels filtrados por: ${query}`);
+        }
+
+        if (inputShortsSearchTerm) {
+            inputShortsSearchTerm.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    executeShortsInternalSearch();
+                }
+            });
+        }
+
+        if (btnExecuteShortsSearchInPill) {
+            btnExecuteShortsSearchInPill.addEventListener("click", () => {
+                executeShortsInternalSearch();
             });
         }
 
@@ -20117,16 +20183,39 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             const matchingPlaylists = [];
             const matchingEpisodes = [];
 
-            // 1. Canais / Séries correspondentes
+            // 1. Canais / Séries correspondentes (Busca tanto na coleção de séries quanto nos canais dos episódios postados)
+            const discoveredChannelsMap = new Map();
+
             if (Array.isArray(availableSeriesList)) {
                 availableSeriesList.forEach(s => {
-                    const title = (s.title || "").toLowerCase();
-                    const syn = (s.synopsis || "").toLowerCase();
-                    if (title.includes(cleanQuery) || syn.includes(cleanQuery)) {
-                        matchingChannels.push(s);
+                    if (s.title) {
+                        const titleKey = s.title.trim().toLowerCase();
+                        discoveredChannelsMap.set(titleKey, s);
                     }
                 });
             }
+
+            if (Array.isArray(loadedEpisodesCache)) {
+                loadedEpisodesCache.forEach(ep => {
+                    const chName = (ep.channel || "").trim();
+                    if (chName && !discoveredChannelsMap.has(chName.toLowerCase())) {
+                        discoveredChannelsMap.set(chName.toLowerCase(), {
+                            title: chName,
+                            coverUrl: ep.seriesCover || ep.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200",
+                            subscribersCount: 0,
+                            createdAt: ep.timestamp || ep.createdAt
+                        });
+                    }
+                });
+            }
+
+            discoveredChannelsMap.forEach(channelItem => {
+                const titleStr = (channelItem.title || "").toLowerCase();
+                const synStr = (channelItem.synopsis || "").toLowerCase();
+                if (titleStr.includes(cleanQuery) || synStr.includes(cleanQuery)) {
+                    matchingChannels.push(channelItem);
+                }
+            });
 
             // 2. Episódios correspondentes (com verificação se foram assistidos para exibir barra vermelha)
             const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -20545,6 +20634,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         initAppTabsAndStorage();
+        loadSeriesFromFirestore();
         checkUrlParamsAndOpenVideoOnLoad();
         updateWeeklyNotificationsBellCount();
     </script>
