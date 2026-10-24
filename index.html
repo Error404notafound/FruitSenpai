@@ -13282,6 +13282,14 @@
                 document.getElementById("btnSearch").style.display = "flex";
                 viewSubscriptions.classList.add("active");
             }
+            // Na tela de Pesquisa (Print A1/A2): Mantém o cabeçalho ativo exibindo o campo de busca
+            else if (screen === viewSearchResults) {
+                headerWrapper.style.display = "block";
+                chipsBar.style.display = "none";
+                ytDefaultHeaderBar.style.display = "none";
+                ytSearchActiveHeaderBar.classList.add("active");
+                viewSearchResults.classList.add("active");
+            }
             // Na tela Você (A2): Esconde o sino e exibe apenas 1 lupa e 1 engrenagem
             else if (screen === viewYou) {
                 headerWrapper.style.display = "block";
@@ -20027,9 +20035,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         function openSearchInputMode() {
+            openScreen(viewSearchResults);
+            headerWrapper.style.display = "block";
             ytDefaultHeaderBar.style.display = "none";
             ytSearchActiveHeaderBar.classList.add("active");
-            openScreen(viewSearchResults);
 
             // Reseta visual para o estado do Print A1
             btnClearSearchQueryX.style.display = "none";
