@@ -7671,6 +7671,354 @@
             font-weight: 500;
             color: #aaaaaa;
         }
+
+        /* ==========================================================================
+           ESTILOS OFICIAIS DO SISTEMA DE PESQUISA (PRINTS A1 ATÉ A10)
+           ========================================================================== */
+        .search-results-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            min-height: calc(100vh - var(--yt-bottom-nav-h));
+            background-color: var(--yt-bg-main);
+            padding-bottom: 90px;
+        }
+
+        .search-results-view.active {
+            display: flex;
+        }
+
+        /* Barra de Pesquisa Ativa no Cabeçalho (Prints A1, A2 e A3) */
+        .header-search-active-bar {
+            height: var(--yt-header-h);
+            display: none;
+            align-items: center;
+            padding: 0 10px;
+            gap: 8px;
+            background-color: var(--yt-bg-main);
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .header-search-active-bar.active {
+            display: flex;
+        }
+
+        .search-input-pill-box {
+            flex: 1;
+            height: 38px;
+            background-color: #212121;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-input-pill-box input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 14.5px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-clear-x-btn {
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .search-clear-x-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .search-filter-icon-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .search-filter-icon-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        /* Barra de Filtros [Todos ▾] e [Qualquer data ▾] (Print A6) */
+        .search-filters-bar {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px 10px 14px;
+            background-color: var(--yt-bg-main);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            position: sticky;
+            top: 48px;
+            z-index: 45;
+        }
+
+        .search-filters-bar.active {
+            display: flex;
+        }
+
+        .search-dropdown-filter-pill {
+            background-color: #272727;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            height: 32px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .search-dropdown-filter-pill svg {
+            width: 14px;
+            height: 14px;
+            fill: #ffffff;
+        }
+
+        /* Histórico de Pesquisa Recente (Print A10) */
+        .search-history-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .search-history-item-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            cursor: pointer;
+        }
+
+        .search-history-item-row:active {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .search-history-query-text {
+            color: #3ea6ff;
+            font-size: 14.5px;
+            font-weight: 500;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-history-remove-btn {
+            color: #3ea6ff;
+            font-size: 12.5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        /* Card de Canal no Resultado da Pesquisa (Print A7.1 e A9) */
+        .search-channel-result-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 12px;
+        }
+
+        .search-channel-left-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
+        }
+
+        .search-channel-avatar-big {
+            width: 64px;
+            height: 64px;
+            min-width: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-channel-avatar-big img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .search-channel-texts-col {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-channel-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-channel-meta {
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        /* Card de Playlist no Resultado da Pesquisa (Print A7.2) */
+        .search-playlist-result-card {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            cursor: pointer;
+            gap: 8px;
+        }
+
+        .search-playlist-thumb-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #212121;
+            position: relative;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+        }
+
+        .search-playlist-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .search-playlist-badge {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Tela de Pesquisa por Voz (Print A5) */
+        .voice-search-screen-modal {
+            position: fixed;
+            inset: 0;
+            background-color: #0f0f0f;
+            z-index: 10040;
+            display: none;
+            flex-direction: column;
+            padding: 16px 20px 40px 20px;
+            max-width: 480px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .voice-search-screen-modal.active {
+            display: flex;
+        }
+
+        .voice-mic-press-button {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            background-color: #333333;
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: auto auto 30px auto;
+            outline: none;
+            transition: transform 0.15s, background-color 0.15s, box-shadow 0.15s;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .voice-mic-press-button.recording {
+            background-color: #ff0000;
+            transform: scale(1.15);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+        }
+
+        .voice-mic-press-button svg {
+            width: 38px;
+            height: 38px;
+            fill: #ffffff;
+        }
+
+        /* Rádio Customizado nos Menus A7 e A8 */
+        .search-filter-radio-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .search-filter-radio-row:active {
+            background-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .search-filter-radio-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #aaaaaa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-filter-radio-row.selected .search-filter-radio-circle {
+            border-color: #3ea6ff;
+        }
+
+        .search-filter-radio-row.selected .search-filter-radio-circle::after {
+            content: '';
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background-color: #3ea6ff;
+        }
     </style>
 </head>
 <body>
@@ -7682,47 +8030,79 @@
              CABEÇALHO COM LOGO, SINO, BUSCA E EXPLORAR
              ========================================================================== -->
         <header class="yt-header-wrapper">
-    <div class="yt-header">
-        <!-- Logotipo Oficial FruitSenpai com Link do seu GitHub -->
+    <!-- Cabeçalho Padrão do Feed (Print A) -->
+    <div class="yt-header" id="ytDefaultHeaderBar">
         <div class="yt-logo-area" id="btnLogo">
             <img src="https://raw.githubusercontent.com/Error404notafound/FruitSenpai/main/20261001_022059.png" alt="FruitSenpai Logo" class="fruit-logo-img">
             <span class="yt-logo-text">FruitSenpai</span>
         </div>
 
-        <!-- Ações do Cabeçalho com Suporte Dinâmico (Prints A, B e C) -->
         <div class="yt-header-actions">
-            <!-- Sininho de Notificação: Inicia oculto e recebe contagem semanal real de 1+ a 99+ -->
+            <!-- Sininho de Notificação -->
             <button class="yt-icon-btn" aria-label="Notificações" id="btnBell" style="display:none;">
                 <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
                 <span class="badge-notification" id="bellNotificationBadge" style="display:none;"></span>
             </button>
 
-            <!-- Lupa de Pesquisa -->
+            <!-- Lupa de Pesquisa (Abre Prints A1 e A10) -->
             <button class="yt-icon-btn" aria-label="Pesquisar" id="btnSearch">
                 <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
             </button>
 
-            <!-- Botão + Nova Guia / Abrir com ID Temporário (Seta Azul do Print A) -->
+            <!-- Botão + Nova Guia -->
             <button class="yt-icon-btn" aria-label="Nova Guia" id="btnHeaderNewTabPlus">
                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
             </button>
 
-            <!-- Contador de Abas Abertas (Seta Rosa do Print A - Abre o Print C) -->
+            <!-- Contador de Abas Abertas -->
             <button class="tab-counter-badge-btn" id="btnHeaderTabCounter" type="button" title="Guias abertas">
                 <span id="txtHeaderTabCountNum">1</span>
             </button>
 
-            <!-- Kebab 3 Pontinhos de Opções de Navegação (Seta Verde do Print A - Abre Print R) -->
+            <!-- Kebab do Navegador -->
             <button class="yt-icon-btn" id="btnHeaderBrowserMenu" type="button" aria-label="Menu do Navegador">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </button>
 
-            <!-- Botão Configurações (Ativado na tela Você) -->
+            <!-- Botão Configurações -->
             <button class="yt-icon-btn" id="btnSettingsTop" style="display: none;" aria-label="Configurações">
                 <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
             </button>
         </div>
-            </div>
+    </div>
+
+    <!-- Cabeçalho Oficial Ativo de Pesquisa (Prints A1, A2 e A3) -->
+    <div class="header-search-active-bar" id="ytSearchActiveHeaderBar">
+        <button class="yt-icon-btn" id="btnBackFromSearchInput" type="button" aria-label="Voltar">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+
+        <div class="search-input-pill-box">
+            <input type="text" id="inputGlobalSearchQuery" placeholder="Pesquisar no YouTube">
+            <!-- Botão ✕ para limpar o texto e voltar a A1 (Print A3) -->
+            <button class="search-clear-x-btn" id="btnClearSearchQueryX" type="button" aria-label="Limpar texto">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+            <!-- Ícone Sliders de Filtro do Print A2 que abre A6 -->
+            <button class="search-filter-icon-btn" id="btnTriggerSearchFilterBar" type="button" aria-label="Filtros">
+                <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+            </button>
+            <!-- Botão Lupa dentro do input para executar busca -->
+            <button class="yt-icon-btn" id="btnExecuteSearchMagnifier" type="button" style="padding:0; margin-left:2px;">
+                <svg style="width:18px;height:18px;" viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+            </button>
+        </div>
+
+        <!-- Microfone do Print A1/A2 que abre a Pesquisa por Voz A5 -->
+        <button class="yt-icon-btn" id="btnTriggerVoiceSearchModal" type="button" aria-label="Pesquisar com voz">
+            <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+        </button>
+
+        <!-- Kebab do Cabeçalho que abre a Opção de Desativar Histórico (Print A10) -->
+        <button class="yt-icon-btn" id="btnSearchHeaderKebab" type="button" aria-label="Opções de pesquisa">
+            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+        </button>
+    </div>
 
             <!-- ==========================================================================
                  BARRA DE FILTROS / CHIPS DESLIZÁVEIS
@@ -9895,6 +10275,136 @@
                         <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zM4.34 2.93L2.93 4.34l18.14 18.14 1.41-1.41L4.34 2.93z"/></svg>
                         <span style="font-size:14.5px;" id="lblNotifB3MuteActivity">Desativar notificações de atividade</span>
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             TELA OFICIAL DE RESULTADOS E HISTÓRICO DE PESQUISA (PRINTS A1 ATÉ A10)
+             ========================================================================== -->
+        <section class="yt-subview search-results-view" id="viewSearchResults">
+            <!-- Barra de Filtros [Todos ▾] e [Qualquer data ▾] (Print A6) -->
+            <div class="search-filters-bar" id="searchFiltersBar">
+                <button class="search-dropdown-filter-pill" id="btnOpenFilterTypeModal" type="button">
+                    <span id="txtCurrentFilterTypeLabel">Todos</span>
+                    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </button>
+                <button class="search-dropdown-filter-pill" id="btnOpenFilterDateModal" type="button">
+                    <span id="txtCurrentFilterDateLabel">Qualquer data</span>
+                    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                </button>
+            </div>
+
+            <!-- Lista de Histórico Recente em Azul (Print A10) -->
+            <div class="search-history-container" id="searchHistoryContainer"></div>
+
+            <!-- Lista de Resultados de Vídeos, Canais e Playlists (Paginação de 20 em 20) -->
+            <div id="searchResultsListContainer" style="display:flex; flex-direction:column; padding-top:4px;"></div>
+
+            <!-- Indicador de Carregando mais Resultados no Fim da Página -->
+            <div id="searchScrollLoadingIndicator" style="display:none; padding:20px; text-align:center; color:#aaaaaa; font-size:13px;">Carregando mais resultados...</div>
+        </section>
+
+        <!-- TELA DE PESQUISA POR VOZ COM SEGURAR-E-SOLTAR (PRINT A5) -->
+        <div class="voice-search-screen-modal" id="modalVoiceSearch">
+            <button class="yt-icon-btn" id="btnCloseVoiceSearchModal" type="button" aria-label="Fechar" style="align-self:flex-start;">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+            <div style="margin-top:40px;">
+                <h2 style="font-size:24px; font-weight:800; color:#ffffff; margin-bottom:8px;">Pesquisar com sua voz</h2>
+                <p style="font-size:13.5px; color:#aaaaaa; line-height:1.45;" id="txtVoiceInstructionDesc">Pressione e segure o microfone abaixo para falar. Quando soltar, a pesquisa será realizada automaticamente.</p>
+                <div style="font-size:18px; font-weight:600; color:#3ea6ff; min-height:30px; margin-top:20px;" id="txtVoiceTranscribedSpeech"></div>
+            </div>
+            <!-- Botão da Seta Azul: Pressione e Segure para Falar -->
+            <button class="voice-mic-press-button" id="btnVoiceMicHoldToTalk" type="button">
+                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+            </button>
+        </div>
+
+        <!-- GAVETA PRINT A4: KEBAB VERTICAL DOS RESULTADOS DE PESQUISA (100% SVG) -->
+        <div class="accounts-drawer" id="drawerSearchItemKebab" style="z-index:10035;">
+            <div class="accounts-sheet" style="padding:10px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnSearchKebabConfig">
+                    <div class="account-item-left"><span style="font-size:14.5px;">Configurações</span></div>
+                </div>
+                <div class="account-item-row" id="btnSearchKebabData">
+                    <div class="account-item-left"><span style="font-size:14.5px;">Seus dados no YouTube</span></div>
+                </div>
+                <div class="account-item-row" id="btnSearchKebabOpenApp">
+                    <div class="account-item-left"><span style="font-size:14.5px;">Abrir app</span></div>
+                </div>
+                <div class="account-item-row" id="btnSearchKebabComments">
+                    <div class="account-item-left"><span style="font-size:14.5px;">Comentários</span></div>
+                </div>
+                <div class="account-item-row" id="btnSearchKebabHelp">
+                    <div class="account-item-left"><span style="font-size:14.5px;">Ajuda</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT A7: FILTRO DE TIPO (TODOS, CANAIS, PLAYLISTS) -->
+        <div class="accounts-drawer" id="drawerFilterTypeModal" style="z-index:10035;">
+            <div class="accounts-sheet" style="padding:14px 0 24px 0;">
+                <div class="search-filter-radio-row selected" data-type-filter="todos">
+                    <span style="font-size:15px; font-weight:600;">Todos</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-type-filter="canais">
+                    <span style="font-size:15px; font-weight:600;">Canais</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-type-filter="playlists">
+                    <span style="font-size:15px; font-weight:600;">Playlists</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT A8: FILTRO DE DATA (QUALQUER DATA, HOJE, ESTA SEMANA, ETC.) -->
+        <div class="accounts-drawer" id="drawerFilterDateModal" style="z-index:10035;">
+            <div class="accounts-sheet" style="padding:14px 0 24px 0;">
+                <div class="search-filter-radio-row selected" data-date-filter="all">
+                    <span style="font-size:15px; font-weight:600;">Qualquer data</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="today">
+                    <span style="font-size:15px; font-weight:600;">Hoje</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="week">
+                    <span style="font-size:15px; font-weight:600;">Esta semana</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="month">
+                    <span style="font-size:15px; font-weight:600;">Este mês</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="year">
+                    <span style="font-size:15px; font-weight:600;">Este ano</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT A10: DESATIVAR HISTÓRICO DE PESQUISA -->
+        <div class="yt-center-modal-backdrop" id="modalSearchHistoryToggle" style="z-index:10040;">
+            <div class="yt-center-dialog">
+                <h3 style="font-size:17px; font-weight:700; color:#ffffff;">Histórico de pesquisa</h3>
+                <p style="font-size:13px; color:#aaaaaa; line-height:1.4;">Deseja desativar o salvamento das suas pesquisas recentes no aplicativo?</p>
+                <div style="display:flex; gap:16px; margin:6px 0;">
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="radioSearchHistChoice" id="radioHistDisableYes" value="yes" style="accent-color:#3ea6ff;">
+                        <span>Sim</span>
+                    </label>
+                    <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                        <input type="radio" name="radioSearchHistChoice" id="radioHistDisableNo" value="no" checked style="accent-color:#3ea6ff;">
+                        <span>Não</span>
+                    </label>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:8px;">
+                    <button type="button" class="btn-modal-blue-close" id="btnCloseModalSearchHist">Fechar</button>
+                    <button type="button" class="btn-modal-white-confirm" id="btnConfirmModalSearchHist">Concluir</button>
                 </div>
             </div>
         </div>
@@ -12749,6 +13259,8 @@
             // Na tela Inicial (Home): Mostra logotipo, lupa e o sino (apenas se logado)
             if (screen === "home") {
                 headerWrapper.style.display = "block";
+                ytDefaultHeaderBar.style.display = "flex";
+                ytSearchActiveHeaderBar.classList.remove("active");
                 btnBell.style.display = currentUserEmail ? "flex" : "none";
                 btnSettingsTop.style.display = "none";
                 btnHeaderNewTabPlus.style.display = "flex";
@@ -19391,6 +19903,636 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 bellBadge.style.display = "none";
                 bellBadge.textContent = "";
             }
+        }
+
+        // ==========================================================================
+        // FLUXO DE PESQUISA COMPLETO: VOZ, HISTÓRICO, FILTROS E PAGINAÇÃO INFINITA
+        // ==========================================================================
+        const ytDefaultHeaderBar = document.getElementById("ytDefaultHeaderBar");
+        const ytSearchActiveHeaderBar = document.getElementById("ytSearchActiveHeaderBar");
+        const btnBackFromSearchInput = document.getElementById("btnBackFromSearchInput");
+        const inputGlobalSearchQuery = document.getElementById("inputGlobalSearchQuery");
+        const btnClearSearchQueryX = document.getElementById("btnClearSearchQueryX");
+        const btnTriggerSearchFilterBar = document.getElementById("btnTriggerSearchFilterBar");
+        const btnExecuteSearchMagnifier = document.getElementById("btnExecuteSearchMagnifier");
+        const btnTriggerVoiceSearchModal = document.getElementById("btnTriggerVoiceSearchModal");
+        const btnSearchHeaderKebab = document.getElementById("btnSearchHeaderKebab");
+
+        const viewSearchResults = document.getElementById("viewSearchResults");
+        const searchFiltersBar = document.getElementById("searchFiltersBar");
+        const btnOpenFilterTypeModal = document.getElementById("btnOpenFilterTypeModal");
+        const txtCurrentFilterTypeLabel = document.getElementById("txtCurrentFilterTypeLabel");
+        const btnOpenFilterDateModal = document.getElementById("btnOpenFilterDateModal");
+        const txtCurrentFilterDateLabel = document.getElementById("txtCurrentFilterDateLabel");
+
+        const searchHistoryContainer = document.getElementById("searchHistoryContainer");
+        const searchResultsListContainer = document.getElementById("searchResultsListContainer");
+        const searchScrollLoadingIndicator = document.getElementById("searchScrollLoadingIndicator");
+
+        const modalVoiceSearch = document.getElementById("modalVoiceSearch");
+        const btnCloseVoiceSearchModal = document.getElementById("btnCloseVoiceSearchModal");
+        const btnVoiceMicHoldToTalk = document.getElementById("btnVoiceMicHoldToTalk");
+        const txtVoiceTranscribedSpeech = document.getElementById("txtVoiceTranscribedSpeech");
+        const txtVoiceInstructionDesc = document.getElementById("txtVoiceInstructionDesc");
+
+        const drawerSearchItemKebab = document.getElementById("drawerSearchItemKebab");
+        const drawerFilterTypeModal = document.getElementById("drawerFilterTypeModal");
+        const drawerFilterDateModal = document.getElementById("drawerFilterDateModal");
+        const modalSearchHistoryToggle = document.getElementById("modalSearchHistoryToggle");
+        const btnCloseModalSearchHist = document.getElementById("btnCloseModalSearchHist");
+        const btnConfirmModalSearchHist = document.getElementById("btnConfirmModalSearchHist");
+        const radioHistDisableYes = document.getElementById("radioHistDisableYes");
+        const radioHistDisableNo = document.getElementById("radioHistDisableNo");
+
+        let activeSearchFilterType = "todos";
+        let activeSearchFilterDate = "all";
+        let filteredSearchResultsPool = [];
+        let searchCurrentDisplayedCount = 20;
+        let speechRecognitionInstance = null;
+        let isVoiceRecognizing = false;
+        let speechRecognizedFinalText = "";
+
+        // Lê se o histórico de pesquisa está ativado no dispositivo
+        function isSearchHistorySavingEnabled() {
+            return localStorage.getItem("fs_save_search_history") !== "disabled";
+        }
+
+        function getSearchHistoryList() {
+            try {
+                return JSON.parse(localStorage.getItem("fs_user_search_history") || "[]");
+            } catch(e) {
+                return [];
+            }
+        }
+
+        function saveSearchTermToHistory(term) {
+            if (!isSearchHistorySavingEnabled()) return;
+            const clean = term.trim();
+            if (!clean) return;
+
+            let list = getSearchHistoryList();
+            list = list.filter(item => item.toLowerCase() !== clean.toLowerCase());
+            list.unshift(clean);
+            if (list.length > 20) list = list.slice(0, 20);
+            localStorage.setItem("fs_user_search_history", JSON.stringify(list));
+        }
+
+        function removeSearchTermFromHistory(termToRemove) {
+            let list = getSearchHistoryList();
+            list = list.filter(item => item !== termToRemove);
+            localStorage.setItem("fs_user_search_history", JSON.stringify(list));
+            renderSearchHistoryList();
+        }
+
+        // Renderiza o histórico de buscas recentes em azul com botão Remover (Print A10)
+        function renderSearchHistoryList() {
+            if (!searchHistoryContainer) return;
+            searchHistoryContainer.innerHTML = "";
+
+            const history = getSearchHistoryList();
+            if (history.length === 0) return;
+
+            history.forEach(term => {
+                const row = document.createElement("div");
+                row.className = "search-history-item-row";
+                row.innerHTML = `
+                    <span class="search-history-query-text">${escapeHtml(term)}</span>
+                    <button class="search-history-remove-btn" type="button">Remover</button>
+                `;
+
+                row.onclick = (e) => {
+                    if (e.target.closest(".search-history-remove-btn")) return;
+                    inputGlobalSearchQuery.value = term;
+                    executeGlobalSearch(term);
+                };
+
+                const removeBtn = row.querySelector(".search-history-remove-btn");
+                if (removeBtn) {
+                    removeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        removeSearchTermFromHistory(term);
+                    };
+                }
+
+                searchHistoryContainer.appendChild(row);
+            });
+        }
+
+        // 1. Clicar na lupa do cabeçalho entra no modo de busca (Print A1 / A10)
+        const btnHeaderSearchIcon = document.getElementById("btnSearch");
+        if (btnHeaderSearchIcon) {
+            btnHeaderSearchIcon.addEventListener("click", () => {
+                openSearchInputMode();
+            });
+        }
+
+        function openSearchInputMode() {
+            ytDefaultHeaderBar.style.display = "none";
+            ytSearchActiveHeaderBar.classList.add("active");
+            openScreen(viewSearchResults);
+
+            // Reseta visual para o estado do Print A1
+            btnClearSearchQueryX.style.display = "none";
+            btnTriggerSearchFilterBar.style.display = "none";
+            searchFiltersBar.classList.remove("active");
+            searchResultsListContainer.innerHTML = "";
+
+            renderSearchHistoryList();
+            inputGlobalSearchQuery.focus();
+        }
+
+        // Seta voltar do cabeçalho de busca: sai da pesquisa e retorna ao Início
+        if (btnBackFromSearchInput) {
+            btnBackFromSearchInput.addEventListener("click", () => {
+                ytSearchActiveHeaderBar.classList.remove("active");
+                ytDefaultHeaderBar.style.display = "flex";
+                inputGlobalSearchQuery.value = "";
+                openScreen("home");
+            });
+        }
+
+        // Digitar no input de busca: gerencia o botão ✕ (Print A3)
+        inputGlobalSearchQuery.addEventListener("input", () => {
+            const val = inputGlobalSearchQuery.value;
+            btnClearSearchQueryX.style.display = val.length > 0 ? "flex" : "none";
+        });
+
+        // Clicar no ✕ limpa o texto e volta para o Print A1 com o histórico
+        if (btnClearSearchQueryX) {
+            btnClearSearchQueryX.addEventListener("click", () => {
+                inputGlobalSearchQuery.value = "";
+                btnClearSearchQueryX.style.display = "none";
+                btnTriggerSearchFilterBar.style.display = "none";
+                searchFiltersBar.classList.remove("active");
+                searchResultsListContainer.innerHTML = "";
+                renderSearchHistoryList();
+                inputGlobalSearchQuery.focus();
+            });
+        }
+
+        // Executar pesquisa ao dar Enter ou tocar na lupa interna
+        inputGlobalSearchQuery.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                executeGlobalSearch(inputGlobalSearchQuery.value);
+            }
+        });
+
+        if (btnExecuteSearchMagnifier) {
+            btnExecuteSearchMagnifier.addEventListener("click", () => {
+                executeGlobalSearch(inputGlobalSearchQuery.value);
+            });
+        }
+
+        // Seta vermelha do Print A2: ativa/desativa a barra de filtros A6
+        if (btnTriggerSearchFilterBar) {
+            btnTriggerSearchFilterBar.addEventListener("click", () => {
+                searchFiltersBar.classList.toggle("active");
+            });
+        }
+
+        // 2. FUNÇÃO PRINCIPAL DE PESQUISA (PRINTS A2, A6, A7, A8, A9)
+        function executeGlobalSearch(query) {
+            const cleanQuery = query.trim().toLowerCase();
+            if (!cleanQuery) return;
+
+            saveSearchTermToHistory(query);
+
+            // Ajusta o cabeçalho para o formato de resultados (Print A2)
+            searchHistoryContainer.innerHTML = "";
+            btnClearSearchQueryX.style.display = "none";
+            btnTriggerSearchFilterBar.style.display = "flex";
+            searchFiltersBar.classList.add("active");
+
+            // Coleta tudo da memória: canais/séries, playlists e episódios
+            const matchingChannels = [];
+            const matchingPlaylists = [];
+            const matchingEpisodes = [];
+
+            // 1. Canais / Séries correspondentes
+            if (Array.isArray(availableSeriesList)) {
+                availableSeriesList.forEach(s => {
+                    const title = (s.title || "").toLowerCase();
+                    const syn = (s.synopsis || "").toLowerCase();
+                    if (title.includes(cleanQuery) || syn.includes(cleanQuery)) {
+                        matchingChannels.push(s);
+                    }
+                });
+            }
+
+            // 2. Episódios correspondentes (com verificação se foram assistidos para exibir barra vermelha)
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+            const now = Date.now();
+
+            if (Array.isArray(loadedEpisodesCache)) {
+                loadedEpisodesCache.forEach(ep => {
+                    const name = (ep.name || "").toLowerCase();
+                    const chan = (ep.channel || "").toLowerCase();
+
+                    if (name.includes(cleanQuery) || chan.includes(cleanQuery)) {
+                        // Filtro de Data (Print A8)
+                        const epTime = ep.timestamp?.seconds ? (ep.timestamp.seconds * 1000) : (ep.createdAt?.seconds ? (ep.createdAt.seconds * 1000) : 0);
+                        const diffMs = now - epTime;
+
+                        let matchesDateFilter = true;
+                        if (activeSearchFilterDate === "today") {
+                            matchesDateFilter = diffMs <= ONE_DAY_MS && diffMs >= 0;
+                        } else if (activeSearchFilterDate === "week") {
+                            matchesDateFilter = diffMs <= (7 * ONE_DAY_MS) && diffMs >= 0;
+                        } else if (activeSearchFilterDate === "month") {
+                            matchesDateFilter = diffMs <= (30 * ONE_DAY_MS) && diffMs >= 0;
+                        } else if (activeSearchFilterDate === "year") {
+                            matchesDateFilter = diffMs <= (365 * ONE_DAY_MS) && diffMs >= 0;
+                        }
+
+                        if (matchesDateFilter) {
+                            matchingEpisodes.push(ep);
+                        }
+                    }
+                });
+            }
+
+            // Agrupa os itens de acordo com o filtro selecionado (Print A7)
+            filteredSearchResultsPool = [];
+
+            if (activeSearchFilterType === "canais") {
+                matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
+            } else if (activeSearchFilterType === "playlists") {
+                // Playlists públicas existentes no dispositivo
+                const localPlaylists = JSON.parse(localStorage.getItem("fs_user_playlists") || "[]");
+                localPlaylists.forEach(pl => {
+                    if ((pl.title || "").toLowerCase().includes(cleanQuery)) {
+                        filteredSearchResultsPool.push({ type: "playlist", data: pl });
+                    }
+                });
+            } else {
+                // Modo "Todos": Exibe episódios e coloca canais relevantes no resultado (Print A9)
+                matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
+                matchingEpisodes.forEach(ep => filteredSearchResultsPool.push({ type: "episode", data: ep }));
+            }
+
+            // Inicia com apenas 20 itens para economizar as leituras do plano Spark
+            searchCurrentDisplayedCount = 20;
+            renderSearchResultsPaged();
+        }
+
+        // Renderiza os resultados em lotes de 20 em 20 (Proteção Spark / Infinite Scroll)
+        function renderSearchResultsPaged() {
+            searchResultsListContainer.innerHTML = "";
+
+            if (filteredSearchResultsPool.length === 0) {
+                searchResultsListContainer.innerHTML = `<div style="padding:60px 16px; text-align:center; color:#888; font-size:14px;">Nenhum resultado encontrado.</div>`;
+                searchScrollLoadingIndicator.style.display = "none";
+                return;
+            }
+
+            const currentBatch = filteredSearchResultsPool.slice(0, searchCurrentDisplayedCount);
+
+            currentBatch.forEach(item => {
+                if (item.type === "channel") {
+                    searchResultsListContainer.appendChild(createSearchChannelCard(item.data));
+                } else if (item.type === "playlist") {
+                    searchResultsListContainer.appendChild(createSearchPlaylistCard(item.data));
+                } else if (item.type === "episode") {
+                    searchResultsListContainer.appendChild(createSearchEpisodeCard(item.data));
+                }
+            });
+
+            // Se ainda houver itens para carregar, mantém o sensor de rolagem ativo
+            if (searchCurrentDisplayedCount < filteredSearchResultsPool.length) {
+                searchScrollLoadingIndicator.style.display = "block";
+            } else {
+                searchScrollLoadingIndicator.style.display = "none";
+            }
+        }
+
+        // Sensor de Rolagem Infinita (Carrega mais 20 ao chegar no fim da página)
+        window.addEventListener("scroll", () => {
+            if (!viewSearchResults.classList.contains("active")) return;
+            if (searchCurrentDisplayedCount >= filteredSearchResultsPool.length) return;
+
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const threshold = document.documentElement.scrollHeight - 150;
+
+            if (scrollPosition >= threshold) {
+                searchCurrentDisplayedCount += 20;
+                renderSearchResultsPaged();
+            }
+        });
+
+        // 3. CARDS DE RESULTADOS
+        // Card de Canal / Série (Print A7.1 e A9)
+        function createSearchChannelCard(series) {
+            const card = document.createElement("div");
+            card.className = "search-channel-result-card";
+            const cover = series.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200";
+            const name = series.title || "Série";
+            const handle = "@" + name.toLowerCase().replace(/\s+/g, '');
+            const subsText = formatSubscribersCountDisplay(series.subscribersCount || 0);
+
+            card.innerHTML = `
+                <div class="search-channel-left-info btnOpenSeriesFromSearchCard">
+                    <div class="search-channel-avatar-big">
+                        <img src="${escapeHtml(cover)}" alt="${escapeHtml(name)}">
+                    </div>
+                    <div class="search-channel-texts-col">
+                        <div class="search-channel-name">${escapeHtml(name)}</div>
+                        <div class="search-channel-meta">${escapeHtml(handle)}</div>
+                        <div class="search-channel-meta">${subsText}</div>
+                    </div>
+                </div>
+                <button class="channel-subscribe-full-btn btnSubscribeInsideSearchChannel" type="button" style="width:auto; padding:0 18px; margin:0; height:34px;">Inscrever-se</button>
+            `;
+
+            card.querySelector(".btnOpenSeriesFromSearchCard").onclick = () => {
+                openSeriesChannel(name);
+            };
+
+            const subBtn = card.querySelector(".btnSubscribeInsideSearchChannel");
+            syncSeriesSubscriptionUI(name, subBtn);
+            subBtn.onclick = () => {
+                handleUnifiedSeriesSubscription(name);
+            };
+
+            return card;
+        }
+
+        // Card de Playlist (Print A7.2)
+        function createSearchPlaylistCard(playlist) {
+            const card = document.createElement("div");
+            card.className = "search-playlist-result-card";
+            const cover = playlist.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+            const title = playlist.title || "Playlist";
+            const author = playlist.author || "FruitSenpai";
+            const count = Array.isArray(playlist.videos) ? playlist.videos.length : (playlist.totalItems || 12);
+
+            card.innerHTML = `
+                <div class="search-playlist-thumb-box">
+                    <img src="${escapeHtml(cover)}" alt="Capa">
+                    <div class="search-playlist-badge">≡ ${count} vídeos</div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:4px;">
+                    <div>
+                        <h4 style="font-size:14px; font-weight:600; color:#fff; line-height:1.3;">${escapeHtml(title)}</h4>
+                        <div style="font-size:12px; color:#aaa; margin-top:2px;">${escapeHtml(author)} • Playlist</div>
+                    </div>
+                    <button class="yt-icon-btn"><svg style="width:18px;height:18px;fill:#fff;" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                </div>
+            `;
+
+            card.onclick = () => {
+                openPlaylistDetailPage(playlist.id, title);
+            };
+
+            return card;
+        }
+
+        // Card de Episódio (Print A2 / A9) com barra vermelha se já foi assistido
+        function createSearchEpisodeCard(ep) {
+            const card = document.createElement("article");
+            card.className = "sub-video-feed-card";
+
+            const cover = ep.thumbUrl || ep.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600";
+            const seriesName = ep.channel || "Série";
+            const seriesAvatar = ep.seriesCover || cover;
+
+            // Verifica se o vídeo está no histórico para exibir a barra vermelha
+            const wasWatched = currentUserHistoryList.some(h => h.id === ep.id);
+
+            card.innerHTML = `
+                <div class="sub-video-thumb-wrap">
+                    <img src="${escapeHtml(cover)}" alt="Capa">
+                    <div class="yt-duration-badge">${escapeHtml(formatDurationBadge(ep.duration))}</div>
+                    ${wasWatched ? `<div class="history-progress-bar"></div>` : ''}
+                </div>
+                <div class="sub-video-info-block">
+                    <div class="sub-video-channel-avatar btnOpenSeriesFromSearchRow">
+                        <img src="${escapeHtml(seriesAvatar)}" alt="${escapeHtml(seriesName)}">
+                    </div>
+                    <div class="sub-video-texts">
+                        <h3 class="sub-video-title">${escapeHtml(ep.name || 'Episódio')}</h3>
+                        <div class="sub-video-meta-row">
+                            <span class="btnOpenSeriesFromSearchRow" style="cursor:pointer; color:#ffffff; font-weight:500;">${escapeHtml(seriesName)}</span>
+                            <span>•</span>
+                            <span>${formatNumber(ep.viewsCount || 0)} visualizações</span>
+                            <span>•</span>
+                            <span>${formatTimeAgo(ep.timestamp || ep.createdAt)}</span>
+                        </div>
+                    </div>
+                    <button class="sub-video-kebab-btn btnSearchItemKebabTrigger" type="button" aria-label="Mais opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+            `;
+
+            card.onclick = (e) => {
+                if (e.target.closest(".btnSearchItemKebabTrigger") || e.target.closest(".btnOpenSeriesFromSearchRow")) return;
+                openWatchScreen(ep, ep.id);
+            };
+
+            card.querySelectorAll(".btnOpenSeriesFromSearchRow").forEach(el => {
+                el.onclick = (e) => {
+                    e.stopPropagation();
+                    openSeriesChannel(seriesName);
+                };
+            });
+
+            const kebab = card.querySelector(".btnSearchItemKebabTrigger");
+            if (kebab) {
+                kebab.onclick = (e) => {
+                    e.stopPropagation();
+                    drawerSearchItemKebab.classList.add("active");
+                };
+            }
+
+            return card;
+        }
+
+        // Fechar modais ao clicar fora
+        if (drawerSearchItemKebab) {
+            drawerSearchItemKebab.addEventListener("click", (e) => {
+                if (e.target === drawerSearchItemKebab) drawerSearchItemKebab.classList.remove("active");
+            });
+        }
+
+        // 4. PESQUISA POR VOZ COM SEGURAR-E-SOLTAR (PRINT A5)
+        if (btnTriggerVoiceSearchModal) {
+            btnTriggerVoiceSearchModal.addEventListener("click", () => {
+                txtVoiceTranscribedSpeech.textContent = "";
+                modalVoiceSearch.classList.add("active");
+            });
+        }
+
+        if (btnCloseVoiceSearchModal) {
+            btnCloseVoiceSearchModal.addEventListener("click", () => {
+                stopVoiceRecognition();
+                modalVoiceSearch.classList.remove("active");
+            });
+        }
+
+        // Inicializa API de Reconhecimento de Fala nativa
+        function initSpeechRecognition() {
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRec) return null;
+
+            const rec = new SpeechRec();
+            rec.lang = "pt-BR";
+            rec.continuous = true;
+            rec.interimResults = true;
+
+            rec.onresult = (event) => {
+                let interim = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) {
+                        speechRecognizedFinalText += event.results[i][0].transcript;
+                    } else {
+                        interim += event.results[i][0].transcript;
+                    }
+                }
+                txtVoiceTranscribedSpeech.textContent = speechRecognizedFinalText || interim;
+            };
+
+            rec.onerror = () => {
+                stopVoiceRecognition();
+            };
+
+            return rec;
+        }
+
+        function startVoiceRecognition() {
+            speechRecognizedFinalText = "";
+            txtVoiceTranscribedSpeech.textContent = "Ouvindo...";
+            btnVoiceMicHoldToTalk.classList.add("recording");
+            isVoiceRecognizing = true;
+
+            if (!speechRecognitionInstance) {
+                speechRecognitionInstance = initSpeechRecognition();
+            }
+
+            if (speechRecognitionInstance) {
+                try { speechRecognitionInstance.start(); } catch(e) {}
+            }
+        }
+
+        function stopVoiceRecognition() {
+            if (!isVoiceRecognizing) return;
+            isVoiceRecognizing = false;
+            btnVoiceMicHoldToTalk.classList.remove("recording");
+
+            if (speechRecognitionInstance) {
+                try { speechRecognitionInstance.stop(); } catch(e) {}
+            }
+
+            const recognizedQuery = txtVoiceTranscribedSpeech.textContent.replace("Ouvindo...", "").trim();
+            if (recognizedQuery) {
+                modalVoiceSearch.classList.remove("active");
+                inputGlobalSearchQuery.value = recognizedQuery;
+                executeGlobalSearch(recognizedQuery);
+            }
+        }
+
+        // Eventos de Pressionar e Soltar (Mouse e Toque no celular)
+        btnVoiceMicHoldToTalk.addEventListener("mousedown", startVoiceRecognition);
+        btnVoiceMicHoldToTalk.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            startVoiceRecognition();
+        });
+
+        btnVoiceMicHoldToTalk.addEventListener("mouseup", stopVoiceRecognition);
+        btnVoiceMicHoldToTalk.addEventListener("touchend", (e) => {
+            e.preventDefault();
+            stopVoiceRecognition();
+        });
+
+        // 5. MODAL DE FILTRO DE TIPO: [Todos ▾] (PRINT A7)
+        if (btnOpenFilterTypeModal) {
+            btnOpenFilterTypeModal.addEventListener("click", () => {
+                drawerFilterTypeModal.classList.add("active");
+            });
+        }
+
+        if (drawerFilterTypeModal) {
+            drawerFilterTypeModal.addEventListener("click", (e) => {
+                if (e.target === drawerFilterTypeModal) drawerFilterTypeModal.classList.remove("active");
+            });
+        }
+
+        document.querySelectorAll("#drawerFilterTypeModal .search-filter-radio-row").forEach(row => {
+            row.addEventListener("click", () => {
+                document.querySelectorAll("#drawerFilterTypeModal .search-filter-radio-row").forEach(r => r.classList.remove("selected"));
+                row.classList.add("selected");
+
+                activeSearchFilterType = row.getAttribute("data-type-filter");
+                txtCurrentFilterTypeLabel.textContent = row.querySelector("span").textContent;
+                drawerFilterTypeModal.classList.remove("active");
+
+                executeGlobalSearch(inputGlobalSearchQuery.value);
+            });
+        });
+
+        // 6. MODAL DE FILTRO DE DATA: [Qualquer data ▾] (PRINT A8)
+        if (btnOpenFilterDateModal) {
+            btnOpenFilterDateModal.addEventListener("click", () => {
+                drawerFilterDateModal.classList.add("active");
+            });
+        }
+
+        if (drawerFilterDateModal) {
+            drawerFilterDateModal.addEventListener("click", (e) => {
+                if (e.target === drawerFilterDateModal) drawerFilterDateModal.classList.remove("active");
+            });
+        }
+
+        document.querySelectorAll("#drawerFilterDateModal .search-filter-radio-row").forEach(row => {
+            row.addEventListener("click", () => {
+                document.querySelectorAll("#drawerFilterDateModal .search-filter-radio-row").forEach(r => r.classList.remove("selected"));
+                row.classList.add("selected");
+
+                activeSearchFilterDate = row.getAttribute("data-date-filter");
+                txtCurrentFilterDateLabel.textContent = row.querySelector("span").textContent;
+                drawerFilterDateModal.classList.remove("active");
+
+                executeGlobalSearch(inputGlobalSearchQuery.value);
+            });
+        });
+
+        // 7. DESATIVAR HISTÓRICO DE PESQUISA (PRINT A10)
+        if (btnSearchHeaderKebab) {
+            btnSearchHeaderKebab.addEventListener("click", () => {
+                const isCurrentlyDisabled = localStorage.getItem("fs_save_search_history") === "disabled";
+                if (radioHistDisableYes && radioHistDisableNo) {
+                    radioHistDisableYes.checked = isCurrentlyDisabled;
+                    radioHistDisableNo.checked = !isCurrentlyDisabled;
+                }
+                modalSearchHistoryToggle.classList.add("active");
+            });
+        }
+
+        if (btnCloseModalSearchHist) {
+            btnCloseModalSearchHist.addEventListener("click", () => {
+                modalSearchHistoryToggle.classList.remove("active");
+            });
+        }
+
+        if (modalSearchHistoryToggle) {
+            modalSearchHistoryToggle.addEventListener("click", (e) => {
+                if (e.target === modalSearchHistoryToggle) modalSearchHistoryToggle.classList.remove("active");
+            });
+        }
+
+        if (btnConfirmModalSearchHist) {
+            btnConfirmModalSearchHist.addEventListener("click", () => {
+                const disableHistory = radioHistDisableYes.checked;
+                if (disableHistory) {
+                    localStorage.setItem("fs_save_search_history", "disabled");
+                    localStorage.removeItem("fs_user_search_history");
+                    searchHistoryContainer.innerHTML = "";
+                    showToast("Histórico de pesquisa desativado.");
+                } else {
+                    localStorage.removeItem("fs_save_search_history");
+                    showToast("Histórico de pesquisa ativado.");
+                }
+                modalSearchHistoryToggle.classList.remove("active");
+            });
         }
 
         initAppTabsAndStorage();
