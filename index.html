@@ -13386,6 +13386,11 @@
 
         if (btnBackFromShorts) {
             btnBackFromShorts.addEventListener("click", () => {
+                // Se a barra de pesquisa do Reels estiver aberta, apenas fecha ela e permanece no Reels
+                if (shortsHeaderSearchBox && shortsHeaderSearchBox.style.display === "flex") {
+                    closeShortsSearchInputMode();
+                    return;
+                }
                 stopShortsPlaybackTimers();
                 openScreen("home");
             });
@@ -13737,37 +13742,31 @@
             });
         }
 
-        // Pesquisa os Reels diretamente na tela cheia ao dar Enter ou tocar na lupa interna
-        function executeShortsInternalSearch() {
-            const query = inputShortsSearchTerm.value.trim().toLowerCase();
-            if (!query) {
-                loadShortsVideosFromFirestore();
-                return;
-            }
+        // Ao pesquisar no Reels, fecha a tela cheia de Reels e abre a página de resultados reais
+        function executeShortsSearchAndOpenGlobalResults() {
+            const query = inputShortsSearchTerm.value.trim();
+            if (!query) return;
 
-            // Filtra exclusivamente os Reels que correspondem ao termo digitado
-            const matchingReels = currentActiveShortsList.filter(item => {
-                const nameStr = (item.name || "").toLowerCase();
-                const chanStr = (item.channel || "").toLowerCase();
-                return nameStr.includes(query) || chanStr.includes(query);
-            });
+            closeShortsSearchInputMode();
+            stopShortsPlaybackTimers();
 
-            currentActiveShortsList = matchingReels;
-            renderShortsVerticalSlides();
-            showToast(`Reels filtrados por: ${query}`);
+            // Abre o modo de pesquisa oficial com os resultados reais
+            openSearchInputMode("shorts");
+            inputGlobalSearchQuery.value = query;
+            executeGlobalSearch(query);
         }
 
         if (inputShortsSearchTerm) {
             inputShortsSearchTerm.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") {
-                    executeShortsInternalSearch();
+                    executeShortsSearchAndOpenGlobalResults();
                 }
             });
         }
 
         if (btnExecuteShortsSearchInPill) {
             btnExecuteShortsSearchInPill.addEventListener("click", () => {
-                executeShortsInternalSearch();
+                executeShortsSearchAndOpenGlobalResults();
             });
         }
 
@@ -20092,21 +20091,29 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // 1. Clicar na lupa do cabeçalho entra no modo de busca (Print A1 / A10)
+        // Memória da tela de origem para onde o usuário deve retornar ao fechar a busca
+        let previousActiveScreenBeforeSearch = "home";
+
+        // Clicar na lupa do cabeçalho principal entra no modo de busca
         const btnHeaderSearchIcon = document.getElementById("btnSearch");
         if (btnHeaderSearchIcon) {
             btnHeaderSearchIcon.addEventListener("click", () => {
-                openSearchInputMode();
+                openSearchInputMode("home");
             });
         }
 
-        function openSearchInputMode() {
+        function openSearchInputMode(originScreen = "home") {
+            previousActiveScreenBeforeSearch = originScreen;
+            if (originScreen === "shorts") {
+                stopShortsPlaybackTimers();
+            }
+
             openScreen(viewSearchResults);
             headerWrapper.style.display = "block";
             ytDefaultHeaderBar.style.display = "none";
             ytSearchActiveHeaderBar.classList.add("active");
 
-            // Reseta visual para o estado do Print A1
+            // Reseta visual para o estado do Print A1 compartilhando o mesmo histórico
             btnClearSearchQueryX.style.display = "none";
             btnTriggerSearchFilterBar.style.display = "none";
             searchFiltersBar.classList.remove("active");
@@ -20116,13 +20123,23 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             inputGlobalSearchQuery.focus();
         }
 
-        // Seta voltar do cabeçalho de busca: sai da pesquisa e retorna ao Início
+        // Seta voltar (←) do campo de busca: apenas fecha o campo de pesquisa e retorna à tela onde o usuário estava
         if (btnBackFromSearchInput) {
             btnBackFromSearchInput.addEventListener("click", () => {
                 ytSearchActiveHeaderBar.classList.remove("active");
                 ytDefaultHeaderBar.style.display = "flex";
                 inputGlobalSearchQuery.value = "";
-                openScreen("home");
+
+                // Restaura a tela exata de onde a busca foi acionada
+                if (previousActiveScreenBeforeSearch === "shorts") {
+                    openShortsFullScreen();
+                } else if (previousActiveScreenBeforeSearch === "subscriptions") {
+                    openScreen(viewSubscriptions);
+                } else if (previousActiveScreenBeforeSearch === "you") {
+                    openScreen(viewYou);
+                } else {
+                    openScreen("home");
+                }
             });
         }
 
