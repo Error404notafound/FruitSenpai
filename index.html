@@ -12071,7 +12071,8 @@
                         await addDoc(frutasColecao, {
                             name: epName,
                             channel: sName,
-                            seriesCover: seriesCoverUrl, // Capa da série usada para o avatar redondo
+                            author: currentUserEmail,
+                            seriesCover: seriesCoverUrl,
                             viewsCount: 0,
                             timeAgo: "agora mesmo",
                             thumbUrl: epThumb,
@@ -12149,6 +12150,7 @@
                         await addDoc(frutasColecao, {
                             name: epName,
                             channel: seriesName,
+                            author: currentUserEmail,
                             seriesCover: seriesPhoto || epThumb,
                             viewsCount: 0,
                             timeAgo: "agora mesmo",
@@ -19215,29 +19217,61 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             };
         }
 
-        // 2. ABA "COMENTÁRIOS" (PRINT B2 E B3)
+        // 2. ABA "COMENTÁRIOS" (PRINT B2 E B3): RECONHECE OS COMENTÁRIOS DE TERCEIROS NOS SEUS VÍDEOS
         function renderNotificationsCommentsTab() {
-            // Puxa os episódios postados pelo próprio usuário logado
-            const myEpisodes = loadedEpisodesCache.filter(ep => ep.author === currentUserEmail || ep.channel === getNameFromEmail(currentUserEmail));
+            if (!currentUserEmail) return;
+
+            // Busca as séries criadas pelo usuário logado
+            const mySeriesTitlesSet = new Set();
+            if (Array.isArray(availableSeriesList)) {
+                availableSeriesList.forEach(s => {
+                    if (s.author === currentUserEmail || s.creator === currentUserEmail) {
+                        if (s.title) mySeriesTitlesSet.add(s.title.trim().toLowerCase());
+                    }
+                });
+            }
+
+            // Identifica todos os episódios que pertencem a você (por autoria direta ou pelo nome da série mãe)
+            const myEpisodes = loadedEpisodesCache.filter(ep => {
+                if (ep.author && ep.author.toLowerCase() === currentUserEmail.toLowerCase()) {
+                    return true;
+                }
+                const epChan = (ep.channel || "").trim().toLowerCase();
+                if (mySeriesTitlesSet.has(epChan)) {
+                    return true;
+                }
+                return false;
+            });
 
             if (myEpisodes.length === 0) {
                 notifsDynamicContainer.innerHTML = `<div style="padding:60px 24px; text-align:center; color:#888; font-size:14px;">Você ainda não postou episódios para receber comentários.</div>`;
                 return;
             }
 
-            // Consulta apenas os comentários dos vídeos do usuário
+            let totalCommentsFound = 0;
+            notifsDynamicContainer.innerHTML = "";
+
+            // Consulta os comentários dos seus episódios em tempo real
             myEpisodes.forEach(ep => {
                 onSnapshot(collection(db, `frutas/${ep.id}/comments`), (snap) => {
                     snap.forEach(d => {
                         const comm = d.data();
+
+                        // Ignora comentários feitos por você mesmo no seu próprio vídeo (apenas terceiros aparecem)
+                        if (comm.user && comm.user.toLowerCase() === currentUserEmail.toLowerCase()) {
+                            return;
+                        }
+
+                        totalCommentsFound++;
                         const row = document.createElement("div");
                         row.className = "notif-item-row";
 
                         const userHandle = `@${(comm.user || 'usuario').split('@')[0]}`;
                         const userInitial = userHandle.charAt(1).toUpperCase();
+                        const videoCover = ep.thumbUrl || ep.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
 
                         row.innerHTML = `
-                            <!-- Seta Rosa Print B2: Avatar do usuário -->
+                            <!-- Seta Rosa Print B2: Avatar do usuário que comentou -->
                             <div class="notif-avatar-circle" style="background:#cc0000; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">
                                 ${userInitial}
                             </div>
@@ -19249,20 +19283,22 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                 <!-- Seta Azul Print B2: Data real do comentário -->
                                 <div class="notif-time-ago">${formatTimeAgo(comm.createdAt)}</div>
                             </div>
-                            <!-- Miniatura do vídeo -->
+                            <!-- Miniatura do vídeo comentado -->
                             <div class="notif-thumb-box">
-                                <img src="${escapeHtml(ep.thumbUrl || ep.seriesCover || '')}" alt="Capa">
+                                <img src="${escapeHtml(videoCover)}" alt="Capa">
                             </div>
-                            <button class="notif-kebab-btn btnNotifCommentKebabTrigger" type="button">
+                            <button class="notif-kebab-btn btnNotifCommentKebabTrigger" type="button" aria-label="Mais opções">
                                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
                             </button>
                         `;
 
+                        // Clicar no card abre o player do respectivo episódio
                         row.onclick = (e) => {
                             if (e.target.closest(".btnNotifCommentKebabTrigger")) return;
                             openWatchScreen(ep, ep.id);
                         };
 
+                        // Kebab abre a gaveta do Print B3
                         const kebab = row.querySelector(".btnNotifCommentKebabTrigger");
                         if (kebab) {
                             kebab.onclick = (e) => {
