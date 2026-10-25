@@ -12169,7 +12169,7 @@
             btnAudioLegendado.classList.remove("active");
         });
 
-        // 1. O botão (+) da barra inferior abre a tela oficial de postagem
+        // 1. O botão (+) da barra inferior abre a tela oficial de postagem (?action=upload)
         navCreate.addEventListener("click", () => {
             if (!currentUserEmail) {
                 openAuthModal();
@@ -12180,10 +12180,12 @@
             uploadChannelHandle.textContent = "@" + name.toLowerCase().replace(/\s+/g, '');
             uploadChannelAvatar.textContent = name.charAt(0).toUpperCase();
             viewUploadDetails.classList.add("active");
+            updateAppBrowserUrl({ action: "upload" }, true);
         });
 
         btnBackFromUpload.addEventListener("click", () => {
             viewUploadDetails.classList.remove("active");
+            updateAppBrowserUrl({}, false);
         });
 
         // Alternar "Mostrar mais" / "Mostrar menos"
@@ -13259,6 +13261,31 @@
         // Histórico de navegação sem sobreposição de telas
         let screenNavigationHistory = [];
 
+        // ==========================================================================
+        // GERENCIADOR CENTRAL DE URLS (PADRÃO GITHUB PAGES SEM ERRO 404)
+        // ==========================================================================
+        function updateAppBrowserUrl(paramsObj = {}, addToHistory = true) {
+            const baseUrl = window.location.origin + window.location.pathname;
+            const searchParams = new URLSearchParams();
+
+            Object.entries(paramsObj).forEach(([key, val]) => {
+                if (val !== undefined && val !== null && val !== "") {
+                    searchParams.set(key, val);
+                }
+            });
+
+            const queryStr = searchParams.toString();
+            const targetUrl = queryStr ? `${baseUrl}?${queryStr}` : baseUrl;
+
+            if (window.location.href !== targetUrl) {
+                if (addToHistory) {
+                    window.history.pushState(paramsObj, "", targetUrl);
+                } else {
+                    window.history.replaceState(paramsObj, "", targetUrl);
+                }
+            }
+        }
+
         function openScreen(screen, addToHistory = true) {
             if (addToHistory && screen !== "home") {
                 screenNavigationHistory.push(screen);
@@ -13268,7 +13295,7 @@
             chipsBar.style.display = "none";
             document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view, .notifs-page-view").forEach(s => s.classList.remove("active"));
 
-            // Na tela Inicial (Home): Mostra logotipo, lupa e o sino (apenas se logado)
+            // Na tela Inicial (Home): URL limpa principal
             if (screen === "home") {
                 headerWrapper.style.display = "block";
                 ytDefaultHeaderBar.style.display = "flex";
@@ -13281,8 +13308,9 @@
                 document.getElementById("btnSearch").style.display = "flex";
                 feedContainer.style.display = "flex";
                 chipsBar.style.display = "flex";
+                updateAppBrowserUrl({}, addToHistory);
             }
-            // Na tela de Inscrições: Exibe o Logo FruitSenpai à esquerda e a Lupa de Pesquisa à direita (Fiel ao Print)
+            // Na tela de Inscrições: URL ?tab=subscriptions
             else if (screen === viewSubscriptions) {
                 headerWrapper.style.display = "block";
                 chipsBar.style.display = "none";
@@ -13293,8 +13321,9 @@
                 btnHeaderBrowserMenu.style.display = "none";
                 document.getElementById("btnSearch").style.display = "flex";
                 viewSubscriptions.classList.add("active");
+                updateAppBrowserUrl({ tab: "subscriptions" }, addToHistory);
             }
-            // Na tela de Pesquisa (Print A1/A2): Mantém o cabeçalho ativo exibindo o campo de busca
+            // Na tela de Pesquisa
             else if (screen === viewSearchResults) {
                 headerWrapper.style.display = "block";
                 chipsBar.style.display = "none";
@@ -13302,21 +13331,28 @@
                 ytSearchActiveHeaderBar.classList.add("active");
                 viewSearchResults.classList.add("active");
             }
-            // Na tela Você (A2): Esconde o sino e exibe apenas 1 lupa e 1 engrenagem
+            // Na tela Você (Perfil): URL ?tab=you
             else if (screen === viewYou) {
                 headerWrapper.style.display = "block";
                 btnBell.style.display = "none";
                 btnSettingsTop.style.display = "flex";
                 viewYou.classList.add("active");
+                updateAppBrowserUrl({ tab: "you" }, addToHistory);
             } 
-            // Na tela do Grupo (viewGroupDetail) e na Lista de Grupos (viewUserGroupsList): Exibe o Logo FruitSenpai, Sino e Lupa
+            // Na tela de Notificações: URL ?view=notifications
+            else if (screen === viewNotifications) {
+                headerWrapper.style.display = "none";
+                viewNotifications.classList.add("active");
+                updateAppBrowserUrl({ view: "notifications" }, addToHistory);
+            }
+            // Na tela do Grupo e Lista de Grupos
             else if (screen === viewGroupDetail || screen === viewUserGroupsList) {
                 headerWrapper.style.display = "block";
                 btnBell.style.display = currentUserEmail ? "flex" : "none";
                 btnSettingsTop.style.display = "none";
                 screen.classList.add("active");
             }
-            // Em subtelas de criação/modais (Fullscreen com botão próprio de fechar): Oculta o topo principal
+            // Em subtelas de criação/modais
             else if (screen) {
                 headerWrapper.style.display = "none";
                 screen.classList.add("active");
@@ -13399,6 +13435,7 @@
         function openShortsFullScreen() {
             openScreen(viewShortsScreen);
             window.scrollTo(0, 0);
+            updateAppBrowserUrl({ tab: "shorts" }, true);
             loadShortsVideosFromFirestore();
         }
 
@@ -14554,6 +14591,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             currentOpenPlaylistDocId = playlistId;
             openScreen(viewPlaylists);
             window.scrollTo(0, 0);
+            updateAppBrowserUrl({ list: playlistId }, true);
 
             plNotFoundMessage.style.display = "none";
             plMainContainerView.style.display = "flex";
@@ -15516,12 +15554,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             currentWatchVideoId = videoId;
             openScreen(viewWatchVideo);
 
-            // Atualiza a URL na barra do navegador para o link oficial do vídeo com ?v=ID
-            const cleanBaseUrl = window.location.origin + window.location.pathname;
-            const videoUrlWithQuery = `${cleanBaseUrl}?v=${videoId}`;
-            if (window.location.search !== `?v=${videoId}`) {
-                window.history.pushState({ videoId: videoId }, "", videoUrlWithQuery);
-            }
+            // Atualiza a URL na barra para o padrão do player ?v=ID
+            updateAppBrowserUrl({ v: videoId }, true);
 
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
@@ -15618,10 +15652,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
 
-                    // Restaura a URL para a página principal limpa sem o ?v=
-                    const cleanBaseUrl = window.location.origin + window.location.pathname;
-                    window.history.pushState({}, "", cleanBaseUrl);
-
+                    // Restaura a URL para a página principal limpa
+                    updateAppBrowserUrl({}, false);
                     openScreen("home");
                 };
             }
@@ -16622,10 +16654,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             document.getElementById("drawerSeriesInfoUrl").textContent = `www.youtube.com/${handleText}`;
             document.getElementById("channelLinkUrlPreview").textContent = `fruitsenpai.app/${cleanName.toLowerCase().replace(/\s+/g, '')} e mais 1 link`;
 
-            // Abre a tela do canal
-            document.querySelectorAll(".yt-subview").forEach(s => s.classList.remove("active"));
+            // Abre a tela do canal e atualiza a URL para ?series=NomeDaSerie
+            document.querySelectorAll(".yt-subview, .all-subs-page-view").forEach(s => s.classList.remove("active"));
             viewSeriesChannel.classList.add("active");
             window.scrollTo(0, 0);
+            updateAppBrowserUrl({ series: cleanName }, true);
 
             // Sincroniza o estado do botão Inscrever-se nesta série
             syncSeriesSubscriptionUI(cleanName, btnChannelSubscribe);
@@ -19521,11 +19554,18 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         });
 
-        // Leitor de Link Compartilhado: Abre o Player direto se o usuário entrar via link (?v=...)
-        async function checkUrlParamsAndOpenVideoOnLoad() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const targetVideoId = urlParams.get("v") || urlParams.get("video") || urlParams.get("fruta");
+        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Trava de Login e Bloqueio de Páginas Privadas
+        async function handleAppRoutingFromUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const targetVideoId = params.get("v") || params.get("video") || params.get("fruta");
+            const targetSeriesName = params.get("series");
+            const targetPlaylistId = params.get("list");
+            const targetTab = params.get("tab");
+            const targetAction = params.get("action");
+            const targetView = params.get("view");
+            const targetSearchQuery = params.get("search_query");
 
+            // 1. Abertura Direta do Player (?v=ID)
             if (targetVideoId) {
                 try {
                     const videoSnap = await getDoc(doc(db, "frutas", targetVideoId));
@@ -19533,27 +19573,118 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         const videoData = { id: videoSnap.id, ...videoSnap.data() };
                         openWatchScreen(videoData, videoData.id);
                         showToast(`Carregando: ${videoData.name}`);
+                        return;
                     }
-                } catch (err) {
-                    console.error("Erro ao carregar vídeo do link:", err);
+                } catch (err) {}
+            }
+
+            // 2. Abertura do Canal da Série (?series=Nome)
+            if (targetSeriesName) {
+                openSeriesChannel(targetSeriesName);
+                return;
+            }
+
+            // 3. Abertura de Playlist (?list=ID) COM BLOQUEIO DE PLAYLIST PRIVADA
+            if (targetPlaylistId) {
+                try {
+                    let plDocSnap = await getDoc(doc(db, "playlists", targetPlaylistId));
+                    let plData = plDocSnap.exists() ? plDocSnap.data() : null;
+
+                    if (!plData) {
+                        plDocSnap = await getDoc(doc(db, "series_playlists", targetPlaylistId));
+                        if (plDocSnap.exists()) plData = plDocSnap.data();
+                    }
+
+                    if (plData) {
+                        const isPrivate = (plData.visibility === "Particular" || plData.visibility === "Privado" || plData.visibility === "Privada");
+                        const isOwner = currentUserEmail && (plData.user === currentUserEmail);
+
+                        // Se for privada e quem abriu não for o dono: joga para o feed principal com aviso
+                        if (isPrivate && !isOwner) {
+                            showToast("Esta playlist é privada e não está disponível.");
+                            updateAppBrowserUrl({}, false);
+                            openScreen("home", false);
+                            return;
+                        }
+
+                        openPlaylistDetailPage(targetPlaylistId, plData.title);
+                        return;
+                    }
+                } catch (err) {}
+            }
+
+            // 4. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
+            if (targetTab === "subscriptions") {
+                if (!currentUserEmail) {
+                    updateAppBrowserUrl({}, false);
+                    openScreen("home", false);
+                    openAuthModal();
+                    showToast("Faça login para ver suas inscrições.");
+                    return;
                 }
+                openScreen(viewSubscriptions, false);
+                loadSubscriptionsFeedRealtime();
+                return;
+            }
+
+            // 5. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
+            if (targetAction === "upload") {
+                if (!currentUserEmail) {
+                    updateAppBrowserUrl({}, false);
+                    openScreen("home", false);
+                    openAuthModal();
+                    showToast("Faça login para postar conteúdo.");
+                    return;
+                }
+                viewUploadDetails.classList.add("active");
+                return;
+            }
+
+            // 6. Notificações (?view=notifications) COM TRAVA DE LOGIN
+            if (targetView === "notifications") {
+                if (!currentUserEmail) {
+                    updateAppBrowserUrl({}, false);
+                    openScreen("home", false);
+                    openAuthModal();
+                    return;
+                }
+                openScreen(viewNotifications, false);
+                loadNotificationsPage("todos");
+                return;
+            }
+
+            // 7. Reels / Shorts (?tab=shorts)
+            if (targetTab === "shorts") {
+                openShortsFullScreen();
+                return;
+            }
+
+            // 8. Você / Perfil (?tab=you)
+            if (targetTab === "you") {
+                openScreen(viewYou, false);
+                return;
+            }
+
+            // 9. Pesquisa (?search_query=...)
+            if (targetSearchQuery) {
+                openSearchInputMode();
+                inputGlobalSearchQuery.value = targetSearchQuery;
+                executeGlobalSearch(targetSearchQuery);
+                return;
             }
         }
 
-        // Sincroniza a navegação do botão Voltar do próprio celular ou do navegador
+        // Navegação pelo botão Voltar nativo do navegador/celular
         window.addEventListener("popstate", () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const vParam = urlParams.get("v");
-
-            if (!vParam) {
-                // Se a URL voltou a ser a principal, fecha o player se estiver aberto
+            if (!window.location.search) {
                 if (viewWatchVideo && viewWatchVideo.classList.contains("active")) {
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                    openScreen("home", false);
                 }
-            } else if (vParam !== currentWatchVideoId) {
-                checkUrlParamsAndOpenVideoOnLoad();
+                if (viewUploadDetails) viewUploadDetails.classList.remove("active");
+                openScreen("home", false);
+            } else {
+                handleAppRoutingFromUrlParams();
             }
         });
 
