@@ -12878,7 +12878,8 @@
         const authModalSub = document.getElementById("authModalSub");
 
         let isRegisterMode = false;
-        let currentUserEmail = "";
+        // Inicia com o e-mail em cache para que uma nova aba reconheça a sessão imediatamente
+        let currentUserEmail = localStorage.getItem("fs_cached_user_email") || "";
 
         // Extrai o nome do canal a partir do e-mail
         function getNameFromEmail(email) {
@@ -12975,9 +12976,11 @@
         // Monitora o estado de autenticação real e grava no Firestore
         onAuthStateChanged(auth, async (user) => {
             if (user && user.email) {
+                localStorage.setItem("fs_cached_user_email", user.email);
                 updateLoginState(true, user.email);
                 await saveUserToFirestore(user);
             } else {
+                localStorage.removeItem("fs_cached_user_email");
                 updateLoginState(false, null);
             }
         });
@@ -13286,6 +13289,17 @@
             }
         }
 
+        // Função universal de navegação para trás (respeita o histórico real 3 -> 2 -> 1)
+        function navigateBack() {
+            if (window.history.length > 1 && screenNavigationHistory.length > 1) {
+                screenNavigationHistory.pop();
+                window.history.back();
+            } else {
+                screenNavigationHistory = [];
+                openScreen("home", false);
+            }
+        }
+
         function openScreen(screen, addToHistory = true) {
             if (addToHistory && screen !== "home") {
                 screenNavigationHistory.push(screen);
@@ -13297,6 +13311,10 @@
 
             // Na tela Inicial (Home): URL limpa principal
             if (screen === "home") {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navHomeBtn = document.getElementById("navHome");
+                if (navHomeBtn) navHomeBtn.classList.add("active");
+
                 headerWrapper.style.display = "block";
                 ytDefaultHeaderBar.style.display = "flex";
                 ytSearchActiveHeaderBar.classList.remove("active");
@@ -13312,6 +13330,10 @@
             }
             // Na tela de Inscrições: URL ?tab=subscriptions
             else if (screen === viewSubscriptions) {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navSubsBtn = document.getElementById("navSubscriptions");
+                if (navSubsBtn) navSubsBtn.classList.add("active");
+
                 headerWrapper.style.display = "block";
                 chipsBar.style.display = "none";
                 btnBell.style.display = "none";
@@ -13333,6 +13355,10 @@
             }
             // Na tela Você (Perfil): URL ?tab=you
             else if (screen === viewYou) {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navYouBtn = document.getElementById("navYou");
+                if (navYouBtn) navYouBtn.classList.add("active");
+
                 headerWrapper.style.display = "block";
                 btnBell.style.display = "none";
                 btnSettingsTop.style.display = "flex";
@@ -13420,6 +13446,18 @@
             openShortsFullScreen();
         });
 
+        function openShortsFullScreen() {
+            // Sincroniza o ícone ativo na barra inferior de navegação
+            document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+            const navShortsBtn = document.getElementById("navShorts");
+            if (navShortsBtn) navShortsBtn.classList.add("active");
+
+            openScreen(viewShortsScreen);
+            window.scrollTo(0, 0);
+            updateAppBrowserUrl({ tab: "shorts" }, false);
+            loadShortsVideosFromFirestore();
+        }
+
         if (btnBackFromShorts) {
             btnBackFromShorts.addEventListener("click", () => {
                 // Se a barra de pesquisa do Reels estiver aberta, apenas fecha ela e permanece no Reels
@@ -13428,15 +13466,8 @@
                     return;
                 }
                 stopShortsPlaybackTimers();
-                openScreen("home");
+                navigateBack();
             });
-        }
-
-        function openShortsFullScreen() {
-            openScreen(viewShortsScreen);
-            window.scrollTo(0, 0);
-            updateAppBrowserUrl({ tab: "shorts" }, true);
-            loadShortsVideosFromFirestore();
         }
 
         // Carrega EXCLUSIVAMENTE os vídeos marcados como "Reels" na página de postagem
@@ -15651,10 +15682,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 btnBackFromWatch.onclick = () => {
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-
-                    // Restaura a URL para a página principal limpa
-                    updateAppBrowserUrl({}, false);
-                    openScreen("home");
+                    navigateBack();
                 };
             }
 
@@ -16456,7 +16484,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         if (btnBackFromChannel) {
             btnBackFromChannel.addEventListener("click", () => {
                 viewSeriesChannel.classList.remove("active");
-                openScreen("home");
+                navigateBack();
             });
         }
 
@@ -19554,15 +19582,23 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         });
 
-        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Trava de Login e Bloqueio de Páginas Privadas
-        async function handleAppRoutingFromUrlParams() {
+        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Suporte a Novas Abas, Voltar e Bloqueios Reais
+        async function handleAppRoutingFromUrlParams(addToHistory = true) {
             const params = new URLSearchParams(window.location.search);
             const targetVideoId = params.get("v") || params.get("video") || params.get("fruta");
             const targetSeriesName = params.get("series");
             const targetPlaylistId = params.get("list");
-            const targetTab = params.get("tab");
-            const targetAction = params.get("action");
-            const targetView = params.get("view");
+
+            // Tratamento flexível: remove barras finais e aceita maiúsculas/minúsculas
+            const rawTab = params.get("tab") || "";
+            const targetTab = rawTab.trim().toLowerCase().replace(/\/$/, "");
+
+            const rawAction = params.get("action") || "";
+            const targetAction = rawAction.trim().toLowerCase().replace(/\/$/, "");
+
+            const rawView = params.get("view") || "";
+            const targetView = rawView.trim().toLowerCase().replace(/\/$/, "");
+
             const targetSearchQuery = params.get("search_query");
 
             // 1. Abertura Direta do Player (?v=ID)
@@ -19599,7 +19635,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         const isPrivate = (plData.visibility === "Particular" || plData.visibility === "Privado" || plData.visibility === "Privada");
                         const isOwner = currentUserEmail && (plData.user === currentUserEmail);
 
-                        // Se for privada e quem abriu não for o dono: joga para o feed principal com aviso
+                        // Se for privada e quem abriu não for o dono: redireciona para o Início
                         if (isPrivate && !isOwner) {
                             showToast("Esta playlist é privada e não está disponível.");
                             updateAppBrowserUrl({}, false);
@@ -19613,7 +19649,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 } catch (err) {}
             }
 
-            // 4. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
+            // 4. Reels / Shorts (?tab=shorts)
+            if (targetTab === "shorts") {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navShortsBtn = document.getElementById("navShorts");
+                if (navShortsBtn) navShortsBtn.classList.add("active");
+                openShortsFullScreen();
+                return;
+            }
+
+            // 5. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
             if (targetTab === "subscriptions") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19622,12 +19667,24 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     showToast("Faça login para ver suas inscrições.");
                     return;
                 }
-                openScreen(viewSubscriptions, false);
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navSubsBtn = document.getElementById("navSubscriptions");
+                if (navSubsBtn) navSubsBtn.classList.add("active");
+                openScreen(viewSubscriptions, addToHistory);
                 loadSubscriptionsFeedRealtime();
                 return;
             }
 
-            // 5. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
+            // 6. Você / Perfil (?tab=you)
+            if (targetTab === "you") {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navYouBtn = document.getElementById("navYou");
+                if (navYouBtn) navYouBtn.classList.add("active");
+                openScreen(viewYou, addToHistory);
+                return;
+            }
+
+            // 7. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
             if (targetAction === "upload") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19640,7 +19697,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
-            // 6. Notificações (?view=notifications) COM TRAVA DE LOGIN
+            // 8. Notificações (?view=notifications) COM TRAVA DE LOGIN
             if (targetView === "notifications") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19648,20 +19705,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     openAuthModal();
                     return;
                 }
-                openScreen(viewNotifications, false);
+                openScreen(viewNotifications, addToHistory);
                 loadNotificationsPage("todos");
-                return;
-            }
-
-            // 7. Reels / Shorts (?tab=shorts)
-            if (targetTab === "shorts") {
-                openShortsFullScreen();
-                return;
-            }
-
-            // 8. Você / Perfil (?tab=you)
-            if (targetTab === "you") {
-                openScreen(viewYou, false);
                 return;
             }
 
@@ -19674,17 +19719,21 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         }
 
-        // Navegação pelo botão Voltar nativo do navegador/celular
+        // Navegação pelo botão Voltar nativo do navegador/celular e popstate
         window.addEventListener("popstate", () => {
+            if (watchIframe) watchIframe.src = "";
+            if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+            stopShortsPlaybackTimers();
+
+            if (viewUploadDetails) viewUploadDetails.classList.remove("active");
+            if (viewAllSubscriptionsList) viewAllSubscriptionsList.classList.remove("active");
+            if (viewAllSubscribedShorts) viewAllSubscribedShorts.classList.remove("active");
+
             if (!window.location.search) {
-                if (viewWatchVideo && viewWatchVideo.classList.contains("active")) {
-                    if (watchIframe) watchIframe.src = "";
-                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                }
-                if (viewUploadDetails) viewUploadDetails.classList.remove("active");
+                screenNavigationHistory = [];
                 openScreen("home", false);
             } else {
-                handleAppRoutingFromUrlParams();
+                handleAppRoutingFromUrlParams(false);
             }
         });
 
@@ -20783,7 +20832,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         initAppTabsAndStorage();
         loadSeriesFromFirestore();
-        checkUrlParamsAndOpenVideoOnLoad();
+        handleAppRoutingFromUrlParams(false);
         updateWeeklyNotificationsBellCount();
     </script>
 </body>
