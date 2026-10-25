@@ -13769,9 +13769,10 @@
             inputShortsSearchTerm.value = "";
         }
 
+        // A lupa do Reels abre o mesmo modo oficial de pesquisa com histórico e microfone
         if (btnShortsSearchTrigger) {
             btnShortsSearchTrigger.addEventListener("click", () => {
-                openShortsSearchInputMode();
+                openSearchInputMode("shorts");
             });
         }
 
@@ -19956,26 +19957,15 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         function renderNotificationsCommentsTab() {
             if (!currentUserEmail) return;
 
-            // Busca as séries criadas pelo usuário logado
-            const mySeriesTitlesSet = new Set();
-            if (Array.isArray(availableSeriesList)) {
-                availableSeriesList.forEach(s => {
-                    if (s.author === currentUserEmail || s.creator === currentUserEmail) {
-                        if (s.title) mySeriesTitlesSet.add(s.title.trim().toLowerCase());
-                    }
-                });
-            }
+            const myChannelName = getNameFromEmail(currentUserEmail).toLowerCase();
+            const myEmailClean = currentUserEmail.toLowerCase();
 
-            // Identifica todos os episódios que pertencem a você (por autoria direta ou pelo nome da série mãe)
+            // Identifica todos os episódios postados por você (por e-mail, canal ou autoria)
             const myEpisodes = loadedEpisodesCache.filter(ep => {
-                if (ep.author && ep.author.toLowerCase() === currentUserEmail.toLowerCase()) {
-                    return true;
-                }
-                const epChan = (ep.channel || "").trim().toLowerCase();
-                if (mySeriesTitlesSet.has(epChan)) {
-                    return true;
-                }
-                return false;
+                const epAuthor = (ep.author || "").toLowerCase();
+                const epChannel = (ep.channel || "").toLowerCase();
+
+                return epAuthor === myEmailClean || epChannel === myChannelName || epChannel.includes(myChannelName);
             });
 
             if (myEpisodes.length === 0) {
@@ -19983,21 +19973,21 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
-            let totalCommentsFound = 0;
             notifsDynamicContainer.innerHTML = "";
+            let anyCommentRendered = false;
 
-            // Consulta os comentários dos seus episódios em tempo real
+            // Percorre os episódios do usuário e traz todos os comentários de outras pessoas
             myEpisodes.forEach(ep => {
                 onSnapshot(collection(db, `frutas/${ep.id}/comments`), (snap) => {
                     snap.forEach(d => {
                         const comm = d.data();
 
                         // Ignora comentários feitos por você mesmo no seu próprio vídeo (apenas terceiros aparecem)
-                        if (comm.user && comm.user.toLowerCase() === currentUserEmail.toLowerCase()) {
+                        if (comm.user && comm.user.toLowerCase() === myEmailClean) {
                             return;
                         }
 
-                        totalCommentsFound++;
+                        anyCommentRendered = true;
                         const row = document.createElement("div");
                         row.className = "notif-item-row";
 
@@ -20273,14 +20263,14 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             inputGlobalSearchQuery.focus();
         }
 
-        // Seta voltar (←) do campo de busca: apenas fecha o campo de pesquisa e retorna à tela onde o usuário estava
+        // Seta voltar (←) do campo de busca: apenas fecha o campo de pesquisa e retorna exatamente à tela onde você estava
         if (btnBackFromSearchInput) {
             btnBackFromSearchInput.addEventListener("click", () => {
                 ytSearchActiveHeaderBar.classList.remove("active");
                 ytDefaultHeaderBar.style.display = "flex";
                 inputGlobalSearchQuery.value = "";
 
-                // Restaura a tela exata de onde a busca foi acionada
+                // Restaura a tela sem recarregar e sem jogar pro feed inicial
                 if (previousActiveScreenBeforeSearch === "shorts") {
                     openShortsFullScreen();
                 } else if (previousActiveScreenBeforeSearch === "subscriptions") {
@@ -20420,9 +20410,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             filteredSearchResultsPool = [];
 
             if (activeSearchFilterType === "canais") {
+                // Filtro "Canais" (Print A7.1): Exibe todas as séries encontradas com botão Inscrever-se sem ser bloqueado pela data
                 matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
             } else if (activeSearchFilterType === "playlists") {
-                // Playlists públicas existentes no dispositivo
+                // Playlists existentes no dispositivo ou salvas
                 const localPlaylists = JSON.parse(localStorage.getItem("fs_user_playlists") || "[]");
                 localPlaylists.forEach(pl => {
                     if ((pl.title || "").toLowerCase().includes(cleanQuery)) {
@@ -20430,7 +20421,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     }
                 });
             } else {
-                // Modo "Todos": Exibe episódios e coloca canais relevantes no resultado (Print A9)
+                // Modo "Todos": Exibe os canais no topo e os episódios logo abaixo (Print A9)
                 matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
                 matchingEpisodes.forEach(ep => filteredSearchResultsPool.push({ type: "episode", data: ep }));
             }
@@ -20802,7 +20793,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         initAppTabsAndStorage();
         loadSeriesFromFirestore();
-        checkUrlParamsAndOpenVideoOnLoad();
+        handleAppRoutingFromUrlParams();
         updateWeeklyNotificationsBellCount();
     </script>
 </body>
