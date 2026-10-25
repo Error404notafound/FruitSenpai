@@ -12877,15 +12877,15 @@
         const btnToggleAuthMode = document.getElementById("btnToggleAuthMode");
         const authModalSub = document.getElementById("authModalSub");
 
-        let isRegisterMode = false;
-        let currentUserEmail = "";
-
-        // Extrai o nome do canal a partir do e-mail
-        function getNameFromEmail(email) {
-            if (!email) return "Usuário";
-            const raw = email.split("@")[0];
-            return raw.charAt(0).toUpperCase() + raw.slice(1);
-        }
+        // Monitora o estado de autenticação real e grava no Firestore
+        onAuthStateChanged(auth, async (user) => {
+            if (user && user.email) {
+                updateLoginState(true, user.email);
+                await saveUserToFirestore(user);
+            } else {
+                updateLoginState(false, null);
+            }
+        });
 
         function updateLoginState(isLoggedIn, userEmail) {
             currentUserEmail = userEmail || "";
@@ -13433,9 +13433,14 @@
         }
 
         function openShortsFullScreen() {
+            // Sincroniza o ícone ativo na barra inferior de navegação
+            document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+            const navShortsBtn = document.getElementById("navShorts");
+            if (navShortsBtn) navShortsBtn.classList.add("active");
+
             openScreen(viewShortsScreen);
             window.scrollTo(0, 0);
-            updateAppBrowserUrl({ tab: "shorts" }, true);
+            updateAppBrowserUrl({ tab: "shorts" }, false);
             loadShortsVideosFromFirestore();
         }
 
@@ -19554,15 +19559,23 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         });
 
-        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Trava de Login e Bloqueio de Páginas Privadas
+        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Suporte a Novas Abas e Bloqueios Reais
         async function handleAppRoutingFromUrlParams() {
             const params = new URLSearchParams(window.location.search);
             const targetVideoId = params.get("v") || params.get("video") || params.get("fruta");
             const targetSeriesName = params.get("series");
             const targetPlaylistId = params.get("list");
-            const targetTab = params.get("tab");
-            const targetAction = params.get("action");
-            const targetView = params.get("view");
+            
+            // Tratamento flexível: remove barras finais e aceita maiúsculas/minúsculas sem quebrar
+            const rawTab = params.get("tab") || "";
+            const targetTab = rawTab.trim().toLowerCase().replace(/\/$/, "");
+
+            const rawAction = params.get("action") || "";
+            const targetAction = rawAction.trim().toLowerCase().replace(/\/$/, "");
+
+            const rawView = params.get("view") || "";
+            const targetView = rawView.trim().toLowerCase().replace(/\/$/, "");
+
             const targetSearchQuery = params.get("search_query");
 
             // 1. Abertura Direta do Player (?v=ID)
@@ -19599,7 +19612,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         const isPrivate = (plData.visibility === "Particular" || plData.visibility === "Privado" || plData.visibility === "Privada");
                         const isOwner = currentUserEmail && (plData.user === currentUserEmail);
 
-                        // Se for privada e quem abriu não for o dono: joga para o feed principal com aviso
+                        // Se for privada e quem abriu não for o dono: redireciona para o Início
                         if (isPrivate && !isOwner) {
                             showToast("Esta playlist é privada e não está disponível.");
                             updateAppBrowserUrl({}, false);
@@ -19613,7 +19626,13 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 } catch (err) {}
             }
 
-            // 4. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
+            // 4. Reels / Shorts (?tab=shorts)
+            if (targetTab === "shorts") {
+                openShortsFullScreen();
+                return;
+            }
+
+            // 5. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
             if (targetTab === "subscriptions") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19622,12 +19641,24 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     showToast("Faça login para ver suas inscrições.");
                     return;
                 }
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navSubsBtn = document.getElementById("navSubscriptions");
+                if (navSubsBtn) navSubsBtn.classList.add("active");
                 openScreen(viewSubscriptions, false);
                 loadSubscriptionsFeedRealtime();
                 return;
             }
 
-            // 5. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
+            // 6. Você / Perfil (?tab=you)
+            if (targetTab === "you") {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navYouBtn = document.getElementById("navYou");
+                if (navYouBtn) navYouBtn.classList.add("active");
+                openScreen(viewYou, false);
+                return;
+            }
+
+            // 7. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
             if (targetAction === "upload") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19640,7 +19671,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
-            // 6. Notificações (?view=notifications) COM TRAVA DE LOGIN
+            // 8. Notificações (?view=notifications) COM TRAVA DE LOGIN
             if (targetView === "notifications") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19650,18 +19681,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 }
                 openScreen(viewNotifications, false);
                 loadNotificationsPage("todos");
-                return;
-            }
-
-            // 7. Reels / Shorts (?tab=shorts)
-            if (targetTab === "shorts") {
-                openShortsFullScreen();
-                return;
-            }
-
-            // 8. Você / Perfil (?tab=you)
-            if (targetTab === "you") {
-                openScreen(viewYou, false);
                 return;
             }
 
