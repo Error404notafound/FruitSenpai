@@ -13432,15 +13432,15 @@
             });
         }
 
-        function openShortsFullScreen() {
+        function openShortsFullScreen(addToHistory = true) {
             // Sincroniza o ícone ativo na barra inferior de navegação
             document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
             const navShortsBtn = document.getElementById("navShorts");
             if (navShortsBtn) navShortsBtn.classList.add("active");
 
-            openScreen(viewShortsScreen);
+            openScreen(viewShortsScreen, addToHistory);
             window.scrollTo(0, 0);
-            updateAppBrowserUrl({ tab: "shorts" }, false);
+            updateAppBrowserUrl({ tab: "shorts" }, addToHistory);
             loadShortsVideosFromFirestore();
         }
 
@@ -15556,12 +15556,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         }
 
-        function openWatchScreen(videoData, videoId) {
+        function openWatchScreen(videoData, videoId, addToHistory = true) {
             currentWatchVideoId = videoId;
-            openScreen(viewWatchVideo);
+            openScreen(viewWatchVideo, addToHistory);
 
-            // Atualiza a URL na barra para o padrão do player ?v=ID
-            updateAppBrowserUrl({ v: videoId }, true);
+            // Atualiza a URL na barra para o padrão do player ?v=ID salvando no histórico
+            updateAppBrowserUrl({ v: videoId }, addToHistory);
 
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
@@ -16642,8 +16642,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         
 
-        // Abre o Canal da Série e consolida todos os posts filhos
-        async function openSeriesChannel(seriesName) {
+        // Abre o Canal da Série e consolida todos os posts filhos com histórico real
+        async function openSeriesChannel(seriesName, addToHistory = true) {
             if (!seriesName) return;
 
             const cleanName = seriesName.trim();
@@ -16657,11 +16657,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             document.getElementById("drawerSeriesInfoUrl").textContent = `www.youtube.com/${handleText}`;
             document.getElementById("channelLinkUrlPreview").textContent = `fruitsenpai.app/${cleanName.toLowerCase().replace(/\s+/g, '')} e mais 1 link`;
 
-            // Abre a tela do canal e atualiza a URL para ?series=NomeDaSerie
+            // Abre a tela do canal e atualiza a URL para ?series=NomeDaSerie no histórico
             document.querySelectorAll(".yt-subview, .all-subs-page-view").forEach(s => s.classList.remove("active"));
             viewSeriesChannel.classList.add("active");
             window.scrollTo(0, 0);
-            updateAppBrowserUrl({ series: cleanName }, true);
+            updateAppBrowserUrl({ series: cleanName }, addToHistory);
 
             // Sincroniza o estado do botão Inscrever-se nesta série
             syncSeriesSubscriptionUI(cleanName, btnChannelSubscribe);
@@ -20789,170 +20789,173 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 }
 
                 // ==========================================================================
-                // SISTEMA UNIVERSAL DE NAVEGAÇÃO E HISTÓRICO REAL (PÁGINA 1 -> 2 -> 1)
-                // ==========================================================================
-                function navigateBack() {
-                    if (window.history.length > 1 && screenNavigationHistory.length > 1) {
-                        screenNavigationHistory.pop();
-                        window.history.back();
-                    } else {
-                        screenNavigationHistory = [];
-                        openScreen("home", true);
-                    }
+        // SISTEMA NATIVO DE NAVEGAÇÃO E VOLTAR DO NAVEGADOR / CELULAR (1 -> 2 -> 1)
+        // ==========================================================================
+        function navigateBack() {
+            // Se houver histórico no navegador, volta um passo real
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                openScreen("home", false);
+                updateAppBrowserUrl({}, false);
+            }
+        }
+
+        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages sem duplicar histórico
+        async function handleAppRoutingFromUrlParams(addToHistory = false) {
+            const params = new URLSearchParams(window.location.search);
+            const targetVideoId = params.get("v") || params.get("video") || params.get("fruta");
+            const targetSeriesName = params.get("series");
+            const targetPlaylistId = params.get("list");
+
+            const rawTab = params.get("tab") || "";
+            const targetTab = rawTab.trim().toLowerCase().replace(/\/$/, "");
+
+            const rawAction = params.get("action") || "";
+            const targetAction = rawAction.trim().toLowerCase().replace(/\/$/, "");
+
+            const rawView = params.get("view") || "";
+            const targetView = rawView.trim().toLowerCase().replace(/\/$/, "");
+
+            const targetSearchQuery = params.get("search_query");
+
+            // Se a URL não tiver parâmetros, limpa os reprodutores e vai para o início
+            if (!window.location.search) {
+                if (viewWatchVideo && viewWatchVideo.classList.contains("active")) {
+                    if (watchIframe) watchIframe.src = "";
+                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
                 }
+                if (viewUploadDetails) viewUploadDetails.classList.remove("active");
+                stopShortsPlaybackTimers();
+                openScreen("home", false);
+                return;
+            }
 
-                // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Suporte a Novas Abas e Bloqueios Reais
-                async function handleAppRoutingFromUrlParams() {
-                    const params = new URLSearchParams(window.location.search);
-                    const targetVideoId = params.get("v") || params.get("video") || params.get("fruta");
-                    const targetSeriesName = params.get("series");
-                    const targetPlaylistId = params.get("list");
-
-                    // Tratamento flexível: remove barras finais e aceita maiúsculas/minúsculas sem quebrar
-                    const rawTab = params.get("tab") || "";
-                    const targetTab = rawTab.trim().toLowerCase().replace(/\/$/, "");
-
-                    const rawAction = params.get("action") || "";
-                    const targetAction = rawAction.trim().toLowerCase().replace(/\/$/, "");
-
-                    const rawView = params.get("view") || "";
-                    const targetView = rawView.trim().toLowerCase().replace(/\/$/, "");
-
-                    const targetSearchQuery = params.get("search_query");
-
-                    // 1. Abertura Direta do Player (?v=ID)
-                    if (targetVideoId) {
-                        try {
-                            const videoSnap = await getDoc(doc(db, "frutas", targetVideoId));
-                            if (videoSnap.exists()) {
-                                const videoData = { id: videoSnap.id, ...videoSnap.data() };
-                                openWatchScreen(videoData, videoData.id);
-                                showToast(`Carregando: ${videoData.name}`);
-                                return;
-                            }
-                        } catch (err) {}
-                    }
-
-                    // 2. Abertura do Canal da Série (?series=Nome)
-                    if (targetSeriesName) {
-                        openSeriesChannel(targetSeriesName);
+            // 1. Abertura Direta do Player (?v=ID)
+            if (targetVideoId) {
+                try {
+                    const videoSnap = await getDoc(doc(db, "frutas", targetVideoId));
+                    if (videoSnap.exists()) {
+                        const videoData = { id: videoSnap.id, ...videoSnap.data() };
+                        openWatchScreen(videoData, videoData.id, addToHistory);
+                        showToast(`Carregando: ${videoData.name}`);
                         return;
                     }
+                } catch (err) {}
+            }
 
-                    // 3. Abertura de Playlist (?list=ID) COM BLOQUEIO DE PLAYLIST PRIVADA
-                    if (targetPlaylistId) {
-                        try {
-                            let plDocSnap = await getDoc(doc(db, "playlists", targetPlaylistId));
-                            let plData = plDocSnap.exists() ? plDocSnap.data() : null;
+            // 2. Abertura do Canal da Série (?series=Nome)
+            if (targetSeriesName) {
+                openSeriesChannel(targetSeriesName, addToHistory);
+                return;
+            }
 
-                            if (!plData) {
-                                plDocSnap = await getDoc(doc(db, "series_playlists", targetPlaylistId));
-                                if (plDocSnap.exists()) plData = plDocSnap.data();
-                            }
+            // 3. Abertura de Playlist (?list=ID) COM BLOQUEIO DE PLAYLIST PRIVADA
+            if (targetPlaylistId) {
+                try {
+                    let plDocSnap = await getDoc(doc(db, "playlists", targetPlaylistId));
+                    let plData = plDocSnap.exists() ? plDocSnap.data() : null;
 
-                            if (plData) {
-                                const isPrivate = (plData.visibility === "Particular" || plData.visibility === "Privado" || plData.visibility === "Privada");
-                                const isOwner = currentUserEmail && (plData.user === currentUserEmail);
-
-                                // Se for privada e quem abriu não for o dono: redireciona para o Início
-                                if (isPrivate && !isOwner) {
-                                    showToast("Esta playlist é privada e não está disponível.");
-                                    updateAppBrowserUrl({}, false);
-                                    openScreen("home", false);
-                                    return;
-                                }
-
-                                openPlaylistDetailPage(targetPlaylistId, plData.title);
-                                return;
-                            }
-                        } catch (err) {}
+                    if (!plData) {
+                        plDocSnap = await getDoc(doc(db, "series_playlists", targetPlaylistId));
+                        if (plDocSnap.exists()) plData = plDocSnap.data();
                     }
 
-                    // 4. Reels / Shorts (?tab=shorts)
-                    if (targetTab === "shorts") {
-                        openShortsFullScreen();
-                        return;
-                    }
+                    if (plData) {
+                        const isPrivate = (plData.visibility === "Particular" || plData.visibility === "Privado" || plData.visibility === "Privada");
+                        const isOwner = currentUserEmail && (plData.user === currentUserEmail);
 
-                    // 5. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
-                    if (targetTab === "subscriptions") {
-                        if (!currentUserEmail) {
+                        // Se for privada e quem abriu não for o dono: redireciona para o Início
+                        if (isPrivate && !isOwner) {
+                            showToast("Esta playlist é privada e não está disponível.");
                             updateAppBrowserUrl({}, false);
                             openScreen("home", false);
-                            openAuthModal();
-                            showToast("Faça login para ver suas inscrições.");
                             return;
                         }
-                        document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                        const navSubsBtn = document.getElementById("navSubscriptions");
-                        if (navSubsBtn) navSubsBtn.classList.add("active");
-                        openScreen(viewSubscriptions, false);
-                        loadSubscriptionsFeedRealtime();
-                        return;
-                    }
 
-                    // 6. Você / Perfil (?tab=you)
-                    if (targetTab === "you") {
-                        document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                        const navYouBtn = document.getElementById("navYou");
-                        if (navYouBtn) navYouBtn.classList.add("active");
-                        openScreen(viewYou, false);
+                        openPlaylistDetailPage(targetPlaylistId, plData.title, addToHistory);
                         return;
                     }
+                } catch (err) {}
+            }
 
-                    // 7. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
-                    if (targetAction === "upload") {
-                        if (!currentUserEmail) {
-                            updateAppBrowserUrl({}, false);
-                            openScreen("home", false);
-                            openAuthModal();
-                            showToast("Faça login para postar conteúdo.");
-                            return;
-                        }
-                        viewUploadDetails.classList.add("active");
-                        return;
-                    }
+            // 4. Reels / Shorts (?tab=shorts)
+            if (targetTab === "shorts") {
+                openShortsFullScreen(addToHistory);
+                return;
+            }
 
-                    // 8. Notificações (?view=notifications) COM TRAVA DE LOGIN
-                    if (targetView === "notifications") {
-                        if (!currentUserEmail) {
-                            updateAppBrowserUrl({}, false);
-                            openScreen("home", false);
-                            openAuthModal();
-                            return;
-                        }
-                        openScreen(viewNotifications, false);
-                        loadNotificationsPage("todos");
-                        return;
-                    }
-
-                    // 9. Pesquisa (?search_query=...)
-                    if (targetSearchQuery) {
-                        openSearchInputMode();
-                        inputGlobalSearchQuery.value = targetSearchQuery;
-                        executeGlobalSearch(targetSearchQuery);
-                        return;
-                    }
+            // 5. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
+            if (targetTab === "subscriptions") {
+                if (!currentUserEmail) {
+                    updateAppBrowserUrl({}, false);
+                    openScreen("home", false);
+                    openAuthModal();
+                    showToast("Faça login para ver suas inscrições.");
+                    return;
                 }
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navSubsBtn = document.getElementById("navSubscriptions");
+                if (navSubsBtn) navSubsBtn.classList.add("active");
+                openScreen(viewSubscriptions, addToHistory);
+                loadSubscriptionsFeedRealtime();
+                return;
+            }
 
-                // Sincroniza o botão Voltar do próprio celular ou do navegador
-                window.addEventListener("popstate", () => {
-                    if (!window.location.search) {
-                        if (viewWatchVideo && viewWatchVideo.classList.contains("active")) {
-                            if (watchIframe) watchIframe.src = "";
-                            if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                        }
-                        if (viewUploadDetails) viewUploadDetails.classList.remove("active");
-                        openScreen("home", false);
-                    } else {
-                        handleAppRoutingFromUrlParams();
-                    }
-                });
+            // 6. Você / Perfil (?tab=you)
+            if (targetTab === "you") {
+                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+                const navYouBtn = document.getElementById("navYou");
+                if (navYouBtn) navYouBtn.classList.add("active");
+                openScreen(viewYou, addToHistory);
+                return;
+            }
 
-                initAppTabsAndStorage();
-                loadSeriesFromFirestore();
-                handleAppRoutingFromUrlParams();
-                updateWeeklyNotificationsBellCount();
-            </script>
+            // 7. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
+            if (targetAction === "upload") {
+                if (!currentUserEmail) {
+                    updateAppBrowserUrl({}, false);
+                    openScreen("home", false);
+                    openAuthModal();
+                    showToast("Faça login para postar conteúdo.");
+                    return;
+                }
+                viewUploadDetails.classList.add("active");
+                updateAppBrowserUrl({ action: "upload" }, addToHistory);
+                return;
+            }
+
+            // 8. Notificações (?view=notifications) COM TRAVA DE LOGIN
+            if (targetView === "notifications") {
+                if (!currentUserEmail) {
+                    updateAppBrowserUrl({}, false);
+                    openScreen("home", false);
+                    openAuthModal();
+                    return;
+                }
+                openScreen(viewNotifications, addToHistory);
+                loadNotificationsPage("todos");
+                return;
+            }
+
+            // 9. Pesquisa (?search_query=...)
+            if (targetSearchQuery) {
+                openSearchInputMode();
+                inputGlobalSearchQuery.value = targetSearchQuery;
+                executeGlobalSearch(targetSearchQuery);
+                return;
+            }
+        }
+
+        // Responde ao botão Voltar nativo do celular ou do navegador (Android/iOS/PC)
+        window.addEventListener("popstate", () => {
+            handleAppRoutingFromUrlParams(false);
+        });
+
+        initAppTabsAndStorage();
+        loadSeriesFromFirestore();
+        handleAppRoutingFromUrlParams(false);
+        updateWeeklyNotificationsBellCount();
+    </script>
 </body>
   </html>
