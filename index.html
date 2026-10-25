@@ -12877,15 +12877,15 @@
         const btnToggleAuthMode = document.getElementById("btnToggleAuthMode");
         const authModalSub = document.getElementById("authModalSub");
 
-        // Monitora o estado de autenticação real e grava no Firestore
-        onAuthStateChanged(auth, async (user) => {
-            if (user && user.email) {
-                updateLoginState(true, user.email);
-                await saveUserToFirestore(user);
-            } else {
-                updateLoginState(false, null);
-            }
-        });
+        let isRegisterMode = false;
+        let currentUserEmail = "";
+
+        // Extrai o nome do canal a partir do e-mail
+        function getNameFromEmail(email) {
+            if (!email) return "Usuário";
+            const raw = email.split("@")[0];
+            return raw.charAt(0).toUpperCase() + raw.slice(1);
+        }
 
         function updateLoginState(isLoggedIn, userEmail) {
             currentUserEmail = userEmail || "";
@@ -13428,19 +13428,14 @@
                     return;
                 }
                 stopShortsPlaybackTimers();
-                navigateBack();
+                openScreen("home");
             });
         }
 
-        function openShortsFullScreen(addToHistory = true) {
-            // Sincroniza o ícone ativo na barra inferior de navegação
-            document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-            const navShortsBtn = document.getElementById("navShorts");
-            if (navShortsBtn) navShortsBtn.classList.add("active");
-
-            openScreen(viewShortsScreen, addToHistory);
+        function openShortsFullScreen() {
+            openScreen(viewShortsScreen);
             window.scrollTo(0, 0);
-            updateAppBrowserUrl({ tab: "shorts" }, addToHistory);
+            updateAppBrowserUrl({ tab: "shorts" }, true);
             loadShortsVideosFromFirestore();
         }
 
@@ -13769,10 +13764,9 @@
             inputShortsSearchTerm.value = "";
         }
 
-        // A lupa do Reels abre o mesmo modo oficial de pesquisa com histórico e microfone
         if (btnShortsSearchTrigger) {
             btnShortsSearchTrigger.addEventListener("click", () => {
-                openSearchInputMode("shorts");
+                openShortsSearchInputMode();
             });
         }
 
@@ -15556,12 +15550,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         }
 
-        function openWatchScreen(videoData, videoId, addToHistory = true) {
+        function openWatchScreen(videoData, videoId) {
             currentWatchVideoId = videoId;
-            openScreen(viewWatchVideo, addToHistory);
+            openScreen(viewWatchVideo);
 
-            // Atualiza a URL na barra para o padrão do player ?v=ID salvando no histórico
-            updateAppBrowserUrl({ v: videoId }, addToHistory);
+            // Atualiza a URL na barra para o padrão do player ?v=ID
+            updateAppBrowserUrl({ v: videoId }, true);
 
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
@@ -15657,7 +15651,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 btnBackFromWatch.onclick = () => {
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                    navigateBack();
+
+                    // Restaura a URL para a página principal limpa
+                    updateAppBrowserUrl({}, false);
+                    openScreen("home");
                 };
             }
 
@@ -16459,7 +16456,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         if (btnBackFromChannel) {
             btnBackFromChannel.addEventListener("click", () => {
                 viewSeriesChannel.classList.remove("active");
-                navigateBack();
+                openScreen("home");
             });
         }
 
@@ -16642,8 +16639,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         
 
-        // Abre o Canal da Série e consolida todos os posts filhos com histórico real
-        async function openSeriesChannel(seriesName, addToHistory = true) {
+        // Abre o Canal da Série e consolida todos os posts filhos
+        async function openSeriesChannel(seriesName) {
             if (!seriesName) return;
 
             const cleanName = seriesName.trim();
@@ -16657,11 +16654,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             document.getElementById("drawerSeriesInfoUrl").textContent = `www.youtube.com/${handleText}`;
             document.getElementById("channelLinkUrlPreview").textContent = `fruitsenpai.app/${cleanName.toLowerCase().replace(/\s+/g, '')} e mais 1 link`;
 
-            // Abre a tela do canal e atualiza a URL para ?series=NomeDaSerie no histórico
+            // Abre a tela do canal e atualiza a URL para ?series=NomeDaSerie
             document.querySelectorAll(".yt-subview, .all-subs-page-view").forEach(s => s.classList.remove("active"));
             viewSeriesChannel.classList.add("active");
             window.scrollTo(0, 0);
-            updateAppBrowserUrl({ series: cleanName }, addToHistory);
+            updateAppBrowserUrl({ series: cleanName }, true);
 
             // Sincroniza o estado do botão Inscrever-se nesta série
             syncSeriesSubscriptionUI(cleanName, btnChannelSubscribe);
@@ -19557,23 +19554,15 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         });
 
-        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Suporte a Novas Abas e Bloqueios Reais
+        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages com Trava de Login e Bloqueio de Páginas Privadas
         async function handleAppRoutingFromUrlParams() {
             const params = new URLSearchParams(window.location.search);
             const targetVideoId = params.get("v") || params.get("video") || params.get("fruta");
             const targetSeriesName = params.get("series");
             const targetPlaylistId = params.get("list");
-            
-            // Tratamento flexível: remove barras finais e aceita maiúsculas/minúsculas sem quebrar
-            const rawTab = params.get("tab") || "";
-            const targetTab = rawTab.trim().toLowerCase().replace(/\/$/, "");
-
-            const rawAction = params.get("action") || "";
-            const targetAction = rawAction.trim().toLowerCase().replace(/\/$/, "");
-
-            const rawView = params.get("view") || "";
-            const targetView = rawView.trim().toLowerCase().replace(/\/$/, "");
-
+            const targetTab = params.get("tab");
+            const targetAction = params.get("action");
+            const targetView = params.get("view");
             const targetSearchQuery = params.get("search_query");
 
             // 1. Abertura Direta do Player (?v=ID)
@@ -19610,7 +19599,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         const isPrivate = (plData.visibility === "Particular" || plData.visibility === "Privado" || plData.visibility === "Privada");
                         const isOwner = currentUserEmail && (plData.user === currentUserEmail);
 
-                        // Se for privada e quem abriu não for o dono: redireciona para o Início
+                        // Se for privada e quem abriu não for o dono: joga para o feed principal com aviso
                         if (isPrivate && !isOwner) {
                             showToast("Esta playlist é privada e não está disponível.");
                             updateAppBrowserUrl({}, false);
@@ -19624,13 +19613,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 } catch (err) {}
             }
 
-            // 4. Reels / Shorts (?tab=shorts)
-            if (targetTab === "shorts") {
-                openShortsFullScreen();
-                return;
-            }
-
-            // 5. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
+            // 4. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
             if (targetTab === "subscriptions") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19639,24 +19622,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     showToast("Faça login para ver suas inscrições.");
                     return;
                 }
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                const navSubsBtn = document.getElementById("navSubscriptions");
-                if (navSubsBtn) navSubsBtn.classList.add("active");
                 openScreen(viewSubscriptions, false);
                 loadSubscriptionsFeedRealtime();
                 return;
             }
 
-            // 6. Você / Perfil (?tab=you)
-            if (targetTab === "you") {
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                const navYouBtn = document.getElementById("navYou");
-                if (navYouBtn) navYouBtn.classList.add("active");
-                openScreen(viewYou, false);
-                return;
-            }
-
-            // 7. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
+            // 5. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
             if (targetAction === "upload") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19669,7 +19640,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
-            // 8. Notificações (?view=notifications) COM TRAVA DE LOGIN
+            // 6. Notificações (?view=notifications) COM TRAVA DE LOGIN
             if (targetView === "notifications") {
                 if (!currentUserEmail) {
                     updateAppBrowserUrl({}, false);
@@ -19679,6 +19650,18 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 }
                 openScreen(viewNotifications, false);
                 loadNotificationsPage("todos");
+                return;
+            }
+
+            // 7. Reels / Shorts (?tab=shorts)
+            if (targetTab === "shorts") {
+                openShortsFullScreen();
+                return;
+            }
+
+            // 8. Você / Perfil (?tab=you)
+            if (targetTab === "you") {
+                openScreen(viewYou, false);
                 return;
             }
 
@@ -19954,15 +19937,26 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         function renderNotificationsCommentsTab() {
             if (!currentUserEmail) return;
 
-            const myChannelName = getNameFromEmail(currentUserEmail).toLowerCase();
-            const myEmailClean = currentUserEmail.toLowerCase();
+            // Busca as séries criadas pelo usuário logado
+            const mySeriesTitlesSet = new Set();
+            if (Array.isArray(availableSeriesList)) {
+                availableSeriesList.forEach(s => {
+                    if (s.author === currentUserEmail || s.creator === currentUserEmail) {
+                        if (s.title) mySeriesTitlesSet.add(s.title.trim().toLowerCase());
+                    }
+                });
+            }
 
-            // Identifica todos os episódios postados por você (por e-mail, canal ou autoria)
+            // Identifica todos os episódios que pertencem a você (por autoria direta ou pelo nome da série mãe)
             const myEpisodes = loadedEpisodesCache.filter(ep => {
-                const epAuthor = (ep.author || "").toLowerCase();
-                const epChannel = (ep.channel || "").toLowerCase();
-
-                return epAuthor === myEmailClean || epChannel === myChannelName || epChannel.includes(myChannelName);
+                if (ep.author && ep.author.toLowerCase() === currentUserEmail.toLowerCase()) {
+                    return true;
+                }
+                const epChan = (ep.channel || "").trim().toLowerCase();
+                if (mySeriesTitlesSet.has(epChan)) {
+                    return true;
+                }
+                return false;
             });
 
             if (myEpisodes.length === 0) {
@@ -19970,21 +19964,21 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
+            let totalCommentsFound = 0;
             notifsDynamicContainer.innerHTML = "";
-            let anyCommentRendered = false;
 
-            // Percorre os episódios do usuário e traz todos os comentários de outras pessoas
+            // Consulta os comentários dos seus episódios em tempo real
             myEpisodes.forEach(ep => {
                 onSnapshot(collection(db, `frutas/${ep.id}/comments`), (snap) => {
                     snap.forEach(d => {
                         const comm = d.data();
 
                         // Ignora comentários feitos por você mesmo no seu próprio vídeo (apenas terceiros aparecem)
-                        if (comm.user && comm.user.toLowerCase() === myEmailClean) {
+                        if (comm.user && comm.user.toLowerCase() === currentUserEmail.toLowerCase()) {
                             return;
                         }
 
-                        anyCommentRendered = true;
+                        totalCommentsFound++;
                         const row = document.createElement("div");
                         row.className = "notif-item-row";
 
@@ -20260,14 +20254,14 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             inputGlobalSearchQuery.focus();
         }
 
-        // Seta voltar (←) do campo de busca: apenas fecha o campo de pesquisa e retorna exatamente à tela onde você estava
+        // Seta voltar (←) do campo de busca: apenas fecha o campo de pesquisa e retorna à tela onde o usuário estava
         if (btnBackFromSearchInput) {
             btnBackFromSearchInput.addEventListener("click", () => {
                 ytSearchActiveHeaderBar.classList.remove("active");
                 ytDefaultHeaderBar.style.display = "flex";
                 inputGlobalSearchQuery.value = "";
 
-                // Restaura a tela sem recarregar e sem jogar pro feed inicial
+                // Restaura a tela exata de onde a busca foi acionada
                 if (previousActiveScreenBeforeSearch === "shorts") {
                     openShortsFullScreen();
                 } else if (previousActiveScreenBeforeSearch === "subscriptions") {
@@ -20407,10 +20401,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             filteredSearchResultsPool = [];
 
             if (activeSearchFilterType === "canais") {
-                // Filtro "Canais" (Print A7.1): Exibe todas as séries encontradas com botão Inscrever-se sem ser bloqueado pela data
                 matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
             } else if (activeSearchFilterType === "playlists") {
-                // Playlists existentes no dispositivo ou salvas
+                // Playlists públicas existentes no dispositivo
                 const localPlaylists = JSON.parse(localStorage.getItem("fs_user_playlists") || "[]");
                 localPlaylists.forEach(pl => {
                     if ((pl.title || "").toLowerCase().includes(cleanQuery)) {
@@ -20418,7 +20411,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     }
                 });
             } else {
-                // Modo "Todos": Exibe os canais no topo e os episódios logo abaixo (Print A9)
+                // Modo "Todos": Exibe episódios e coloca canais relevantes no resultado (Print A9)
                 matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
                 matchingEpisodes.forEach(ep => filteredSearchResultsPool.push({ type: "episode", data: ep }));
             }
@@ -20773,188 +20766,24 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         if (btnConfirmModalSearchHist) {
-                    btnConfirmModalSearchHist.addEventListener("click", () => {
-                        const disableHistory = radioHistDisableYes.checked;
-                        if (disableHistory) {
-                            localStorage.setItem("fs_save_search_history", "disabled");
-                            localStorage.removeItem("fs_user_search_history");
-                            searchHistoryContainer.innerHTML = "";
-                            showToast("Histórico de pesquisa desativado.");
-                        } else {
-                            localStorage.removeItem("fs_save_search_history");
-                            showToast("Histórico de pesquisa ativado.");
-                        }
-                        modalSearchHistoryToggle.classList.remove("active");
-                    });
+            btnConfirmModalSearchHist.addEventListener("click", () => {
+                const disableHistory = radioHistDisableYes.checked;
+                if (disableHistory) {
+                    localStorage.setItem("fs_save_search_history", "disabled");
+                    localStorage.removeItem("fs_user_search_history");
+                    searchHistoryContainer.innerHTML = "";
+                    showToast("Histórico de pesquisa desativado.");
+                } else {
+                    localStorage.removeItem("fs_save_search_history");
+                    showToast("Histórico de pesquisa ativado.");
                 }
-
-                // ==========================================================================
-        // SISTEMA NATIVO DE NAVEGAÇÃO E VOLTAR DO NAVEGADOR / CELULAR (1 -> 2 -> 1)
-        // ==========================================================================
-        function navigateBack() {
-            // Se houver histórico no navegador, volta um passo real
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                openScreen("home", false);
-                updateAppBrowserUrl({}, false);
-            }
+                modalSearchHistoryToggle.classList.remove("active");
+            });
         }
-
-        // ROTEADOR UNIVERSAL: Lê a URL no GitHub Pages sem duplicar histórico
-        async function handleAppRoutingFromUrlParams(addToHistory = false) {
-            const params = new URLSearchParams(window.location.search);
-            const targetVideoId = params.get("v") || params.get("video") || params.get("fruta");
-            const targetSeriesName = params.get("series");
-            const targetPlaylistId = params.get("list");
-
-            const rawTab = params.get("tab") || "";
-            const targetTab = rawTab.trim().toLowerCase().replace(/\/$/, "");
-
-            const rawAction = params.get("action") || "";
-            const targetAction = rawAction.trim().toLowerCase().replace(/\/$/, "");
-
-            const rawView = params.get("view") || "";
-            const targetView = rawView.trim().toLowerCase().replace(/\/$/, "");
-
-            const targetSearchQuery = params.get("search_query");
-
-            // Se a URL não tiver parâmetros, limpa os reprodutores e vai para o início
-            if (!window.location.search) {
-                if (viewWatchVideo && viewWatchVideo.classList.contains("active")) {
-                    if (watchIframe) watchIframe.src = "";
-                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                }
-                if (viewUploadDetails) viewUploadDetails.classList.remove("active");
-                stopShortsPlaybackTimers();
-                openScreen("home", false);
-                return;
-            }
-
-            // 1. Abertura Direta do Player (?v=ID)
-            if (targetVideoId) {
-                try {
-                    const videoSnap = await getDoc(doc(db, "frutas", targetVideoId));
-                    if (videoSnap.exists()) {
-                        const videoData = { id: videoSnap.id, ...videoSnap.data() };
-                        openWatchScreen(videoData, videoData.id, addToHistory);
-                        showToast(`Carregando: ${videoData.name}`);
-                        return;
-                    }
-                } catch (err) {}
-            }
-
-            // 2. Abertura do Canal da Série (?series=Nome)
-            if (targetSeriesName) {
-                openSeriesChannel(targetSeriesName, addToHistory);
-                return;
-            }
-
-            // 3. Abertura de Playlist (?list=ID) COM BLOQUEIO DE PLAYLIST PRIVADA
-            if (targetPlaylistId) {
-                try {
-                    let plDocSnap = await getDoc(doc(db, "playlists", targetPlaylistId));
-                    let plData = plDocSnap.exists() ? plDocSnap.data() : null;
-
-                    if (!plData) {
-                        plDocSnap = await getDoc(doc(db, "series_playlists", targetPlaylistId));
-                        if (plDocSnap.exists()) plData = plDocSnap.data();
-                    }
-
-                    if (plData) {
-                        const isPrivate = (plData.visibility === "Particular" || plData.visibility === "Privado" || plData.visibility === "Privada");
-                        const isOwner = currentUserEmail && (plData.user === currentUserEmail);
-
-                        // Se for privada e quem abriu não for o dono: redireciona para o Início
-                        if (isPrivate && !isOwner) {
-                            showToast("Esta playlist é privada e não está disponível.");
-                            updateAppBrowserUrl({}, false);
-                            openScreen("home", false);
-                            return;
-                        }
-
-                        openPlaylistDetailPage(targetPlaylistId, plData.title, addToHistory);
-                        return;
-                    }
-                } catch (err) {}
-            }
-
-            // 4. Reels / Shorts (?tab=shorts)
-            if (targetTab === "shorts") {
-                openShortsFullScreen(addToHistory);
-                return;
-            }
-
-            // 5. Inscrições (?tab=subscriptions) COM TRAVA DE LOGIN
-            if (targetTab === "subscriptions") {
-                if (!currentUserEmail) {
-                    updateAppBrowserUrl({}, false);
-                    openScreen("home", false);
-                    openAuthModal();
-                    showToast("Faça login para ver suas inscrições.");
-                    return;
-                }
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                const navSubsBtn = document.getElementById("navSubscriptions");
-                if (navSubsBtn) navSubsBtn.classList.add("active");
-                openScreen(viewSubscriptions, addToHistory);
-                loadSubscriptionsFeedRealtime();
-                return;
-            }
-
-            // 6. Você / Perfil (?tab=you)
-            if (targetTab === "you") {
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                const navYouBtn = document.getElementById("navYou");
-                if (navYouBtn) navYouBtn.classList.add("active");
-                openScreen(viewYou, addToHistory);
-                return;
-            }
-
-            // 7. Postagem / Upload (?action=upload) COM TRAVA DE LOGIN
-            if (targetAction === "upload") {
-                if (!currentUserEmail) {
-                    updateAppBrowserUrl({}, false);
-                    openScreen("home", false);
-                    openAuthModal();
-                    showToast("Faça login para postar conteúdo.");
-                    return;
-                }
-                viewUploadDetails.classList.add("active");
-                updateAppBrowserUrl({ action: "upload" }, addToHistory);
-                return;
-            }
-
-            // 8. Notificações (?view=notifications) COM TRAVA DE LOGIN
-            if (targetView === "notifications") {
-                if (!currentUserEmail) {
-                    updateAppBrowserUrl({}, false);
-                    openScreen("home", false);
-                    openAuthModal();
-                    return;
-                }
-                openScreen(viewNotifications, addToHistory);
-                loadNotificationsPage("todos");
-                return;
-            }
-
-            // 9. Pesquisa (?search_query=...)
-            if (targetSearchQuery) {
-                openSearchInputMode();
-                inputGlobalSearchQuery.value = targetSearchQuery;
-                executeGlobalSearch(targetSearchQuery);
-                return;
-            }
-        }
-
-        // Responde ao botão Voltar nativo do celular ou do navegador (Android/iOS/PC)
-        window.addEventListener("popstate", () => {
-            handleAppRoutingFromUrlParams(false);
-        });
 
         initAppTabsAndStorage();
         loadSeriesFromFirestore();
-        handleAppRoutingFromUrlParams(false);
+        checkUrlParamsAndOpenVideoOnLoad();
         updateWeeklyNotificationsBellCount();
     </script>
 </body>
