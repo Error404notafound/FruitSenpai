@@ -7677,14 +7677,14 @@
         }
 
         /* ==========================================================================
-           ESTILOS OFICIAIS DO SISTEMA DE PESQUISA REAL (PRINTS A1 ATÉ H8)
+           ESTILOS OFICIAIS DO SISTEMA DE PESQUISA (PRINTS A1 ATÉ A10)
            ========================================================================== */
         .search-results-view {
             display: none;
             flex-direction: column;
             width: 100%;
             min-height: calc(100vh - var(--yt-bottom-nav-h));
-            background-color: #1f1f1f;
+            background-color: var(--yt-bg-main);
             padding-bottom: 90px;
         }
 
@@ -7692,14 +7692,14 @@
             display: flex;
         }
 
-        /* Barra de Pesquisa Ativa no Cabeçalho */
+        /* Barra de Pesquisa Ativa no Cabeçalho (Prints A1, A2 e A3) */
         .header-search-active-bar {
             height: var(--yt-header-h);
             display: none;
             align-items: center;
             padding: 0 10px;
             gap: 8px;
-            background-color: #1f1f1f;
+            background-color: var(--yt-bg-main);
             width: 100%;
             box-sizing: border-box;
         }
@@ -7710,14 +7710,14 @@
 
         .search-input-pill-box {
             flex: 1;
-            height: 42px;
-            background-color: #2a2a2a;
-            border-radius: 24px;
+            height: 38px;
+            background-color: #212121;
+            border-radius: 20px;
             display: flex;
             align-items: center;
-            padding: 0 14px;
+            padding: 0 12px;
             gap: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .search-input-pill-box input {
@@ -7725,7 +7725,7 @@
             background: none;
             border: none;
             color: #ffffff;
-            font-size: 15px;
+            font-size: 14.5px;
             outline: none;
             font-family: inherit;
         }
@@ -7742,852 +7742,287 @@
         }
 
         .search-clear-x-btn svg {
-            width: 18px;
-            height: 18px;
-            fill: currentColor;
-        }
-
-        /* Barra de Categorias Horizontal (Prints A1 a A5) */
-        .google-categories-bar {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            padding: 0 14px;
-            height: 44px;
-            background-color: #1f1f1f;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: sticky;
-            top: 48px;
-            z-index: 40;
-        }
-
-        .google-categories-bar::-webkit-scrollbar {
-            display: none;
-        }
-
-        .google-category-tab {
-            background: none;
-            border: none;
-            color: #9aa0a6;
-            font-size: 13.5px;
-            font-weight: 500;
-            padding: 11px 0;
-            cursor: pointer;
-            position: relative;
-            flex-shrink: 0;
-            font-family: inherit;
-        }
-
-        .google-category-tab.active {
-            color: #8ab4f8;
-            font-weight: 700;
-        }
-
-        .google-category-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            border-radius: 2px 2px 0 0;
-            background-color: #8ab4f8;
-        }
-
-        /* Sub-filtros Horizontais (Idioma, Data, Todos) */
-        .google-subfilters-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px 10px 14px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            background-color: #1f1f1f;
-        }
-
-        .google-subfilters-row::-webkit-scrollbar {
-            display: none;
-        }
-
-        .google-subfilter-pill {
-            background-color: #303134;
-            color: #e8eaed;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            height: 32px;
-            padding: 0 12px;
-            font-size: 12.5px;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .google-subfilter-pill svg {
-            width: 14px;
-            height: 14px;
-            fill: #9aa0a6;
-        }
-
-        /* Container Dinâmico das Abas de Resultados */
-        .google-tab-content-panel {
-            display: none;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .google-tab-content-panel.active {
-            display: flex;
-        }
-
-        /* Card de Apps no Topo (Print A1.1) */
-        .google-apps-block {
-            display: flex;
-            flex-direction: column;
-            padding: 14px 16px;
-            border-bottom: 8px solid #121212;
-            gap: 12px;
-        }
-
-        .google-apps-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 15px;
-            font-weight: 700;
-            color: #ffffff;
-        }
-
-        .google-app-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 4px 0;
-            cursor: pointer;
-        }
-
-        .google-app-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .google-app-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: #2a2a2a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .google-app-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .google-app-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #e8eaed;
-        }
-
-        .google-app-meta {
-            font-size: 12px;
-            color: #9aa0a6;
-            margin-top: 2px;
-        }
-
-        .google-btn-more-apps {
-            width: 100%;
-            height: 38px;
-            border-radius: 19px;
-            background-color: #303134;
-            color: #e8eaed;
-            border: none;
-            font-size: 13.5px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 6px;
-        }
-
-        /* Resumo IA (Print A1.1) */
-        .google-ai-overview-box {
-            padding: 14px 16px;
-            border-bottom: 8px solid #121212;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            background: linear-gradient(180deg, rgba(138, 180, 248, 0.08) 0%, transparent 100%);
-        }
-
-        .google-ai-header {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #8ab4f8;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .google-ai-header svg {
             width: 16px;
             height: 16px;
             fill: currentColor;
         }
 
-        .google-ai-highlight-text {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #e8eaed;
-        }
-
-        .google-ai-highlight-text mark {
-            background-color: rgba(138, 180, 248, 0.3);
+        .search-filter-icon-btn {
+            background: none;
+            border: none;
             color: #ffffff;
-            padding: 1px 4px;
-            border-radius: 3px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
         }
 
-        /* Sanfona "As pessoas também perguntam" (Print A1.3) */
-        .google-faq-section {
-            padding: 14px 16px;
-            border-bottom: 8px solid #121212;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+        .search-filter-icon-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
         }
 
-        .google-faq-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 4px;
-        }
-
-        .google-faq-item {
+        /* Barra de Filtros [Todos ▾] e [Qualquer data ▾] (Print A6) */
+        .search-filters-bar {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px 10px 14px;
+            background-color: var(--yt-bg-main);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 12px 0;
+            position: sticky;
+            top: 48px;
+            z-index: 45;
+        }
+
+        .search-filters-bar.active {
+            display: flex;
+        }
+
+        .search-dropdown-filter-pill {
+            background-color: #272727;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            height: 32px;
+            padding: 0 12px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             cursor: pointer;
         }
 
-        .google-faq-question-row {
+        .search-dropdown-filter-pill svg {
+            width: 14px;
+            height: 14px;
+            fill: #ffffff;
+        }
+
+        /* Histórico de Pesquisa Recente (Print A10) */
+        .search-history-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .search-history-item-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            font-size: 14px;
-            color: #e8eaed;
-            font-weight: 500;
-        }
-
-        .google-faq-chevron {
-            width: 20px;
-            height: 20px;
-            fill: #9aa0a6;
-            transition: transform 0.2s;
-        }
-
-        .google-faq-chevron.open {
-            transform: rotate(180deg);
-        }
-
-        .google-faq-answer {
-            display: none;
-            padding-top: 8px;
-            font-size: 13px;
-            color: #bdc1c6;
-            line-height: 1.45;
-        }
-
-        .google-faq-answer.open {
-            display: block;
-        }
-
-        /* Resultados Web (Prints G1 a G1.4) */
-        .google-web-result-card {
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
+            padding: 12px 16px;
             cursor: pointer;
         }
 
-        .google-web-source-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #bdc1c6;
+        .search-history-item-row:active {
+            background-color: rgba(255, 255, 255, 0.05);
         }
 
-        .google-web-favicon {
+        .search-history-query-text {
+            color: #3ea6ff;
+            font-size: 14.5px;
+            font-weight: 500;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-history-remove-btn {
+            color: #3ea6ff;
+            font-size: 12.5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        /* Card de Canal no Resultado da Pesquisa (Print A7.1 e A9) */
+        .search-channel-result-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            gap: 12px;
+        }
+
+        .search-channel-left-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+            min-width: 0;
+            cursor: pointer;
+        }
+
+        .search-channel-avatar-big {
+            width: 64px;
+            height: 64px;
+            min-width: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: #272727;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-channel-avatar-big img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .search-channel-texts-col {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .search-channel-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .search-channel-meta {
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        /* Card de Playlist no Resultado da Pesquisa (Print A7.2) */
+        .search-playlist-result-card {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px;
+            cursor: pointer;
+            gap: 8px;
+        }
+
+        .search-playlist-thumb-box {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #212121;
+            position: relative;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+        }
+
+        .search-playlist-thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .search-playlist-badge {
+            position: absolute;
+            bottom: 6px;
+            right: 6px;
+            background: rgba(0, 0, 0, 0.85);
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Tela de Pesquisa por Voz (Print A5) */
+        .voice-search-screen-modal {
+            position: fixed;
+            inset: 0;
+            background-color: #0f0f0f;
+            z-index: 10040;
+            display: none;
+            flex-direction: column;
+            padding: 16px 20px 40px 20px;
+            max-width: 480px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .voice-search-screen-modal.active {
+            display: flex;
+        }
+
+        .voice-mic-press-button {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            background-color: #333333;
+            border: none;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: auto auto 30px auto;
+            outline: none;
+            transition: transform 0.15s, background-color 0.15s, box-shadow 0.15s;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .voice-mic-press-button.recording {
+            background-color: #ff0000;
+            transform: scale(1.15);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7);
+        }
+
+        .voice-mic-press-button svg {
+            width: 38px;
+            height: 38px;
+            fill: #ffffff;
+        }
+
+        /* Rádio Customizado nos Menus A7 e A8 */
+        .search-filter-radio-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .search-filter-radio-row:active {
+            background-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .search-filter-radio-circle {
             width: 18px;
             height: 18px;
             border-radius: 50%;
-            overflow: hidden;
-            background-color: #303134;
+            border: 2px solid #aaaaaa;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
         }
 
-        .google-web-favicon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .search-filter-radio-row.selected .search-filter-radio-circle {
+            border-color: #3ea6ff;
         }
 
-        .google-web-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #8ab4f8;
-            line-height: 1.35;
-        }
-
-        .google-web-snippet {
-            font-size: 13px;
-            color: #bdc1c6;
-            line-height: 1.45;
-        }
-
-        .google-web-card-with-thumb {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-
-        .google-web-right-thumb {
-            width: 90px;
-            height: 90px;
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #303134;
-            flex-shrink: 0;
-        }
-
-        .google-web-right-thumb img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Botão "Mais resultados de pesquisa" no final da página Web */
-        .google-btn-more-results {
-            margin: 18px 16px 24px 16px;
-            height: 42px;
-            background-color: #303134;
-            color: #8ab4f8;
-            border: none;
-            border-radius: 21px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Rodapé de Localização (Prints G1.4 e A1.6) */
-        .google-search-footer-info {
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            font-size: 12px;
-            color: #9aa0a6;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            background-color: #171717;
-        }
-
-        .google-search-footer-loc {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: #e8eaed;
-            font-weight: 600;
-        }
-
-        .google-search-footer-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-        }
-
-        .google-search-footer-links a {
-            color: #9aa0a6;
-            text-decoration: none;
-        }
-
-        /* ABA IMAGENS (PRINTS B1, B1.1 E B2) */
-        .google-images-tags-carousel {
-            display: flex;
-            gap: 8px;
-            padding: 8px 14px 12px 14px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            background-color: #1f1f1f;
-        }
-
-        .google-images-tags-carousel::-webkit-scrollbar {
-            display: none;
-        }
-
-        .google-img-tag-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: #303134;
-            border-radius: 16px;
-            padding: 4px 12px 4px 6px;
-            color: #e8eaed;
-            font-size: 12.5px;
-            font-weight: 600;
-            cursor: pointer;
-            flex-shrink: 0;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .google-img-tag-avatar {
-            width: 22px;
-            height: 22px;
+        .search-filter-radio-row.selected .search-filter-radio-circle::after {
+            content: '';
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
-            overflow: hidden;
-            background-color: #444444;
-            flex-shrink: 0;
-            pointer-events: none;
+            background-color: #3ea6ff;
         }
-
-        .google-img-tag-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .google-images-masonry-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            padding: 10px 14px;
-        }
-
-        .google-image-result-card {
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: #242424;
-        }
-
-        .google-image-thumb-box {
-            width: 100%;
-            aspect-ratio: 2 / 3;
-            background-color: #1a1a1a;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .google-image-thumb-box.horizontal-ratio {
-            aspect-ratio: 16 / 9;
-        }
-
-        .google-image-thumb-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .google-image-info-row {
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .google-image-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: #e8eaed;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .google-image-source {
-            font-size: 10.5px;
-            color: #9aa0a6;
-        }
-
-        /* ABA VÍDEOS (PRINT C1) */
-        .google-videos-vertical-list {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            padding: 6px 0;
-        }
-
-        .google-video-item-card {
-            display: flex;
-            padding: 10px 14px;
-            gap: 12px;
-            align-items: flex-start;
-            cursor: pointer;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .google-video-thumb-box {
-            width: 140px;
-            min-width: 140px;
-            aspect-ratio: 16 / 9;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            background-color: #2a2a2a;
-        }
-
-        .google-video-thumb-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .google-video-details-col {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .google-video-title {
-            font-size: 13.5px;
-            font-weight: 600;
-            color: #8ab4f8;
-            line-height: 1.35;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .google-video-source-uploader {
-            font-size: 11.5px;
-            color: #bdc1c6;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-top: 2px;
-        }
-
-        .google-video-date-row {
-            font-size: 11px;
-            color: #9aa0a6;
-            margin-top: 1px;
-        }
-
-        /* ABA NOTÍCIAS (PRINT D1) */
-        .google-news-vertical-list {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-
-        .google-news-item-card {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .google-news-left-col {
-            flex: 1;
-            min-width: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .google-news-source-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: #bdc1c6;
-        }
-
-        .google-news-headline {
-            font-size: 14.5px;
-            font-weight: 600;
-            color: #8ab4f8;
-            line-height: 1.35;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .google-news-date-text {
-            font-size: 11.5px;
-            color: #9aa0a6;
-            margin-top: 2px;
-        }
-
-        .google-news-thumb-box {
-            width: 86px;
-            height: 86px;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: #303134;
-            flex-shrink: 0;
-        }
-
-        .google-news-thumb-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* ABA SHOPPING (PRINTS E1 A E3.2) */
-        .google-shopping-top-controls {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            background-color: #1f1f1f;
-        }
-
-        .google-shopping-top-controls::-webkit-scrollbar {
-            display: none;
-        }
-
-        .google-shopping-filter-trigger {
-            background-color: #303134;
-            color: #e8eaed;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 16px;
-            height: 34px;
-            padding: 0 12px;
-            font-size: 12.5px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .google-shopping-filter-trigger svg {
-            width: 14px;
-            height: 14px;
-            fill: #e8eaed;
-        }
-
-        .google-shopping-products-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px 10px;
-            padding: 10px 14px;
-        }
-
-        .google-product-card {
-            display: flex;
-            flex-direction: column;
-            background-color: #242424;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .google-product-thumb-box {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background-color: #ffffff;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-        }
-
-        .google-product-thumb-box img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .google-product-info-box {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-        }
-
-        .google-product-title {
-            font-size: 12.5px;
-            color: #e8eaed;
-            font-weight: 500;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .google-product-price {
-            font-size: 14.5px;
-            font-weight: 700;
-            color: #81c995;
-            margin-top: 2px;
-        }
-
-        .google-product-merchant-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            color: #9aa0a6;
-        }
-
-        /* GAVETA REFINAR PESQUISA DO SHOPPING (PRINTS E2 A E2.7) */
-        .google-shopping-drawer-sheet {
-            height: 85vh;
-            max-height: 85vh;
-            background-color: #1f1f1f;
-            border-radius: 16px 16px 0 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .google-shopping-drawer-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-
-        .google-drawer-section-title {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 8px;
-        }
-
-        .google-drawer-pills-wrap {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .google-drawer-choice-pill {
-            background-color: #303134;
-            color: #e8eaed;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 6px 14px;
-            font-size: 12.5px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .google-drawer-choice-pill.active {
-            background-color: #ffffff;
-            color: #000000;
-            font-weight: 700;
-        }
-
-        /* ABA VÍDEOS CURTOS (PRINTS F1 E F1.1) */
-        .google-shorts-two-col-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px 10px;
-            padding: 12px 14px;
-        }
-
-        .google-short-card-item {
-            aspect-ratio: 9 / 16;
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            background-color: #212121;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
-        }
-
-        .google-short-card-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        .google-short-card-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, transparent 40%, rgba(0, 0, 0, 0.9) 100%);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            padding: 10px;
-            gap: 4px;
-        }
-
-        .google-short-play-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: #ffffff;
-            font-size: 10.5px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 4px;
-            align-self: flex-start;
-            margin-bottom: 2px;
-        }
-
-        .google-short-card-title {
-            font-size: 12.5px;
-            font-weight: 700;
-            color: #ffffff;
-            line-height: 1.25;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .google-short-card-source {
-            font-size: 10.5px;
-            color: #bdc1c6;
-        }
-
-        
-
-        
     </style>
 </head>
 <body>
@@ -10205,11 +9640,6 @@
              ========================================================================== -->
         <section class="tabs-switcher-screen" id="viewTabsGridSwitcher">
             <div class="tabs-switcher-header">
-                <!-- Seta Vermelha do Print H1: Botão '<' que retorna ao feed principal -->
-                <button class="yt-icon-btn" id="btnBackFromTabsSwitcher" type="button" aria-label="Voltar ao início">
-                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-                </button>
-
                 <!-- Botão + Nova Guia no topo esquerdo -->
                 <button class="tabs-switcher-new-btn" id="btnTabsSwitcherNewTab" type="button" title="Nova guia">
                     <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
@@ -10862,213 +10292,30 @@
         </div>
 
         <!-- ==========================================================================
-             TELA OFICIAL DE RESULTADOS DA PESQUISA REAL (PRINTS A1 ATÉ G1.4)
+             TELA OFICIAL DE RESULTADOS E HISTÓRICO DE PESQUISA (PRINTS A1 ATÉ A10)
              ========================================================================== -->
         <section class="yt-subview search-results-view" id="viewSearchResults">
-            <!-- Scroll Horizontal das Categorias Oficiais (Prints A1 a A5) -->
-            <div class="google-categories-bar" id="googleCategoriesBar">
-                <button class="google-category-tab" data-tab="ia" type="button">Modo IA</button>
-                <button class="google-category-tab active" data-tab="tudo" type="button">Tudo</button>
-                <button class="google-category-tab" data-tab="imagens" type="button">Imagens</button>
-                <button class="google-category-tab" data-tab="videos" type="button">Vídeos</button>
-                <button class="google-category-tab" data-tab="curtos" type="button">Vídeos curtos</button>
-                <button class="google-category-tab" data-tab="noticias" type="button">Notícias</button>
-                <button class="google-category-tab" data-tab="shopping" type="button">Shopping</button>
-                <button class="google-category-tab" data-tab="web" type="button">Web</button>
-                <button class="google-category-tab" data-tab="novels" type="button">Light Novels</button>
-                <button class="google-category-tab" data-tab="mangas" type="button">Mangás</button>
-            </div>
-
-            <!-- Sub-filtros Horizontais (Print A1) -->
-            <div class="google-subfilters-row" id="googleSubFiltersRow">
-                <button class="google-subfilter-pill" type="button">
-                    <span>Em qualquer idioma</span>
+            <!-- Barra de Filtros [Todos ▾] e [Qualquer data ▾] (Print A6) -->
+            <div class="search-filters-bar" id="searchFiltersBar">
+                <button class="search-dropdown-filter-pill" id="btnOpenFilterTypeModal" type="button">
+                    <span id="txtCurrentFilterTypeLabel">Todos</span>
                     <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
                 </button>
-                <button class="google-subfilter-pill" type="button">
-                    <span>Em qualquer data</span>
-                    <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
-                </button>
-                <button class="google-subfilter-pill" type="button">
-                    <span>Todos os resultados</span>
+                <button class="search-dropdown-filter-pill" id="btnOpenFilterDateModal" type="button">
+                    <span id="txtCurrentFilterDateLabel">Qualquer data</span>
                     <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
                 </button>
             </div>
 
-            <!-- Histórico Recente de Pesquisa em Azul (Print A10) -->
+            <!-- Lista de Histórico Recente em Azul (Print A10) -->
             <div class="search-history-container" id="searchHistoryContainer"></div>
 
-            <!-- PAINEL 1: TUDO (PRINTS A1.1 ATÉ A1.6) -->
-            <div class="google-tab-content-panel active" id="panelSearchTudo">
-                <div id="containerSearchTudoDynamic"></div>
-            </div>
+            <!-- Lista de Resultados de Vídeos, Canais e Playlists (Paginação de 20 em 20) -->
+            <div id="searchResultsListContainer" style="display:flex; flex-direction:column; padding-top:4px;"></div>
 
-            <!-- PAINEL 2: IMAGENS COM TAGS INTERATIVAS (PRINTS B1, B1.1, B2) -->
-            <div class="google-tab-content-panel" id="panelSearchImagens">
-                <div class="google-images-tags-carousel" id="carouselImageSearchTags"></div>
-                <div class="google-images-masonry-grid" id="gridImageSearchResults"></div>
-            </div>
-
-            <!-- PAINEL 3: VÍDEOS (PRINT C1) -->
-            <div class="google-tab-content-panel" id="panelSearchVideos">
-                <div class="google-videos-vertical-list" id="listVideoSearchResults"></div>
-            </div>
-
-            <!-- PAINEL 4: VÍDEOS CURTOS / REELS (PRINTS F1 E F1.1) -->
-            <div class="google-tab-content-panel" id="panelSearchCurtos">
-                <div class="google-shorts-two-col-grid" id="gridShortsSearchResults"></div>
-            </div>
-
-            <!-- PAINEL 5: NOTÍCIAS (PRINT D1) -->
-            <div class="google-tab-content-panel" id="panelSearchNoticias">
-                <div class="google-news-vertical-list" id="listNewsSearchResults"></div>
-            </div>
-
-            <!-- PAINEL 6: SHOPPING (PRINTS E1 ATÉ E3.2) -->
-            <div class="google-tab-content-panel" id="panelSearchShopping">
-                <div class="google-shopping-top-controls">
-                    <button class="google-shopping-filter-trigger" id="btnOpenShoppingRefineModal" type="button">
-                        <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
-                        <span>Filtros</span>
-                    </button>
-                    <button class="google-shopping-filter-trigger" id="btnOpenShoppingSortDrawer" type="button">
-                        <span>Ordenar</span>
-                        <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
-                    </button>
-                    <!-- Chips interativos de categoria que somam à busca -->
-                    <div id="shoppingCategoryChipsRow" style="display:flex; gap:8px;"></div>
-                </div>
-                <div class="google-shopping-products-grid" id="gridShoppingProducts"></div>
-            </div>
-
-            <!-- PAINEL 7: WEB (PRINTS G1 ATÉ G1.4) -->
-            <div class="google-tab-content-panel" id="panelSearchWeb">
-                <div id="listWebSearchResults"></div>
-                <!-- Botão Paginação por 20 (Print G1.4) -->
-                <button class="google-btn-more-results" id="btnLoadMoreWebResults" type="button">Mais resultados de pesquisa</button>
-            </div>
-
-            <!-- PAINEL 8: LIGHT NOVELS -->
-            <div class="google-tab-content-panel" id="panelSearchNovels">
-                <div id="listNovelsSearchResults" style="padding:10px 14px; display:flex; flex-direction:column; gap:10px;"></div>
-            </div>
-
-            <!-- PAINEL 9: MANGÁS -->
-            <div class="google-tab-content-panel" id="panelSearchMangas">
-                <div id="listMangasSearchResults" style="padding:10px 14px; display:flex; flex-direction:column; gap:10px;"></div>
-            </div>
-
-            <!-- Rodapé de Localização (Prints G1.4 e A1.6) -->
-            <footer class="google-search-footer-info" id="googleSearchFooter">
-                <div class="google-search-footer-loc">
-                    <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#9aa0a6;"></span>
-                    <span>Brasil • South america - SA</span>
-                </div>
-                <div style="font-size:11px; color:#9aa0a6;">Com base na sua atividade anterior • Atualizar local</div>
-                <div class="google-search-footer-links">
-                    <a href="#">Tema escuro: ativado</a>
-                    <a href="#">Ajuda</a>
-                    <a href="#">Enviar feedback</a>
-                    <a href="#">Privacidade</a>
-                    <a href="#">Termos</a>
-                </div>
-            </footer>
+            <!-- Indicador de Carregando mais Resultados no Fim da Página -->
+            <div id="searchScrollLoadingIndicator" style="display:none; padding:20px; text-align:center; color:#aaaaaa; font-size:13px;">Carregando mais resultados...</div>
         </section>
-
-        <!-- GAVETA REFINAR PESQUISA DO SHOPPING (PRINTS E2 ATÉ E2.7) -->
-        <div class="accounts-drawer" id="drawerShoppingRefineModal" style="z-index: 10045;">
-            <div class="accounts-sheet google-shopping-drawer-sheet">
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
-                    <h3 style="font-size:16px; font-weight:700; color:#fff;">Refine sua pesquisa</h3>
-                    <button class="yt-icon-btn" id="btnCloseShoppingRefineModal" type="button" aria-label="Fechar">
-                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                    </button>
-                </div>
-                <div class="google-shopping-drawer-body">
-                    <div>
-                        <div class="google-drawer-section-title">Ordenar por</div>
-                        <div class="google-drawer-pills-wrap">
-                            <button class="google-drawer-choice-pill active" type="button">Relevância</button>
-                            <button class="google-drawer-choice-pill" type="button">Preço: do menor para o maior</button>
-                            <button class="google-drawer-choice-pill" type="button">Preço: do maior para o menor</button>
-                            <button class="google-drawer-choice-pill" type="button">Classificação</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="google-drawer-section-title">Gênero</div>
-                        <div class="google-drawer-pills-wrap">
-                            <button class="google-drawer-choice-pill" type="button">RPG</button>
-                            <button class="google-drawer-choice-pill" type="button">Aventura</button>
-                            <button class="google-drawer-choice-pill" type="button">Luta</button>
-                            <button class="google-drawer-choice-pill" type="button">Ação</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="google-drawer-section-title">Plataforma</div>
-                        <div class="google-drawer-pills-wrap">
-                            <button class="google-drawer-choice-pill" type="button">PlayStation 4</button>
-                            <button class="google-drawer-choice-pill" type="button">PC</button>
-                            <button class="google-drawer-choice-pill" type="button">Xbox</button>
-                            <button class="google-drawer-choice-pill" type="button">PlayStation 5</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="google-drawer-section-title">Preço</div>
-                        <div class="google-drawer-pills-wrap">
-                            <button class="google-drawer-choice-pill" type="button">Abaixo de R$ 35</button>
-                            <button class="google-drawer-choice-pill" type="button">R$ 35 - R$ 70</button>
-                            <button class="google-drawer-choice-pill" type="button">R$ 70 - R$ 100</button>
-                            <button class="google-drawer-choice-pill" type="button">R$ 100 - R$ 200</button>
-                            <button class="google-drawer-choice-pill" type="button">Acima de R$ 200</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="google-drawer-section-title">Recursos</div>
-                        <div class="google-drawer-pills-wrap">
-                            <button class="google-drawer-choice-pill" type="button">Cosplay</button>
-                            <button class="google-drawer-choice-pill" type="button">Infantil</button>
-                            <button class="google-drawer-choice-pill" type="button">Box</button>
-                            <button class="google-drawer-choice-pill" type="button">Animação</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="google-drawer-section-title">Formato</div>
-                        <div class="google-drawer-pills-wrap">
-                            <button class="google-drawer-choice-pill" type="button">DVD</button>
-                            <button class="google-drawer-choice-pill" type="button">Blu-ray</button>
-                            <button class="google-drawer-choice-pill" type="button">VHS</button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="google-drawer-section-title">Lojas</div>
-                        <div class="google-drawer-pills-wrap">
-                            <button class="google-drawer-choice-pill" type="button">Shopee</button>
-                            <button class="google-drawer-choice-pill" type="button">Mercado Livre</button>
-                            <button class="google-drawer-choice-pill" type="button">Amazon</button>
-                            <button class="google-drawer-choice-pill" type="button">Magalu</button>
-                            <button class="google-drawer-choice-pill" type="button">eBay</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- GAVETA ADICIONAR GUIA AO GRUPO (PRINTS H7 E H8) -->
-        <div class="accounts-drawer" id="drawerAddTabToGroupModal" style="z-index: 10045;">
-            <div class="accounts-sheet" style="padding:16px 18px 24px 18px; gap:14px;">
-                <div class="yt-sheet-drag-handle"></div>
-                <h3 style="font-size:16px; font-weight:700; color:#fff;">Adicionar a</h3>
-                <div class="account-item-row" id="btnActionCreateNewGroupFromTab">
-                    <div class="account-item-left">
-                        <div style="width:40px; height:40px; border-radius:10px; background:#2a2a2a; display:flex; align-items:center; justify-content:center;">
-                            <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                        </div>
-                        <span style="font-size:14.5px; font-weight:600; color:#fff;">Novo grupo de guias</span>
-                    </div>
-                </div>
-                <div id="containerDynamicGroupsInDrawer" style="display:flex; flex-direction:column; gap:4px;"></div>
-            </div>
-        </div>
 
         <!-- TELA DE PESQUISA POR VOZ COM SEGURAR-E-SOLTAR (PRINT A5) -->
         <div class="voice-search-screen-modal" id="modalVoiceSearch">
@@ -21115,677 +20362,112 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // ==========================================================================
-        // SISTEMA DE PESQUISA REAL (PRINTS A1 ATÉ H8 COM ZERO ABREVIAÇÕES)
-        // ==========================================================================
-        const googleCategoriesBar = document.getElementById("googleCategoriesBar");
-        const panelSearchTudo = document.getElementById("panelSearchTudo");
-        const panelSearchImagens = document.getElementById("panelSearchImagens");
-        const panelSearchVideos = document.getElementById("panelSearchVideos");
-        const panelSearchCurtos = document.getElementById("panelSearchCurtos");
-        const panelSearchNoticias = document.getElementById("panelSearchNoticias");
-        const panelSearchShopping = document.getElementById("panelSearchShopping");
-        const panelSearchWeb = document.getElementById("panelSearchWeb");
-        const panelSearchNovels = document.getElementById("panelSearchNovels");
-        const panelSearchMangas = document.getElementById("panelSearchMangas");
-
-        const containerSearchTudoDynamic = document.getElementById("containerSearchTudoDynamic");
-        const carouselImageSearchTags = document.getElementById("carouselImageSearchTags");
-        const gridImageSearchResults = document.getElementById("gridImageSearchResults");
-        const listVideoSearchResults = document.getElementById("listVideoSearchResults");
-        const gridShortsSearchResults = document.getElementById("gridShortsSearchResults");
-        const listNewsSearchResults = document.getElementById("listNewsSearchResults");
-        const shoppingCategoryChipsRow = document.getElementById("shoppingCategoryChipsRow");
-        const gridShoppingProducts = document.getElementById("gridShoppingProducts");
-        const listWebSearchResults = document.getElementById("listWebSearchResults");
-        const btnLoadMoreWebResults = document.getElementById("btnLoadMoreWebResults");
-
-        const btnOpenShoppingRefineModal = document.getElementById("btnOpenShoppingRefineModal");
-        const btnOpenShoppingSortDrawer = document.getElementById("btnOpenShoppingSortDrawer");
-        const drawerShoppingRefineModal = document.getElementById("drawerShoppingRefineModal");
-        const btnCloseShoppingRefineModal = document.getElementById("btnCloseShoppingRefineModal");
-
-        const btnBackFromTabsSwitcher = document.getElementById("btnBackFromTabsSwitcher");
-        const drawerAddTabToGroupModal = document.getElementById("drawerAddTabToGroupModal");
-        const btnActionCreateNewGroupFromTab = document.getElementById("btnActionCreateNewGroupFromTab");
-        const containerDynamicGroupsInDrawer = document.getElementById("containerDynamicGroupsInDrawer");
-
-        let activeGoogleSearchTab = "tudo";
-        let currentSearchQueryText = "";
-        let webSearchDisplayedLimit = 20;
-        let allMatchingWebItems = [];
-
-        // Seta '<' do Print H1: volta para a página principal
-        if (btnBackFromTabsSwitcher) {
-            btnBackFromTabsSwitcher.addEventListener("click", () => {
-                openScreen("home");
-            });
-        }
-
-        // Fechar gaveta de shopping ao clicar fora
-        if (drawerShoppingRefineModal) {
-            drawerShoppingRefineModal.addEventListener("click", (e) => {
-                if (e.target === drawerShoppingRefineModal) drawerShoppingRefineModal.classList.remove("active");
-            });
-        }
-
-        if (btnCloseShoppingRefineModal) {
-            btnCloseShoppingRefineModal.addEventListener("click", () => {
-                drawerShoppingRefineModal.classList.remove("active");
-            });
-        }
-
-        if (btnOpenShoppingRefineModal) {
-            btnOpenShoppingRefineModal.addEventListener("click", () => {
-                drawerShoppingRefineModal.classList.add("active");
-            });
-        }
-
-        if (btnOpenShoppingSortDrawer) {
-            btnOpenShoppingSortDrawer.addEventListener("click", () => {
-                drawerShoppingRefineModal.classList.add("active");
-            });
-        }
-
-        // Alternância de Abas da Pesquisa Real
-        document.querySelectorAll(".google-category-tab").forEach(tabBtn => {
-            tabBtn.addEventListener("click", () => {
-                document.querySelectorAll(".google-category-tab").forEach(t => t.classList.remove("active"));
-                tabBtn.classList.add("active");
-                activeGoogleSearchTab = tabBtn.getAttribute("data-tab");
-
-                document.querySelectorAll(".google-tab-content-panel").forEach(p => p.classList.remove("active"));
-                const targetPanel = document.getElementById(`panelSearch${activeGoogleSearchTab.charAt(0).toUpperCase() + activeGoogleSearchTab.slice(1)}`);
-                if (targetPanel) targetPanel.classList.add("active");
-
-                window.scrollTo(0, 0);
-            });
-        });
-
-        // Formatação de data real fiel ao Print C1 (se passou de 1 mês, exibe data exata)
-        function formatVideoSearchExactDate(timestamp) {
-            if (!timestamp) return "agora mesmo";
-            let date;
-            if (timestamp.toDate) date = timestamp.toDate();
-            else if (timestamp.seconds) date = new Date(timestamp.seconds * 1000);
-            else date = new Date(timestamp);
-
-            const now = Date.now();
-            const diffDays = Math.floor((now - date.getTime()) / (24 * 3600 * 1000));
-
-            if (diffDays <= 30) {
-                return formatTimeAgo(timestamp);
-            }
-
-            const months = ["jan.", "fev.", "mar.", "abr.", "mai.", "jun.", "jul.", "ago.", "set.", "out.", "nov.", "dez."];
-            return `${String(date.getDate()).padStart(2, '0')} de ${months[date.getMonth()]} de ${date.getFullYear()}`;
-        }
-
-        // 2. FUNÇÃO PRINCIPAL DE PESQUISA REAL
+        // 2. FUNÇÃO PRINCIPAL DE PESQUISA (PRINTS A2, A6, A7, A8, A9)
         function executeGlobalSearch(query) {
             const cleanQuery = query.trim().toLowerCase();
             if (!cleanQuery) return;
 
-            currentSearchQueryText = query.trim();
             saveSearchTermToHistory(query);
 
+            // Ajusta o cabeçalho para o formato de resultados (Print A2)
             searchHistoryContainer.innerHTML = "";
-            btnClearSearchQueryX.style.display = "flex";
+            btnClearSearchQueryX.style.display = "none";
+            btnTriggerSearchFilterBar.style.display = "flex";
+            searchFiltersBar.classList.add("active");
 
-            // 1. Localiza Séries e Episódios Reais no Banco
-            const matchingSeries = [];
+            // Coleta tudo da memória: canais/séries, playlists e episódios
+            const matchingChannels = [];
+            const matchingPlaylists = [];
             const matchingEpisodes = [];
-            const matchingReels = [];
+
+            // 1. Canais / Séries correspondentes (Busca tanto na coleção de séries quanto nos canais dos episódios postados)
+            const discoveredChannelsMap = new Map();
 
             if (Array.isArray(availableSeriesList)) {
                 availableSeriesList.forEach(s => {
-                    const title = (s.title || "").toLowerCase();
-                    const syn = (s.synopsis || "").toLowerCase();
-                    if (title.includes(cleanQuery) || syn.includes(cleanQuery) || cleanQuery.includes(title)) {
-                        matchingSeries.push(s);
+                    if (s.title) {
+                        const titleKey = s.title.trim().toLowerCase();
+                        discoveredChannelsMap.set(titleKey, s);
                     }
                 });
             }
 
             if (Array.isArray(loadedEpisodesCache)) {
                 loadedEpisodesCache.forEach(ep => {
-                    const name = (ep.name || "").toLowerCase();
-                    const channel = (ep.channel || "").toLowerCase();
+                    const chName = (ep.channel || "").trim();
+                    if (chName && !discoveredChannelsMap.has(chName.toLowerCase())) {
+                        discoveredChannelsMap.set(chName.toLowerCase(), {
+                            title: chName,
+                            coverUrl: ep.seriesCover || ep.thumbUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200",
+                            subscribersCount: 0,
+                            createdAt: ep.timestamp || ep.createdAt
+                        });
+                    }
+                });
+            }
 
-                    if (name.includes(cleanQuery) || channel.includes(cleanQuery) || cleanQuery.includes(name)) {
-                        if (ep.contentType === "Reels") {
-                            matchingReels.push(ep);
-                        } else {
+            discoveredChannelsMap.forEach(channelItem => {
+                const titleStr = (channelItem.title || "").toLowerCase();
+                const synStr = (channelItem.synopsis || "").toLowerCase();
+                if (titleStr.includes(cleanQuery) || synStr.includes(cleanQuery)) {
+                    matchingChannels.push(channelItem);
+                }
+            });
+
+            // 2. Episódios correspondentes (com verificação se foram assistidos para exibir barra vermelha)
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+            const now = Date.now();
+
+            if (Array.isArray(loadedEpisodesCache)) {
+                loadedEpisodesCache.forEach(ep => {
+                    const name = (ep.name || "").toLowerCase();
+                    const chan = (ep.channel || "").toLowerCase();
+
+                    if (name.includes(cleanQuery) || chan.includes(cleanQuery)) {
+                        // Filtro de Data (Print A8)
+                        const epTime = ep.timestamp?.seconds ? (ep.timestamp.seconds * 1000) : (ep.createdAt?.seconds ? (ep.createdAt.seconds * 1000) : 0);
+                        const diffMs = now - epTime;
+
+                        let matchesDateFilter = true;
+                        if (activeSearchFilterDate === "today") {
+                            matchesDateFilter = diffMs <= ONE_DAY_MS && diffMs >= 0;
+                        } else if (activeSearchFilterDate === "week") {
+                            matchesDateFilter = diffMs <= (7 * ONE_DAY_MS) && diffMs >= 0;
+                        } else if (activeSearchFilterDate === "month") {
+                            matchesDateFilter = diffMs <= (30 * ONE_DAY_MS) && diffMs >= 0;
+                        } else if (activeSearchFilterDate === "year") {
+                            matchesDateFilter = diffMs <= (365 * ONE_DAY_MS) && diffMs >= 0;
+                        }
+
+                        if (matchesDateFilter) {
                             matchingEpisodes.push(ep);
                         }
                     }
                 });
             }
 
-            // Renderiza todas as abas
-            renderGoogleTabTudo(cleanQuery, matchingSeries, matchingEpisodes);
-            renderGoogleTabImagens(cleanQuery, matchingSeries, matchingEpisodes);
-            renderGoogleTabVideos(matchingEpisodes);
-            renderGoogleTabShorts(matchingReels);
-            renderGoogleTabNoticias(cleanQuery, matchingSeries);
-            renderGoogleTabShopping(cleanQuery);
-            renderGoogleTabWeb(cleanQuery, matchingSeries, matchingEpisodes);
-            renderGoogleTabNovelsAndMangas(cleanQuery, matchingSeries);
-        }
+            // Agrupa os itens de acordo com o filtro selecionado (Print A7)
+            filteredSearchResultsPool = [];
 
-        // A. RENDERIZA ABA TUDO (PRINTS A1.1 A A1.6)
-        function renderGoogleTabTudo(cleanQuery, seriesList, episodesList) {
-            if (!containerSearchTudoDynamic) return;
-            containerSearchTudoDynamic.innerHTML = "";
-
-            // Bloco de Apps
-            const appsBlock = document.createElement("div");
-            appsBlock.className = "google-apps-block";
-            appsBlock.innerHTML = `
-                <div class="google-apps-header">
-                    <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#8ab4f8;"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
-                    <span>Apps</span>
-                </div>
-                <div class="google-app-row">
-                    <div class="google-app-left">
-                        <div class="google-app-icon"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100"></div>
-                        <div>
-                            <div class="google-app-title">Super Animes</div>
-                            <div class="google-app-meta">4.3 ★ (4,327) • Entretenimento</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="google-app-row">
-                    <div class="google-app-left">
-                        <div class="google-app-icon"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=100"></div>
-                        <div>
-                            <div class="google-app-title">Play Animes TV</div>
-                            <div class="google-app-meta">4.7 ★ (55,663) • Entretenimento</div>
-                        </div>
-                    </div>
-                </div>
-                <button class="google-btn-more-apps" type="button">Mais aplicativos</button>
-            `;
-            containerSearchTudoDynamic.appendChild(appsBlock);
-
-            // Resumo IA
-            const aiBox = document.createElement("div");
-            aiBox.className = "google-ai-overview-box";
-            aiBox.innerHTML = `
-                <div class="google-ai-header">
-                    <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
-                    <span>Visão geral criada por IA</span>
-                </div>
-                <p class="google-ai-highlight-text">
-                    O termo <mark>${escapeHtml(currentSearchQueryText)}</mark> refere-se a produções em anime com narrativa profunda, estilos visuais de destaque e episódios disponíveis para streaming na plataforma FruitSenpai.
-                </p>
-            `;
-            containerSearchTudoDynamic.appendChild(aiBox);
-
-            // Sanfona "As pessoas também perguntam" (Print A1.3)
-            const faqSection = document.createElement("div");
-            faqSection.className = "google-faq-section";
-            faqSection.innerHTML = `
-                <div class="google-faq-title">As pessoas também perguntam</div>
-                <div class="google-faq-item">
-                    <div class="google-faq-question-row"><span>Quais são os 10 melhores animes?</span><svg class="google-faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
-                    <div class="google-faq-answer">Fullmetal Alchemist: Brotherhood, Attack on Titan, Death Note, Steins;Gate e Hunter x Hunter figuram entre os mais aclamados.</div>
-                </div>
-                <div class="google-faq-item">
-                    <div class="google-faq-question-row"><span>Quais são os 20 melhores animes?</span><svg class="google-faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
-                    <div class="google-faq-answer">Incluem clássicos como Cowboy Bebop, One Piece, Bleach, Naruto Shippuden e Dragon Ball Z.</div>
-                </div>
-                <div class="google-faq-item">
-                    <div class="google-faq-question-row"><span>Quais são alguns animes 18+?</span><svg class="google-faq-chevron" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
-                    <div class="google-faq-answer">Animes com classificação adulta contêm temas maduros, violência gráfica ou conteúdo ecchi/hentai.</div>
-                </div>
-            `;
-
-            faqSection.querySelectorAll(".google-faq-item").forEach(item => {
-                item.onclick = () => {
-                    const ans = item.querySelector(".google-faq-answer");
-                    const chev = item.querySelector(".google-faq-chevron");
-                    const isOpen = ans.classList.toggle("open");
-                    chev.classList.toggle("open", isOpen);
-                };
-            });
-            containerSearchTudoDynamic.appendChild(faqSection);
-
-            // Séries Encontradas
-            seriesList.forEach(s => {
-                containerSearchTudoDynamic.appendChild(createSearchChannelCard(s));
-            });
-
-            // Episódios Encontrados
-            episodesList.forEach(ep => {
-                containerSearchTudoDynamic.appendChild(createSearchEpisodeCard(ep));
-            });
-        }
-
-        // B. RENDERIZA ABA IMAGENS (PRINTS B1, B1.1 E B2)
-        function renderGoogleTabImagens(cleanQuery, seriesList, episodesList) {
-            if (!carouselImageSearchTags || !gridImageSearchResults) return;
-            carouselImageSearchTags.innerHTML = "";
-            gridImageSearchResults.innerHTML = "";
-
-            const sampleTags = ["Girl", "Wallpaper", "Boy", "Kawaii", "Perfil", "Cat", "Personagem", "Desenhar"];
-
-            // Renderiza as tags com avatares aleatórios
-            sampleTags.forEach(tag => {
-                const pill = document.createElement("div");
-                pill.className = "google-img-tag-pill";
-                pill.innerHTML = `
-                    <div class="google-img-tag-avatar">
-                        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100">
-                    </div>
-                    <span>${tag}</span>
-                `;
-
-                // Tocar na tag soma a palavra ao termo anterior e busca de novo (Print B2)
-                pill.onclick = () => {
-                    const combinedQuery = `${currentSearchQueryText} ${tag}`.trim();
-                    inputGlobalSearchQuery.value = combinedQuery;
-                    executeGlobalSearch(combinedQuery);
-                };
-
-                carouselImageSearchTags.appendChild(pill);
-            });
-
-            // Coleta todas as fotos de capas e episódios
-            const imagesList = [];
-
-            seriesList.forEach(s => {
-                if (s.coverUrl) {
-                    imagesList.push({
-                        url: s.coverUrl,
-                        title: s.title || "Série",
-                        source: "FruitSenpai • Série",
-                        action: () => openSeriesChannel(s.title)
-                    });
-                }
-            });
-
-            episodesList.forEach(ep => {
-                if (ep.thumbUrl) {
-                    imagesList.push({
-                        url: ep.thumbUrl,
-                        title: ep.name || "Episódio",
-                        source: `${ep.channel || 'Série'} • Episódio`,
-                        horizontal: true,
-                        action: () => openWatchScreen(ep, ep.id)
-                    });
-                }
-            });
-
-            if (imagesList.length === 0) {
-                imagesList.push(
-                    { url: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600", title: "Frieren Beyond Journey", source: "Pinterest", action: () => openScreen("home") },
-                    { url: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600", title: "Anime Wallpaper Girl", source: "Pinterest", action: () => openScreen("home") }
-                );
-            }
-
-            imagesList.forEach(imgObj => {
-                const card = document.createElement("div");
-                card.className = "google-image-result-card";
-                card.innerHTML = `
-                    <div class="google-image-thumb-box ${imgObj.horizontal ? 'horizontal-ratio' : ''}">
-                        <img src="${escapeHtml(imgObj.url)}" alt="${escapeHtml(imgObj.title)}">
-                    </div>
-                    <div class="google-image-info-row">
-                        <div class="google-image-title">${escapeHtml(imgObj.title)}</div>
-                        <div class="google-image-source">${escapeHtml(imgObj.source)}</div>
-                    </div>
-                `;
-                card.onclick = imgObj.action;
-                gridImageSearchResults.appendChild(card);
-            });
-        }
-
-        // C. RENDERIZA ABA VÍDEOS (PRINT C1)
-        function renderGoogleTabVideos(episodesList) {
-            if (!listVideoSearchResults) return;
-            listVideoSearchResults.innerHTML = "";
-
-            if (episodesList.length === 0) {
-                listVideoSearchResults.innerHTML = `<div style="padding:40px 16px; text-align:center; color:#888;">Nenhum vídeo encontrado.</div>`;
-                return;
-            }
-
-            episodesList.forEach(ep => {
-                const card = document.createElement("div");
-                card.className = "google-video-item-card";
-                const uploaderName = ep.channel || "FruitSenpai";
-                const epDuration = ep.duration || "24:00";
-                const dateText = formatVideoSearchExactDate(ep.timestamp || ep.createdAt);
-
-                card.innerHTML = `
-                    <div class="google-video-thumb-box">
-                        <img src="${escapeHtml(ep.thumbUrl || ep.seriesCover || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
-                        <div class="yt-duration-badge">${escapeHtml(epDuration)}</div>
-                    </div>
-                    <div class="google-video-details-col">
-                        <div class="google-video-title">${escapeHtml(ep.name || 'Vídeo')}</div>
-                        <div class="google-video-source-uploader">YouTube • ${escapeHtml(uploaderName)}</div>
-                        <div class="google-video-date-row">${escapeHtml(dateText)}</div>
-                    </div>
-                    <button class="yt-icon-btn" type="button"><svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#fff;"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
-                `;
-
-                card.onclick = () => {
-                    openWatchScreen(ep, ep.id);
-                };
-
-                listVideoSearchResults.appendChild(card);
-            });
-        }
-
-        // D. RENDERIZA ABA VÍDEOS CURTOS (PRINTS F1 E F1.1)
-        function renderGoogleTabShorts(reelsList) {
-            if (!gridShortsSearchResults) return;
-            gridShortsSearchResults.innerHTML = "";
-
-            if (reelsList.length === 0) {
-                gridShortsSearchResults.innerHTML = `<div style="grid-column:span 2; padding:40px 16px; text-align:center; color:#888;">Nenhum vídeo curto encontrado.</div>`;
-                return;
-            }
-
-            reelsList.forEach(reel => {
-                const card = document.createElement("div");
-                card.className = "google-short-card-item";
-                const cover = reel.thumbUrl || reel.seriesCover || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300";
-
-                card.innerHTML = `
-                    <img src="${escapeHtml(cover)}" alt="Reels">
-                    <div class="google-short-card-overlay">
-                        <div class="google-short-play-badge">▶ ${escapeHtml(reel.duration || '0:45')}</div>
-                        <div class="google-short-card-title">${escapeHtml(reel.name || 'Reels')}</div>
-                        <div class="google-short-card-source">${escapeHtml(reel.channel || 'FruitSenpai')}</div>
-                    </div>
-                `;
-
-                card.onclick = () => {
-                    currentActiveShortsList = [reel, ...reelsList.filter(r => r.id !== reel.id)];
-                    openShortsFullScreen();
-                };
-
-                gridShortsSearchResults.appendChild(card);
-            });
-        }
-
-        // E. RENDERIZA ABA NOTÍCIAS (PRINT D1)
-        function renderGoogleTabNoticias(cleanQuery, seriesList) {
-            if (!listNewsSearchResults) return;
-            listNewsSearchResults.innerHTML = "";
-
-            const sampleNews = [
-                { source: "Crunchyroll", icon: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=80", title: "Nova temporada de animes revela artes e detalhes inéditos dos personagens que retornarão", time: "2 dias atrás", thumb: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" },
-                { source: "Estadão", icon: "https://images.unsplash.com/photo-1563089145-599997674d42?w=80", title: "Bleach, Meu Casamento Feliz e mais: os lançamentos e destaques da semana", time: "há 10 horas", thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=200" },
-                { source: "Omelete", icon: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=80", title: "Adaptação de mangá clássico ganha trailer completo oficial com dublagem", time: "há 6 horas", thumb: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200" }
-            ];
-
-            sampleNews.forEach(news => {
-                const card = document.createElement("div");
-                card.className = "google-news-item-card";
-                card.innerHTML = `
-                    <div class="google-news-left-col">
-                        <div class="google-news-source-header">
-                            <div class="google-web-favicon"><img src="${news.icon}"></div>
-                            <span>${news.source}</span>
-                        </div>
-                        <div class="google-news-headline">${news.title}</div>
-                        <div class="google-news-date-text">${news.time}</div>
-                    </div>
-                    <div class="google-news-thumb-box">
-                        <img src="${news.thumb}">
-                    </div>
-                `;
-                card.onclick = () => showToast(`Abrindo notícia de ${news.source}`);
-                listNewsSearchResults.appendChild(card);
-            });
-        }
-
-        // F. RENDERIZA ABA SHOPPING (PRINTS E1 A E3.2)
-        function renderGoogleTabShopping(cleanQuery) {
-            if (!shoppingCategoryChipsRow || !gridShoppingProducts) return;
-            shoppingCategoryChipsRow.innerHTML = "";
-            gridShoppingProducts.innerHTML = "";
-
-            const shoppingChips = ["Videogames", "Papéis de parede", "Filmes e TV", "Action figures", "Livros", "Camisas e blusas", "Fantasias"];
-
-            shoppingChips.forEach(chipName => {
-                const chipBtn = document.createElement("button");
-                chipBtn.className = "google-shopping-filter-trigger";
-                chipBtn.type = "button";
-                chipBtn.textContent = chipName;
-
-                // Clicar no chip soma ao termo de busca (Print E3 -> E3.1)
-                chipBtn.onclick = () => {
-                    const combined = `${currentSearchQueryText} ${chipName}`.trim();
-                    inputGlobalSearchQuery.value = combined;
-                    executeGlobalSearch(combined);
-                };
-
-                shoppingCategoryChipsRow.appendChild(chipBtn);
-            });
-
-            const productsList = [
-                { title: "Box Dragon Ball Vols. 1 Ao 21 Mangás Lacrados", price: "R$ 600,00", store: "Mercado Livre", rating: "4.6 ★ (7)", img: "https://images.unsplash.com/photo-1563089145-599997674d42?w=300" },
-                { title: "Attack on Titan Vol. 32 Mangá Edição Especial", price: "R$ 7,90", store: "Amazon", rating: "4.9 ★ (104)", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=300" },
-                { title: "Demon Slayer The Hinokami Chronicles PS4", price: "R$ 264,95", store: "Amazon", rating: "4.7 ★ (120)", img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300" },
-                { title: "Dvd Anime Supernatural Série Completa Dublado", price: "R$ 54,90", store: "Shopee", rating: "5.0 ★ (2)", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=300" }
-            ];
-
-            productsList.forEach(p => {
-                const card = document.createElement("div");
-                card.className = "google-product-card";
-                card.innerHTML = `
-                    <div class="google-product-thumb-box">
-                        <img src="${p.img}" alt="${escapeHtml(p.title)}">
-                    </div>
-                    <div class="google-product-info-box">
-                        <div class="google-product-title">${escapeHtml(p.title)}</div>
-                        <div class="google-product-price">${p.price}</div>
-                        <div class="google-product-merchant-row">
-                            <span>${p.store} • ${p.rating}</span>
-                        </div>
-                    </div>
-                `;
-                card.onclick = () => showToast(`Item disponível via ${p.store}`);
-                gridShoppingProducts.appendChild(card);
-            });
-        }
-
-        // G. RENDERIZA ABA WEB (PRINTS G1 ATÉ G1.4 COM LIMITE DE 20 E BOTÃO NO FIM)
-        function renderGoogleTabWeb(cleanQuery, seriesList, episodesList) {
-            if (!listWebSearchResults || !btnLoadMoreWebResults) return;
-            listWebSearchResults.innerHTML = "";
-            webSearchDisplayedLimit = 20;
-
-            allMatchingWebItems = [];
-
-            seriesList.forEach(s => {
-                allMatchingWebItems.push({
-                    site: "FruitSenpai",
-                    url: `https://fruitsenpai.app/serie/${(s.title || '').toLowerCase().replace(/\s+/g, '')}`,
-                    title: `${s.title} – Assista Online Grátis em HD`,
-                    snippet: s.synopsis || `Todos os episódios completos e atualizados da série ${s.title} para assistir em alta resolução.`,
-                    thumb: s.coverUrl || null,
-                    action: () => openSeriesChannel(s.title)
-                });
-            });
-
-            episodesList.forEach(ep => {
-                allMatchingWebItems.push({
-                    site: "FruitSenpai",
-                    url: `https://fruitsenpai.app/video/?v=${ep.id}`,
-                    title: `${ep.name} – Episódio Oficial Dublado e Legendado`,
-                    snippet: `Assista agora ao episódio ${ep.name} com qualidade ${ep.resolutionBadge || 'HD'} e áudio ${ep.audioType || 'Original'}.`,
-                    thumb: ep.thumbUrl || null,
-                    action: () => openWatchScreen(ep, ep.id)
-                });
-            });
-
-            // Resultados complementares para garantir páginas completas
-            const fallbackWeb = [
-                { site: "Crunchyroll", url: "https://www.crunchyroll.com", title: "Animes e Filmes Mais Populares de Todos os Tempos", snippet: "Embarque em uma nova aventura de anime com um acervo vasto e episódios diários.", thumb: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150" },
-                { site: "Wikipédia", url: "https://pt.wikipedia.org", title: "Anime – Wikipédia, a enciclopédia livre", snippet: "Anime é uma forma de arte e animação originária do Japão com grande variedade de gêneros.", thumb: null },
-                { site: "IMDb", url: "https://www.imdb.com", title: "Top 100 Anime Series Of All Time", snippet: "Ranking das melhores produções mundiais de anime de acordo com avaliação do público.", thumb: null },
-                { site: "Omelete", url: "https://www.omelete.com.br", title: "Mangás e Animes: Últimas novidades e calendários de estreias", snippet: "Fique por dentro dos principais lançamentos semanais e entrevistas de estúdios.", thumb: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" }
-            ];
-
-            while (allMatchingWebItems.length < 25) {
-                fallbackWeb.forEach(w => allMatchingWebItems.push({ ...w, action: () => showToast(`Acessando ${w.site}`) }));
-            }
-
-            renderWebSearchResultsBatch();
-        }
-
-        function renderWebSearchResultsBatch() {
-            if (!listWebSearchResults || !btnLoadMoreWebResults) return;
-
-            const itemsToShow = allMatchingWebItems.slice(0, webSearchDisplayedLimit);
-            listWebSearchResults.innerHTML = "";
-
-            itemsToShow.forEach(item => {
-                const card = document.createElement("div");
-                card.className = "google-web-result-card";
-
-                if (item.thumb) {
-                    card.innerHTML = `
-                        <div class="google-web-source-row">
-                            <div class="google-web-favicon"><img src="${item.thumb}"></div>
-                            <span>${item.site} • ${item.url}</span>
-                        </div>
-                        <div class="google-web-card-with-thumb">
-                            <div style="flex:1;">
-                                <div class="google-web-title">${escapeHtml(item.title)}</div>
-                                <div class="google-web-snippet">${escapeHtml(item.snippet)}</div>
-                            </div>
-                            <div class="google-web-right-thumb">
-                                <img src="${escapeHtml(item.thumb)}">
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    card.innerHTML = `
-                        <div class="google-web-source-row">
-                            <div class="google-web-favicon"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=50"></div>
-                            <span>${item.site} • ${item.url}</span>
-                        </div>
-                        <div class="google-web-title">${escapeHtml(item.title)}</div>
-                        <div class="google-web-snippet">${escapeHtml(item.snippet)}</div>
-                    `;
-                }
-
-                card.onclick = item.action || (() => {});
-                listWebSearchResults.appendChild(card);
-            });
-
-            // Se houver mais do que 20 itens disponíveis, exibe o botão (Print G1.4)
-            if (allMatchingWebItems.length > webSearchDisplayedLimit) {
-                btnLoadMoreWebResults.style.display = "flex";
-            } else {
-                btnLoadMoreWebResults.style.display = "none";
-            }
-        }
-
-        if (btnLoadMoreWebResults) {
-            btnLoadMoreWebResults.addEventListener("click", () => {
-                webSearchDisplayedLimit += 20;
-                renderWebSearchResultsBatch();
-            });
-        }
-
-        // H. RENDERIZA ABA LIGHT NOVELS E MANGÁS
-        function renderGoogleTabNovelsAndMangas(cleanQuery, seriesList) {
-            if (listNovelsSearchResults) {
-                listNovelsSearchResults.innerHTML = `
-                    <div class="google-web-result-card">
-                        <div class="google-web-title">Overgeared – Light Novel Oficial Traduzida</div>
-                        <div class="google-web-snippet">Acompanhe todos os volumes traduzidos da novel sul-coreana com capítulos atualizados.</div>
-                    </div>
-                `;
-            }
-
-            if (listMangasSearchResults) {
-                listMangasSearchResults.innerHTML = `
-                    <div class="google-web-result-card">
-                        <div class="google-web-title">Yani Neko – Mangá Completo em Português</div>
-                        <div class="google-web-snippet">Capítulos semanais traduzidos da comédia ácida sobre o cotidiano da gata Yani.</div>
-                    </div>
-                `;
-            }
-        }
-
-        // ==========================================================================
-        // FLUXO DE ABAS ANÔNIMAS E MENUS (PRINTS H1 ATÉ H8)
-        // ==========================================================================
-        // Seta Verde no Print H2: Clicar em "Modo anônimo" abre H4
-        if (btnNewTabModeIncognito) {
-            btnNewTabModeIncognito.onclick = () => {
-                openTabsSwitcherScreen("incognito");
-            };
-        }
-
-        // Seta Azul no Print H2: Kebab abre o menu H6
-        if (btnNewTabOptions) {
-            btnNewTabOptions.onclick = () => {
-                if (drawerTabsOptionsMenu) drawerTabsOptionsMenu.classList.add("active");
-            };
-        }
-
-        // Seta Vermelha no Print H6: "Adicionar guia ao grupo" abre gaveta H7 ou H8
-        if (btnMenuSelectTabsToGroup) {
-            btnMenuSelectTabsToGroup.onclick = () => {
-                if (drawerTabsOptionsMenu) drawerTabsOptionsMenu.classList.remove("active");
-                renderAddTabToGroupDrawer();
-            };
-        }
-
-        function renderAddTabToGroupDrawer() {
-            if (!containerDynamicGroupsInDrawer || !drawerAddTabToGroupModal) return;
-            containerDynamicGroupsInDrawer.innerHTML = "";
-
-            appTabGroupsList.forEach(grp => {
-                const tabsInGroup = appTabsList.filter(t => grp.tabIds && grp.tabIds.includes(t.id));
-                const row = document.createElement("div");
-                row.className = "account-item-row";
-                row.innerHTML = `
-                    <div class="account-item-left">
-                        <div class="tab-group-color-dot" style="background:${grp.color || '#fff'}; width:12px; height:12px;"></div>
-                        <div>
-                            <div style="font-size:14px; font-weight:600; color:#fff;">${escapeHtml(grp.title)}</div>
-                            <small style="color:#aaa;">${tabsInGroup.length} guias • Atualizado agora</small>
-                        </div>
-                    </div>
-                `;
-
-                row.onclick = () => {
-                    if (activeTabId && !grp.tabIds.includes(activeTabId)) {
-                        grp.tabIds.push(activeTabId);
-                        saveTabsToStorage();
-                        showToast(`Guia adicionada a ${grp.title}`);
+            if (activeSearchFilterType === "canais") {
+                matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
+            } else if (activeSearchFilterType === "playlists") {
+                // Playlists públicas existentes no dispositivo
+                const localPlaylists = JSON.parse(localStorage.getItem("fs_user_playlists") || "[]");
+                localPlaylists.forEach(pl => {
+                    if ((pl.title || "").toLowerCase().includes(cleanQuery)) {
+                        filteredSearchResultsPool.push({ type: "playlist", data: pl });
                     }
-                    drawerAddTabToGroupModal.classList.remove("active");
-                };
+                });
+            } else {
+                // Modo "Todos": Exibe episódios e coloca canais relevantes no resultado (Print A9)
+                matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
+                matchingEpisodes.forEach(ep => filteredSearchResultsPool.push({ type: "episode", data: ep }));
+            }
 
-                containerDynamicGroupsInDrawer.appendChild(row);
-            });
-
-            drawerAddTabToGroupModal.classList.add("active");
-        }
-
-        if (btnActionCreateNewGroupFromTab) {
-            btnActionCreateNewGroupFromTab.onclick = () => {
-                drawerAddTabToGroupModal.classList.remove("active");
-                if (modalCreateTabGroup) modalCreateTabGroup.classList.add("active");
-            };
-        }
-
-        if (drawerAddTabToGroupModal) {
-            drawerAddTabToGroupModal.addEventListener("click", (e) => {
-                if (e.target === drawerAddTabToGroupModal) drawerAddTabToGroupModal.classList.remove("active");
-            });
+            // Inicia com apenas 20 itens para economizar as leituras do plano Spark
+            searchCurrentDisplayedCount = 20;
+            renderSearchResultsPaged();
         }
 
         // Renderiza os resultados em lotes de 20 em 20 (Proteção Spark / Infinite Scroll)
