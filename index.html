@@ -19076,41 +19076,42 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         // Busca Universal: Resolve ID Temporário ou ID Selvagem de Compartilhamento
-        async function executeUniversalWildSearch() {
-            const term = inputUniversalWildSearch.value.trim();
-            if (!term) return;
+async function executeUniversalWildSearch() {
+    const term = inputUniversalWildSearch.value.trim();
+    if (!term) return;
 
-            // 1. Se for um ID Temporário de Perfil (FS-TEMP-...)
-            if (term.toUpperCase().startsWith("FS-TEMP-")) {
-                processTempIdLogin(term);
+    // 1. Se for um ID Temporário de Perfil (FS-TEMP-)
+    if (term.toUpperCase().startsWith("FS-TEMP-")) {
+        processTempIdLogin(term);
+        return;
+    }
+
+    // 2. Se for um ID Selvagem de Compartilhamento (FS-)
+    if (term.toUpperCase().startsWith("FS-")) {
+        try {
+            const snap = await getDoc(doc(db, "compartilhamentos", term.toUpperCase()));
+            if (snap.exists()) {
+                const data = snap.data();
+                if (data.tipo === "serie") {
+                    openSeriesChannel(data.idOriginal);
+                } else if (data.tipo === "grupo") {
+                    openGroupDetailPage(data.idOriginal);
+                } else if (data.tipo === "playlist") {
+                    openPlaylistDetailPage(data.idOriginal, "Playlist");
+                } else {
+                    openScreen("home");
+                }
+                showToast(`Redirecionado pelo ID Selvagem ${term.toUpperCase()}`);
                 return;
             }
+        } catch(e) {}
+    }
 
-            // 2. Se for um ID Selvagem de Compartilhamento (FS-...)
-            if (term.toUpperCase().startsWith("FS-")) {
-                try {
-                    const snap = await getDoc(doc(db, "compartilhamentos", term.toUpperCase()));
-                    if (snap.exists()) {
-                        const data = snap.data();
-                        if (data.tipo === "serie") {
-                            openSeriesChannel(data.idOriginal);
-                        } else if (data.tipo === "grupo") {
-                            openGroupDetailPage(data.idOriginal);
-                        } else if (data.tipo === "playlist") {
-                            openPlaylistDetailPage(data.idOriginal, "Playlist");
-                        } else {
-                            openScreen("home");
-                        }
-                        showToast(`Redirecionado pelo ID Selvagem ${term.toUpperCase()}`);
-                        return;
-                    }
-                } catch(e) {}
-            }
-
-            // 3. Busca normal
-            showToast(`Buscando por: ${term}`);
-            openScreen("home");
-        }
+    // 3. Busca normal realizada a partir da tela de Nova Guia
+    openSearchInputMode("newtab");
+    inputGlobalSearchQuery.value = term;
+    executeGlobalSearch(term);
+}
 
         btnSubmitWildSearch.addEventListener("click", executeUniversalWildSearch);
         inputUniversalWildSearch.addEventListener("keydown", (e) => {
@@ -20303,25 +20304,27 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             inputGlobalSearchQuery.focus();
         }
 
-        // Seta voltar (←) do campo de busca: apenas fecha o campo de pesquisa e retorna à tela onde o usuário estava
-        if (btnBackFromSearchInput) {
-            btnBackFromSearchInput.addEventListener("click", () => {
-                ytSearchActiveHeaderBar.classList.remove("active");
-                ytDefaultHeaderBar.style.display = "flex";
-                inputGlobalSearchQuery.value = "";
+        // Seta voltar do campo de busca: apenas fecha o campo de pesquisa e retorna à tela onde o usuário estava
+if (btnBackFromSearchInput) {
+    btnBackFromSearchInput.addEventListener("click", () => {
+        ytSearchActiveHeaderBar.classList.remove("active");
+        ytDefaultHeaderBar.style.display = "flex";
+        inputGlobalSearchQuery.value = "";
 
-                // Restaura a tela exata de onde a busca foi acionada
-                if (previousActiveScreenBeforeSearch === "shorts") {
-                    openShortsFullScreen();
-                } else if (previousActiveScreenBeforeSearch === "subscriptions") {
-                    openScreen(viewSubscriptions);
-                } else if (previousActiveScreenBeforeSearch === "you") {
-                    openScreen(viewYou);
-                } else {
-                    openScreen("home");
-                }
-            });
+        // Restaura a tela exata de onde a busca foi acionada
+        if (previousActiveScreenBeforeSearch === "shorts") {
+            openShortsFullScreen();
+        } else if (previousActiveScreenBeforeSearch === "subscriptions") {
+            openScreen(viewSubscriptions);
+        } else if (previousActiveScreenBeforeSearch === "you") {
+            openScreen(viewYou);
+        } else if (previousActiveScreenBeforeSearch === "newtab") {
+            openNewTabHomeScreen(Boolean(currentUserEmail));
+        } else {
+            openScreen("home");
         }
+    });
+}
 
         // Digitar no input de busca: gerencia o botão ✕ (Print A3)
         inputGlobalSearchQuery.addEventListener("input", () => {
