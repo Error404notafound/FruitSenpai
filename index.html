@@ -13301,91 +13301,91 @@
         }
 
         function openScreen(screen, addToHistory = true) {
-            if (addToHistory && screen !== "home") {
-                screenNavigationHistory.push(screen);
-            }
+    if (addToHistory && screen !== "home") {
+        screenNavigationHistory.push(screen);
+    }
 
-            feedContainer.style.display = "none";
-            chipsBar.style.display = "none";
-            document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view, .notifs-page-view").forEach(s => s.classList.remove("active"));
+    feedContainer.style.display = "none";
+    chipsBar.style.display = "none";
+    document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view, .notifs-page-view, .new-tab-home-screen, .tabs-switcher-screen").forEach(s => s.classList.remove("active"));
 
-            // Na tela Inicial (Home): URL limpa principal
-            if (screen === "home") {
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                const navHomeBtn = document.getElementById("navHome");
-                if (navHomeBtn) navHomeBtn.classList.add("active");
+    // Na tela Inicial (Home): URL limpa principal
+    if (screen === "home") {
+        document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+        const navHomeBtn = document.getElementById("navHome");
+        if (navHomeBtn) navHomeBtn.classList.add("active");
 
-                headerWrapper.style.display = "block";
-                ytDefaultHeaderBar.style.display = "flex";
-                ytSearchActiveHeaderBar.classList.remove("active");
-                btnBell.style.display = currentUserEmail ? "flex" : "none";
-                btnSettingsTop.style.display = "none";
-                btnHeaderNewTabPlus.style.display = "flex";
-                btnHeaderTabCounter.style.display = "flex";
-                btnHeaderBrowserMenu.style.display = "flex";
-                document.getElementById("btnSearch").style.display = "flex";
-                feedContainer.style.display = "flex";
-                chipsBar.style.display = "flex";
-                updateAppBrowserUrl({}, addToHistory);
-            }
-            // Na tela de Inscrições: URL ?tab=subscriptions
-            else if (screen === viewSubscriptions) {
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                const navSubsBtn = document.getElementById("navSubscriptions");
-                if (navSubsBtn) navSubsBtn.classList.add("active");
+        headerWrapper.style.display = "block";
+        ytDefaultHeaderBar.style.display = "flex";
+        ytSearchActiveHeaderBar.classList.remove("active");
+        btnBell.style.display = currentUserEmail ? "flex" : "none";
+        btnSettingsTop.style.display = "none";
+        btnHeaderNewTabPlus.style.display = "flex";
+        btnHeaderTabCounter.style.display = "flex";
+        btnHeaderBrowserMenu.style.display = "flex";
+        document.getElementById("btnSearch").style.display = "flex";
+        feedContainer.style.display = "flex";
+        chipsBar.style.display = "flex";
+        updateAppBrowserUrl({}, addToHistory);
+    }
+    // Na tela de Inscrições: URL ?tab=subscriptions
+    else if (screen === viewSubscriptions) {
+        document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+        const navSubsBtn = document.getElementById("navSubscriptions");
+        if (navSubsBtn) navSubsBtn.classList.add("active");
 
-                headerWrapper.style.display = "block";
-                chipsBar.style.display = "none";
-                btnBell.style.display = "none";
-                btnSettingsTop.style.display = "none";
-                btnHeaderNewTabPlus.style.display = "none";
-                btnHeaderTabCounter.style.display = "none";
-                btnHeaderBrowserMenu.style.display = "none";
-                document.getElementById("btnSearch").style.display = "flex";
-                viewSubscriptions.classList.add("active");
-                updateAppBrowserUrl({ tab: "subscriptions" }, addToHistory);
-            }
-            // Na tela de Pesquisa
-            else if (screen === viewSearchResults) {
-                headerWrapper.style.display = "block";
-                chipsBar.style.display = "none";
-                ytDefaultHeaderBar.style.display = "none";
-                ytSearchActiveHeaderBar.classList.add("active");
-                viewSearchResults.classList.add("active");
-            }
-            // Na tela Você (Perfil): URL ?tab=you
-            else if (screen === viewYou) {
-                document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
-                const navYouBtn = document.getElementById("navYou");
-                if (navYouBtn) navYouBtn.classList.add("active");
+        headerWrapper.style.display = "block";
+        chipsBar.style.display = "none";
+        btnBell.style.display = "none";
+        btnSettingsTop.style.display = "none";
+        btnHeaderNewTabPlus.style.display = "none";
+        btnHeaderTabCounter.style.display = "none";
+        btnHeaderBrowserMenu.style.display = "none";
+        document.getElementById("btnSearch").style.display = "flex";
+        viewSubscriptions.classList.add("active");
+        updateAppBrowserUrl({ tab: "subscriptions" }, addToHistory);
+    }
+    // Na tela de Pesquisa
+    else if (screen === viewSearchResults) {
+        headerWrapper.style.display = "block";
+        chipsBar.style.display = "none";
+        ytDefaultHeaderBar.style.display = "none";
+        ytSearchActiveHeaderBar.classList.add("active");
+        viewSearchResults.classList.add("active");
+    }
+    // Na tela Você (Perfil): URL ?tab=you
+    else if (screen === viewYou) {
+        document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
+        const navYouBtn = document.getElementById("navYou");
+        if (navYouBtn) navYouBtn.classList.add("active");
 
-                headerWrapper.style.display = "block";
-                btnBell.style.display = "none";
-                btnSettingsTop.style.display = "flex";
-                viewYou.classList.add("active");
-                updateAppBrowserUrl({ tab: "you" }, addToHistory);
-            } 
-            // Na tela de Notificações: URL ?view=notifications
-            else if (screen === viewNotifications) {
-                headerWrapper.style.display = "none";
-                viewNotifications.classList.add("active");
-                updateAppBrowserUrl({ view: "notifications" }, addToHistory);
-            }
-            // Na tela do Grupo e Lista de Grupos
-            else if (screen === viewGroupDetail || screen === viewUserGroupsList) {
-                headerWrapper.style.display = "block";
-                btnBell.style.display = currentUserEmail ? "flex" : "none";
-                btnSettingsTop.style.display = "none";
-                screen.classList.add("active");
-            }
-            // Em subtelas de criação/modais
-            else if (screen) {
-                headerWrapper.style.display = "none";
-                screen.classList.add("active");
-            }
+        headerWrapper.style.display = "block";
+        btnBell.style.display = "none";
+        btnSettingsTop.style.display = "flex";
+        viewYou.classList.add("active");
+        updateAppBrowserUrl({ tab: "you" }, addToHistory);
+    } 
+    // Na tela de Notificações: URL ?view=notifications
+    else if (screen === viewNotifications) {
+        headerWrapper.style.display = "none";
+        viewNotifications.classList.add("active");
+        updateAppBrowserUrl({ view: "notifications" }, addToHistory);
+    }
+    // Na tela do Grupo e Lista de Grupos
+    else if (screen === viewGroupDetail || screen === viewUserGroupsList) {
+        headerWrapper.style.display = "block";
+        btnBell.style.display = currentUserEmail ? "flex" : "none";
+        btnSettingsTop.style.display = "none";
+        screen.classList.add("active");
+    }
+    // Em subtelas de criação/modais
+    else if (screen) {
+        headerWrapper.style.display = "none";
+        screen.classList.add("active");
+    }
 
-            window.scrollTo(0, 0);
-        }
+    window.scrollTo(0, 0);
+}
 
         // A engrenagem única do topo abre a tela de Configurações (B1)
         btnSettingsTop.addEventListener("click", () => openScreen(viewSettings));
@@ -19108,15 +19108,20 @@ async function executeUniversalWildSearch() {
     }
 
     // 3. Busca normal realizada a partir da tela de Nova Guia
+    inputUniversalWildSearch.blur();
+    viewNewTabHome.classList.remove("active");
     openSearchInputMode("newtab");
     inputGlobalSearchQuery.value = term;
     executeGlobalSearch(term);
 }
 
-        btnSubmitWildSearch.addEventListener("click", executeUniversalWildSearch);
-        inputUniversalWildSearch.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") executeUniversalWildSearch();
-        });
+btnSubmitWildSearch.addEventListener("click", executeUniversalWildSearch);
+inputUniversalWildSearch.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        executeUniversalWildSearch();
+    }
+});
 
         // Trailer Recente no Feed da Guia
         function loadRandomTrailerForNewTab() {
