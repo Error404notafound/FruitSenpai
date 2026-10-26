@@ -21721,7 +21721,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         // FLUXO DE ABAS ANÔNIMAS E MENUS (PRINTS H1 ATÉ H8)
         // ==========================================================================
         // Seta Verde no Print H2: Clicar em "Modo anônimo" abre H4
-        const btnNewTabModeIncognito = document.getElementById("btnNewTabModeIncognito");
         if (btnNewTabModeIncognito) {
             btnNewTabModeIncognito.onclick = () => {
                 openTabsSwitcherScreen("incognito");
@@ -21729,7 +21728,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         // Seta Azul no Print H2: Kebab abre o menu H6
-        const btnNewTabOptions = document.getElementById("btnNewTabOptions");
         if (btnNewTabOptions) {
             btnNewTabOptions.onclick = () => {
                 if (drawerTabsOptionsMenu) drawerTabsOptionsMenu.classList.add("active");
@@ -21737,7 +21735,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         }
 
         // Seta Vermelha no Print H6: "Adicionar guia ao grupo" abre gaveta H7 ou H8
-        const btnMenuSelectTabsToGroup = document.getElementById("btnMenuSelectTabsToGroup");
         if (btnMenuSelectTabsToGroup) {
             btnMenuSelectTabsToGroup.onclick = () => {
                 if (drawerTabsOptionsMenu) drawerTabsOptionsMenu.classList.remove("active");
