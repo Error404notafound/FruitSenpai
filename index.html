@@ -13990,21 +13990,6 @@
         let hiddenShortsIdsSet = new Set();
         let hiddenFeedVideosIdsSet = new Set();
 
-        // Controladores de cancelamento para evitar acúmulo de listeners e estouro de cota
-        let unsubscribeSubsSeries = null;
-        let unsubscribeSubsEpisodes = null;
-
-        function clearSubscriptionsListeners() {
-            if (unsubscribeSubsSeries) {
-                unsubscribeSubsSeries();
-                unsubscribeSubsSeries = null;
-            }
-            if (unsubscribeSubsEpisodes) {
-                unsubscribeSubsEpisodes();
-                unsubscribeSubsEpisodes = null;
-            }
-        }
-
         // Clicar em "Inscrições" abre a tela oficial de Inscrições
         if (navSubscriptions) {
             navSubscriptions.addEventListener("click", () => {
@@ -14050,24 +14035,16 @@
             });
         }
 
-        // Carrega o feed das séries com cancelamento de ouvintes anteriores (Zero estouro de cota)
+        // Carrega o feed das séries que o usuário segue em tempo real
         function loadSubscriptionsFeedRealtime() {
             if (!currentUserEmail) return;
-
-            // Cancela os ouvintes antigos antes de criar novos
-            clearSubscriptionsListeners();
 
             const mySubscribedSeriesList = getStoredSubscribedSeries();
             const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
             const now = Date.now();
 
-            unsubscribeSubsSeries = onSnapshot(collection(db, "series"), (seriesSnap) => {
-                if (unsubscribeSubsEpisodes) {
-                    unsubscribeSubsEpisodes();
-                    unsubscribeSubsEpisodes = null;
-                }
-
-                unsubscribeSubsEpisodes = onSnapshot(frutasColecao, (episodesSnap) => {
+            onSnapshot(collection(db, "series"), (seriesSnap) => {
+                onSnapshot(frutasColecao, (episodesSnap) => {
                     const allSeriesMap = {};
                     seriesSnap.forEach(d => {
                         const sData = { id: d.id, ...d.data() };
@@ -15701,26 +15678,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
             if (watchIframe) watchIframe.src = srcUrl;
 
-            // Controladores de desinscrição para o player de vídeo
-        let unsubscribeRelatedEpisodes = null;
-        let unsubscribeWatchComments = null;
-
-        function clearWatchListeners() {
-            if (unsubscribeRelatedEpisodes) {
-                unsubscribeRelatedEpisodes();
-                unsubscribeRelatedEpisodes = null;
-            }
-            if (unsubscribeWatchComments) {
-                unsubscribeWatchComments();
-                unsubscribeWatchComments = null;
-            }
-        }
-
             if (btnBackFromWatch) {
                 btnBackFromWatch.onclick = () => {
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                    clearWatchListeners();
                     navigateBack();
                 };
             }
@@ -15743,17 +15704,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             loadRelatedEpisodes(videoData, videoId);
         }
 
-        // CARREGA PRÓXIMOS EPISÓDIOS DA SÉRIE COM DESINSCRIÇÃO AUTOMÁTICA
+        // CARREGA PRÓXIMOS EPISÓDIOS DA SÉRIE (FOTO COM X VERDE/VERMELHO CORRIGIDA)
         function loadRelatedEpisodes(videoData, videoId) {
             const container = document.getElementById("watchRelatedFeed");
             if (!container) return;
             container.innerHTML = "";
-
-            // Cancela o ouvinte anterior para não acumular leituras
-            if (unsubscribeRelatedEpisodes) {
-                unsubscribeRelatedEpisodes();
-                unsubscribeRelatedEpisodes = null;
-            }
 
             // Extrai a raiz do nome da série (ex: "Clevatess")
             let rootSeries = "";
@@ -15765,7 +15720,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 rootSeries = videoData.name.toLowerCase().trim();
             }
 
-            unsubscribeRelatedEpisodes = onSnapshot(frutasColecao, (snapshot) => {
+            onSnapshot(frutasColecao, (snapshot) => {
                 container.innerHTML = "";
                 const seriesEpisodes = [];
                 const otherEpisodes = [];
@@ -16084,13 +16039,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             const counterPreview = document.getElementById("watchCommentsCount");
             const counterDrawer = document.getElementById("txtCommentsDrawerTotal");
 
-            // Cancela o ouvinte de comentários anterior antes de conectar a outro vídeo
-            if (unsubscribeWatchComments) {
-                unsubscribeWatchComments();
-                unsubscribeWatchComments = null;
-            }
-
-            unsubscribeWatchComments = onSnapshot(collection(db, `frutas/${videoId}/comments`), (snap) => {
+            onSnapshot(collection(db, `frutas/${videoId}/comments`), (snap) => {
                 commentsContainer.innerHTML = "";
                 const total = snap.size;
                 counterPreview.textContent = total;
@@ -16532,24 +16481,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Controladores de desinscrição para a página do canal da série
-        let unsubscribeSeriesMother = null;
-        let unsubscribeSeriesEpisodes = null;
-
-        function clearSeriesChannelListeners() {
-            if (unsubscribeSeriesMother) {
-                unsubscribeSeriesMother();
-                unsubscribeSeriesMother = null;
-            }
-            if (unsubscribeSeriesEpisodes) {
-                unsubscribeSeriesEpisodes();
-                unsubscribeSeriesEpisodes = null;
-            }
-        }
-
         if (btnBackFromChannel) {
             btnBackFromChannel.addEventListener("click", () => {
-                clearSeriesChannelListeners();
                 viewSeriesChannel.classList.remove("active");
                 navigateBack();
             });
@@ -16758,13 +16691,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Sincroniza o estado do botão Inscrever-se nesta série
             syncSeriesSubscriptionUI(cleanName, btnChannelSubscribe);
 
-            // Cancela os ouvintes da série anterior para não manter conexões duplicadas
-            clearSeriesChannelListeners();
-
             // Busca os dados da série mãe cadastrada no Firestore para obter a contagem real
             let matchedSeriesData = null;
             try {
-                unsubscribeSeriesMother = onSnapshot(collection(db, "series"), (snapshot) => {
+                const seriesSnap = await onSnapshot(collection(db, "series"), (snapshot) => {
                     snapshot.forEach(docSnap => {
                         const sData = docSnap.data();
                         if (sData.title && sData.title.toLowerCase() === cleanName.toLowerCase()) {
@@ -16778,8 +16708,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 });
             } catch (err) {}
 
-            // Consulta todos os posts filhos com cancelamento automático ao sair
-            unsubscribeSeriesEpisodes = onSnapshot(frutasColecao, (snapshot) => {
+            // Consulta todos os posts filhos (episódios de todos os usuários ligados a esta série)
+            onSnapshot(frutasColecao, (snapshot) => {
                 currentActiveSeriesEpisodes = [];
                 let totalAccumulatedViews = 0;
                 let seriesCoverImage = "";
@@ -19145,12 +19075,18 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             newTabShortcutsCarousel.appendChild(div);
         }
 
-        // Busca Universal: Sem busca por ID temporário e executando a pesquisa real
+        // Busca Universal: Resolve ID Temporário ou ID Selvagem de Compartilhamento
         async function executeUniversalWildSearch() {
             const term = inputUniversalWildSearch.value.trim();
             if (!term) return;
 
-            // Se for um ID Selvagem de Compartilhamento (FS-...)
+            // 1. Se for um ID Temporário de Perfil (FS-TEMP-...)
+            if (term.toUpperCase().startsWith("FS-TEMP-")) {
+                processTempIdLogin(term);
+                return;
+            }
+
+            // 2. Se for um ID Selvagem de Compartilhamento (FS-...)
             if (term.toUpperCase().startsWith("FS-")) {
                 try {
                     const snap = await getDoc(doc(db, "compartilhamentos", term.toUpperCase()));
@@ -19171,11 +19107,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 } catch(e) {}
             }
 
-            // Busca normal: abre a pesquisa oficial com os resultados reais
-            if (viewNewTabHome) viewNewTabHome.classList.remove("active");
-            openSearchInputMode("home");
-            inputGlobalSearchQuery.value = term;
-            executeGlobalSearch(term);
+            // 3. Busca normal
+            showToast(`Buscando por: ${term}`);
+            openScreen("home");
         }
 
         btnSubmitWildSearch.addEventListener("click", executeUniversalWildSearch);
