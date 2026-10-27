@@ -8058,18 +8058,19 @@
     position: sticky;
     top: 0;
     z-index: 20;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.tab-search-brand-title {
-    font-size: 20px;
+.tab-search-center-brand {
+    font-size: 36px;
     font-weight: 800;
     color: #ffffff;
+    text-align: center;
+    margin: 14px 0 16px 0;
     letter-spacing: -0.5px;
 }
 
 .tab-search-input-pill {
-    margin: 10px 14px 6px 14px;
+    margin: 0 14px 12px 14px;
     background-color: #242424;
     border-radius: 24px;
     height: 48px;
@@ -12184,19 +12185,30 @@
              NOVA TELA OFICIAL DE PESQUISA DAS ABAS (PRINTS A1 ATÉ G1.4)
              ========================================================================== -->
         <section class="tab-search-screen-view" id="viewTabSearchResults">
-            <!-- Cabeçalho com Voltar, Marca FruitSenpai, Notificações e Perfil -->
+            <!-- Cabeçalho Formato B com Voltar, Sino, Contador, Perfil e Kebab -->
             <div class="tab-search-top-header">
+                <button class="yt-icon-btn" id="btnBackFromTabSearchScreen" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <button class="yt-icon-btn" id="btnBackFromTabSearchScreen" type="button" aria-label="Voltar">
-                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    <button class="yt-icon-btn" id="btnTabSearchBell" type="button" aria-label="Notificações">
+                        <svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg>
                     </button>
-                    <span class="tab-search-brand-title">FruitSenpai</span>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <button class="yt-icon-btn" type="button"><svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg></button>
+                    <!-- Contador de Guias do Formato B -->
+                    <button class="tab-counter-badge-btn" id="btnTabSearchCounter" type="button" title="Guias abertas">
+                        <span id="txtTabSearchCountNum">1</span>
+                    </button>
+                    <!-- Perfil do Usuário -->
                     <div class="account-avatar-small" style="width: 28px; height: 28px; font-size: 12px; background-color: #00897b;">E</div>
+                    <!-- Kebab 3 Pontinhos do Formato B -->
+                    <button class="yt-icon-btn" id="btnTabSearchOptionsMenu" type="button" aria-label="Mais opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
                 </div>
             </div>
+
+            <!-- Marca FruitSenpai Centralizada do Formato B -->
+            <h1 class="tab-search-center-brand">FruitSenpai</h1>
 
             <!-- Campo de Busca Estilo Google -->
             <div class="tab-search-input-pill">
@@ -19662,6 +19674,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             if (txtHeaderTabCountNum) txtHeaderTabCountNum.textContent = label;
             if (txtNewTabCountNum) txtNewTabCountNum.textContent = label;
             if (txtSegmentNormalCount) txtSegmentNormalCount.textContent = label;
+            const txtTabSearchCountNum = document.getElementById("txtTabSearchCountNum");
+            if (txtTabSearchCountNum) txtTabSearchCountNum.textContent = label;
         }
 
         // 2. CRIAÇÃO DE NOVA ABA COM VALIDAÇÃO DE ID TEMPORÁRIO (PRINT A -> PRINT E)
@@ -21789,10 +21803,40 @@ if (btnConfirmUploadDescriptionG15) {
     };
 }
 
-// 5. Botão de voltar do novo design de pesquisa das abas
+// 5. Botões do Cabeçalho Formato B da Pesquisa das Abas
 if (btnBackFromTabSearchScreen) {
     btnBackFromTabSearchScreen.onclick = () => {
         openScreen(viewNewTabHome);
+    };
+}
+
+// Botão Contador de Guias do Formato B (Seta Amarela do Print B)
+const btnTabSearchCounter = document.getElementById("btnTabSearchCounter");
+if (btnTabSearchCounter) {
+    btnTabSearchCounter.onclick = () => {
+        openTabsSwitcherScreen("normal");
+    };
+}
+
+// Botão Kebab de 3 Pontinhos do Formato B (Seta Azul-Clara do Print B)
+const btnTabSearchOptionsMenu = document.getElementById("btnTabSearchOptionsMenu");
+if (btnTabSearchOptionsMenu) {
+    btnTabSearchOptionsMenu.onclick = (e) => {
+        e.stopPropagation();
+        menuBrowserDropdownH6.classList.toggle("active");
+    };
+}
+
+// Botão Sino de Notificações do Cabeçalho Formato B
+const btnTabSearchBell = document.getElementById("btnTabSearchBell");
+if (btnTabSearchBell) {
+    btnTabSearchBell.onclick = () => {
+        if (!currentUserEmail) {
+            openAuthModal();
+            return;
+        }
+        openScreen(viewNotifications);
+        loadNotificationsPage("todos");
     };
 }
 
