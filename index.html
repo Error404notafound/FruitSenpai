@@ -8023,6 +8023,553 @@
             border-radius: 50%;
             background-color: #3ea6ff;
         }
+
+    /* ==========================================================================
+   ESTILOS EXCLUSIVOS DA PESQUISA DAS ABAS (PRINTS A1 ATÉ H8)
+   ========================================================================== */
+.tab-search-screen-view {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #171717;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 480px;
+    z-index: 10008;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 75px;
+}
+
+.tab-search-screen-view.active {
+    display: flex;
+}
+
+.tab-search-top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background-color: #171717;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tab-search-brand-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.tab-search-input-pill {
+    margin: 10px 14px 6px 14px;
+    background-color: #242424;
+    border-radius: 24px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.tab-search-input-pill input {
+    flex: 1;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 14.5px;
+    outline: none;
+}
+
+.tab-search-categories-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px 10px 14px;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: #171717;
+    position: sticky;
+    top: 60px;
+    z-index: 15;
+}
+
+.tab-search-categories-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-search-cat-pill {
+    background: none;
+    border: none;
+    color: #9aa0a6;
+    padding: 8px 12px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.tab-search-cat-pill.active {
+    background-color: #303134;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.tab-search-content-panel {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+}
+
+.tab-search-content-panel.active {
+    display: flex;
+}
+
+/* Print B1 e B2: Tags de Imagens com Miniatura Redonda */
+.tab-search-image-tags-bar {
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tab-search-image-tags-bar::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-search-image-tag-pill {
+    background-color: #242424;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    height: 38px;
+    padding: 2px 14px 2px 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.tab-search-tag-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #383838;
+}
+
+.tab-search-tag-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Print B1: Grade de 2 Colunas de Imagens */
+.tab-search-images-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.tab-search-image-card {
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #242424;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.tab-search-image-card img {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+}
+
+.tab-search-image-card-info {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tab-search-image-card-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab-search-image-card-sub {
+    font-size: 10.5px;
+    color: #9aa0a6;
+}
+
+/* Print C1: Lista de Vídeos */
+.tab-search-video-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px 14px;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+}
+
+.tab-search-video-thumb-box {
+    width: 135px;
+    min-width: 135px;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    background-color: #242424;
+}
+
+.tab-search-video-thumb-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.tab-search-video-info-box {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.tab-search-video-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tab-search-video-meta {
+    font-size: 11px;
+    color: #9aa0a6;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Print D1: Lista de Notícias */
+.tab-search-news-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 14px;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+}
+
+.tab-search-news-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tab-search-news-source-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #9aa0a6;
+}
+
+.tab-search-news-icon {
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    background-color: #ff0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.tab-search-news-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tab-search-news-date {
+    font-size: 11px;
+    color: #70757a;
+}
+
+.tab-search-news-thumb {
+    width: 86px;
+    min-width: 86px;
+    height: 86px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #242424;
+}
+
+.tab-search-news-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Print E1: Grade de Shopping */
+.tab-search-shopping-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 10px 14px;
+}
+
+.tab-search-shopping-card {
+    background-color: #202124;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    cursor: pointer;
+}
+
+.tab-search-shopping-thumb {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #2e3033;
+}
+
+.tab-search-shopping-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.tab-search-shopping-info {
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.tab-search-shopping-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tab-search-shopping-price {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #81c995;
+    margin-top: 2px;
+}
+
+.tab-search-shopping-store {
+    font-size: 10.5px;
+    color: #9aa0a6;
+}
+
+/* Print G1: Resultados Web Estilo Google */
+.tab-search-web-card {
+    display: flex;
+    flex-direction: column;
+    padding: 12px 14px;
+    gap: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    cursor: pointer;
+}
+
+.tab-search-web-header-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tab-search-web-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #2e3033;
+    flex-shrink: 0;
+}
+
+.tab-search-web-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tab-search-web-meta-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+}
+
+.tab-search-web-site-name {
+    font-size: 12px;
+    color: #bdc1c6;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab-search-web-url {
+    font-size: 10.5px;
+    color: #70757a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tab-search-web-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #8ab4f8;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+
+.tab-search-web-snippet {
+    font-size: 12.5px;
+    color: #bdc1c6;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Botão Paginação e Rodapé */
+.tab-search-pagination-btn {
+    width: calc(100% - 28px);
+    margin: 16px 14px;
+    height: 42px;
+    background-color: #303134;
+    color: #ffffff;
+    border: none;
+    border-radius: 21px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tab-search-footer-info {
+    padding: 24px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 11.5px;
+    color: #9aa0a6;
+}
+
+/* Menu Dropdown H6 */
+.browser-menu-dropdown-sheet {
+    position: fixed;
+    top: 52px;
+    right: 14px;
+    width: 250px;
+    background-color: #282a2d;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10020;
+    display: none;
+    flex-direction: column;
+    padding: 8px 0;
+}
+
+.browser-menu-dropdown-sheet.active {
+    display: flex;
+}
+
+.browser-menu-item-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    color: #ffffff;
+    font-size: 13.5px;
+    cursor: pointer;
+}
+
+.browser-menu-item-row svg {
+    width: 20px;
+    height: 20px;
+    fill: #ffffff;
+}
+
+/* Tela H4 e H5: Modo Anônimo */
+.incognito-landing-screen {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #0f141c;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-width: 480px;
+    z-index: 10007;
+    overflow-y: auto;
+    padding: 20px 24px 75px 24px;
+}
+
+.incognito-landing-screen.active {
+    display: flex;
+}
     </style>
 </head>
 <body>
@@ -9640,10 +10187,15 @@
              ========================================================================== -->
         <section class="tabs-switcher-screen" id="viewTabsGridSwitcher">
             <div class="tabs-switcher-header">
-                <!-- Botão + Nova Guia no topo esquerdo -->
-                <button class="tabs-switcher-new-btn" id="btnTabsSwitcherNewTab" type="button" title="Nova guia">
-                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                </button>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <button class="yt-icon-btn" id="btnTabsSwitcherBackHome" type="button" aria-label="Voltar ao início">
+                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    </button>
+                    <!-- Botão + Nova Guia no topo esquerdo -->
+                    <button class="tabs-switcher-new-btn" id="btnTabsSwitcherNewTab" type="button" title="Nova guia">
+                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    </button>
+                </div>
 
                 <!-- Controle Segmentado Central: Abas Normais, Anônimas, Grupos de Guias -->
                 <div class="tabs-segmented-control">
@@ -11526,6 +12078,214 @@
             <span id="customSnackbarMessageText">Salvo em Watch later</span>
         </div>
 
+        <!-- ==========================================================================
+             MENU SUSPENSO DO NAVEGADOR (PRINT H6)
+             ========================================================================== -->
+        <div class="browser-menu-dropdown-sheet" id="menuBrowserDropdownH6">
+            <div class="browser-menu-item-row" id="btnBrowserMenuNewTab">
+                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                <span>Nova guia</span>
+            </div>
+            <div class="browser-menu-item-row" id="btnBrowserMenuNewIncognito">
+                <svg viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 12.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                <span>Nova guia anônima</span>
+            </div>
+            <div class="browser-menu-item-row" id="btnBrowserMenuAddTabToGroup">
+                <svg viewBox="0 0 24 24"><path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zm-9 9h7v7H4v-7zm9 0h7v7h-7v-7z"/></svg>
+                <span>Adicionar guia ao grupo</span>
+            </div>
+            <div class="browser-menu-item-row" id="btnBrowserMenuHistory">
+                <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.896 8.896 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+                <span>Histórico</span>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             GAVETA INFERIOR: ADICIONAR GUIA AO GRUPO (PRINTS H7 E H8)
+             ========================================================================== -->
+        <div class="accounts-drawer" id="drawerAddToGroupH7" style="z-index: 10025;">
+            <div class="accounts-sheet" style="padding: 16px 18px 24px 18px;">
+                <div class="yt-sheet-drag-handle"></div>
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 14px;">Adicionar a</h3>
+                <div class="account-item-row" id="btnCreateNewGroupFromH7">
+                    <div class="account-item-left">
+                        <div class="group-create-plus-icon-btn" style="width: 36px; height: 36px;">
+                            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                        </div>
+                        <span style="font-weight: 600; font-size: 14px;">Novo grupo de guias</span>
+                    </div>
+                </div>
+                <div id="containerExistingGroupsH7" style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;"></div>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             TELA DE INTRODUÇÃO À NAVEGAÇÃO ANÔNIMA (PRINT H4)
+             ========================================================================== -->
+        <section class="incognito-landing-screen" id="viewIncognitoHomeH4">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                <button class="yt-icon-btn" id="btnBackFromIncognitoH4" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <button class="tabs-switcher-new-btn" id="btnIncognitoNewTabPlusH4" type="button">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px;">
+                <div style="width: 72px; height: 72px; border-radius: 50%; background-color: #242424; display: flex; align-items: center; justify-content: center;">
+                    <svg style="width: 44px; height: 44px; fill: #ffffff;" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 12.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                </div>
+                <h2 style="font-size: 20px; font-weight: 700; color: #ffffff;">Você entrou no modo de navegação anônima</h2>
+                <p style="font-size: 13px; color: #9aa0a6; line-height: 1.45;">Agora você pode navegar com privacidade. Suas guias anônimas serão fechadas após 4 dias de inatividade.</p>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             MODAL: ADICIONAR DESCRIÇÃO DA POSTAGEM (PRINT G1.5)
+             ========================================================================== -->
+        <div class="yt-center-modal-backdrop" id="modalAddUploadDescriptionG15" style="z-index: 10045;">
+            <div class="yt-center-dialog">
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">Adicionar descrição</h3>
+                <textarea id="txtAreaUploadDescriptionG15" class="yt-input" style="height: 120px; resize: none;" placeholder="Escreva a descrição da série ou episódio"></textarea>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                    <button type="button" class="btn-modal-blue-close" id="btnCloseUploadDescriptionG15">Fechar</button>
+                    <button type="button" class="btn-modal-white-confirm" id="btnConfirmUploadDescriptionG15">Concluir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             GAVETA INFERIOR: ORDENAÇÃO DO SHOPPING (PRINT E2 ATÉ E2.7)
+             ========================================================================== -->
+        <div class="accounts-drawer" id="drawerShoppingSortE2" style="z-index: 10030;">
+            <div class="accounts-sheet" style="padding: 16px 18px 24px 18px; max-height: 80vh; overflow-y: auto;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="font-size: 16px; font-weight: 700;">Refine sua pesquisa</h3>
+                    <button class="yt-icon-btn" id="btnCloseShoppingSortE2"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+                </div>
+                <div style="font-size: 13px; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Ordenar por</div>
+                <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+                    <button class="channel-chip-pill active" type="button" style="text-align: left;">Relevância</button>
+                    <button class="channel-chip-pill" type="button" style="text-align: left;">Preço: do menor para o maior</button>
+                    <button class="channel-chip-pill" type="button" style="text-align: left;">Preço: do maior para o menor</button>
+                </div>
+                <div style="font-size: 13px; font-weight: 700; color: #ffffff; margin-bottom: 8px;">Gênero</div>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <button class="channel-chip-pill" type="button">RPG</button>
+                    <button class="channel-chip-pill" type="button">Aventura</button>
+                    <button class="channel-chip-pill" type="button">Luta</button>
+                    <button class="channel-chip-pill" type="button">Ação</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             NOVA TELA OFICIAL DE PESQUISA DAS ABAS (PRINTS A1 ATÉ G1.4)
+             ========================================================================== -->
+        <section class="tab-search-screen-view" id="viewTabSearchResults">
+            <!-- Cabeçalho com Voltar, Marca FruitSenpai, Notificações e Perfil -->
+            <div class="tab-search-top-header">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="yt-icon-btn" id="btnBackFromTabSearchScreen" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                    </button>
+                    <span class="tab-search-brand-title">FruitSenpai</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="yt-icon-btn" type="button"><svg viewBox="0 0 24 24"><path d="M10 20h4c0 1.1-.9 2-2 2s-2-.9-2-2zm10-2.65V19H4v-1.65l2-1.88v-5.15C6 7.4 7.56 5.1 10 4.34v-.38c0-.86.7-1.56 1.56-1.56.85 0 1.55.7 1.55 1.56v.38c2.44.75 4 3.06 4 5.98v5.15l2 1.88z"/></svg></button>
+                    <div class="account-avatar-small" style="width: 28px; height: 28px; font-size: 12px; background-color: #00897b;">E</div>
+                </div>
+            </div>
+
+            <!-- Campo de Busca Estilo Google -->
+            <div class="tab-search-input-pill">
+                <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: #9aa0a6;"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                <input type="text" id="inputTabSearchQuery" placeholder="Pesquisar">
+                <button class="yt-icon-btn" id="btnClearTabSearchInput" type="button" style="padding: 0;"><svg viewBox="0 0 24 24" style="width: 18px; height: 18px;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
+            </div>
+
+            <!-- Barra de Abas Horizontais Deslizáveis (Prints A1 a A5) -->
+            <div class="tab-search-categories-bar" id="tabSearchCategoriesBar">
+                <button class="tab-search-cat-pill" data-tab-cat="ia" type="button">Modo IA</button>
+                <button class="tab-search-cat-pill active" data-tab-cat="tudo" type="button">Tudo</button>
+                <button class="tab-search-cat-pill" data-tab-cat="imagens" type="button">Imagens</button>
+                <button class="tab-search-cat-pill" data-tab-cat="videos" type="button">Vídeos</button>
+                <button class="tab-search-cat-pill" data-tab-cat="curtos" type="button">Vídeos curtos</button>
+                <button class="tab-search-cat-pill" data-tab-cat="noticias" type="button">Notícias</button>
+                <button class="tab-search-cat-pill" data-tab-cat="shopping" type="button">Shopping</button>
+                <button class="tab-search-cat-pill" data-tab-cat="web" type="button">Web</button>
+                <button class="tab-search-cat-pill" data-tab-cat="novels" type="button">Light novels</button>
+                <button class="tab-search-cat-pill" data-tab-cat="mangas" type="button">Mangás</button>
+            </div>
+
+            <!-- Painel 1: Tudo (Prints A1 a A1.6) -->
+            <div class="tab-search-content-panel active" id="tabPanelTudo">
+                <div id="containerTabSearchTudoResults"></div>
+            </div>
+
+            <!-- Painel 2: Imagens (Prints B1, B1.1 e B2) -->
+            <div class="tab-search-content-panel" id="tabPanelImagens">
+                <div class="tab-search-image-tags-bar" id="containerTabSearchImageTagsBar"></div>
+                <div class="tab-search-images-grid" id="containerTabSearchImagesGrid"></div>
+            </div>
+
+            <!-- Painel 3: Vídeos (Print C1) -->
+            <div class="tab-search-content-panel" id="tabPanelVideos">
+                <div id="containerTabSearchVideosList"></div>
+            </div>
+
+            <!-- Painel 4: Vídeos curtos (Prints F1 e F1.1) -->
+            <div class="tab-search-content-panel" id="tabPanelCurtos">
+                <div class="tab-search-images-grid" id="containerTabSearchShortsGrid"></div>
+            </div>
+
+            <!-- Painel 5: Notícias (Print D1) -->
+            <div class="tab-search-content-panel" id="tabPanelNoticias">
+                <div id="containerTabSearchNewsList"></div>
+            </div>
+
+            <!-- Painel 6: Shopping (Prints E1 a E3.2) -->
+            <div class="tab-search-content-panel" id="tabPanelShopping">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 10px 14px;">
+                    <button class="channel-chip-pill active" id="btnOpenShoppingSortDrawer" type="button" style="display: flex; align-items: center; gap: 6px;">
+                        <span>Ordenar</span>
+                        <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    </button>
+                    <div style="display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;" id="containerShoppingQuickTags"></div>
+                </div>
+                <div class="tab-search-shopping-grid" id="containerTabSearchShoppingGrid"></div>
+            </div>
+
+            <!-- Painel 7: Web (Prints G1 a G1.4) -->
+            <div class="tab-search-content-panel" id="tabPanelWeb">
+                <div id="containerTabSearchWebList"></div>
+            </div>
+
+            <!-- Painel 8 e 9: Light novels e Mangás -->
+            <div class="tab-search-content-panel" id="tabPanelNovels">
+                <div id="containerTabSearchNovelsList"></div>
+            </div>
+            <div class="tab-search-content-panel" id="tabPanelMangas">
+                <div id="containerTabSearchMangasList"></div>
+            </div>
+
+            <!-- Botão Mais Resultados de Pesquisa (Aparece se houver mais de 20) -->
+            <button class="tab-search-pagination-btn" id="btnLoadMoreTabSearchResults" type="button" style="display: none;">Mais resultados de pesquisa</button>
+
+            <!-- Rodapé (Print A1.6 e G1.4) -->
+            <div class="tab-search-footer-info">
+                <div>Brasil South america - SA</div>
+                <div>Com base na sua atividade anterior</div>
+                <div style="display: flex; gap: 12px; margin-top: 6px;">
+                    <span>Tema escuro: ativado</span>
+                    <span>Ajuda</span>
+                    <span>Privacidade</span>
+                    <span>Termos</span>
+                </div>
+            </div>
+        </section>
+
     </div>
 
     <!-- ==========================================================================
@@ -13307,7 +14067,7 @@
 
     feedContainer.style.display = "none";
     chipsBar.style.display = "none";
-    document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view, .notifs-page-view, .new-tab-home-screen, .tabs-switcher-screen").forEach(s => s.classList.remove("active"));
+    document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view, .notifs-page-view, .tab-search-screen-view, .new-tab-home-screen, .tabs-switcher-screen, .incognito-landing-screen").forEach(s => s.classList.remove("active"));
 
     // Na tela Inicial (Home): URL limpa principal
     if (screen === "home") {
@@ -19080,13 +19840,13 @@ async function executeUniversalWildSearch() {
     const term = inputUniversalWildSearch.value.trim();
     if (!term) return;
 
-    // 1. Se for um ID Temporário de Perfil (FS-TEMP-)
+    // 1. Se for um ID Temporário de Perfil (FS-TEMP-...)
     if (term.toUpperCase().startsWith("FS-TEMP-")) {
         processTempIdLogin(term);
         return;
     }
 
-    // 2. Se for um ID Selvagem de Compartilhamento (FS-)
+    // 2. Se for um ID Selvagem de Compartilhamento (FS-...)
     if (term.toUpperCase().startsWith("FS-")) {
         try {
             const snap = await getDoc(doc(db, "compartilhamentos", term.toUpperCase()));
@@ -19107,12 +19867,9 @@ async function executeUniversalWildSearch() {
         } catch(e) {}
     }
 
-    // 3. Busca normal realizada a partir da tela de Nova Guia
+    // 3. Executa a pesquisa exclusiva no novo design das abas
     inputUniversalWildSearch.blur();
-    viewNewTabHome.classList.remove("active");
-    openSearchInputMode("newtab");
-    inputGlobalSearchQuery.value = term;
-    executeGlobalSearch(term);
+    executeTabSearch(term, "tudo");
 }
 
 btnSubmitWildSearch.addEventListener("click", executeUniversalWildSearch);
@@ -20842,6 +21599,539 @@ if (btnBackFromSearchInput) {
         loadSeriesFromFirestore();
         handleAppRoutingFromUrlParams(false);
         updateWeeklyNotificationsBellCount();
+
+    // ==========================================================================
+// MOTOR EXCLUSIVO DE PESQUISA DAS ABAS (PRINTS A1 ATÉ H8)
+// ==========================================================================
+const viewTabSearchResults = document.getElementById("viewTabSearchResults");
+const inputTabSearchQuery = document.getElementById("inputTabSearchQuery");
+const btnClearTabSearchInput = document.getElementById("btnClearTabSearchInput");
+const btnBackFromTabSearchScreen = document.getElementById("btnBackFromTabSearchScreen");
+const btnLoadMoreTabSearchResults = document.getElementById("btnLoadMoreTabSearchResults");
+
+const tabPanelTudo = document.getElementById("tabPanelTudo");
+const tabPanelImagens = document.getElementById("tabPanelImagens");
+const tabPanelVideos = document.getElementById("tabPanelVideos");
+const tabPanelCurtos = document.getElementById("tabPanelCurtos");
+const tabPanelNoticias = document.getElementById("tabPanelNoticias");
+const tabPanelShopping = document.getElementById("tabPanelShopping");
+const tabPanelWeb = document.getElementById("tabPanelWeb");
+const tabPanelNovels = document.getElementById("tabPanelNovels");
+const tabPanelMangas = document.getElementById("tabPanelMangas");
+
+const containerTabSearchTudoResults = document.getElementById("containerTabSearchTudoResults");
+const containerTabSearchImageTagsBar = document.getElementById("containerTabSearchImageTagsBar");
+const containerTabSearchImagesGrid = document.getElementById("containerTabSearchImagesGrid");
+const containerTabSearchVideosList = document.getElementById("containerTabSearchVideosList");
+const containerTabSearchShortsGrid = document.getElementById("containerTabSearchShortsGrid");
+const containerTabSearchNewsList = document.getElementById("containerTabSearchNewsList");
+const containerTabSearchShoppingGrid = document.getElementById("containerTabSearchShoppingGrid");
+const containerShoppingQuickTags = document.getElementById("containerShoppingQuickTags");
+const containerTabSearchWebList = document.getElementById("containerTabSearchWebList");
+const containerTabSearchNovelsList = document.getElementById("containerTabSearchNovelsList");
+const containerTabSearchMangasList = document.getElementById("containerTabSearchMangasList");
+
+const drawerShoppingSortE2 = document.getElementById("drawerShoppingSortE2");
+const btnOpenShoppingSortDrawer = document.getElementById("btnOpenShoppingSortDrawer");
+const btnCloseShoppingSortE2 = document.getElementById("btnCloseShoppingSortE2");
+
+const menuBrowserDropdownH6 = document.getElementById("menuBrowserDropdownH6");
+const btnBrowserMenuNewTab = document.getElementById("btnBrowserMenuNewTab");
+const btnBrowserMenuNewIncognito = document.getElementById("btnBrowserMenuNewIncognito");
+const btnBrowserMenuAddTabToGroup = document.getElementById("btnBrowserMenuAddTabToGroup");
+const drawerAddToGroupH7 = document.getElementById("drawerAddToGroupH7");
+const btnCreateNewGroupFromH7 = document.getElementById("btnCreateNewGroupFromH7");
+const containerExistingGroupsH7 = document.getElementById("containerExistingGroupsH7");
+
+const viewIncognitoHomeH4 = document.getElementById("viewIncognitoHomeH4");
+const btnBackFromIncognitoH4 = document.getElementById("btnBackFromIncognitoH4");
+const btnIncognitoNewTabPlusH4 = document.getElementById("btnIncognitoNewTabPlusH4");
+const btnNewTabModeIncognito = document.getElementById("btnNewTabModeIncognito");
+const btnNewTabOptions = document.getElementById("btnNewTabOptions");
+
+const modalAddUploadDescriptionG15 = document.getElementById("modalAddUploadDescriptionG15");
+const txtAreaUploadDescriptionG15 = document.getElementById("txtAreaUploadDescriptionG15");
+const btnCloseUploadDescriptionG15 = document.getElementById("btnCloseUploadDescriptionG15");
+const btnConfirmUploadDescriptionG15 = document.getElementById("btnConfirmUploadDescriptionG15");
+const rowUploadDescription = document.getElementById("rowUploadDescription");
+
+const btnTabsSwitcherBackHome = document.getElementById("btnTabsSwitcherBackHome");
+
+let currentTabSearchQuery = "";
+let currentActiveTabSearchCategory = "tudo";
+let tabSearchCurrentVisibleLimit = 20;
+let tabSearchPool = [];
+let savedUploadSeriesDescriptionG15 = "";
+
+// 1. Botão < no cabeçalho do Gerenciador de Guias (Print H1)
+if (btnTabsSwitcherBackHome) {
+    btnTabsSwitcherBackHome.onclick = () => {
+        openScreen("home");
+    };
+}
+
+// 2. Botão Modo Anônimo (Print H2 -> Print H4)
+if (btnNewTabModeIncognito) {
+    btnNewTabModeIncognito.onclick = () => {
+        openScreen(viewIncognitoHomeH4);
+    };
+}
+
+if (btnBackFromIncognitoH4) {
+    btnBackFromIncognitoH4.onclick = () => {
+        openScreen(viewNewTabHome);
+    };
+}
+
+if (btnIncognitoNewTabPlusH4) {
+    btnIncognitoNewTabPlusH4.onclick = () => {
+        createNewTabObject("Nova Guia Anônima", "newtab", true);
+        openScreen(viewNewTabHome);
+        const brand = document.querySelector(".new-tab-center-brand");
+        if (brand) {
+            brand.innerHTML = `<span style="display:inline-flex;align-items:center;gap:10px;"><svg style="width:36px;height:36px;fill:#fff;" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 0-9 9c0 4.17 2.84 7.67 6.69 8.69L12 22l2.31-2.31C18.16 18.67 21 15.17 21 11a9 9 0 0 0-9-9zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm0 12.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg> FruitSenpai</span>`;
+        }
+    };
+}
+
+// 3. Botão de 3 pontos do topo abre o menu Print H6
+if (btnNewTabOptions) {
+    btnNewTabOptions.onclick = (e) => {
+        e.stopPropagation();
+        menuBrowserDropdownH6.classList.toggle("active");
+    };
+}
+
+document.addEventListener("click", (e) => {
+    if (!e.target.closest("#menuBrowserDropdownH6") && !e.target.closest("#btnNewTabOptions")) {
+        menuBrowserDropdownH6.classList.remove("active");
+    }
+});
+
+if (btnBrowserMenuNewTab) {
+    btnBrowserMenuNewTab.onclick = () => {
+        menuBrowserDropdownH6.classList.remove("active");
+        createNewTabObject("Nova Guia", "newtab", false);
+        openScreen(viewNewTabHome);
+    };
+}
+
+if (btnBrowserMenuNewIncognito) {
+    btnBrowserMenuNewIncognito.onclick = () => {
+        menuBrowserDropdownH6.classList.remove("active");
+        openScreen(viewIncognitoHomeH4);
+    };
+}
+
+if (btnBrowserMenuAddTabToGroup) {
+    btnBrowserMenuAddTabToGroup.onclick = () => {
+        menuBrowserDropdownH6.classList.remove("active");
+        renderAddToGroupDrawerH7();
+        drawerAddToGroupH7.classList.add("active");
+    };
+}
+
+function renderAddToGroupDrawerH7() {
+    containerExistingGroupsH7.innerHTML = "";
+    appTabGroupsList.forEach(grp => {
+        const item = document.createElement("div");
+        item.className = "account-item-row";
+        item.innerHTML = `
+            <div class="account-item-left">
+                <div class="tab-group-color-dot" style="background:${grp.color || '#ffffff'};"></div>
+                <div>
+                    <div style="font-weight:600; font-size:14px; color:#ffffff;">${escapeHtml(grp.title)}</div>
+                    <small style="color:#aaaaaa;">Atualizado agora</small>
+                </div>
+            </div>
+        `;
+        item.onclick = () => {
+            if (activeTabId && !grp.tabIds.includes(activeTabId)) {
+                grp.tabIds.push(activeTabId);
+                const currentTab = appTabsList.find(t => t.id === activeTabId);
+                if (currentTab) currentTab.groupId = grp.id;
+                saveTabsToStorage();
+                showToast(`Guia adicionada ao grupo ${grp.title}`);
+            }
+            drawerAddToGroupH7.classList.remove("active");
+        };
+        containerExistingGroupsH7.appendChild(item);
+    });
+}
+
+if (btnCreateNewGroupFromH7) {
+    btnCreateNewGroupFromH7.onclick = () => {
+        drawerAddToGroupH7.classList.remove("active");
+        inputTabGroupTitle.value = "";
+        modalCreateTabGroup.classList.add("active");
+    };
+}
+
+// 4. Modal "Adicionar descrição" da tela de postagem (Print G1.5)
+if (rowUploadDescription) {
+    rowUploadDescription.onclick = () => {
+        txtAreaUploadDescriptionG15.value = savedUploadSeriesDescriptionG15;
+        modalAddUploadDescriptionG15.classList.add("active");
+    };
+}
+
+if (btnCloseUploadDescriptionG15) {
+    btnCloseUploadDescriptionG15.onclick = () => {
+        modalAddUploadDescriptionG15.classList.remove("active");
+    };
+}
+
+if (btnConfirmUploadDescriptionG15) {
+    btnConfirmUploadDescriptionG15.onclick = () => {
+        savedUploadSeriesDescriptionG15 = txtAreaUploadDescriptionG15.value.trim();
+        modalAddUploadDescriptionG15.classList.remove("active");
+        showToast("Descrição atualizada com sucesso.");
+    };
+}
+
+// 5. Botão de voltar do novo design de pesquisa das abas
+if (btnBackFromTabSearchScreen) {
+    btnBackFromTabSearchScreen.onclick = () => {
+        openScreen(viewNewTabHome);
+    };
+}
+
+if (btnClearTabSearchInput) {
+    btnClearTabSearchInput.onclick = () => {
+        inputTabSearchQuery.value = "";
+        inputTabSearchQuery.focus();
+    };
+}
+
+inputTabSearchQuery.onkeydown = (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        const q = inputTabSearchQuery.value.trim();
+        if (q) executeTabSearch(q, currentActiveTabSearchCategory);
+    }
+};
+
+// 6. Troca de Abas de Categoria (Prints A1 até A5)
+document.querySelectorAll(".tab-search-cat-pill").forEach(pill => {
+    pill.onclick = () => {
+        document.querySelectorAll(".tab-search-cat-pill").forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        const category = pill.getAttribute("data-tab-cat");
+        switchTabSearchCategory(category);
+    };
+});
+
+function switchTabSearchCategory(cat) {
+    currentActiveTabSearchCategory = cat;
+    [tabPanelTudo, tabPanelImagens, tabPanelVideos, tabPanelCurtos, tabPanelNoticias, tabPanelShopping, tabPanelWeb, tabPanelNovels, tabPanelMangas].forEach(panel => {
+        if (panel) panel.classList.remove("active");
+    });
+
+    if (cat === "tudo") tabPanelTudo.classList.add("active");
+    else if (cat === "imagens") tabPanelImagens.classList.add("active");
+    else if (cat === "videos") tabPanelVideos.classList.add("active");
+    else if (cat === "curtos") tabPanelCurtos.classList.add("active");
+    else if (cat === "noticias") tabPanelNoticias.classList.add("active");
+    else if (cat === "shopping") tabPanelShopping.classList.add("active");
+    else if (cat === "web") tabPanelWeb.classList.add("active");
+    else if (cat === "novels") tabPanelNovels.classList.add("active");
+    else if (cat === "mangas") tabPanelMangas.classList.add("active");
+
+    tabSearchCurrentVisibleLimit = 20;
+    renderTabSearchResultsCurrentCategory();
+}
+
+// 7. Função Principal de Execução da Busca nas Abas
+function executeTabSearch(queryText, categoryToOpen = "tudo") {
+    currentTabSearchQuery = queryText.trim().toLowerCase();
+    inputTabSearchQuery.value = queryText.trim();
+
+    openScreen(viewTabSearchResults);
+    switchTabSearchCategory(categoryToOpen);
+}
+
+// 8. Renderização Específica por Categoria
+function renderTabSearchResultsCurrentCategory() {
+    const q = currentTabSearchQuery;
+
+    // Filtra episódios da memória
+    const matchedEpisodes = loadedEpisodesCache.filter(ep => {
+        const name = (ep.name || "").toLowerCase();
+        const chan = (ep.channel || "").toLowerCase();
+        return name.includes(q) || chan.includes(q);
+    });
+
+    // Filtra séries da memória
+    const matchedSeries = availableSeriesList.filter(s => {
+        const title = (s.title || "").toLowerCase();
+        const synopsis = (s.synopsis || "").toLowerCase();
+        return title.includes(q) || synopsis.includes(q);
+    });
+
+    // Categoria: Tudo (Prints A1 a A1.6)
+    if (currentActiveTabSearchCategory === "tudo") {
+        containerTabSearchTudoResults.innerHTML = "";
+
+        // Bloco de Apps
+        const appsBlock = document.createElement("div");
+        appsBlock.style.padding = "10px 14px";
+        appsBlock.innerHTML = `
+            <div style="font-size: 15px; font-weight: 700; color: #ffffff; margin-bottom: 10px;">Apps</div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div style="width:40px; height:40px; border-radius:10px; background:#ff453a; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;">🍅</div>
+                    <div>
+                        <div style="font-size:13.5px; font-weight:600; color:#fff;">Super Animes</div>
+                        <div style="font-size:11px; color:#9aa0a6;">4.3 ★ (4,327) • Entretenimento</div>
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div style="width:40px; height:40px; border-radius:10px; background:#ff6d00; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;">📺</div>
+                    <div>
+                        <div style="font-size:13.5px; font-weight:600; color:#fff;">Play Animes TV</div>
+                        <div style="font-size:11px; color:#9aa0a6;">4.7 ★ (55,663) • Entretenimento</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        containerTabSearchTudoResults.appendChild(appsBlock);
+
+        // Cards Web do Tudo
+        matchedSeries.slice(0, tabSearchCurrentVisibleLimit).forEach(s => {
+            containerTabSearchTudoResults.appendChild(createGoogleWebCard(s));
+        });
+    }
+
+    // Categoria: Imagens (Prints B1, B1.1 e B2)
+    else if (currentActiveTabSearchCategory === "imagens") {
+        containerTabSearchImageTagsBar.innerHTML = "";
+        containerTabSearchImagesGrid.innerHTML = "";
+
+        const sampleTags = ["Girl", "Wallpaper", "Boy", "Kawaii", "Perfil", "Cat"];
+        sampleTags.forEach(tag => {
+            const randomEp = matchedEpisodes[Math.floor(Math.random() * matchedEpisodes.length)] || loadedEpisodesCache[0] || {};
+            const tagPill = document.createElement("div");
+            tagPill.className = "tab-search-image-tag-pill";
+            tagPill.innerHTML = `
+                <div class="tab-search-tag-avatar">
+                    <img src="${escapeHtml(randomEp.thumbUrl || randomEp.seriesCover || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100')}">
+                </div>
+                <span>${tag}</span>
+            `;
+            // Clicar na tag soma o termo e refaz a busca (Print B2)
+            tagPill.onclick = () => {
+                const combined = `${inputTabSearchQuery.value.trim()} ${tag}`.trim();
+                executeTabSearch(combined, "imagens");
+            };
+            containerTabSearchImageTagsBar.appendChild(tagPill);
+        });
+
+        matchedEpisodes.slice(0, tabSearchCurrentVisibleLimit).forEach(ep => {
+            const card = document.createElement("div");
+            card.className = "tab-search-image-card";
+            card.innerHTML = `
+                <img src="${escapeHtml(ep.thumbUrl || ep.seriesCover || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}">
+                <div class="tab-search-image-card-info">
+                    <div class="tab-search-image-card-title">${escapeHtml(ep.name)}</div>
+                    <div class="tab-search-image-card-sub">${escapeHtml(ep.channel || 'Série')}</div>
+                </div>
+            `;
+            card.onclick = () => {
+                openWatchScreen(ep, ep.id);
+            };
+            containerTabSearchImagesGrid.appendChild(card);
+        });
+    }
+
+    // Categoria: Vídeos (Print C1)
+    else if (currentActiveTabSearchCategory === "videos") {
+        containerTabSearchVideosList.innerHTML = "";
+        matchedEpisodes.slice(0, tabSearchCurrentVisibleLimit).forEach(ep => {
+            const item = document.createElement("div");
+            item.className = "tab-search-video-item";
+            const userHandle = ep.author ? ep.author.split("@")[0] : (ep.channel || "Mouton");
+            const epNum = ep.episodeNum ? `Episódio ${ep.episodeNum}` : "Episódio 1";
+
+            item.innerHTML = `
+                <div class="tab-search-video-thumb-box">
+                    <img src="${escapeHtml(ep.thumbUrl || ep.seriesCover || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}">
+                    <div class="yt-duration-badge">${escapeHtml(ep.duration || "24:00")}</div>
+                </div>
+                <div class="tab-search-video-info-box">
+                    <div class="tab-search-video-title">${escapeHtml(ep.name)}</div>
+                    <div class="tab-search-video-meta">
+                        <span style="color:#ffffff;">${escapeHtml(userHandle)} • ${epNum}</span>
+                        <span>${formatTimeAgo(ep.timestamp || ep.createdAt)}</span>
+                    </div>
+                </div>
+            `;
+            item.onclick = () => {
+                openWatchScreen(ep, ep.id);
+            };
+            containerTabSearchVideosList.appendChild(item);
+        });
+    }
+
+    // Categoria: Vídeos curtos (Prints F1 e F1.1)
+    else if (currentActiveTabSearchCategory === "curtos") {
+        containerTabSearchShortsGrid.innerHTML = "";
+        const reelsOnly = loadedEpisodesCache.filter(ep => ep.contentType === "Reels" && (ep.name || "").toLowerCase().includes(q));
+
+        reelsOnly.slice(0, tabSearchCurrentVisibleLimit).forEach(sh => {
+            const card = document.createElement("div");
+            card.className = "channel-short-grid-card";
+            card.innerHTML = `
+                <img src="${escapeHtml(sh.thumbUrl || sh.seriesCover || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400')}">
+                <div class="channel-short-grid-overlay">
+                    <div class="channel-short-grid-top">
+                        <span class="yt-duration-badge" style="position:static;">${escapeHtml(sh.duration || "0:45")}</span>
+                    </div>
+                    <div>
+                        <div class="channel-short-grid-title">${escapeHtml(sh.name)}</div>
+                        <div class="channel-short-grid-views">${escapeHtml(sh.channel || 'Série')}</div>
+                    </div>
+                </div>
+            `;
+            card.onclick = () => {
+                currentActiveShortsList = [sh];
+                openShortsFullScreen();
+            };
+            containerTabSearchShortsGrid.appendChild(card);
+        });
+    }
+
+    // Categoria: Notícias (Print D1)
+    else if (currentActiveTabSearchCategory === "noticias") {
+        containerTabSearchNewsList.innerHTML = "";
+        matchedSeries.slice(0, tabSearchCurrentVisibleLimit).forEach(s => {
+            const item = document.createElement("div");
+            item.className = "tab-search-news-item";
+            item.innerHTML = `
+                <div class="tab-search-news-content">
+                    <div class="tab-search-news-source-row">
+                        <div class="tab-search-news-icon">F</div>
+                        <span>FruitSenpai News</span>
+                    </div>
+                    <div class="tab-search-news-title">Nova temporada de ${escapeHtml(s.title)} confirmada com lançamento de episódios no aplicativo</div>
+                    <div class="tab-search-news-date">${formatTimeAgo(s.createdAt)}</div>
+                </div>
+                <div class="tab-search-news-thumb">
+                    <img src="${escapeHtml(s.coverUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=200')}">
+                </div>
+            `;
+            item.onclick = () => {
+                openSeriesChannel(s.title);
+            };
+            containerTabSearchNewsList.appendChild(item);
+        });
+    }
+
+    // Categoria: Shopping (Prints E1 a E3.2)
+    else if (currentActiveTabSearchCategory === "shopping") {
+        containerTabSearchShoppingGrid.innerHTML = "";
+        containerShoppingQuickTags.innerHTML = "";
+
+        const shopTags = ["Videogames", "Papéis de parede", "Action figures", "Livros"];
+        shopTags.forEach(st => {
+            const pill = document.createElement("button");
+            pill.className = "channel-chip-pill";
+            pill.type = "button";
+            pill.textContent = st;
+            pill.onclick = () => {
+                const combined = `${inputTabSearchQuery.value.trim()} ${st}`.trim();
+                executeTabSearch(combined, "shopping");
+            };
+            containerShoppingQuickTags.appendChild(pill);
+        });
+
+        matchedSeries.slice(0, tabSearchCurrentVisibleLimit).forEach((s, idx) => {
+            const card = document.createElement("div");
+            card.className = "tab-search-shopping-card";
+            const price = (35 + (idx * 12)).toFixed(2).replace(".", ",");
+
+            card.innerHTML = `
+                <div class="tab-search-shopping-thumb">
+                    <img src="${escapeHtml(s.coverUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400')}">
+                </div>
+                <div class="tab-search-shopping-info">
+                    <div class="tab-search-shopping-title">${escapeHtml(s.title)} - Coleção Completa Oficial</div>
+                    <div class="tab-search-shopping-price">R$ ${price}</div>
+                    <div class="tab-search-shopping-store">FruitStore • Frete grátis</div>
+                </div>
+            `;
+            card.onclick = () => {
+                openSeriesChannel(s.title);
+            };
+            containerTabSearchShoppingGrid.appendChild(card);
+        });
+    }
+
+    // Categoria: Web (Prints G1 a G1.4)
+    else if (currentActiveTabSearchCategory === "web") {
+        containerTabSearchWebList.innerHTML = "";
+        matchedSeries.slice(0, tabSearchCurrentVisibleLimit).forEach(s => {
+            containerTabSearchWebList.appendChild(createGoogleWebCard(s));
+        });
+    }
+
+    // Controle do Botão "Mais resultados de pesquisa"
+    const currentTotalItems = (currentActiveTabSearchCategory === "videos" || currentActiveTabSearchCategory === "imagens") ? matchedEpisodes.length : matchedSeries.length;
+    if (currentTotalItems > tabSearchCurrentVisibleLimit) {
+        btnLoadMoreTabSearchResults.style.display = "block";
+    } else {
+        btnLoadMoreTabSearchResults.style.display = "none";
+    }
+}
+
+// Cria o Card Web no Formato Exato do Print G1
+function createGoogleWebCard(series) {
+    const card = document.createElement("div");
+    card.className = "tab-search-web-card";
+    const cleanName = series.title || "Série";
+    const cleanUrl = `https://fruitsenpai.app/${cleanName.toLowerCase().replace(/\s+/g, '')}`;
+    const descText = savedUploadSeriesDescriptionG15 || series.synopsis || "Assista agora todos os episódios oficiais e acompanhe a transmissão exclusiva no FruitSenpai.";
+
+    card.innerHTML = `
+        <div class="tab-search-web-header-row">
+            <div class="tab-search-web-avatar">
+                <img src="${escapeHtml(series.coverUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=100')}">
+            </div>
+            <div class="tab-search-web-meta-text">
+                <span class="tab-search-web-site-name">${escapeHtml(cleanName)}</span>
+                <span class="tab-search-web-url">${cleanUrl}</span>
+            </div>
+        </div>
+        <div class="tab-search-web-title">${escapeHtml(cleanName)} - Assistir Episódios Online</div>
+        <div class="tab-search-web-snippet">${escapeHtml(descText)}</div>
+    `;
+
+    card.onclick = () => {
+        openSeriesChannel(cleanName);
+    };
+
+    return card;
+}
+
+// Botão "Mais resultados de pesquisa" soma mais 20 resultados
+btnLoadMoreTabSearchResults.onclick = () => {
+    tabSearchCurrentVisibleLimit += 20;
+    renderTabSearchResultsCurrentCategory();
+};
+
+// Gaveta de Ordenação do Shopping E2
+if (btnOpenShoppingSortDrawer) {
+    btnOpenShoppingSortDrawer.onclick = () => {
+        drawerShoppingSortE2.classList.add("active");
+    };
+}
+
+if (btnCloseShoppingSortE2) {
+    btnCloseShoppingSortE2.onclick = () => {
+        drawerShoppingSortE2.classList.remove("active");
+    };
+}
     </script>
 </body>
   </html>
