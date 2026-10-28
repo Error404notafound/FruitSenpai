@@ -6123,7 +6123,7 @@
             display: block;
         }
 
-        /* Camada de Controles sobre o Vídeo (Prints A, A1, A2, A3) */
+        /* Camada de Controles sobre o Vídeo (Inicia Invisível) */
         .watch-player-overlay-controls {
             position: absolute;
             inset: 0;
@@ -6141,6 +6141,11 @@
         .watch-player-overlay-controls.hidden-overlay {
             opacity: 0;
             pointer-events: none;
+        }
+
+        /* Quando o painel estiver aberto, oculta o botãozinho lateral para não sobrepor a engrenagem */
+        .watch-player-overlay-controls:not(.hidden-overlay) ~ .watch-mini-overlay-toggle-btn {
+            display: none !important;
         }
 
         /* Barra Superior do Player */
@@ -9195,8 +9200,8 @@
             <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
         </button>
 
-        <!-- Camada Completa de Controles sobre o Vídeo (Print A1) -->
-        <div class="watch-player-overlay-controls" id="watchPlayerOverlayControls">
+        <!-- Camada Completa de Controles sobre o Vídeo (Inicia Oculta) -->
+        <div class="watch-player-overlay-controls hidden-overlay" id="watchPlayerOverlayControls">
             <!-- Barra Superior do Vídeo -->
             <div class="watch-overlay-top-row">
                 <!-- Seta Roxa: Chevron Para Baixo (Cru sem função no momento) -->
@@ -16933,8 +16938,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Atualiza a navegação sequencial de episódios da série
             updateSeriesEpisodesNavigation(videoData, videoId);
 
-            // Mostra os controles na tela com contagem regressiva de 5 segundos
-            showPlayerControls();
+            // Inicia com o player limpo (formato do Print A) sem os botões abrirem sozinhos
+            hidePlayerControls();
 
             // Configura o timer automático do Modo Maratona caso esteja ativo
             setupMarathonPlaybackTimer(videoData);
@@ -22689,31 +22694,57 @@ function updateMarathonButtonVisualState() {
 }
 updateMarathonButtonVisualState();
 
-// 1. Mostrar e Ocultar Controles com 5 Segundos de Inatividade
+// 1. Funções de Mostrar e Ocultar os Controles do Player (Com contagem de 5s)
 function showPlayerControls() {
     if (!watchPlayerOverlayControls) return;
     watchPlayerOverlayControls.classList.remove("hidden-overlay");
-    if (playerControlsTimer) clearTimeout(playerControlsTimer);
+    if (btnShowPlayerControlsMini) {
+        btnShowPlayerControlsMini.style.display = "none";
+    }
 
+    if (playerControlsTimer) clearTimeout(playerControlsTimer);
     playerControlsTimer = setTimeout(() => {
-        watchPlayerOverlayControls.classList.add("hidden-overlay");
+        hidePlayerControls();
     }, 5000);
 }
 
-if (watchPlayerBox) {
-    watchPlayerBox.addEventListener("click", (e) => {
-        if (e.target.closest("#watchPlayerOverlayControls") && !e.target.closest(".watch-center-control-btn") && !e.target.closest(".watch-overlay-marathon-btn") && !e.target.closest(".watch-overlay-cc-btn")) {
-            showPlayerControls();
-        } else if (!e.target.closest("#watchPlayerOverlayControls")) {
-            showPlayerControls();
-        }
-    });
+function hidePlayerControls() {
+    if (!watchPlayerOverlayControls) return;
+    watchPlayerOverlayControls.classList.add("hidden-overlay");
+    if (btnShowPlayerControlsMini) {
+        btnShowPlayerControlsMini.style.display = "flex";
+    }
+    if (playerControlsTimer) {
+        clearTimeout(playerControlsTimer);
+    }
 }
 
+// Clicar no botão pequeno do canto direito (Print A) abre os controles (Print A1)
 if (btnShowPlayerControlsMini) {
     btnShowPlayerControlsMini.addEventListener("click", (e) => {
         e.stopPropagation();
         showPlayerControls();
+    });
+}
+
+// Clicar no player alterna a visualização ou renova a contagem de 5 segundos
+if (watchPlayerBox) {
+    watchPlayerBox.addEventListener("click", (e) => {
+        // Se o clique for em um botão interativo (play, avançar, engrenagem), renova os 5 segundos
+        if (e.target.closest(".watch-center-control-btn") || e.target.closest(".watch-overlay-marathon-btn") || e.target.closest(".watch-overlay-cc-btn")) {
+            if (playerControlsTimer) clearTimeout(playerControlsTimer);
+            playerControlsTimer = setTimeout(() => {
+                hidePlayerControls();
+            }, 5000);
+            return;
+        }
+
+        // Se os controles estiverem visíveis e o usuário tocar na área vazia, fecha imediatamente
+        if (watchPlayerOverlayControls && !watchPlayerOverlayControls.classList.contains("hidden-overlay")) {
+            hidePlayerControls();
+        } else {
+            showPlayerControls();
+        }
     });
 }
 
