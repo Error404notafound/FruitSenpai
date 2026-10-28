@@ -12410,7 +12410,7 @@
                 season: "1ª Temporada",
                 episode: "1º Episódio",
                 episodeNum: 1,
-                age: "14+",
+                age: "12+",
                 duration: "23:40",
                 videoUrl: "",
                 thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800"
@@ -12683,13 +12683,25 @@
                 const displayTitle = text || "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life";
 
                 if (uploadHeaderTitleText) {
-                    uploadHeaderTitleText.textContent = `${displayTitle} - Episódio 1`;
+                    uploadHeaderTitleText.textContent = `${displayTitle} - Episódio ${currentActiveEpisodeIndex + 1}`;
                 }
                 if (uploadHeaderSubText) {
                     uploadHeaderSubText.textContent = displayTitle;
                 }
                 if (uploadSeriesVerticalPosterTitle) {
-                    uploadSeriesVerticalPosterTitle.textContent = text || "The Laid-Off Chea...";
+                    uploadSeriesVerticalPosterTitle.textContent = text || "The Laid-Off Chea";
+                }
+
+                // Sincroniza o nome da série e a classificação indicativa em tempo real em todos os cards de episódios
+                if (typeof addedEpisodesList !== "undefined" && addedEpisodesList.length > 0) {
+                    addedEpisodesList.forEach((ep, idx) => {
+                        ep.seriesName = displayTitle;
+                        ep.title = `${displayTitle} - Episódio ${idx + 1}`;
+                        ep.age = selectedAgeBadge || "12+";
+                    });
+                    if (typeof renderUploadEpisodesScroll === "function") {
+                        renderUploadEpisodesScroll();
+                    }
                 }
             });
         }
@@ -13398,7 +13410,7 @@
                             season: "1ª Temporada",
                             episode: "1º Episódio",
                             episodeNum: 1,
-                            age: "14+",
+                            age: selectedAgeBadge || "12+",
                             duration: "23:40",
                             videoUrl: "",
                             thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800"
