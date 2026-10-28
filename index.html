@@ -6106,21 +6106,48 @@
 
         .yt-player-box {
             width: 100%;
+            max-width: 100%;
             aspect-ratio: 16 / 9;
+            height: calc(100vw * 9 / 16);
+            max-height: 56.25vw;
             background-color: #000000;
             position: sticky;
             top: 0;
             z-index: 10005;
             overflow: hidden;
             user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .yt-player-box iframe, 
-        .yt-player-box video {
-            width: 100%;
-            height: 100%;
+        .yt-player-box iframe {
+            width: 100% !important;
+            height: 100% !important;
             border: none;
             display: block;
+            margin: 0;
+            padding: 0;
+            transform-origin: center center;
+            transition: transform 0.2s ease;
+        }
+
+        .yt-player-box video {
+            width: 100% !important;
+            height: 100% !important;
+            border: none;
+            display: block;
+            object-fit: contain;
+            background-color: #000000;
+        }
+
+        /* Modo Zoom para Preencher: elimina as faixas pretas ao redor do vídeo */
+        .yt-player-box.fill-zoom iframe {
+            transform: scale(1.36);
+        }
+
+        .yt-player-box.fill-zoom video {
+            object-fit: cover;
         }
 
         /* Camada de Controles sobre o Vídeo (Inicia Invisível) */
@@ -9193,7 +9220,11 @@
     </div>
 
     <div class="yt-player-box" id="watchPlayerBox">
+        <!-- Player Iframe para YouTube e Embeds Externos -->
         <iframe id="watchIframe" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+
+        <!-- Player de Vídeo Nativo HTML5 para MP4 e Links Diretos -->
+        <video id="watchVideoTag" playsinline autoplay controls style="display: none;"></video>
 
         <!-- Botão Pequeno do Canto Direito (Print A) -->
         <button class="watch-mini-overlay-toggle-btn" id="btnShowPlayerControlsMini" type="button" aria-label="Mostrar controles">
@@ -16900,15 +16931,38 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             if (descFullViews) descFullViews.textContent = viewsCount.toLocaleString('pt-BR');
             if (descFullLikes) descFullLikes.textContent = likesCount.toLocaleString('pt-BR');
 
-            // Carrega Iframe do Vídeo
+            // Carregamento Inteligente: Tag Video para MP4 Direto ou Iframe para Embeds
             let srcUrl = (videoData.videoUrl || "").trim();
-            if (srcUrl) {
-                const ytMatch = srcUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-                if (ytMatch && ytMatch[1]) {
-                    srcUrl = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
+            const watchVideoTag = document.getElementById("watchVideoTag");
+            const isDirectVideoFile = Boolean(srcUrl.match(/\.(mp4|webm|ogg|m4v)(\?.*)?$/i));
+
+            if (isDirectVideoFile) {
+                if (watchIframe) {
+                    watchIframe.src = "";
+                    watchIframe.style.display = "none";
+                }
+                if (watchVideoTag) {
+                    watchVideoTag.src = srcUrl;
+                    watchVideoTag.style.display = "block";
+                    watchVideoTag.play().catch(() => {});
+                }
+            } else {
+                if (watchVideoTag) {
+                    watchVideoTag.pause();
+                    watchVideoTag.src = "";
+                    watchVideoTag.style.display = "none";
+                }
+                if (watchIframe) {
+                    watchIframe.style.display = "block";
+                    const ytMatch = srcUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/);
+                    if (ytMatch && ytMatch[1]) {
+                        srcUrl = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&playsinline=1&rel=0`;
+                    } else if (srcUrl.includes("drive.google.com")) {
+                        srcUrl = srcUrl.replace(/\/view.*$/, "/preview");
+                    }
+                    watchIframe.src = srcUrl;
                 }
             }
-            if (watchIframe) watchIframe.src = srcUrl;
 
             if (btnBackFromWatch) {
                 btnBackFromWatch.onclick = () => {
@@ -22727,10 +22781,25 @@ if (btnShowPlayerControlsMini) {
     });
 }
 
-// Clicar no player alterna a visualização ou renova a contagem de 5 segundos
+// Clicar no player alterna a visualização, renova os 5s e suporta Duplo Toque para Zoom
+let lastPlayerTapTime = 0;
+
 if (watchPlayerBox) {
     watchPlayerBox.addEventListener("click", (e) => {
-        // Se o clique for em um botão interativo (play, avançar, engrenagem), renova os 5 segundos
+        // 1. Detecção de Duplo Toque para alternar o modo Zoom para Preencher
+        const currentTime = new Date().getTime();
+        const tapInterval = currentTime - lastPlayerTapTime;
+
+        if (tapInterval < 300 && tapInterval > 0) {
+            e.preventDefault();
+            const isZoomed = watchPlayerBox.classList.toggle("fill-zoom");
+            showToast(isZoomed ? "Zoom ativado: preenchendo a tela" : "Tamanho original restaurado");
+            lastPlayerTapTime = 0;
+            return;
+        }
+        lastPlayerTapTime = currentTime;
+
+        // 2. Se o clique for em um botão interativo (play, avançar, engrenagem), renova os 5 segundos
         if (e.target.closest(".watch-center-control-btn") || e.target.closest(".watch-overlay-marathon-btn") || e.target.closest(".watch-overlay-cc-btn")) {
             if (playerControlsTimer) clearTimeout(playerControlsTimer);
             playerControlsTimer = setTimeout(() => {
@@ -22739,7 +22808,7 @@ if (watchPlayerBox) {
             return;
         }
 
-        // Se os controles estiverem visíveis e o usuário tocar na área vazia, fecha imediatamente
+        // 3. Se os controles estiverem visíveis e o usuário tocar na área vazia, fecha imediatamente
         if (watchPlayerOverlayControls && !watchPlayerOverlayControls.classList.contains("hidden-overlay")) {
             hidePlayerControls();
         } else {
