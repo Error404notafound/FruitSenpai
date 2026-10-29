@@ -6021,47 +6021,68 @@
             padding-bottom: 80px;
         }
 
-        /* Topo do Player com Suporte à Pesquisa Expansível (Prints A1 e A2) */
+        /* Topo do Player com a Mesma Altura e Proporção da Página Principal (Feed) */
         .watch-top-header-bar {
-            height: 48px;
+            height: var(--yt-header-h, 48px);
+            min-height: 48px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 16px;
-            background-color: #0f0f0f;
+            padding: 0 10px;
+            background-color: var(--yt-bg-main);
             position: sticky;
             top: 0;
             z-index: 60;
-            gap: 8px;
+            gap: 6px;
+            box-sizing: border-box;
         }
 
+        .watch-top-header-bar .yt-icon-btn {
+            width: 38px;
+            height: 38px;
+            padding: 8px;
+            flex-shrink: 0;
+        }
+
+        .watch-top-header-bar .yt-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        /* Pílula de Pesquisa Espaçosa e Confortável (Fiel ao Print A2) */
         .watch-header-search-box {
             display: none;
             flex: 1;
-            align-items: center;
+            height: 38px;
             background-color: #212121;
             border-radius: 20px;
-            height: 38px;
+            align-items: center;
             padding: 0 14px;
-            margin: 0 4px;
             gap: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
         }
 
         .watch-header-search-box input {
             flex: 1;
+            height: 100%;
             background: none;
             border: none;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 14.5px;
             outline: none;
             font-family: inherit;
+            padding: 0;
+            line-height: normal;
         }
 
         .watch-header-search-box svg {
             width: 18px;
             height: 18px;
             fill: #ffffff;
+            flex-shrink: 0;
         }
 
         /* Estilos dos Vídeos Recomendados Abaixo dos Comentários (Fiel ao Print da Seta Amarela) */
