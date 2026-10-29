@@ -23805,7 +23805,7 @@ if (btnMinimizeWatchPlayer) {
 
 let hasDraggedMiniPlayer = false;
 
-// 4. Botão de Expandir: Toque simples expande; segurar por 2 segundos arrasta a janela
+// 4. Botão de Expandir: Toque simples expande; segurar por 2 segundos permite reposicionar infinitas vezes
 if (btnMiniPlayerExpand) {
     btnMiniPlayerExpand.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -23819,15 +23819,27 @@ if (btnMiniPlayerExpand) {
     btnMiniPlayerExpand.addEventListener("touchstart", (e) => {
         if (!isMiniPlayerModeActive) return;
 
+        // Remove transições residuais para que o movimento acompanhe o dedo imediatamente
+        if (watchPlayerBox) {
+            watchPlayerBox.style.transition = "none";
+        }
+
         miniPlayerTouchStartX = e.touches[0].clientX;
         miniPlayerTouchStartY = e.touches[0].clientY;
         isHoldingMiniPlayer = false;
         hasDraggedMiniPlayer = false;
 
-        // Inicia a contagem de 2 segundos no botão de expandir
+        if (miniPlayerHoldTimer) {
+            clearTimeout(miniPlayerHoldTimer);
+        }
+
+        // Inicia a contagem de 2 segundos com tolerância anatômica de micro-tremor
         miniPlayerHoldTimer = setTimeout(() => {
             isHoldingMiniPlayer = true;
-            showToast("Arraste para um dos 4 cantos ou para a borda lateral.");
+            if (navigator.vibrate) {
+                navigator.vibrate(40);
+            }
+            showToast("Arraste agora para qualquer um dos 4 cantos.");
         }, 2000);
     }, { passive: true });
 
@@ -23839,15 +23851,16 @@ if (btnMiniPlayerExpand) {
         const deltaX = Math.abs(currentX - miniPlayerTouchStartX);
         const deltaY = Math.abs(currentY - miniPlayerTouchStartY);
 
-        // Se mover antes dos 2 segundos, cancela a espera
-        if (!isHoldingMiniPlayer && (deltaX > 10 || deltaY > 10)) {
+        // Tolerância de 25px para evitar cancelamentos acidentais enquanto o dedo descansa na tela
+        if (!isHoldingMiniPlayer && (deltaX > 25 || deltaY > 25)) {
             clearTimeout(miniPlayerHoldTimer);
         }
 
-        // Permite arrastar após segurar por 2 segundos
-        if (isHoldingMiniPlayer) {
+        // Quando a retenção de 2 segundos for confirmada, permite reposicionar livremente
+        if (isHoldingMiniPlayer && watchPlayerBox) {
             e.preventDefault();
             hasDraggedMiniPlayer = true;
+            watchPlayerBox.style.transition = "none";
             watchPlayerBox.style.top = `${currentY - 20}px`;
             watchPlayerBox.style.left = `${currentX - 20}px`;
             watchPlayerBox.style.right = "auto";
@@ -23857,15 +23870,18 @@ if (btnMiniPlayerExpand) {
 
     btnMiniPlayerExpand.addEventListener("touchend", (e) => {
         if (!isMiniPlayerModeActive) return;
-        clearTimeout(miniPlayerHoldTimer);
 
-        if (isHoldingMiniPlayer && hasDraggedMiniPlayer) {
+        if (miniPlayerHoldTimer) {
+            clearTimeout(miniPlayerHoldTimer);
+        }
+
+        if (isHoldingMiniPlayer && hasDraggedMiniPlayer && watchPlayerBox) {
             const endX = e.changedTouches[0].clientX;
             const endY = e.changedTouches[0].clientY;
             const windowWidth = window.innerWidth;
             const windowHeight = window.innerHeight;
 
-            // Se arrastado até a extremidade lateral, recolhe na lingueta (Print B1)
+            // Se for arrastado até a extremidade lateral, recolhe na lingueta (Print B1)
             if (endX < 45 || endX > windowWidth - 55) {
                 watchPlayerBox.style.display = "none";
                 if (dockedMiniPlayerEdgeHandle) {
@@ -23873,7 +23889,7 @@ if (btnMiniPlayerExpand) {
                 }
                 showToast("Vídeo recolhido na lateral.");
             } else {
-                // Encaixa no canto mais próximo entre os 4 cantos (Prints A1, A1.1, A1.2 e A1.3)
+                // Encaixa com animação no quadrante correspondente
                 const isLeft = endX < (windowWidth / 2);
                 const isTop = endY < (windowHeight / 2);
 
@@ -23905,10 +23921,18 @@ if (btnMiniPlayerExpand) {
                     watchPlayerBox.style.left = "auto";
                 }
 
+                // Desativa a transição após o encaixe para que o próximo arraste seja instantâneo
                 setTimeout(() => {
-                    if (watchPlayerBox) watchPlayerBox.style.transition = "";
-                }, 300);
+                    if (watchPlayerBox) {
+                        watchPlayerBox.style.transition = "";
+                    }
+                }, 280);
             }
+
+            // Reseta a trava de clique após o término do arraste
+            setTimeout(() => {
+                hasDraggedMiniPlayer = false;
+            }, 150);
         }
 
         isHoldingMiniPlayer = false;
