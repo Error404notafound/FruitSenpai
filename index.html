@@ -23803,45 +23803,35 @@ if (btnMinimizeWatchPlayer) {
     });
 }
 
-// Botão de Expandir: Abre o player de volta em tela cheia
+let hasDraggedMiniPlayer = false;
+
+// 4. Botão de Expandir: Toque simples expande; segurar por 2 segundos arrasta a janela
 if (btnMiniPlayerExpand) {
     btnMiniPlayerExpand.addEventListener("click", (e) => {
         e.stopPropagation();
+        if (hasDraggedMiniPlayer) {
+            hasDraggedMiniPlayer = false;
+            return;
+        }
         restoreWatchPlayerFromPip();
     });
-}
 
-// Botão ✕ no Canto Direito: Encerra o Vídeo
-if (btnMiniPlayerClose) {
-    btnMiniPlayerClose.addEventListener("click", (e) => {
-        e.stopPropagation();
-        isMiniPlayerModeActive = false;
-        if (miniPipProgressInterval) clearInterval(miniPipProgressInterval);
-        if (watchIframe) watchIframe.src = "";
-        viewWatchVideo.classList.remove("minimized-pip-mode");
-        viewWatchVideo.classList.remove("active");
-        if (dockedMiniPlayerEdgeHandle) dockedMiniPlayerEdgeHandle.style.display = "none";
-        showToast("Vídeo encerrado.");
-    });
-}
-
-// 4. Segurar por 3 Segundos para Arrastar e Encaixar nos 4 Cantos (A1, A1.1, A1.2, A1.3)
-if (watchPlayerBox) {
-    watchPlayerBox.addEventListener("touchstart", (e) => {
+    btnMiniPlayerExpand.addEventListener("touchstart", (e) => {
         if (!isMiniPlayerModeActive) return;
 
         miniPlayerTouchStartX = e.touches[0].clientX;
         miniPlayerTouchStartY = e.touches[0].clientY;
         isHoldingMiniPlayer = false;
+        hasDraggedMiniPlayer = false;
 
-        // Inicia contagem de 3 segundos
+        // Inicia a contagem de 2 segundos no botão de expandir
         miniPlayerHoldTimer = setTimeout(() => {
             isHoldingMiniPlayer = true;
             showToast("Arraste para um dos 4 cantos ou para a borda lateral.");
-        }, 3000);
+        }, 2000);
     }, { passive: true });
 
-    watchPlayerBox.addEventListener("touchmove", (e) => {
+    btnMiniPlayerExpand.addEventListener("touchmove", (e) => {
         if (!isMiniPlayerModeActive) return;
 
         const currentX = e.touches[0].clientX;
@@ -23849,26 +23839,27 @@ if (watchPlayerBox) {
         const deltaX = Math.abs(currentX - miniPlayerTouchStartX);
         const deltaY = Math.abs(currentY - miniPlayerTouchStartY);
 
-        // Se mover antes dos 3 segundos, cancela o temporizador
+        // Se mover antes dos 2 segundos, cancela a espera
         if (!isHoldingMiniPlayer && (deltaX > 10 || deltaY > 10)) {
             clearTimeout(miniPlayerHoldTimer);
         }
 
-        // Permite arrastar livremente após os 3 segundos
+        // Permite arrastar após segurar por 2 segundos
         if (isHoldingMiniPlayer) {
             e.preventDefault();
-            watchPlayerBox.style.top = `${currentY - 45}px`;
-            watchPlayerBox.style.left = `${currentX - 100}px`;
+            hasDraggedMiniPlayer = true;
+            watchPlayerBox.style.top = `${currentY - 20}px`;
+            watchPlayerBox.style.left = `${currentX - 20}px`;
             watchPlayerBox.style.right = "auto";
             watchPlayerBox.style.bottom = "auto";
         }
     }, { passive: false });
 
-    watchPlayerBox.addEventListener("touchend", (e) => {
+    btnMiniPlayerExpand.addEventListener("touchend", (e) => {
         if (!isMiniPlayerModeActive) return;
         clearTimeout(miniPlayerHoldTimer);
 
-        if (isHoldingMiniPlayer) {
+        if (isHoldingMiniPlayer && hasDraggedMiniPlayer) {
             const endX = e.changedTouches[0].clientX;
             const endY = e.changedTouches[0].clientY;
             const windowWidth = window.innerWidth;
@@ -23882,7 +23873,7 @@ if (watchPlayerBox) {
                 }
                 showToast("Vídeo recolhido na lateral.");
             } else {
-                // Encaixa no canto mais próximo entre os 4 cantos
+                // Encaixa no canto mais próximo entre os 4 cantos (Prints A1, A1.1, A1.2 e A1.3)
                 const isLeft = endX < (windowWidth / 2);
                 const isTop = endY < (windowHeight / 2);
 
@@ -23922,6 +23913,20 @@ if (watchPlayerBox) {
 
         isHoldingMiniPlayer = false;
     }, { passive: true });
+}
+
+// Botão ✕ no Canto Direito: Encerra o Vídeo
+if (btnMiniPlayerClose) {
+    btnMiniPlayerClose.addEventListener("click", (e) => {
+        e.stopPropagation();
+        isMiniPlayerModeActive = false;
+        if (miniPipProgressInterval) clearInterval(miniPipProgressInterval);
+        if (watchIframe) watchIframe.src = "";
+        viewWatchVideo.classList.remove("minimized-pip-mode");
+        viewWatchVideo.classList.remove("active");
+        if (dockedMiniPlayerEdgeHandle) dockedMiniPlayerEdgeHandle.style.display = "none";
+        showToast("Vídeo encerrado.");
+    });
 }
 
 // 5. Clicar na Lingueta Lateral Restaura a Janela Flutuante (Print B1 -> Print A1.1)
