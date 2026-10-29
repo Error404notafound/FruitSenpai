@@ -6001,7 +6001,6 @@
             color: #aaa;
         }
 
-        /* TELA DE REPRODUÇÃO (WATCH), COMENTÁRIOS E GAVETAS */
         .yt-watch-screen {
             display: none;
             flex-direction: column;
@@ -6020,6 +6019,49 @@
             overflow-x: hidden;
             -webkit-overflow-scrolling: touch;
             padding-bottom: 80px;
+        }
+
+        /* Topo do Player com Suporte à Pesquisa Expansível (Prints A1 e A2) */
+        .watch-top-header-bar {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            background-color: #0f0f0f;
+            position: sticky;
+            top: 0;
+            z-index: 60;
+            gap: 8px;
+        }
+
+        .watch-header-search-box {
+            display: none;
+            flex: 1;
+            align-items: center;
+            background-color: #212121;
+            border-radius: 20px;
+            height: 38px;
+            padding: 0 14px;
+            margin: 0 4px;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .watch-header-search-box input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .watch-header-search-box svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
         }
 
         /* Estilos dos Vídeos Recomendados Abaixo dos Comentários (Fiel ao Print da Seta Amarela) */
@@ -9210,9 +9252,9 @@
 
         <!-- TELA DE REPRODUÇÃO DO VÍDEO (COLOCADA FORA DO FEED) -->
 <section class="yt-subview yt-watch-screen" id="viewWatchVideo">
-    <!-- Topo Oficial do Container com Logo FruitSenpai -->
-    <div style="height:48px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; background:#0f0f0f; position:sticky; top:0; z-index:60;">
-        <div style="display:flex; align-items:center; gap:8px;">
+    <!-- Topo Oficial do Container com Logo e Pesquisa Expansível (Prints A1 e A2) -->
+    <div class="watch-top-header-bar" id="watchTopHeaderBar">
+        <div style="display:flex; align-items:center; gap:8px;" id="watchHeaderLogoGroup">
             <button class="yt-icon-btn" id="btnBackFromWatch" type="button" aria-label="Voltar">
                 <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             </button>
@@ -9221,11 +9263,31 @@
                 <span class="yt-logo-text">FruitSenpai</span>
             </div>
         </div>
-        <div class="yt-header-actions">
-            <button class="yt-icon-btn" aria-label="Pesquisar">
+
+        <!-- Botão Voltar da Pesquisa do Player (Apenas quando a busca estiver aberta em A2) -->
+        <button class="yt-icon-btn" id="btnCloseWatchSearchInPill" type="button" aria-label="Fechar pesquisa" style="display:none;">
+            <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+
+        <!-- Pílula de Pesquisa no Player (Fiel ao Print A2) -->
+        <div class="watch-header-search-box" id="watchHeaderSearchBox">
+            <input type="text" id="inputWatchSearchQuery" placeholder="Pesquisar no FruitSenpai">
+            <button class="yt-icon-btn" id="btnExecuteWatchSearchInPill" type="button" style="padding:0;">
                 <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
             </button>
-            <button class="yt-icon-btn" aria-label="Mais opções">
+        </div>
+
+        <div class="yt-header-actions" id="watchHeaderActionsRight">
+            <!-- Lupa externa inicial que ativa a pílula (Seta Vermelha Print A1) -->
+            <button class="yt-icon-btn" id="btnWatchSearchTrigger" type="button" aria-label="Pesquisar">
+                <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+            </button>
+            <!-- Microfone de Voz no Player (Print A2) -->
+            <button class="yt-icon-btn" id="btnWatchVoiceTrigger" type="button" aria-label="Pesquisa por voz" style="display:none;">
+                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+            </button>
+            <!-- Kebab 3 Pontinhos -->
+            <button class="yt-icon-btn" id="btnWatchHeaderKebabMenu" type="button" aria-label="Mais opções">
                 <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </button>
         </div>
@@ -21619,6 +21681,8 @@ if (btnBackFromSearchInput) {
             openScreen(viewYou);
         } else if (previousActiveScreenBeforeSearch === "newtab") {
             openNewTabHomeScreen(Boolean(currentUserEmail));
+        } else if (previousActiveScreenBeforeSearch === "watch") {
+            openScreen(viewWatchVideo);
         } else {
             openScreen("home");
         }
@@ -23067,6 +23131,93 @@ if (rowSettingQuality) {
         }
     });
 }
+
+// ==========================================================================
+// PESQUISA NO CABEÇALHO DO PLAYER DE VÍDEO (PRINTS A1 E A2)
+// ==========================================================================
+const watchHeaderLogoGroup = document.getElementById("watchHeaderLogoGroup");
+const btnCloseWatchSearchInPill = document.getElementById("btnCloseWatchSearchInPill");
+const watchHeaderSearchBox = document.getElementById("watchHeaderSearchBox");
+const inputWatchSearchQuery = document.getElementById("inputWatchSearchQuery");
+const btnExecuteWatchSearchInPill = document.getElementById("btnExecuteWatchSearchInPill");
+const btnWatchSearchTrigger = document.getElementById("btnWatchSearchTrigger");
+const btnWatchVoiceTrigger = document.getElementById("btnWatchVoiceTrigger");
+
+// Abre o modo de pesquisa no topo do vídeo (Print A1 -> Print A2)
+function openWatchHeaderSearchMode() {
+    if (watchHeaderLogoGroup) watchHeaderLogoGroup.style.display = "none";
+    if (btnCloseWatchSearchInPill) btnCloseWatchSearchInPill.style.display = "flex";
+    if (watchHeaderSearchBox) watchHeaderSearchBox.style.display = "flex";
+    if (btnWatchSearchTrigger) btnWatchSearchTrigger.style.display = "none";
+    if (btnWatchVoiceTrigger) btnWatchVoiceTrigger.style.display = "flex";
+    if (inputWatchSearchQuery) {
+        inputWatchSearchQuery.focus();
+    }
+}
+
+// Fecha o modo de pesquisa no topo do vídeo e restaura o logotipo
+function closeWatchHeaderSearchMode() {
+    if (watchHeaderLogoGroup) watchHeaderLogoGroup.style.display = "flex";
+    if (btnCloseWatchSearchInPill) btnCloseWatchSearchInPill.style.display = "none";
+    if (watchHeaderSearchBox) watchHeaderSearchBox.style.display = "none";
+    if (btnWatchSearchTrigger) btnWatchSearchTrigger.style.display = "flex";
+    if (btnWatchVoiceTrigger) btnWatchVoiceTrigger.style.display = "none";
+    if (inputWatchSearchQuery) inputWatchSearchQuery.value = "";
+}
+
+// Clicar na lupa do cabeçalho abre o campo de busca no vídeo (Seta Vermelha Print A1)
+if (btnWatchSearchTrigger) {
+    btnWatchSearchTrigger.addEventListener("click", () => {
+        openWatchHeaderSearchMode();
+    });
+}
+
+// Clicar na seta voltar fecha a barra e retorna ao logotipo
+if (btnCloseWatchSearchInPill) {
+    btnCloseWatchSearchInPill.addEventListener("click", () => {
+        closeWatchHeaderSearchMode();
+    });
+}
+
+// Executa a pesquisa oficial a partir do vídeo
+function executeWatchVideoSearch() {
+    if (!inputWatchSearchQuery) return;
+    const query = inputWatchSearchQuery.value.trim();
+    if (!query) return;
+
+    closeWatchHeaderSearchMode();
+
+    // Abre a visualização oficial de pesquisa guardando a origem para retorno
+    openSearchInputMode("watch");
+    inputGlobalSearchQuery.value = query;
+    executeGlobalSearch(query);
+}
+
+if (inputWatchSearchQuery) {
+    inputWatchSearchQuery.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            executeWatchVideoSearch();
+        }
+    });
+}
+
+if (btnExecuteWatchSearchInPill) {
+    btnExecuteWatchSearchInPill.addEventListener("click", () => {
+        executeWatchVideoSearch();
+    });
+}
+
+// Clicar no microfone ativa a pesquisa por voz oficial
+if (btnWatchVoiceTrigger) {
+    btnWatchVoiceTrigger.addEventListener("click", () => {
+        if (btnTriggerVoiceSearchModal) {
+            btnTriggerVoiceSearchModal.click();
+        }
+    });
+}
+
+
     </script>
 </body>
   </html>
