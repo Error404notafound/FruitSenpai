@@ -6431,6 +6431,11 @@
             box-sizing: border-box;
         }
 
+        /* Garante prioridade máxima para abrir ao receber a classe active */
+        #drawerComments.active {
+            display: flex !important;
+        }
+
         #drawerComments .accounts-sheet {
             width: 100%;
             height: 100%;
@@ -17434,9 +17439,21 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        document.getElementById("btnOpenComments").addEventListener("click", () => drawerComments.classList.add("active"));
-        document.getElementById("btnCloseCommentsDrawer").addEventListener("click", () => drawerComments.classList.remove("active"));
+        document.getElementById("btnOpenComments").addEventListener("click", () => {
+            drawerComments.classList.add("active");
+        });
 
+        document.getElementById("btnCloseCommentsDrawer").addEventListener("click", () => {
+            drawerComments.classList.remove("active");
+        });
+
+        // Permite fechar os comentários tocando na área de fundo fora da gaveta
+        drawerComments.addEventListener("click", (e) => {
+            if (e.target === drawerComments) {
+                drawerComments.classList.remove("active");
+            }
+        });
+        
         function loadCommentsRealtime(videoId) {
             const commentsContainer = document.getElementById("watchCommentsListContainer");
             const counterPreview = document.getElementById("watchCommentsCount");
