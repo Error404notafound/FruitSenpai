@@ -6571,6 +6571,139 @@
             display: flex;
         }
 
+        /* ==========================================================================
+           JANELA FLUTUANTE (PICTURE-IN-PICTURE) E LINGUETA LATERAL (PRINTS A1 E B1)
+           ========================================================================== */
+        /* Modo Minimizado: Desativa o fundo da tela de vídeo sem recarregar o iframe */
+        .yt-watch-screen.minimized-pip-mode {
+            display: block !important;
+            background: transparent !important;
+            pointer-events: none !important;
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 10030 !important;
+            overflow: visible !important;
+            height: auto !important;
+            padding: 0 !important;
+        }
+
+        .yt-watch-screen.minimized-pip-mode .watch-top-header-bar,
+        .yt-watch-screen.minimized-pip-mode .yt-watch-details,
+        .yt-watch-screen.minimized-pip-mode .yt-watch-actions-bar,
+        .yt-watch-screen.minimized-pip-mode .yt-comments-snippet-box,
+        .yt-watch-screen.minimized-pip-mode #watchRelatedFeed,
+        .yt-watch-screen.minimized-pip-mode #drawerComments,
+        .yt-watch-screen.minimized-pip-mode .watch-playlist-mini-bar,
+        .yt-watch-screen.minimized-pip-mode .watch-playlist-drawer-sheet,
+        .yt-watch-screen.minimized-pip-mode .watch-mini-overlay-toggle-btn,
+        .yt-watch-screen.minimized-pip-mode .watch-player-overlay-controls {
+            display: none !important;
+        }
+
+        /* O Container do Vídeo vira a Janela Flutuante Suspensa (Prints A1.1 a A1.3) */
+        .yt-watch-screen.minimized-pip-mode .yt-player-box {
+            position: fixed !important;
+            top: 72px;
+            right: 14px;
+            width: 210px !important;
+            aspect-ratio: 16 / 9 !important;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.9) !important;
+            border: 1px solid rgba(255, 255, 255, 0.18) !important;
+            z-index: 10035 !important;
+            pointer-events: auto !important;
+            touch-action: none !important;
+            cursor: move;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        /* Camada de Controles da Janela Flutuante */
+        .mini-player-pip-overlay {
+            display: none;
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 40%, rgba(0, 0, 0, 0.6) 100%);
+            z-index: 25;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: auto;
+        }
+
+        .yt-watch-screen.minimized-pip-mode .mini-player-pip-overlay {
+            display: flex;
+        }
+
+        .mini-pip-top-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+        }
+
+        .mini-pip-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        .mini-pip-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #ffffff;
+        }
+
+        /* Barra de Tempo Vermelha no Rodapé da Janela Flutuante */
+        .mini-pip-progress-track {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.3);
+            z-index: 30;
+        }
+
+        .mini-pip-progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #ff0000;
+            transition: width 0.2s linear;
+        }
+
+        /* Lingueta Lateral de Recolhimento da Janela (Prints B1 e B1.1) */
+        .docked-mini-player-edge-handle {
+            position: fixed;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 52px;
+            border-radius: 18px 0 0 18px;
+            background-color: #212121;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-right: none;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10045;
+            box-shadow: -2px 4px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .docked-mini-player-edge-handle svg {
+            width: 18px;
+            height: 18px;
+            fill: #ffffff;
+        }
+
         .yt-watch-details {
             padding: 12px 14px 6px 14px;
             display: flex;
@@ -9380,8 +9513,8 @@
         <div class="watch-player-overlay-controls hidden-overlay" id="watchPlayerOverlayControls">
             <!-- Barra Superior do Vídeo -->
             <div class="watch-overlay-top-row">
-                <!-- Seta Roxa: Chevron Para Baixo Fino e Limpo -->
-                <button class="watch-center-control-btn" type="button" aria-label="Minimizar">
+                <!-- Seta de Minimizar para Janela Flutuante (Seta Vermelha Print C1) -->
+                <button class="watch-center-control-btn" id="btnMinimizeWatchPlayer" type="button" aria-label="Minimizar">
                     <svg viewBox="0 0 24 24" style="width: 24px; height: 24px;"><path fill="#ffffff" d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
                 </button>
 
@@ -9446,6 +9579,22 @@
             </div>
 
             <div style="height: 18px;"></div>
+        </div>
+
+        <!-- Camada da Janela Flutuante com Fechar, Pausar e Barra Vermelha (Prints A1 a A1.3) -->
+        <div class="mini-player-pip-overlay" id="miniPlayerPipOverlay">
+            <div class="mini-pip-top-actions">
+                <button class="mini-pip-btn" id="btnMiniPlayerPlayPause" type="button" aria-label="Pausar ou reproduzir">
+                    <svg class="mini-pip-icon-pause" viewBox="0 0 24 24"><path fill="#ffffff" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    <svg class="mini-pip-icon-play" viewBox="0 0 24 24" style="display: none;"><path fill="#ffffff" d="M8 5v14l11-7z"/></svg>
+                </button>
+                <button class="mini-pip-btn" id="btnMiniPlayerClose" type="button" aria-label="Fechar vídeo">
+                    <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+            <div class="mini-pip-progress-track">
+                <div class="mini-pip-progress-fill" id="miniPipProgressBarFill"></div>
+            </div>
         </div>
 
         <!-- Aviso Flutuante de Legenda (Print A4) -->
@@ -12958,6 +13107,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- Lingueta Lateral de Restauração do Vídeo Flutuante (Prints B1 e B1.1) -->
+        <button class="docked-mini-player-edge-handle" id="dockedMiniPlayerEdgeHandle" type="button" aria-label="Restaurar vídeo flutuante">
+            <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+        </button>
 
     </div>
 
@@ -23551,7 +23705,203 @@ if (btnWatchCastToggle) {
         }
     });
 }
-    
+
+// ==========================================================================
+// JANELA FLUTUANTE DE VÍDEO (PICTURE-IN-PICTURE) E RECOLHIMENTO (PRINTS A1 E B1)
+// ==========================================================================
+const btnMinimizeWatchPlayer = document.getElementById("btnMinimizeWatchPlayer");
+const miniPlayerPipOverlay = document.getElementById("miniPlayerPipOverlay");
+const btnMiniPlayerPlayPause = document.getElementById("btnMiniPlayerPlayPause");
+const btnMiniPlayerClose = document.getElementById("btnMiniPlayerClose");
+const miniPipProgressBarFill = document.getElementById("miniPipProgressBarFill");
+const dockedMiniPlayerEdgeHandle = document.getElementById("dockedMiniPlayerEdgeHandle");
+
+let isMiniPlayerModeActive = false;
+let miniPipProgressInterval = null;
+let miniPlayerHoldTimer = null;
+let isHoldingMiniPlayer = false;
+let miniPlayerTouchStartX = 0;
+let miniPlayerTouchStartY = 0;
+let miniPlayerCurrentPosX = 0;
+let miniPlayerCurrentPosY = 0;
+let isMiniPlayerPaused = false;
+
+// 1. Ativa a Janela Flutuante ao Clicar na Seta Para Baixo (Seta Vermelha Print C1)
+function minimizeWatchPlayerToPip() {
+    if (!currentWatchVideoId) return;
+
+    isMiniPlayerModeActive = true;
+    viewWatchVideo.classList.add("minimized-pip-mode");
+
+    // Retorna para a tela de onde o usuário veio sem fechar a reprodução
+    if (previousActiveScreenBeforeSearch === "you") {
+        openScreen(viewYou, false);
+    } else if (previousActiveScreenBeforeSearch === "subscriptions") {
+        openScreen(viewSubscriptions, false);
+    } else {
+        openScreen("home", false);
+    }
+
+    // Mantém a visualização do mini player visível no topo
+    viewWatchVideo.classList.add("active");
+    viewWatchVideo.classList.add("minimized-pip-mode");
+
+    startMiniPipProgressBarAnimation();
+}
+
+// 2. Restaura o Vídeo para a Tela Cheia Normal ao Tocar no Centro da Janela
+function restoreWatchPlayerFromPip() {
+    isMiniPlayerModeActive = false;
+    viewWatchVideo.classList.remove("minimized-pip-mode");
+    if (dockedMiniPlayerEdgeHandle) dockedMiniPlayerEdgeHandle.style.display = "none";
+    if (watchPlayerBox) {
+        watchPlayerBox.style.display = "flex";
+        watchPlayerBox.style.top = "";
+        watchPlayerBox.style.left = "";
+        watchPlayerBox.style.right = "";
+    }
+    openScreen(viewWatchVideo, false);
+}
+
+// 3. Animação da Barra Vermelha no Rodapé com Base na Duração do Episódio
+function startMiniPipProgressBarAnimation() {
+    if (miniPipProgressInterval) clearInterval(miniPipProgressInterval);
+
+    const currentEp = loadedEpisodesCache.find(v => v.id === currentWatchVideoId);
+    const durationMs = currentEp ? (parseDurationToMs(currentEp.duration) || 1440000) : 1440000;
+    const startTimestamp = Date.now();
+
+    miniPipProgressBarFill.style.width = "0%";
+
+    miniPipProgressInterval = setInterval(() => {
+        if (!isMiniPlayerModeActive) {
+            clearInterval(miniPipProgressInterval);
+            return;
+        }
+        const elapsed = Date.now() - startTimestamp;
+        const percentage = Math.min(100, (elapsed / durationMs) * 100);
+        miniPipProgressBarFill.style.width = `${percentage}%`;
+
+        if (percentage >= 100) {
+            clearInterval(miniPipProgressInterval);
+        }
+    }, 250);
+}
+
+// Botão de Minimizar da barra superior do vídeo (Print C1)
+if (btnMinimizeWatchPlayer) {
+    btnMinimizeWatchPlayer.addEventListener("click", (e) => {
+        e.stopPropagation();
+        minimizeWatchPlayerToPip();
+    });
+}
+
+// Botão ✕ no Canto Superior Direito da Janela Flutuante: Encerra o Vídeo
+if (btnMiniPlayerClose) {
+    btnMiniPlayerClose.addEventListener("click", (e) => {
+        e.stopPropagation();
+        isMiniPlayerModeActive = false;
+        if (miniPipProgressInterval) clearInterval(miniPipProgressInterval);
+        if (watchIframe) watchIframe.src = "";
+        viewWatchVideo.classList.remove("minimized-pip-mode");
+        viewWatchVideo.classList.remove("active");
+        if (dockedMiniPlayerEdgeHandle) dockedMiniPlayerEdgeHandle.style.display = "none";
+        showToast("Vídeo encerrado.");
+    });
+}
+
+// Botão Pausar / Play da Janela Flutuante
+if (btnMiniPlayerPlayPause) {
+    btnMiniPlayerPlayPause.addEventListener("click", (e) => {
+        e.stopPropagation();
+        isMiniPlayerPaused = !isMiniPlayerPaused;
+        const iconPause = btnMiniPlayerPlayPause.querySelector(".mini-pip-icon-pause");
+        const iconPlay = btnMiniPlayerPlayPause.querySelector(".mini-pip-icon-play");
+
+        if (iconPause && iconPlay) {
+            iconPause.style.display = isMiniPlayerPaused ? "none" : "block";
+            iconPlay.style.display = isMiniPlayerPaused ? "block" : "none";
+        }
+        showToast(isMiniPlayerPaused ? "Vídeo pausado" : "Vídeo reproduzindo");
+    });
+}
+
+// 4. Gesto de Segurar por 2 Segundos e Arrastar para a Borda (Prints B1 e B1.1)
+if (watchPlayerBox) {
+    watchPlayerBox.addEventListener("touchstart", (e) => {
+        if (!isMiniPlayerModeActive) return;
+
+        miniPlayerTouchStartX = e.touches[0].clientX;
+        miniPlayerTouchStartY = e.touches[0].clientY;
+        isHoldingMiniPlayer = false;
+
+        // Inicia a contagem de 2 segundos para habilitar o recolhimento
+        miniPlayerHoldTimer = setTimeout(() => {
+            isHoldingMiniPlayer = true;
+            showToast("Arraste até a lateral para recolher o vídeo.");
+        }, 2000);
+    }, { passive: true });
+
+    watchPlayerBox.addEventListener("touchmove", (e) => {
+        if (!isMiniPlayerModeActive) return;
+
+        const currentX = e.touches[0].clientX;
+        const currentY = e.touches[0].clientY;
+        const deltaX = Math.abs(currentX - miniPlayerTouchStartX);
+        const deltaY = Math.abs(currentY - miniPlayerTouchStartY);
+
+        // Se mover antes dos 2 segundos, cancela a espera
+        if (!isHoldingMiniPlayer && (deltaX > 10 || deltaY > 10)) {
+            clearTimeout(miniPlayerHoldTimer);
+        }
+
+        // Se já completou os 2 segundos, permite reposicionar a janela livremente
+        if (isHoldingMiniPlayer) {
+            e.preventDefault();
+            watchPlayerBox.style.top = `${currentY - 45}px`;
+            watchPlayerBox.style.left = `${currentX - 100}px`;
+            watchPlayerBox.style.right = "auto";
+        }
+    }, { passive: false });
+
+    watchPlayerBox.addEventListener("touchend", (e) => {
+        if (!isMiniPlayerModeActive) return;
+        clearTimeout(miniPlayerHoldTimer);
+
+        const endX = e.changedTouches[0].clientX;
+        const windowWidth = window.innerWidth;
+
+        // Se segurou por 2 segundos e soltou próximo às bordas, recolhe na lingueta (Print B1)
+        if (isHoldingMiniPlayer && (endX < 60 || endX > windowWidth - 70)) {
+            watchPlayerBox.style.display = "none";
+            if (dockedMiniPlayerEdgeHandle) {
+                dockedMiniPlayerEdgeHandle.style.display = "flex";
+            }
+            showToast("Vídeo recolhido na lateral.");
+        } else if (!isHoldingMiniPlayer) {
+            // Se foi apenas um toque simples no centro, restaura o player em tela cheia
+            if (!e.target.closest(".mini-pip-btn")) {
+                restoreWatchPlayerFromPip();
+            }
+        }
+
+        isHoldingMiniPlayer = false;
+    }, { passive: true });
+}
+
+// 5. Clicar na Lingueta Lateral Restaura a Janela Flutuante (Print B1 -> Print A1.1)
+if (dockedMiniPlayerEdgeHandle) {
+    dockedMiniPlayerEdgeHandle.addEventListener("click", () => {
+        dockedMiniPlayerEdgeHandle.style.display = "none";
+        if (watchPlayerBox) {
+            watchPlayerBox.style.display = "flex";
+            watchPlayerBox.style.top = "72px";
+            watchPlayerBox.style.right = "14px";
+            watchPlayerBox.style.left = "auto";
+        }
+        showToast("Vídeo flutuante restaurado.");
+    });
+}
     </script>
 </body>
   </html>
