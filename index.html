@@ -41,6 +41,17 @@
             margin: 0;
             padding: 0;
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none !important;
+        }
+
+        /* Impede que segurar o dedo abra o menu nativo de salvar imagem do navegador */
+        img, 
+        .yt-thumbnail-wrapper, 
+        .fs-video-card-mini, 
+        .yt-player-box {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
         }
 
         html, body {
@@ -23805,7 +23816,25 @@ if (btnMinimizeWatchPlayer) {
 
 let hasDraggedMiniPlayer = false;
 
-// 4. Botão de Expandir: Toque simples expande; segurar por 2 segundos permite reposicionar infinitas vezes
+// Bloqueia o menu nativo de imagem do navegador ao segurar o dedo na janela flutuante
+window.addEventListener("contextmenu", (e) => {
+    if (isMiniPlayerModeActive && (e.target.closest("#watchPlayerBox") || e.target.closest("#btnMiniPlayerExpand") || isHoldingMiniPlayer)) {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    }
+});
+
+// Impede que qualquer toque na janela flutuante vaze para os cards do feed atrás dela
+if (watchPlayerBox) {
+    watchPlayerBox.addEventListener("touchstart", (e) => {
+        if (isMiniPlayerModeActive) {
+            e.stopPropagation();
+        }
+    }, { passive: true });
+}
+
+// 4. Botão de Expandir com Isolamento Total de Cliques Submersos
 if (btnMiniPlayerExpand) {
     btnMiniPlayerExpand.addEventListener("click", (e) => {
         e.stopPropagation();
@@ -23819,7 +23848,9 @@ if (btnMiniPlayerExpand) {
     btnMiniPlayerExpand.addEventListener("touchstart", (e) => {
         if (!isMiniPlayerModeActive) return;
 
-        // Remove transições residuais para que o movimento acompanhe o dedo imediatamente
+        // Confinamento do toque: impede que o card ou imagem atrás receba o evento
+        e.stopPropagation();
+
         if (watchPlayerBox) {
             watchPlayerBox.style.transition = "none";
         }
@@ -23833,7 +23864,7 @@ if (btnMiniPlayerExpand) {
             clearTimeout(miniPlayerHoldTimer);
         }
 
-        // Inicia a contagem de 2 segundos com tolerância anatômica de micro-tremor
+        // Inicia a contagem de 2 segundos sem disparar menus do navegador
         miniPlayerHoldTimer = setTimeout(() => {
             isHoldingMiniPlayer = true;
             if (navigator.vibrate) {
@@ -23841,22 +23872,24 @@ if (btnMiniPlayerExpand) {
             }
             showToast("Arraste agora para qualquer um dos 4 cantos.");
         }, 2000);
-    }, { passive: true });
+    }, { passive: false });
 
     btnMiniPlayerExpand.addEventListener("touchmove", (e) => {
         if (!isMiniPlayerModeActive) return;
+
+        e.stopPropagation();
 
         const currentX = e.touches[0].clientX;
         const currentY = e.touches[0].clientY;
         const deltaX = Math.abs(currentX - miniPlayerTouchStartX);
         const deltaY = Math.abs(currentY - miniPlayerTouchStartY);
 
-        // Tolerância de 25px para evitar cancelamentos acidentais enquanto o dedo descansa na tela
+        // Tolerância de movimento durante a espera
         if (!isHoldingMiniPlayer && (deltaX > 25 || deltaY > 25)) {
             clearTimeout(miniPlayerHoldTimer);
         }
 
-        // Quando a retenção de 2 segundos for confirmada, permite reposicionar livremente
+        // Movimentação da janela em tempo real sem afetar os elementos atrás
         if (isHoldingMiniPlayer && watchPlayerBox) {
             e.preventDefault();
             hasDraggedMiniPlayer = true;
@@ -23870,6 +23903,8 @@ if (btnMiniPlayerExpand) {
 
     btnMiniPlayerExpand.addEventListener("touchend", (e) => {
         if (!isMiniPlayerModeActive) return;
+
+        e.stopPropagation();
 
         if (miniPlayerHoldTimer) {
             clearTimeout(miniPlayerHoldTimer);
@@ -23889,7 +23924,7 @@ if (btnMiniPlayerExpand) {
                 }
                 showToast("Vídeo recolhido na lateral.");
             } else {
-                // Encaixa com animação no quadrante correspondente
+                // Encaixa com animação suave no quadrante correspondente
                 const isLeft = endX < (windowWidth / 2);
                 const isTop = endY < (windowHeight / 2);
 
@@ -23921,7 +23956,6 @@ if (btnMiniPlayerExpand) {
                     watchPlayerBox.style.left = "auto";
                 }
 
-                // Desativa a transição após o encaixe para que o próximo arraste seja instantâneo
                 setTimeout(() => {
                     if (watchPlayerBox) {
                         watchPlayerBox.style.transition = "";
@@ -23929,15 +23963,16 @@ if (btnMiniPlayerExpand) {
                 }, 280);
             }
 
-            // Reseta a trava de clique após o término do arraste
             setTimeout(() => {
                 hasDraggedMiniPlayer = false;
             }, 150);
         }
 
         isHoldingMiniPlayer = false;
-    }, { passive: true });
+    }, { passive: false });
 }
+
+        
 
 // Botão ✕ no Canto Direito: Encerra o Vídeo
 if (btnMiniPlayerClose) {
