@@ -6220,6 +6220,32 @@
             gap: 12px;
         }
 
+        /* Botão de Espelhamento / Transmitir (Seta Vermelha) */
+        .watch-overlay-cast-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 50%;
+            transition: color 0.2s ease, transform 0.15s ease;
+        }
+
+        .watch-overlay-cast-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+            display: block;
+        }
+
+        .watch-overlay-cast-btn.active-cast {
+            color: #3ea6ff;
+            filter: drop-shadow(0 0 6px rgba(62, 166, 255, 0.8));
+        }
+
         /* Botão do Modo Maratona Idêntico ao Print A2 (Interruptor em Pílula) */
         .watch-overlay-marathon-btn {
             background: none;
@@ -9361,6 +9387,11 @@
 
                 <!-- Ações da Direita Fiel ao Print A2 -->
                 <div class="watch-overlay-top-actions">
+                    <!-- Botão de Espelhamento / Transmissão para TV (Seta Vermelha) -->
+                    <button class="watch-overlay-cast-btn" id="btnWatchCastToggle" type="button" aria-label="Espelhar na TV" title="Transmitir para TV">
+                        <svg viewBox="0 0 24 24"><path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                    </button>
+
                     <!-- Modo Maratona: Pílula com Botão Deslizante e Barrinhas Verticais -->
                     <button class="watch-overlay-marathon-btn" id="btnWatchMarathonToggle" type="button" aria-label="Modo maratona">
                         <div class="marathon-toggle-track" id="marathonToggleTrack">
@@ -12912,6 +12943,21 @@
                 </div>
             </div>
         </section>
+
+        <!-- Modal de Confirmação de Espelhamento na TV -->
+        <div class="yt-center-modal-backdrop" id="modalCastConfirmTV" style="z-index: 10050;">
+            <div class="yt-center-dialog">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <svg style="width: 24px; height: 24px; fill: #3ea6ff;" viewBox="0 0 24 24"><path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.93-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                    <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">Espelhar com o Celular</h3>
+                </div>
+                <p style="font-size: 13px; color: #aaaaaa; line-height: 1.45;">Seu celular conectado a esta conta solicitou o espelhamento de mídia. Deseja assistir nesta TV?</p>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                    <button type="button" class="profile-pill-btn" id="btnRejectCastTV" style="flex: none; padding: 0 16px;">Não</button>
+                    <button type="button" class="yt-btn-primary" id="btnAcceptCastTV" style="padding: 8px 22px;">Sim</button>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -23280,7 +23326,232 @@ if (btnWatchVoiceTrigger) {
     });
 }
 
+// ==========================================================================
+// MOTOR DE ESPELHAMENTO P2P VIA WEBRTC + SINALIZAÇÃO MÍNIMA FIREBASE SPARK
+// ==========================================================================
+const btnWatchCastToggle = document.getElementById("btnWatchCastToggle");
+const modalCastConfirmTV = document.getElementById("modalCastConfirmTV");
+const btnAcceptCastTV = document.getElementById("btnAcceptCastTV");
+const btnRejectCastTV = document.getElementById("btnRejectCastTV");
 
+let castPeerConnection = null;
+let castDataChannel = null;
+let isCastConnected = false;
+let castSignalingUnsubscribe = null;
+const clientDeviceId = `dev_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+const rtcConfiguration = {
+    iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun1.l.google.com:19302" }
+    ]
+};
+
+// 1. Envio de Comandos via Conexão P2P Direta (Consumo Firebase = ZERO)
+function sendMediaP2PCommand(commandType, extraData = {}) {
+    if (castDataChannel && castDataChannel.readyState === "open") {
+        const payload = JSON.stringify({
+            cmd: commandType,
+            videoId: currentWatchVideoId,
+            ...extraData
+        });
+        castDataChannel.send(payload);
+    }
+}
+
+// 2. Iniciação do Espelhamento pelo Celular (Emissor)
+async function startCastFromMobile() {
+    if (!currentUserEmail || !auth.currentUser) {
+        openAuthModal();
+        return;
+    }
+
+    try {
+        showToast("Procurando TV conectada nesta conta...");
+        btnWatchCastToggle.classList.add("active-cast");
+
+        castPeerConnection = new RTCPeerConnection(rtcConfiguration);
+        castDataChannel = castPeerConnection.createDataChannel("fruitMediaChannel");
+
+        castDataChannel.onopen = async () => {
+            isCastConnected = true;
+            showToast("Conectado à TV via P2P com sucesso!");
+
+            // Envia o vídeo atual para a TV reproduzir imediatamente
+            const currentVideo = loadedEpisodesCache.find(v => v.id === currentWatchVideoId);
+            if (currentVideo) {
+                sendMediaP2PCommand("open_video", { videoData: currentVideo });
+            }
+
+            // Limpa o documento de sinalização no Firestore para economia do plano Spark
+            try {
+                await deleteDoc(doc(db, "cast_sinalizacao", auth.currentUser.uid));
+            } catch (err) {}
+        };
+
+        castDataChannel.onclose = () => {
+            isCastConnected = false;
+            btnWatchCastToggle.classList.remove("active-cast");
+            showToast("Transmissão P2P desconectada.");
+        };
+
+        const offer = await castPeerConnection.createOffer();
+        await castPeerConnection.setLocalDescription(offer);
+
+        // Aguarda a captura completa dos candidatos de rede (Vanilla ICE = Zero gravações extras)
+        await new Promise((resolve) => {
+            if (castPeerConnection.iceGatheringState === "complete") {
+                resolve();
+            } else {
+                const checkIce = () => {
+                    if (castPeerConnection.iceGatheringState === "complete") {
+                        castPeerConnection.removeEventListener("icegatheringstatechange", checkIce);
+                        resolve();
+                    }
+                };
+                castPeerConnection.addEventListener("icegatheringstatechange", checkIce);
+            }
+        });
+
+        // Grava apenas 1 vez a oferta SDP no Firestore sob o ID do usuário
+        const signalingRef = doc(db, "cast_sinalizacao", auth.currentUser.uid);
+        await setDoc(signalingRef, {
+            senderId: clientDeviceId,
+            offer: JSON.stringify(castPeerConnection.localDescription),
+            createdAt: serverTimestamp()
+        });
+
+        // Escuta a resposta da TV vinda do Firestore
+        const unsubAnswer = onSnapshot(signalingRef, async (snap) => {
+            if (snap.exists()) {
+                const data = snap.data();
+                if (data.answer && data.receiverId !== clientDeviceId) {
+                    const answerDesc = new RTCSessionDescription(JSON.parse(data.answer));
+                    if (!castPeerConnection.currentRemoteDescription) {
+                        await castPeerConnection.setRemoteDescription(answerDesc);
+                    }
+                    unsubAnswer();
+                }
+            }
+        });
+    } catch (err) {
+        console.error("Erro ao iniciar espelhamento:", err);
+        btnWatchCastToggle.classList.remove("active-cast");
+        showToast("Falha ao parear com a TV.");
+    }
+}
+
+// 3. Receptor na TV: Escuta solicitações de espelhamento na mesma conta
+function initCastReceiverListener() {
+    if (!auth.currentUser) return;
+    if (castSignalingUnsubscribe) castSignalingUnsubscribe();
+
+    const signalingRef = doc(db, "cast_sinalizacao", auth.currentUser.uid);
+
+    castSignalingUnsubscribe = onSnapshot(signalingRef, async (snap) => {
+        if (!snap.exists()) return;
+        const data = snap.data();
+
+        // Se for outro dispositivo enviando a oferta, exibe o pedido na tela da TV
+        if (data.offer && data.senderId !== clientDeviceId && !isCastConnected) {
+            modalCastConfirmTV.classList.add("active");
+
+            btnAcceptCastTV.onclick = async () => {
+                modalCastConfirmTV.classList.remove("active");
+                try {
+                    castPeerConnection = new RTCPeerConnection(rtcConfiguration);
+
+                    castPeerConnection.ondatachannel = (event) => {
+                        castDataChannel = event.channel;
+
+                        castDataChannel.onmessage = (msgEvent) => {
+                            const message = JSON.parse(msgEvent.data);
+
+                            if (message.cmd === "open_video" && message.videoData) {
+                                openWatchScreen(message.videoData, message.videoId);
+                            } else if (message.cmd === "next_episode") {
+                                advanceSeriesEpisodeNext();
+                            } else if (message.cmd === "prev_episode") {
+                                advanceSeriesEpisodePrevious();
+                            }
+                        };
+
+                        castDataChannel.onopen = () => {
+                            isCastConnected = true;
+                            showToast("Controlado pelo celular via P2P.");
+                        };
+                    };
+
+                    const offerDesc = new RTCSessionDescription(JSON.parse(data.offer));
+                    await castPeerConnection.setRemoteDescription(offerDesc);
+
+                    const answer = await castPeerConnection.createAnswer();
+                    await castPeerConnection.setLocalDescription(answer);
+
+                    await new Promise((resolve) => {
+                        if (castPeerConnection.iceGatheringState === "complete") {
+                            resolve();
+                        } else {
+                            const checkIce = () => {
+                                if (castPeerConnection.iceGatheringState === "complete") {
+                                    castPeerConnection.removeEventListener("icegatheringstatechange", checkIce);
+                                    resolve();
+                                }
+                            };
+                            castPeerConnection.addEventListener("icegatheringstatechange", checkIce);
+                        }
+                    });
+
+                    // Envia a resposta SDP de volta pelo Firestore (Apenas 1 gravação)
+                    await setDoc(signalingRef, {
+                        receiverId: clientDeviceId,
+                        answer: JSON.stringify(castPeerConnection.localDescription)
+                    }, { merge: true });
+
+                } catch (err) {
+                    console.error("Erro na resposta da TV:", err);
+                }
+            };
+
+            btnRejectCastTV.onclick = async () => {
+                modalCastConfirmTV.classList.remove("active");
+                try {
+                    await deleteDoc(signalingRef);
+                } catch (err) {}
+            };
+        }
+    });
+}
+
+// Inicia o receptor automaticamente assim que o usuário estiver logado
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        initCastReceiverListener();
+    } else if (castSignalingUnsubscribe) {
+        castSignalingUnsubscribe();
+    }
+});
+
+// Clique no ícone de espelhamento (Seta Vermelha)
+if (btnWatchCastToggle) {
+    btnWatchCastToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showPlayerControls();
+
+        if (isCastConnected) {
+            if (confirm("Deseja desconectar a transmissão da TV?")) {
+                if (castDataChannel) castDataChannel.close();
+                if (castPeerConnection) castPeerConnection.close();
+                isCastConnected = false;
+                btnWatchCastToggle.classList.remove("active-cast");
+                showToast("Transmissão encerrada.");
+            }
+        } else {
+            startCastFromMobile();
+        }
+    });
+}
+    
     </script>
 </body>
   </html>
