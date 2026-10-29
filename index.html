@@ -6300,28 +6300,37 @@
             fill: #777777;
         }
 
-        /* Botão Pequeno do Canto Direito (Print A) */
+        /* Aba Lateral Estilo Menu Assistente (Fiel ao Print A) */
         .watch-mini-overlay-toggle-btn {
             position: absolute;
-            right: 8px;
+            right: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.25);
-            border: none;
+            width: 14px;
+            height: 38px;
+            border-top-left-radius: 19px;
+            border-bottom-left-radius: 19px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            background-color: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-right: none;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             z-index: 15;
+            padding: 0;
+            outline: none;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.35);
+            transition: background-color 0.2s ease, width 0.15s ease;
         }
 
-        .watch-mini-overlay-toggle-btn svg {
+        .watch-mini-overlay-toggle-btn:active {
+            background-color: rgba(255, 255, 255, 0.55);
             width: 16px;
-            height: 16px;
-            fill: #ffffff;
         }
 
         /* Aviso Flutuante de Legenda (Print A4) */
@@ -9231,10 +9240,8 @@
     <div class="yt-player-box" id="watchPlayerBox">
         <iframe id="watchIframe" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
 
-        <!-- Botão Pequeno do Canto Direito (Print A) -->
-        <button class="watch-mini-overlay-toggle-btn" id="btnShowPlayerControlsMini" type="button" aria-label="Mostrar controles">
-            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        </button>
+        <!-- Aba Lateral Estilo Menu Assistente (Print A) -->
+        <button class="watch-mini-overlay-toggle-btn" id="btnShowPlayerControlsMini" type="button" aria-label="Mostrar controles"></button>
 
         <!-- Camada Completa de Controles sobre o Vídeo (Inicia 100% Oculta) -->
         <div class="watch-player-overlay-controls hidden-overlay" id="watchPlayerOverlayControls">
