@@ -6300,23 +6300,19 @@
             fill: #777777;
         }
 
-        /* Aba Lateral Estilo Menu Assistente (Fiel ao Print A) */
+        /* Aba Lateral Estilo Menu Assistente (Semicírculo Perfeito e Totalmente Transparente) */
         .watch-mini-overlay-toggle-btn {
             position: absolute;
             right: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 14px;
-            height: 38px;
-            border-top-left-radius: 19px;
-            border-bottom-left-radius: 19px;
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            background-color: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 12px;
+            height: 24px;
+            border-radius: 12px 0 0 12px;
+            background-color: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-right: none;
+            box-shadow: none;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -6324,13 +6320,11 @@
             z-index: 15;
             padding: 0;
             outline: none;
-            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.35);
-            transition: background-color 0.2s ease, width 0.15s ease;
+            transition: background-color 0.2s ease;
         }
 
         .watch-mini-overlay-toggle-btn:active {
-            background-color: rgba(255, 255, 255, 0.55);
-            width: 16px;
+            background-color: rgba(255, 255, 255, 0.28);
         }
 
         /* Aviso Flutuante de Legenda (Print A4) */
