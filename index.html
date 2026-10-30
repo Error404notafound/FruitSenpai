@@ -9309,7 +9309,7 @@
                     <div class="fs-section-title-wrap">
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Novos episódios</h3>
-                        <button class="fs-link-more" style="margin-left:4px;" type="button">Tudo</button>
+                        <button class="fs-link-more" id="btnSeeAllNewEpisodes" style="margin-left:4px;" type="button">Tudo</button>
                     </div>
                     <button class="fs-btn-surprise" id="btnSurpriseMe" type="button">
                         <svg style="width:12px;height:12px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
@@ -9402,7 +9402,7 @@
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Mais assistidos</h3>
                     </div>
-                    <button class="fs-link-more" type="button">Tudo</button>
+                    <button class="fs-link-more" id="btnSeeAllMostWatched" type="button">Tudo</button>
                 </div>
 
                 <div class="fs-carousel" id="mostWatchedCarousel"></div>
@@ -9428,7 +9428,7 @@
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Filmes mais recentes</h3>
                     </div>
-                    <button class="fs-link-more">Tudo</button>
+                    <button class="fs-link-more" id="btnSeeAllRecentMovies" type="button">Tudo</button>
                 </div>
 
                 <div class="fs-carousel" id="recentMoviesCarousel"></div>
@@ -9441,16 +9441,16 @@
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Hentais mais recentes</h3>
                     </div>
-                    <button class="fs-link-more">Tudo</button>
+                    <button class="fs-link-more" id="btnSeeAllAdultContent" type="button">Tudo</button>
                 </div>
 
                 <div class="fs-carousel fs-adult-content-blurred" id="adultContentRow"></div>
 
                 <div class="fs-adult-modal-overlay" id="adultModalOverlay">
                     <div class="fs-adult-card">
-                        <div class="fs-hentai-logo">🌴 HENTAILÂNDIA</div>
+                        <div class="fs-hentai-logo">FruitOppai</div>
                         <h4 class="fs-adult-h4">Conteúdo adulto :3</h4>
-                        <p class="fs-adult-p">Tem um conteúdo +18 aqui do HentaiLândia :3</p>
+                        <p class="fs-adult-p">Tem um conteúdo +18 aqui do FruitOppai :3</p>
                         <button class="fs-btn-show-adult" id="btnRevealAdultContent">Mostrar conteúdo duvidoso</button>
                         <label class="fs-adult-checkbox-row">
                             <input type="checkbox" id="chkDontShowAdultWarning">
@@ -9467,7 +9467,7 @@
                         <span class="fs-red-bar"></span>
                         <h3 class="fs-section-title">Animes mais recentes</h3>
                     </div>
-                    <button class="fs-link-more">Tudo</button>
+                    <button class="fs-link-more" id="btnSeeAllRecentAnimes" type="button">Tudo</button>
                 </div>
 
                 <div class="fs-carousel" id="recentAnimesCarousel"></div>
@@ -18949,10 +18949,127 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         // Carrega em tempo real as Coleções em Alta com playlists públicas (>= 4 episódios ou séries)
         const topCollectionsCarousel = document.getElementById("topCollectionsCarousel");
         const btnMoreCollections = document.getElementById("btnMoreCollections");
+        let loadedPublicPlaylistsPool = [];
+
+        // Botões "Tudo" das seções da página inicial
+        const btnSeeAllNewEpisodes = document.getElementById("btnSeeAllNewEpisodes");
+        const btnSeeAllMostWatched = document.getElementById("btnSeeAllMostWatched");
+        const btnSeeAllRecentMovies = document.getElementById("btnSeeAllRecentMovies");
+        const btnSeeAllAdultContent = document.getElementById("btnSeeAllAdultContent");
+        const btnSeeAllRecentAnimes = document.getElementById("btnSeeAllRecentAnimes");
+
+        // Função que abre a pesquisa filtrada por categoria e pagina de 20 em 20
+        function executeSectionFilterSearch(sectionFilterType, sectionSearchLabel) {
+            openSearchInputMode("home");
+            inputGlobalSearchQuery.value = sectionSearchLabel;
+
+            searchHistoryContainer.innerHTML = "";
+            btnClearSearchQueryX.style.display = "flex";
+            btnTriggerSearchFilterBar.style.display = "flex";
+            searchFiltersBar.classList.add("active");
+
+            filteredSearchResultsPool = [];
+
+            const sortByDateDesc = (a, b) => {
+                const timeA = (a.createdAt && a.createdAt.seconds) || (a.timestamp && a.timestamp.seconds) || 0;
+                const timeB = (b.createdAt && b.createdAt.seconds) || (b.timestamp && b.timestamp.seconds) || 0;
+                return timeB - timeA;
+            };
+
+            // 1. Animes Mais Recentes: Séries marcadas como Anime do mais novo para o mais velho (Formato de Canal Print A)
+            if (sectionFilterType === "recent_animes") {
+                const animesList = availableSeriesList.filter(s => !s.isAdult && s.contentType !== "Filme");
+                animesList.sort(sortByDateDesc);
+                animesList.forEach(s => {
+                    filteredSearchResultsPool.push({ type: "channel", data: s });
+                });
+            }
+
+            // 2. Filmes Mais Recentes: Séries marcadas como Filme do mais novo para o mais velho (Formato de Canal Print A)
+            else if (sectionFilterType === "recent_movies") {
+                const moviesList = availableSeriesList.filter(s => s.contentType === "Filme");
+                moviesList.sort(sortByDateDesc);
+                moviesList.forEach(s => {
+                    filteredSearchResultsPool.push({ type: "channel", data: s });
+                });
+            }
+
+            // 3. Hentais Mais Recentes: Séries marcadas como +18 / Ecchi / Hentai do mais novo para o mais velho (Formato de Canal Print A)
+            else if (sectionFilterType === "recent_adult") {
+                const adultList = availableSeriesList.filter(s => s.isAdult === true);
+                adultList.sort(sortByDateDesc);
+                adultList.forEach(s => {
+                    filteredSearchResultsPool.push({ type: "channel", data: s });
+                });
+            }
+
+            // 4. Mais Assistidos: Cards horizontais dos episódios ordenados por visualizações (mais visto no topo)
+            else if (sectionFilterType === "most_watched") {
+                const episodesList = loadedEpisodesCache.filter(ep => ep.contentType !== "Reels");
+                episodesList.sort((a, b) => Number(b.viewsCount || 0) - Number(a.viewsCount || 0));
+                episodesList.forEach(ep => {
+                    filteredSearchResultsPool.push({ type: "episode", data: ep });
+                });
+            }
+
+            // 5. Novos Episódios: Cards horizontais dos episódios ordenados do mais recente para o mais velho
+            else if (sectionFilterType === "new_episodes") {
+                const episodesList = loadedEpisodesCache.filter(ep => ep.contentType !== "Reels" && (ep.videoUrl || ep.contentType === "episode"));
+                episodesList.sort(sortByDateDesc);
+                episodesList.forEach(ep => {
+                    filteredSearchResultsPool.push({ type: "episode", data: ep });
+                });
+            }
+
+            // 6. Coleções em Alta: Playlists públicas ordenadas por popularidade
+            else if (sectionFilterType === "top_collections") {
+                const collectionsList = [...loadedPublicPlaylistsPool];
+                collectionsList.sort((a, b) => Number(b.totalItems || 0) - Number(a.totalItems || 0));
+                collectionsList.forEach(pl => {
+                    filteredSearchResultsPool.push({ type: "playlist", data: pl });
+                });
+            }
+
+            // Exibe apenas 20 resultados inicialmente; o scroll infinito carrega mais 20 ao descer
+            searchCurrentDisplayedCount = 20;
+            renderSearchResultsPaged();
+            window.scrollTo(0, 0);
+        }
+
+        // Eventos de clique de cada botão "Tudo"
+        if (btnSeeAllRecentAnimes) {
+            btnSeeAllRecentAnimes.addEventListener("click", () => {
+                executeSectionFilterSearch("recent_animes", "Animes mais recentes");
+            });
+        }
+
+        if (btnSeeAllRecentMovies) {
+            btnSeeAllRecentMovies.addEventListener("click", () => {
+                executeSectionFilterSearch("recent_movies", "Filmes mais recentes");
+            });
+        }
+
+        if (btnSeeAllAdultContent) {
+            btnSeeAllAdultContent.addEventListener("click", () => {
+                executeSectionFilterSearch("recent_adult", "Hentais mais recentes");
+            });
+        }
+
+        if (btnSeeAllMostWatched) {
+            btnSeeAllMostWatched.addEventListener("click", () => {
+                executeSectionFilterSearch("most_watched", "Mais assistidos");
+            });
+        }
+
+        if (btnSeeAllNewEpisodes) {
+            btnSeeAllNewEpisodes.addEventListener("click", () => {
+                executeSectionFilterSearch("new_episodes", "Novos episódios");
+            });
+        }
 
         if (btnMoreCollections) {
             btnMoreCollections.addEventListener("click", () => {
-                openAllPlaylistsPage();
+                executeSectionFilterSearch("top_collections", "Coleções em alta");
             });
         }
 
@@ -19043,6 +19160,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                 }
                             });
 
+                            loadedPublicPlaylistsPool = publicCollectionsList;
                             topCollectionsCarousel.innerHTML = "";
 
                             // Caso ainda não haja playlists públicas com 4 itens criadas no banco, exibe modelos fiéis
