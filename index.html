@@ -9270,14 +9270,8 @@
                 <div class="yt-compass-chip" id="compassChip" title="Explorar">
                     <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 10.9c-.61 0-1.1.49-1.1 1.1s.49 1.1 1.1 1.1 1.1-.49 1.1-1.1-.49-1.1-1.1-1.1zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm2.19 12.19L6 18l3.81-8.19L18 6l-3.81 8.19z"/></svg>
                 </div>
-                <button class="yt-chip active">Tudo</button>
-                <button class="yt-chip">De Mouton</button>
-                <button class="yt-chip">Indie rock</button>
-                <button class="yt-chip">Metal alternativo</button>
-                <button class="yt-chip">Música</button>
-                <button class="yt-chip">Jogos</button>
-                <button class="yt-chip">Toby Fox</button>
-                <button class="yt-chip">Animações</button>
+                <button class="yt-chip active" id="chipHomeAll" type="button">Tudo</button>
+                <div id="dynamicChipsContainer" style="display:contents;"></div>
             </div>
         </header>
 
@@ -14432,14 +14426,201 @@
             });
         }
 
-        // 5. INTERATIVIDADE DOS CHIPS DE FILTRO
-        document.querySelectorAll(".yt-chip").forEach(chip => {
-            chip.addEventListener("click", () => {
-                document.querySelectorAll(".yt-chip").forEach(c => c.classList.remove("active"));
-                chip.classList.add("active");
-                showToast(`Filtrado por: ${chip.textContent}`);
+        // ==========================================================================
+        // SISTEMA DE RECOMENDAÇÃO BASEADO EM SESSÃO E PÍLULAS DINÂMICAS DO TOPO
+        // ==========================================================================
+        const dynamicChipsContainer = document.getElementById("dynamicChipsContainer");
+        const chipHomeAll = document.getElementById("chipHomeAll");
+
+        // 1. Extração confiável de tags do episódio sem duplicatas internas
+        function extractTagsFromEpisode(ep) {
+            const collected = [];
+            if (Array.isArray(ep.tags)) {
+                ep.tags.forEach(t => {
+                    const clean = String(t).trim();
+                    if (clean) collected.push(clean);
+                });
+            } else if (typeof ep.tags === "string" && ep.tags.trim()) {
+                ep.tags.split(",").forEach(t => {
+                    const clean = t.trim();
+                    if (clean) collected.push(clean);
+                });
+            }
+
+            if (Array.isArray(ep.genres)) {
+                ep.genres.forEach(g => {
+                    const clean = String(g).trim();
+                    if (clean) collected.push(clean);
+                });
+            } else if (typeof ep.genres === "string" && ep.genres.trim()) {
+                ep.genres.split(",").forEach(g => {
+                    const clean = g.trim();
+                    if (clean) collected.push(clean);
+                });
+            }
+
+            if (ep.contentType && ep.contentType !== "episode" && ep.contentType !== "Série" && ep.contentType !== "Reels") {
+                collected.push(ep.contentType.trim());
+            }
+
+            return Array.from(new Set(collected));
+        }
+
+        // 2. Extrai 12 tags únicas a partir dos vídeos mais visualizados da memória (sem custo de leitura Firebase)
+        function getTopMostViewedTags(targetCount = 12) {
+            if (!Array.isArray(loadedEpisodesCache) || loadedEpisodesCache.length === 0) {
+                return ["Anime", "Ação", "Aventura", "Shōnen", "Comédia", "Fantasia", "Drama", "Romance"];
+            }
+
+            const sortedEpisodes = [...loadedEpisodesCache].sort((a, b) => {
+                return Number(b.viewsCount || 0) - Number(a.viewsCount || 0);
             });
-        });
+
+            const defaultTags = [];
+            const seenTagsSet = new Set();
+
+            for (let i = 0; i < sortedEpisodes.length && defaultTags.length < targetCount; i++) {
+                const epTags = extractTagsFromEpisode(sortedEpisodes[i]);
+                let addedFromThisEpisode = 0;
+
+                for (let j = 0; j < epTags.length && addedFromThisEpisode < 3 && defaultTags.length < targetCount; j++) {
+                    const tag = epTags[j];
+                    const lower = tag.toLowerCase();
+                    if (!seenTagsSet.has(lower)) {
+                        seenTagsSet.add(lower);
+                        defaultTags.push(tag);
+                        addedFromThisEpisode++;
+                    }
+                }
+            }
+
+            const fallbackTags = ["Anime", "Ação", "Aventura", "Shōnen", "Comédia", "Fantasia", "Drama", "Romance", "Mistério", "Sobrenatural", "Sci-Fi", "Luta"];
+            for (let k = 0; k < fallbackTags.length && defaultTags.length < targetCount; k++) {
+                const fbTag = fallbackTags[k];
+                if (!seenTagsSet.has(fbTag.toLowerCase())) {
+                    seenTagsSet.add(fbTag.toLowerCase());
+                    defaultTags.push(fbTag);
+                }
+            }
+
+            return defaultTags;
+        }
+
+        // 3. Lê as tags personalizadas da sessão (com expiração de 1 dia para visitantes não logados)
+        function getStoredUserTags() {
+            if (currentUserEmail) {
+                try {
+                    return JSON.parse(localStorage.getItem(`user_chips_tags_${currentUserEmail}`) || "[]");
+                } catch(e) {
+                    return [];
+                }
+            } else {
+                const guestRaw = localStorage.getItem("fs_guest_session_tags");
+                if (guestRaw) {
+                    try {
+                        const parsedSession = JSON.parse(guestRaw);
+                        const now = Date.now();
+                        const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+                        if (parsedSession.lastActive && (now - parsedSession.lastActive) <= ONE_DAY_MS) {
+                            return parsedSession.tags || [];
+                        } else {
+                            localStorage.removeItem("fs_guest_session_tags");
+                            return [];
+                        }
+                    } catch(e) {
+                        return [];
+                    }
+                }
+                return [];
+            }
+        }
+
+        // 4. Grava as tags personalizadas mantendo a validade de 1 dia para sessões anônimas
+        function saveStoredUserTags(tagsList) {
+            if (currentUserEmail) {
+                localStorage.setItem(`user_chips_tags_${currentUserEmail}`, JSON.stringify(tagsList));
+            } else {
+                localStorage.setItem("fs_guest_session_tags", JSON.stringify({
+                    sessionId: `sess_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+                    tags: tagsList,
+                    lastActive: Date.now()
+                }));
+            }
+        }
+
+        // 5. Adiciona tags ao assistir ou curtir um vídeo sem gerar duplicações
+        function addTagsToActiveSession(videoData, countToAdd) {
+            if (!videoData) return;
+            const videoTags = extractTagsFromEpisode(videoData);
+            if (videoTags.length === 0) return;
+
+            const existingTags = getStoredUserTags();
+            const tagsToInsert = videoTags.slice(0, countToAdd);
+
+            tagsToInsert.forEach(t => {
+                const existingIndex = existingTags.findIndex(item => item.toLowerCase() === t.toLowerCase());
+                if (existingIndex !== -1) {
+                    existingTags.splice(existingIndex, 1);
+                }
+                existingTags.unshift(t);
+            });
+
+            const finalTags = existingTags.slice(0, 20);
+            saveStoredUserTags(finalTags);
+            renderDynamicChipsBar();
+        }
+
+        // 6. Monta a lista combinada e renderiza até 20 pílulas na barra superior
+        function renderDynamicChipsBar() {
+            if (!dynamicChipsContainer) return;
+            dynamicChipsContainer.innerHTML = "";
+
+            const userTags = getStoredUserTags();
+            const basePopularTags = getTopMostViewedTags(12);
+            const combinedTags = [...userTags];
+            const seenLower = new Set(userTags.map(t => t.toLowerCase()));
+
+            // Adiciona as tags dos mais visualizados completando até o limite máximo de 20
+            for (let i = 0; i < basePopularTags.length && combinedTags.length < 20; i++) {
+                const popularTag = basePopularTags[i];
+                if (!seenLower.has(popularTag.toLowerCase())) {
+                    seenLower.add(popularTag.toLowerCase());
+                    combinedTags.push(popularTag);
+                }
+            }
+
+            combinedTags.slice(0, 20).forEach(tag => {
+                const pillBtn = document.createElement("button");
+                pillBtn.className = "yt-chip";
+                pillBtn.type = "button";
+                pillBtn.textContent = tag;
+
+                // Clicar na tag atua como atalho de busca e abre os resultados
+                pillBtn.addEventListener("click", () => {
+                    document.querySelectorAll(".yt-chip").forEach(c => c.classList.remove("active"));
+                    pillBtn.classList.add("active");
+
+                    openSearchInputMode("home");
+                    inputGlobalSearchQuery.value = tag;
+                    executeGlobalSearch(tag);
+                });
+
+                dynamicChipsContainer.appendChild(pillBtn);
+            });
+        }
+
+        // 7. Botão fixo "Tudo" retorna e exibe o feed inicial completo
+        if (chipHomeAll) {
+            chipHomeAll.addEventListener("click", () => {
+                document.querySelectorAll(".yt-chip").forEach(c => c.classList.remove("active"));
+                chipHomeAll.classList.add("active");
+                openScreen("home");
+            });
+        }
+
+        // Atualiza a barra de pílulas sempre que o feed carregar na memória
+        renderDynamicChipsBar();
 
         // 7. INTERATIVIDADE DO FLUXO DE NAVEGAÇÃO MAPEADO E AUTH REAL
         const auth = getAuth(app);
@@ -17210,6 +17391,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
 
+            // Adiciona tags do vídeo visualizado (1 tag para logado, 2 para visitante com sessão de 1 dia)
+            if (typeof addTagsToActiveSession === "function") {
+                addTagsToActiveSession(videoData, currentUserEmail ? 1 : 2);
+            }
+
             const title = videoData.name || "Vídeo sem título";
             if (watchVideoTitle) watchVideoTitle.textContent = title;
 
@@ -17518,6 +17704,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     currentLikes = currentLikes + 1;
                     currentVideoUserVote = "like";
                     updateLikeDislikeButtonsUI("like");
+
+                    // Adiciona 2 tags do vídeo marcado como "Gostei" à barra de pílulas do usuário
+                    const currentEpObj = loadedEpisodesCache.find(v => v.id === currentWatchVideoId);
+                    if (currentEpObj && typeof addTagsToActiveSession === "function") {
+                        addTagsToActiveSession(currentEpObj, 2);
+                    }
                 }
 
                 // Salva o total no Firestore e atualiza o texto de metadados
