@@ -13272,6 +13272,9 @@
             const videoUrlInput = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
             if (videoUrlInput) {
                 videoUrlInput.value = ep.videoUrl || "";
+                if (videoUrlInput.id === "uploadFirstEpisodeUrl") {
+                    videoUrlInput.placeholder = `Link do ${ep.episodeNum}º episódio (Embed/Drive/YouTube, opcional)`;
+                }
             }
 
             renderUploadEpisodesScroll();
@@ -13312,6 +13315,12 @@
 
         // Cria novos episódios reais ao clicar no + ou em + adicionar
         function handleCreateNewEpisodeCard() {
+            // Garante o salvamento do link do episódio que estava aberto antes de criar o próximo
+            const currentUrlField = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
+            if (currentUrlField && addedEpisodesList[currentActiveEpisodeIndex]) {
+                addedEpisodesList[currentActiveEpisodeIndex].videoUrl = currentUrlField.value.trim();
+            }
+
             const currentTitleInput = document.getElementById("uploadSeriesName") || document.getElementById("uploadEpisodeTitle");
             const seriesName = (currentTitleInput && currentTitleInput.value.trim()) ? currentTitleInput.value.trim() : "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life";
             
@@ -13437,6 +13446,29 @@
         if (inputEpisodeDuration) {
             inputEpisodeDuration.addEventListener("input", (e) => {
                 syncActiveEpisodeDuration(e.target.value);
+            });
+        }
+
+        // Sincronização em Tempo Real: Link do Vídeo Embed para o Episódio Ativo
+        const inputFirstEpisodeUrl = document.getElementById("uploadFirstEpisodeUrl");
+        const inputEpisodeVideoUrl = document.getElementById("uploadEpisodeVideoUrl");
+
+        function syncActiveEpisodeVideoUrl(val) {
+            const cleanUrl = val.trim();
+            if (addedEpisodesList[currentActiveEpisodeIndex]) {
+                addedEpisodesList[currentActiveEpisodeIndex].videoUrl = cleanUrl;
+            }
+        }
+
+        if (inputFirstEpisodeUrl) {
+            inputFirstEpisodeUrl.addEventListener("input", (e) => {
+                syncActiveEpisodeVideoUrl(e.target.value);
+            });
+        }
+
+        if (inputEpisodeVideoUrl) {
+            inputEpisodeVideoUrl.addEventListener("input", (e) => {
+                syncActiveEpisodeVideoUrl(e.target.value);
             });
         }
 
@@ -14195,6 +14227,12 @@
                             videoUrl: firstEpUrl
                         }];
 
+                    // Salva o link do episódio que estiver atualmente em edição no campo
+                    const activeUrlField = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
+                    if (activeUrlField && addedEpisodesList[currentActiveEpisodeIndex]) {
+                        addedEpisodesList[currentActiveEpisodeIndex].videoUrl = activeUrlField.value.trim();
+                    }
+
                     for (let i = 0; i < episodesToSave.length; i++) {
                         const ep = episodesToSave[i];
                         const epNum = ep.episodeNum || (i + 1);
@@ -14204,7 +14242,7 @@
                         const isReelPost = (selectedContentType === "Reels");
                         const epThumb = isReelPost ? "" : (ep.thumbUrl || (uploadVideoThumb ? uploadVideoThumb.src : ""));
                         const epDuration = ep.duration || "24:00";
-                        const epVideo = ep.videoUrl || firstEpUrl || "";
+                        const epVideo = (ep.videoUrl && ep.videoUrl.trim()) ? ep.videoUrl.trim() : (i === 0 ? firstEpUrl : "");
 
                         await addDoc(frutasColecao, {
                             name: epName,
