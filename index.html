@@ -13171,8 +13171,9 @@
         const db = getFirestore(app);
         const frutasColecao = collection(db, "frutas");
 
-        // Cache global de episódios declarado no topo para evitar erro de inicialização
+        // Cache global de episódios e sessão do usuário declarados no topo para evitar erro de inicialização
         let loadedEpisodesCache = [];
+        let currentUserEmail = localStorage.getItem("fs_cached_user_email") || "";
 
         // Elementos do DOM
         const fruitInput = document.getElementById("fruitInput");
@@ -14412,6 +14413,11 @@
 
             // Atualiza o sininho de notificações imediatamente na tela inicial
             updateWeeklyNotificationsBellCount();
+
+            // Atualiza as pílulas dinâmicas com as tags dos vídeos mais visualizados
+            if (typeof renderDynamicChipsBar === "function") {
+                renderDynamicChipsBar();
+            }
         });
         // 4. INTERATIVIDADE DO AVISO ADULTO (+18) COM DESFOQUE (BLUR)
         const btnRevealAdult = document.getElementById("btnRevealAdultContent");
@@ -14678,8 +14684,6 @@
         const authModalSub = document.getElementById("authModalSub");
 
         let isRegisterMode = false;
-        // Inicia com o e-mail em cache para que uma nova aba reconheça a sessão imediatamente
-        let currentUserEmail = localStorage.getItem("fs_cached_user_email") || "";
 
         // Extrai o nome do canal a partir do e-mail
         function getNameFromEmail(email) {
@@ -14751,6 +14755,11 @@
 
                 // Restaura o aviso deslogado de histórico (Print B)
                 loadUserHistory();
+            }
+
+            // Atualiza a barra de pílulas do topo conforme o status da conta
+            if (typeof renderDynamicChipsBar === "function") {
+                renderDynamicChipsBar();
             }
         }
 
@@ -18305,8 +18314,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         <div class="profile-playlist-sub">${escapeHtml(pl.visibility || "Particular")} • Playlist</div>
                     `;
                     card.onclick = () => {
-                        playlistPageTitle.textContent = pl.title;
-                        openScreen(viewPlaylists);
+                        openPlaylistDetailPage(pl.id, pl.title);
                     };
                     profileCarousel.appendChild(card);
                 });
