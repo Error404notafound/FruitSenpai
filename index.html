@@ -14470,6 +14470,104 @@
             });
         }
 
+        // LÓGICA DO BOTÃO "SURPREENDA-ME" BASEADO NAS TAGS DAS PÍLULAS DO USUÁRIO
+        const btnSurpriseMe = document.getElementById("btnSurpriseMe");
+
+        function handleSurpriseMeRecommendation() {
+            // Coleta todas as séries disponíveis
+            let candidateSeries = [...availableSeriesList];
+
+            // Se a lista de séries estiver vazia, extrai nomes a partir dos episódios carregados
+            if (candidateSeries.length === 0 && Array.isArray(loadedEpisodesCache)) {
+                const uniqueTitles = new Set();
+                loadedEpisodesCache.forEach(ep => {
+                    const ch = (ep.channel || ep.name || "").trim();
+                    if (ch && !uniqueTitles.has(ch)) {
+                        uniqueTitles.add(ch);
+                        candidateSeries.push({
+                            title: ch,
+                            genres: ep.genres || [ep.contentType || "Anime"],
+                            tags: ep.tags || []
+                        });
+                    }
+                });
+            }
+
+            if (candidateSeries.length === 0) {
+                showToast("Nenhuma série disponível para recomendação.");
+                return;
+            }
+
+            // Lê as tags que o usuário já acumulou em sua navegação/histórico
+            const userTags = (typeof getStoredUserTags === "function") ? getStoredUserTags() : [];
+            let targetTagsPool = [];
+
+            if (userTags.length > 0) {
+                targetTagsPool = userTags.map(t => String(t).toLowerCase());
+            } else {
+                // Se o usuário não tiver assistido nada, utiliza as 12 tags populares padrão do topo
+                targetTagsPool = (typeof getTopMostViewedTags === "function") 
+                    ? getTopMostViewedTags(12).map(t => String(t).toLowerCase()) 
+                    : ["anime", "ação", "aventura", "shōnen", "comédia", "fantasia"];
+            }
+
+            // Atribui uma pontuação para cada série de acordo com a quantidade de tags coincidentes
+            const scoredSeriesList = [];
+
+            candidateSeries.forEach(series => {
+                const seriesTags = [];
+                if (Array.isArray(series.genres)) {
+                    series.genres.forEach(g => seriesTags.push(String(g).toLowerCase()));
+                }
+                if (Array.isArray(series.tags)) {
+                    series.tags.forEach(t => seriesTags.push(String(t).toLowerCase()));
+                }
+                if (series.contentType) {
+                    seriesTags.push(String(series.contentType).toLowerCase());
+                }
+
+                let matchCount = 0;
+                seriesTags.forEach(st => {
+                    if (targetTagsPool.includes(st)) {
+                        matchCount++;
+                    }
+                });
+
+                scoredSeriesList.push({
+                    series: series,
+                    score: matchCount
+                });
+            });
+
+            // Filtra as séries que têm pelo menos 1 tag em comum
+            const matchingCandidates = scoredSeriesList.filter(item => item.score > 0);
+
+            let chosenSeries = null;
+
+            if (matchingCandidates.length > 0) {
+                // Ordena pelas que têm mais tags coincidentes primeiro
+                matchingCandidates.sort((a, b) => b.score - a.score);
+                // Pega os melhores resultados e escolhe um aleatoriamente entre eles
+                const topPicks = matchingCandidates.slice(0, Math.min(5, matchingCandidates.length));
+                const randomPick = topPicks[Math.floor(Math.random() * topPicks.length)];
+                chosenSeries = randomPick.series;
+            } else {
+                // Sorteio aleatório geral caso nenhuma tenha tag correspondente
+                chosenSeries = candidateSeries[Math.floor(Math.random() * candidateSeries.length)];
+            }
+
+            if (chosenSeries && chosenSeries.title) {
+                showToast(`Surpreenda-me: Abrindo ${chosenSeries.title}...`);
+                openSeriesChannel(chosenSeries.title);
+            }
+        }
+
+        if (btnSurpriseMe) {
+            btnSurpriseMe.addEventListener("click", () => {
+                handleSurpriseMeRecommendation();
+            });
+        }
+
         // ==========================================================================
         // SISTEMA DE RECOMENDAÇÃO BASEADO EM SESSÃO E PÍLULAS DINÂMICAS DO TOPO
         // ==========================================================================
@@ -15869,18 +15967,23 @@
             });
         }
 
-        // Fechar gavetas ao clicar fora delas
-        if (drawerSubsShortKebab) {
-            drawerSubsShortKebab.addEventListener("click", (e) => {
-                if (e.target === drawerSubsShortKebab) drawerSubsShortKebab.classList.remove("active");
+        // Fechamento universal automático de todas as gavetas inferiores ao clicar fora (no fundo)
+        document.querySelectorAll(".accounts-drawer").forEach(drawer => {
+            drawer.addEventListener("click", (e) => {
+                if (e.target === drawer) {
+                    drawer.classList.remove("active");
+                }
             });
-        }
+        });
 
-        if (drawerSubsVideoKebab) {
-            drawerSubsVideoKebab.addEventListener("click", (e) => {
-                if (e.target === drawerSubsVideoKebab) drawerSubsVideoKebab.classList.remove("active");
+        // Fechamento dos modais centralizados ao clicar no fundo escuro
+        document.querySelectorAll(".yt-center-modal-backdrop").forEach(modal => {
+            modal.addEventListener("click", (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove("active");
+                }
             });
-        }
+        });
 
         // Carrega o feed das séries que o usuário segue em tempo real
         function loadSubscriptionsFeedRealtime() {
@@ -16510,17 +16613,22 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             tempEditedVisibility = foundDoc.visibility || "Privada";
             tempEditedDescription = foundDoc.description || "";
 
-            // Identifica se o usuário atual é o DONO ou VISITANTE
-            const isOwner = currentUserEmail && (foundDoc.user === currentUserEmail) && !foundDoc.isSavedFromOtherUser;
+            // Identifica se o usuário atual é o DONO ou VISITANTE com comparação segura
+            const isOwner = Boolean(
+                currentUserEmail && 
+                foundDoc.user && 
+                (foundDoc.user.trim().toLowerCase() === currentUserEmail.trim().toLowerCase()) && 
+                !foundDoc.isSavedFromOtherUser
+            );
 
             if (isOwner) {
-                // DONO: Lápis para editar ativado, botões de salvar/compartilhar ocultos, opção de excluir visível
+                // DONO: Lápis para editar ativado, botão de salvar OBRIGATORIAMENTE oculto
                 btnOpenEditPlaylistModal.style.display = "flex";
                 btnSavePlaylistBookmarkAction.style.display = "none";
-                btnSharePlaylistVisitorAction.style.display = "none";
+                btnSharePlaylistVisitorAction.style.display = "flex";
                 btnOptionDeletePlaylist.style.display = "flex";
             } else {
-                // VISITANTE (Prints A, B e C): Lápis e exclusão ocultos, botões de salvar e compartilhar ativados
+                // VISITANTE: Lápis e exclusão ocultos, salvar e compartilhar ativados
                 btnOpenEditPlaylistModal.style.display = "none";
                 btnSavePlaylistBookmarkAction.style.display = "flex";
                 btnSharePlaylistVisitorAction.style.display = "flex";
@@ -16790,6 +16898,14 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Se NÃO estiver logado: abre o modal de login
             if (!currentUserEmail) {
                 openAuthModal();
+                return;
+            }
+
+            // Impede o criador da playlist de salvar uma cópia para si mesmo
+            if (currentPlaylistData && currentPlaylistData.user && 
+                currentPlaylistData.user.trim().toLowerCase() === currentUserEmail.trim().toLowerCase() && 
+                !currentPlaylistData.isSavedFromOtherUser) {
+                showToast("Você é o criador desta playlist.");
                 return;
             }
 
@@ -17147,6 +17263,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                             mergedPlaylists.push(data);
                         }
                     });
+
+                    // Remove duplicatas caso a mesma playlist já tenha sido salva como cópia
+                    const uniquePlaylistMap = new Map();
+                    mergedPlaylists.forEach(pl => {
+                        const uniqueKey = pl.originalPlaylistId || pl.id;
+                        if (!uniquePlaylistMap.has(uniqueKey) || !pl.isSavedFromOtherUser) {
+                            uniquePlaylistMap.set(uniqueKey, pl);
+                        }
+                    });
+                    const cleanedMergedPlaylists = Array.from(uniquePlaylistMap.values());
 
                     // Garante a existência do "Watch later" e "Vídeos com Gostei" caso ainda não tenham sido criados
                     const hasWatchLater = mergedPlaylists.some(p => (p.title || "").toLowerCase().includes("watch later") || (p.title || "").toLowerCase().includes("assistir mais tarde"));
@@ -22454,19 +22580,30 @@ if (btnBackFromSearchInput) {
             // Agrupa os itens de acordo com o filtro selecionado (Print A7)
             filteredSearchResultsPool = [];
 
+            // Coleta todas as playlists públicas da memória e do pool de coleções
+            const matchingPublicPlaylists = [];
+            const seenPlaylistIds = new Set();
+
+            if (Array.isArray(loadedPublicPlaylistsPool)) {
+                loadedPublicPlaylistsPool.forEach(pl => {
+                    const plTitle = (pl.title || "").toLowerCase();
+                    if (plTitle.includes(cleanQuery) && !seenPlaylistIds.has(pl.id)) {
+                        seenPlaylistIds.add(pl.id);
+                        matchingPublicPlaylists.push(pl);
+                    }
+                });
+            }
+
             if (activeSearchFilterType === "canais") {
                 matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
             } else if (activeSearchFilterType === "playlists") {
-                // Playlists públicas existentes no dispositivo
-                const localPlaylists = JSON.parse(localStorage.getItem("fs_user_playlists") || "[]");
-                localPlaylists.forEach(pl => {
-                    if ((pl.title || "").toLowerCase().includes(cleanQuery)) {
-                        filteredSearchResultsPool.push({ type: "playlist", data: pl });
-                    }
+                matchingPublicPlaylists.forEach(pl => {
+                    filteredSearchResultsPool.push({ type: "playlist", data: pl });
                 });
             } else {
-                // Modo "Todos": Exibe episódios e coloca canais relevantes no resultado (Print A9)
+                // Modo "Todos": Exibe canais, playlists públicas encontradas e episódios
                 matchingChannels.forEach(c => filteredSearchResultsPool.push({ type: "channel", data: c }));
+                matchingPublicPlaylists.forEach(pl => filteredSearchResultsPool.push({ type: "playlist", data: pl }));
                 matchingEpisodes.forEach(ep => filteredSearchResultsPool.push({ type: "episode", data: ep }));
             }
 
@@ -22654,93 +22791,132 @@ if (btnBackFromSearchInput) {
             });
         }
 
-        // 4. PESQUISA POR VOZ COM SEGURAR-E-SOLTAR (PRINT A5)
+        // 4. PESQUISA POR VOZ COMPLETA COM TOQUE OFICIAL DO YOUTUBE (PRINT A5)
         if (btnTriggerVoiceSearchModal) {
             btnTriggerVoiceSearchModal.addEventListener("click", () => {
+                speechRecognizedFinalText = "";
                 txtVoiceTranscribedSpeech.textContent = "";
+                if (txtVoiceInstructionDesc) {
+                    txtVoiceInstructionDesc.textContent = "Toque no microfone abaixo e diga o nome do anime ou série que deseja buscar.";
+                }
                 modalVoiceSearch.classList.add("active");
+                // Inicia o microfone automaticamente ao abrir a tela
+                setTimeout(() => {
+                    startVoiceRecognition();
+                }, 300);
             });
         }
 
         if (btnCloseVoiceSearchModal) {
             btnCloseVoiceSearchModal.addEventListener("click", () => {
-                stopVoiceRecognition();
+                stopVoiceRecognition(false);
                 modalVoiceSearch.classList.remove("active");
             });
         }
 
-        // Inicializa API de Reconhecimento de Fala nativa
+        // Inicializa API de Reconhecimento de Fala com compatibilidade móvel total
         function initSpeechRecognition() {
             const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRec) return null;
+            if (!SpeechRec) {
+                alert("Seu navegador não tem suporte a reconhecimento de voz. Tente usar o Google Chrome.");
+                return null;
+            }
 
             const rec = new SpeechRec();
             rec.lang = "pt-BR";
-            rec.continuous = true;
+            rec.continuous = false;
             rec.interimResults = true;
+            rec.maxAlternatives = 1;
 
-            rec.onresult = (event) => {
-                let interim = "";
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        speechRecognizedFinalText += event.results[i][0].transcript;
-                    } else {
-                        interim += event.results[i][0].transcript;
-                    }
-                }
-                txtVoiceTranscribedSpeech.textContent = speechRecognizedFinalText || interim;
+            rec.onstart = () => {
+                isVoiceRecognizing = true;
+                btnVoiceMicHoldToTalk.classList.add("recording");
+                txtVoiceTranscribedSpeech.textContent = "Ouvindo agora...";
             };
 
-            rec.onerror = () => {
-                stopVoiceRecognition();
+            rec.onresult = (event) => {
+                let speechResult = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    speechResult += event.results[i][0].transcript;
+                }
+                speechRecognizedFinalText = speechResult;
+                txtVoiceTranscribedSpeech.textContent = speechResult;
+            };
+
+            rec.onspeechend = () => {
+                // Ao terminar de falar, finaliza e executa a busca automaticamente
+                setTimeout(() => {
+                    stopVoiceRecognition(true);
+                }, 400);
+            };
+
+            rec.onerror = (event) => {
+                isVoiceRecognizing = false;
+                btnVoiceMicHoldToTalk.classList.remove("recording");
+                if (event.error === "no-speech") {
+                    txtVoiceTranscribedSpeech.textContent = "Nenhuma voz foi ouvida. Tente falar novamente.";
+                } else if (event.error === "not-allowed") {
+                    txtVoiceTranscribedSpeech.textContent = "Permissão de microfone negada. Ative nas permissões do navegador.";
+                }
+            };
+
+            rec.onend = () => {
+                isVoiceRecognizing = false;
+                btnVoiceMicHoldToTalk.classList.remove("recording");
             };
 
             return rec;
         }
 
         function startVoiceRecognition() {
-            speechRecognizedFinalText = "";
-            txtVoiceTranscribedSpeech.textContent = "Ouvindo...";
-            btnVoiceMicHoldToTalk.classList.add("recording");
-            isVoiceRecognizing = true;
+            if (isVoiceRecognizing) {
+                stopVoiceRecognition(true);
+                return;
+            }
 
+            speechRecognizedFinalText = "";
             if (!speechRecognitionInstance) {
                 speechRecognitionInstance = initSpeechRecognition();
             }
 
             if (speechRecognitionInstance) {
-                try { speechRecognitionInstance.start(); } catch(e) {}
+                try {
+                    speechRecognitionInstance.start();
+                } catch(e) {
+                    try {
+                        speechRecognitionInstance.stop();
+                        speechRecognitionInstance.start();
+                    } catch(err) {}
+                }
             }
         }
 
-        function stopVoiceRecognition() {
-            if (!isVoiceRecognizing) return;
+        function stopVoiceRecognition(shouldExecuteSearch = true) {
             isVoiceRecognizing = false;
             btnVoiceMicHoldToTalk.classList.remove("recording");
 
             if (speechRecognitionInstance) {
-                try { speechRecognitionInstance.stop(); } catch(e) {}
+                try {
+                    speechRecognitionInstance.stop();
+                } catch(e) {}
             }
 
-            const recognizedQuery = txtVoiceTranscribedSpeech.textContent.replace("Ouvindo...", "").trim();
-            if (recognizedQuery) {
+            const cleanQuery = speechRecognizedFinalText.trim();
+            if (shouldExecuteSearch && cleanQuery && cleanQuery !== "Ouvindo agora...") {
                 modalVoiceSearch.classList.remove("active");
-                inputGlobalSearchQuery.value = recognizedQuery;
-                executeGlobalSearch(recognizedQuery);
+                inputGlobalSearchQuery.value = cleanQuery;
+                executeGlobalSearch(cleanQuery);
+                showToast(`Buscando por: ${cleanQuery}`);
             }
         }
 
-        // Eventos de Pressionar e Soltar (Mouse e Toque no celular)
-        btnVoiceMicHoldToTalk.addEventListener("mousedown", startVoiceRecognition);
-        btnVoiceMicHoldToTalk.addEventListener("touchstart", (e) => {
-            e.preventDefault();
-            startVoiceRecognition();
-        });
-
-        btnVoiceMicHoldToTalk.addEventListener("mouseup", stopVoiceRecognition);
-        btnVoiceMicHoldToTalk.addEventListener("touchend", (e) => {
-            e.preventDefault();
-            stopVoiceRecognition();
+        // Toque simples para alternar escuta (Microfone interativo)
+        btnVoiceMicHoldToTalk.addEventListener("click", () => {
+            if (isVoiceRecognizing) {
+                stopVoiceRecognition(true);
+            } else {
+                startVoiceRecognition();
+            }
         });
 
         // 5. MODAL DE FILTRO DE TIPO: [Todos ▾] (PRINT A7)
