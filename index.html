@@ -13127,6 +13127,218 @@
             <svg viewBox="0 0 24 24"><path fill="#ffffff" d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
         </button>
 
+        <!-- ==========================================================================
+             TELA DO PERFIL PESSOAL / CANAL DO USUÁRIO (PRINTS A, A1, A2, A3, A4, A5, C1)
+             ========================================================================== -->
+        <section class="series-channel-view" id="viewUserChannel">
+            <div class="channel-top-bar">
+                <div class="channel-top-bar-left">
+                    <button class="yt-icon-btn" id="btnBackFromUserChannel" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span class="channel-top-bar-title" id="userChannelTopBarTitle">Mouton</span>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn" id="btnUserChannelSearchHeader" type="button" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </button>
+                    <button class="yt-icon-btn" id="btnUserChannelKebabHeader" type="button" aria-label="Opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Contracapa Horizontal do Usuário (Toque duplo altera foto) -->
+            <div class="channel-banner-container" id="userChannelBannerBox" title="Dê 2 toques para alterar a capa">
+                <img id="userChannelBannerImg" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Banner do Usuário">
+            </div>
+
+            <!-- Cabeçalho de Perfil do Usuário -->
+            <div class="channel-profile-header">
+                <div class="channel-profile-row">
+                    <!-- Avatar Redondo (Toque duplo altera foto de perfil) -->
+                    <div class="channel-avatar-circle" id="userChannelAvatarBox" title="Dê 2 toques para alterar a foto">
+                        <img id="userChannelAvatarImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" alt="Avatar">
+                    </div>
+                    <div>
+                        <h1 class="channel-name-h1" id="userChannelNameH1">Mouton</h1>
+                        <div class="channel-handle-text" id="userChannelHandleText">@kalebmouton404</div>
+                        <div class="channel-meta-counters">
+                            <span id="userChannelFriendsCount">0 amigos</span>
+                            <span>•</span>
+                            <span id="userChannelVideosCount">0 vídeos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biografia do Usuário (2 linhas padrão, expande até 3 linhas ao tocar em '...mais') -->
+                <div class="channel-desc-preview-row" id="userChannelBioBox" style="-webkit-line-clamp: 2;">
+                    <span id="userChannelBioText">Música</span>
+                    <span class="channel-more-text" id="btnUserChannelBioMore">...mais</span>
+                </div>
+
+                <!-- Botões de Ação para o Próprio Usuário (Dono) -->
+                <div class="profile-actions-row" id="userChannelOwnerActionsRow" style="padding: 6px 0 0 0; display: flex; gap: 8px;">
+                    <button class="profile-pill-btn" id="btnUserChannelCustomizeProfile" type="button" style="background-color: #272727; font-weight: 700; height: 38px;">Personalizar o perfil</button>
+                    <button class="profile-pill-btn" id="btnUserChannelManageVideos" type="button" style="background-color: #272727; font-weight: 700; height: 38px;">Gerenciar vídeos</button>
+                </div>
+
+                <!-- Botões de Ação para Visitantes (Outros Usuários) -->
+                <div class="profile-actions-row" id="userChannelVisitorActionsRow" style="padding: 6px 0 0 0; display: none; gap: 8px;">
+                    <button class="profile-pill-btn" id="btnUserChannelFriendAction" type="button" style="background-color: #272727; font-weight: 700; height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                        <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <span id="txtUserChannelFriendAction">adicionar</span>
+                    </button>
+                    <button class="profile-pill-btn" id="btnUserChannelSendMessage" type="button" style="background-color: #272727; font-weight: 700; height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                        <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                        <span>mensagem</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Abas do Canal do Usuário -->
+            <div class="channel-tabs-bar" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                <button class="channel-tab-item active" id="tabUserChannelVideos" type="button">Vídeos</button>
+                <button class="channel-tab-item" id="tabUserChannelShorts" type="button">Shorts</button>
+                <button class="channel-tab-item" id="tabUserChannelPlaylists" type="button">Playlists</button>
+                <button class="channel-tab-item" id="tabUserChannelPosts" type="button">Posts</button>
+                <button class="channel-tab-item" id="tabUserChannelSearch" type="button">Pesquisar</button>
+            </div>
+
+            <!-- Painel 1: Vídeos do Usuário (Prints A, A1, A2, A3) -->
+            <div class="channel-tab-pane active" id="paneUserChannelVideos">
+                <div class="channel-chips-filter-row">
+                    <button class="channel-chip-pill active" id="chipUserSortRecent" type="button">Mais recentes</button>
+                    <button class="channel-chip-pill" id="chipUserSortPopular" type="button">Em alta</button>
+                    <button class="channel-chip-pill" id="chipUserSortOldest" type="button">Mais antigos</button>
+                </div>
+                <div id="userChannelVideosListContainer" style="display: flex; flex-direction: column;"></div>
+            </div>
+
+            <!-- Painel 2: Shorts do Usuário (Prints A4 e C1) -->
+            <div class="channel-tab-pane" id="paneUserChannelShorts">
+                <div class="channel-shorts-tab-grid" id="userChannelShortsGridContainer"></div>
+            </div>
+
+            <!-- Painel 3: Playlists do Usuário (Print A5) -->
+            <div class="channel-tab-pane" id="paneUserChannelPlaylists">
+                <div style="padding: 10px 16px;">
+                    <button class="channel-chip-pill active" id="btnUserChannelPlaylistSortDropdown" type="button" style="display: inline-flex; align-items: center; gap: 6px;">
+                        <span id="txtUserChannelPlaylistSortLabel">Data de inclusão (mais recente)</span>
+                        <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    </button>
+                </div>
+                <div id="userChannelPlaylistsListContainer" style="display: flex; flex-direction: column;"></div>
+            </div>
+
+            <!-- Painel 4: Posts Comunitários do Usuário -->
+            <div class="channel-tab-pane" id="paneUserChannelPosts">
+                <div id="userChannelPostsListContainer" style="display: flex; flex-direction: column;"></div>
+            </div>
+
+            <!-- Painel 5: Pesquisar Dentro do Canal -->
+            <div class="channel-tab-pane" id="paneUserChannelSearch">
+                <div style="padding: 14px 16px;">
+                    <div class="search-input-pill-box">
+                        <input type="text" id="inputSearchInsideUserChannel" placeholder="Pesquisar canal">
+                        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: #ffffff;"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </div>
+                </div>
+                <div id="userChannelSearchResultsList" style="display: flex; flex-direction: column;"></div>
+            </div>
+        </section>
+
+        <!-- MODAL: PERSONALIZAR O PERFIL (NOME E BIOGRAFIA) -->
+        <div class="yt-center-modal-backdrop" id="modalCustomizeUserProfile" style="z-index: 10045;">
+            <div class="yt-center-dialog">
+                <h3 style="font-size: 17px; font-weight: 700; color: #ffffff;">Personalizar o perfil</h3>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11.5px; color: #aaaaaa;">Nome do usuário</label>
+                    <input type="text" id="inputEditProfileUsername" class="yt-input" placeholder="Seu nome no aplicativo">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11.5px; color: #aaaaaa;">Biografia do perfil</label>
+                    <textarea id="txtAreaEditProfileBio" class="yt-input" style="height: 90px; resize: none;" placeholder="Escreva sobre você ou seu conteúdo"></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                    <button type="button" class="profile-pill-btn" id="btnCancelCustomizeProfile" style="flex: none; padding: 0 16px;">Cancelar</button>
+                    <button type="button" class="yt-btn-primary" id="btnConfirmCustomizeProfile" style="padding: 8px 22px;">Concluir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: ALTERAR FOTO DE PERFIL (AVATAR) -->
+        <div class="yt-center-modal-backdrop" id="modalEditUserAvatarUrl" style="z-index: 10045;">
+            <div class="yt-center-dialog">
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">Alterar foto de perfil</h3>
+                <div class="yt-form-control">
+                    <label style="color: #aaaaaa; font-size: 12px;">Link (URL) da imagem:</label>
+                    <input type="url" id="inputUserAvatarUrlModal" class="yt-input" placeholder="Cole o link da foto de perfil aqui">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                    <button type="button" class="profile-pill-btn" id="btnCancelUserAvatarModal" style="flex: none; padding: 0 16px;">Cancelar</button>
+                    <button type="button" class="yt-btn-primary" id="btnConfirmUserAvatarModal" style="padding: 8px 22px;">Concluir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: ALTERAR FOTO DE CAPA (BANNER) -->
+        <div class="yt-center-modal-backdrop" id="modalEditUserBannerUrl" style="z-index: 10045;">
+            <div class="yt-center-dialog">
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">Alterar foto de capa</h3>
+                <div class="yt-form-control">
+                    <label style="color: #aaaaaa; font-size: 12px;">Link (URL) da imagem da capa:</label>
+                    <input type="url" id="inputUserBannerUrlModal" class="yt-input" placeholder="Cole o link da foto de capa aqui">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                    <button type="button" class="profile-pill-btn" id="btnCancelUserBannerModal" style="flex: none; padding: 0 16px;">Cancelar</button>
+                    <button type="button" class="yt-btn-primary" id="btnConfirmUserBannerModal" style="padding: 8px 22px;">Concluir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA INFERIOR: KEBAB DO VÍDEO DO USUÁRIO (EDITAR / EXCLUIR) -->
+        <div class="accounts-drawer" id="drawerUserVideoManageKebab" style="z-index: 10035;">
+            <div class="accounts-sheet" style="padding: 10px 0 20px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnActionEditUserVideo">
+                    <div class="account-item-left">
+                        <svg style="width: 20px; height: 20px; fill: #ffffff;" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                        <span style="font-size: 14.5px;">Editar vídeo</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnActionDeleteUserVideo">
+                    <div class="account-item-left">
+                        <svg style="width: 20px; height: 20px; fill: #ff453a;" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        <span style="font-size: 14.5px; color: #ff453a;">Excluir vídeo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL: EDITAR DETALHES DO VÍDEO POSTADO -->
+        <div class="yt-center-modal-backdrop" id="modalEditVideoDetails" style="z-index: 10045;">
+            <div class="yt-center-dialog">
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">Editar vídeo</h3>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11.5px; color: #aaaaaa;">URL do vídeo (Embed)</label>
+                    <input type="text" id="inputEditVideoUrlField" class="yt-input" placeholder="Cole o novo link do vídeo">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11.5px; color: #aaaaaa;">Foto do vídeo (Capa)</label>
+                    <input type="text" id="inputEditVideoThumbField" class="yt-input" placeholder="Cole o link da capa">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11.5px; color: #aaaaaa;">Tempo do vídeo (Duração)</label>
+                    <input type="text" id="inputEditVideoDurationField" class="yt-input" placeholder="Ex.: 03:09 ou 24:00">
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+                    <button type="button" class="profile-pill-btn" id="btnCancelEditVideoDetails" style="flex: none; padding: 0 16px;">Cancelar</button>
+                    <button type="button" class="yt-btn-primary" id="btnConfirmEditVideoDetails" style="padding: 8px 22px;">Confirmar</button>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ==========================================================================
@@ -16461,6 +16673,764 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         // E: Abre E1 Filmes
         document.getElementById("btnOpenMovies").addEventListener("click", () => openScreen(viewMovies));
+
+        // Botão "Seus vídeos" da tela Você abre o canal pessoal do próprio usuário logado
+        const btnOpenYourVideos = document.querySelector(".profile-menu-item");
+        if (btnOpenYourVideos) {
+            btnOpenYourVideos.addEventListener("click", () => {
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
+                openUserProfilePage(currentUserEmail);
+            });
+        }
+
+        // ==========================================================================
+        // MOTOR DO PERFIL PESSOAL DO USUÁRIO (CANAL DO USUÁRIO & AMIZADES)
+        // ==========================================================================
+        const viewUserChannel = document.getElementById("viewUserChannel");
+        const btnBackFromUserChannel = document.getElementById("btnBackFromUserChannel");
+        const userChannelTopBarTitle = document.getElementById("userChannelTopBarTitle");
+        const userChannelBannerImg = document.getElementById("userChannelBannerImg");
+        const userChannelAvatarImg = document.getElementById("userChannelAvatarImg");
+        const userChannelNameH1 = document.getElementById("userChannelNameH1");
+        const userChannelHandleText = document.getElementById("userChannelHandleText");
+        const userChannelFriendsCount = document.getElementById("userChannelFriendsCount");
+        const userChannelVideosCount = document.getElementById("userChannelVideosCount");
+        const userChannelBioBox = document.getElementById("userChannelBioBox");
+        const userChannelBioText = document.getElementById("userChannelBioText");
+        const btnUserChannelBioMore = document.getElementById("btnUserChannelBioMore");
+
+        const userChannelOwnerActionsRow = document.getElementById("userChannelOwnerActionsRow");
+        const userChannelVisitorActionsRow = document.getElementById("userChannelVisitorActionsRow");
+        const btnUserChannelCustomizeProfile = document.getElementById("btnUserChannelCustomizeProfile");
+        const btnUserChannelManageVideos = document.getElementById("btnUserChannelManageVideos");
+        const btnUserChannelFriendAction = document.getElementById("btnUserChannelFriendAction");
+        const txtUserChannelFriendAction = document.getElementById("txtUserChannelFriendAction");
+
+        const tabUserChannelVideos = document.getElementById("tabUserChannelVideos");
+        const tabUserChannelShorts = document.getElementById("tabUserChannelShorts");
+        const tabUserChannelPlaylists = document.getElementById("tabUserChannelPlaylists");
+        const tabUserChannelPosts = document.getElementById("tabUserChannelPosts");
+        const tabUserChannelSearch = document.getElementById("tabUserChannelSearch");
+
+        const paneUserChannelVideos = document.getElementById("paneUserChannelVideos");
+        const paneUserChannelShorts = document.getElementById("paneUserChannelShorts");
+        const paneUserChannelPlaylists = document.getElementById("paneUserChannelPlaylists");
+        const paneUserChannelPosts = document.getElementById("paneUserChannelPosts");
+        const paneUserChannelSearch = document.getElementById("paneUserChannelSearch");
+
+        const userChannelVideosListContainer = document.getElementById("userChannelVideosListContainer");
+        const userChannelShortsGridContainer = document.getElementById("userChannelShortsGridContainer");
+        const userChannelPlaylistsListContainer = document.getElementById("userChannelPlaylistsListContainer");
+        const userChannelSearchResultsList = document.getElementById("userChannelSearchResultsList");
+        const inputSearchInsideUserChannel = document.getElementById("inputSearchInsideUserChannel");
+
+        const chipUserSortRecent = document.getElementById("chipUserSortRecent");
+        const chipUserSortPopular = document.getElementById("chipUserSortPopular");
+        const chipUserSortOldest = document.getElementById("chipUserSortOldest");
+
+        // Modais
+        const modalCustomizeUserProfile = document.getElementById("modalCustomizeUserProfile");
+        const inputEditProfileUsername = document.getElementById("inputEditProfileUsername");
+        const txtAreaEditProfileBio = document.getElementById("txtAreaEditProfileBio");
+        const btnCancelCustomizeProfile = document.getElementById("btnCancelCustomizeProfile");
+        const btnConfirmCustomizeProfile = document.getElementById("btnConfirmCustomizeProfile");
+
+        const modalEditUserAvatarUrl = document.getElementById("modalEditUserAvatarUrl");
+        const inputUserAvatarUrlModal = document.getElementById("inputUserAvatarUrlModal");
+        const btnCancelUserAvatarModal = document.getElementById("btnCancelUserAvatarModal");
+        const btnConfirmUserAvatarModal = document.getElementById("btnConfirmUserAvatarModal");
+
+        const modalEditUserBannerUrl = document.getElementById("modalEditUserBannerUrl");
+        const inputUserBannerUrlModal = document.getElementById("inputUserBannerUrlModal");
+        const btnCancelUserBannerModal = document.getElementById("btnCancelUserBannerModal");
+        const btnConfirmUserBannerModal = document.getElementById("btnConfirmUserBannerModal");
+
+        const drawerUserVideoManageKebab = document.getElementById("drawerUserVideoManageKebab");
+        const btnActionEditUserVideo = document.getElementById("btnActionEditUserVideo");
+        const btnActionDeleteUserVideo = document.getElementById("btnActionDeleteUserVideo");
+        const modalEditVideoDetails = document.getElementById("modalEditVideoDetails");
+        const inputEditVideoUrlField = document.getElementById("inputEditVideoUrlField");
+        const inputEditVideoThumbField = document.getElementById("inputEditVideoThumbField");
+        const inputEditVideoDurationField = document.getElementById("inputEditVideoDurationField");
+        const btnCancelEditVideoDetails = document.getElementById("btnCancelEditVideoDetails");
+        const btnConfirmEditVideoDetails = document.getElementById("btnConfirmEditVideoDetails");
+
+        let activeTargetUserEmail = "";
+        let currentUserVideoBeingManaged = null;
+        let userChannelSortMode = "recent";
+        let lastAvatarTapTime = 0;
+        let lastBannerTapTime = 0;
+
+        // Função universal para abrir a página de qualquer usuário clicando na sua foto ou nome
+        async function openUserProfilePage(targetEmail) {
+            if (!targetEmail) return;
+            activeTargetUserEmail = targetEmail.trim();
+            const isOwner = Boolean(currentUserEmail && (activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
+
+            openScreen(viewUserChannel);
+            window.scrollTo(0, 0);
+
+            // Carrega dados do perfil (do Firestore ou localStorage)
+            let profileData = {
+                username: getNameFromEmail(activeTargetUserEmail),
+                bio: "Música",
+                avatarUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200",
+                bannerUrl: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800",
+                friends: []
+            };
+
+            const localSaved = localStorage.getItem(`profile_${activeTargetUserEmail}`);
+            if (localSaved) {
+                try {
+                    profileData = { ...profileData, ...JSON.parse(localSaved) };
+                } catch(e) {}
+            }
+
+            try {
+                const userDocSnap = await getDoc(doc(db, "users_profiles", activeTargetUserEmail.replace(/[^a-zA-Z0-9]/g, '_')));
+                if (userDocSnap.exists()) {
+                    profileData = { ...profileData, ...userDocSnap.data() };
+                }
+            } catch(e) {}
+
+            // Preenche cabeçalho
+            const cleanName = profileData.username || getNameFromEmail(activeTargetUserEmail);
+            const handleText = "@" + cleanName.toLowerCase().replace(/\s+/g, '');
+
+            userChannelTopBarTitle.textContent = cleanName;
+            userChannelNameH1.textContent = cleanName;
+            userChannelHandleText.textContent = handleText;
+            userChannelAvatarImg.src = profileData.avatarUrl;
+            userChannelBannerImg.src = profileData.bannerUrl;
+
+            // Biografia (2 linhas padrão)
+            userChannelBioText.textContent = profileData.bio || "Música";
+            userChannelBioBox.style.webkitLineClamp = "2";
+
+            // Amigos e Vídeos reais
+            const friendsList = Array.isArray(profileData.friends) ? profileData.friends : [];
+            const friendsCount = friendsList.length;
+            userChannelFriendsCount.textContent = `${friendsCount} ${friendsCount === 1 ? 'amigo' : 'amigos'}`;
+
+            // Exibe botões do Dono vs Visitante
+            if (isOwner) {
+                userChannelOwnerActionsRow.style.display = "flex";
+                userChannelVisitorActionsRow.style.display = "none";
+            } else {
+                userChannelOwnerActionsRow.style.display = "none";
+                userChannelVisitorActionsRow.style.display = "flex";
+                syncFriendshipStateWithTargetUser(activeTargetUserEmail);
+            }
+
+            // Ativa aba padrão "Vídeos"
+            activateUserChannelTab(tabUserChannelVideos, paneUserChannelVideos);
+
+            // Carrega vídeos e playlists desse usuário específico
+            loadUserChannelContent(activeTargetUserEmail, isOwner);
+        }
+
+        if (btnBackFromUserChannel) {
+            btnBackFromUserChannel.onclick = () => {
+                navigateBack();
+            };
+        }
+
+        // Alternância de Abas
+        function activateUserChannelTab(tabBtn, paneEl) {
+            [tabUserChannelVideos, tabUserChannelShorts, tabUserChannelPlaylists, tabUserChannelPosts, tabUserChannelSearch].forEach(b => b.classList.remove("active"));
+            [paneUserChannelVideos, paneUserChannelShorts, paneUserChannelPlaylists, paneUserChannelPosts, paneUserChannelSearch].forEach(p => p.classList.remove("active"));
+
+            tabBtn.classList.add("active");
+            paneEl.classList.add("active");
+        }
+
+        tabUserChannelVideos.onclick = () => activateUserChannelTab(tabUserChannelVideos, paneUserChannelVideos);
+        tabUserChannelShorts.onclick = () => activateUserChannelTab(tabUserChannelShorts, paneUserChannelShorts);
+        tabUserChannelPlaylists.onclick = () => activateUserChannelTab(tabUserChannelPlaylists, paneUserChannelPlaylists);
+        tabUserChannelPosts.onclick = () => activateUserChannelTab(tabUserChannelPosts, paneUserChannelPosts);
+        tabUserChannelSearch.onclick = () => {
+            activateUserChannelTab(tabUserChannelSearch, paneUserChannelSearch);
+            inputSearchInsideUserChannel.focus();
+        };
+
+        // Biografia: expande até 3 linhas ao tocar em '...mais'
+        if (btnUserChannelBioMore) {
+            btnUserChannelBioMore.onclick = (e) => {
+                e.stopPropagation();
+                if (userChannelBioBox.style.webkitLineClamp === "3") {
+                    userChannelBioBox.style.webkitLineClamp = "2";
+                    btnUserChannelBioMore.textContent = "...mais";
+                } else {
+                    userChannelBioBox.style.webkitLineClamp = "3";
+                    btnUserChannelBioMore.textContent = " menos";
+                }
+            };
+        }
+
+        // ==========================================================================
+        // SISTEMA DE AMIZADES (ADICIONAR -> CANCELAR -> AMIGOS & RECUSA DEFINITIVA)
+        // ==========================================================================
+        async function syncFriendshipStateWithTargetUser(targetUserEmail) {
+            if (!currentUserEmail) {
+                txtUserChannelFriendAction.textContent = "adicionar";
+                btnUserChannelFriendAction.style.display = "inline-flex";
+                return;
+            }
+
+            const myKey = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+            const targetKey = targetUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+
+            try {
+                // 1. Verifica se já são amigos
+                const myProfileSnap = await getDoc(doc(db, "users_profiles", myKey));
+                if (myProfileSnap.exists()) {
+                    const friends = myProfileSnap.data().friends || [];
+                    if (friends.includes(targetUserEmail)) {
+                        txtUserChannelFriendAction.textContent = "amigos";
+                        btnUserChannelFriendAction.style.display = "inline-flex";
+                        return;
+                    }
+                }
+
+                // 2. Verifica se a solicitação foi recusada
+                const reqDocKey1 = `${myKey}___TO___${targetKey}`;
+                const reqSnap1 = await getDoc(doc(db, "friend_requests", reqDocKey1));
+                if (reqSnap1.exists()) {
+                    const reqData = reqSnap1.data();
+                    if (reqData.status === "rejected") {
+                        // O outro recusou: o botão 'adicionar' some definitivamente para quem enviou
+                        btnUserChannelFriendAction.style.display = "none";
+                        return;
+                    } else if (reqData.status === "pending") {
+                        txtUserChannelFriendAction.textContent = "cancelar";
+                        btnUserChannelFriendAction.style.display = "inline-flex";
+                        return;
+                    }
+                }
+
+                // Caso normal: botão 'adicionar' ativo
+                txtUserChannelFriendAction.textContent = "adicionar";
+                btnUserChannelFriendAction.style.display = "inline-flex";
+            } catch(e) {}
+        }
+
+        if (btnUserChannelFriendAction) {
+            btnUserChannelFriendAction.onclick = async () => {
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
+
+                const currentState = txtUserChannelFriendAction.textContent.trim().toLowerCase();
+                const myKey = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                const targetKey = activeTargetUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                const reqDocRef = doc(db, "friend_requests", `${myKey}___TO___${targetKey}`);
+
+                if (currentState === "adicionar") {
+                    // Envia solicitação e muda para 'cancelar'
+                    txtUserChannelFriendAction.textContent = "cancelar";
+                    await setDoc(reqDocRef, {
+                        from: currentUserEmail,
+                        fromName: getNameFromEmail(currentUserEmail),
+                        to: activeTargetUserEmail,
+                        status: "pending",
+                        createdAt: serverTimestamp()
+                    });
+                    showToast("Solicitação de amizade enviada!");
+                } else if (currentState === "cancelar") {
+                    // Cancela e volta para 'adicionar'
+                    txtUserChannelFriendAction.textContent = "adicionar";
+                    await deleteDoc(reqDocRef);
+                    showToast("Solicitação cancelada.");
+                }
+            };
+        }
+
+        // ==========================================================================
+        // NOTIFICAÇÃO NO SININHO: ACEITAR OU RECUSAR AMIZADE (SIM / NÃO)
+        // ==========================================================================
+        function initFriendRequestsNotificationListener() {
+            if (!currentUserEmail) return;
+
+            onSnapshot(collection(db, "friend_requests"), (snapshot) => {
+                snapshot.forEach(docSnap => {
+                    const req = docSnap.data();
+                    if (req.to && req.to.toLowerCase() === currentUserEmail.toLowerCase() && req.status === "pending") {
+                        // Adiciona a notificação no painel de notificações
+                        const notifsContainer = document.getElementById("notifsDynamicContainer");
+                        if (!notifsContainer) return;
+
+                        const existingNotification = document.getElementById(`notif_req_${docSnap.id}`);
+                        if (existingNotification) return;
+
+                        const row = document.createElement("div");
+                        row.className = "notif-item-row";
+                        row.id = `notif_req_${docSnap.id}`;
+                        row.style.flexDirection = "column";
+                        row.style.gap = "8px";
+
+                        row.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div class="notif-avatar-circle" style="background: #9c27b0; color: #ffffff; font-weight: 700; display: flex; align-items: center; justify-content: center;">
+                                    ${(req.fromName || "U").charAt(0).toUpperCase()}
+                                </div>
+                                <div class="notif-texts-box">
+                                    <div class="notif-series-title">${escapeHtml(req.fromName)}</div>
+                                    <div class="notif-comment-text">te enviou uma solicitação de amizade. Deseja aceitar?</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 10px; align-self: flex-end; margin-top: 4px;">
+                                <button type="button" class="btn-modal-blue-close btnRejectFriendRequest" style="height: 32px; padding: 0 16px; font-size: 12.5px;">Não</button>
+                                <button type="button" class="btn-modal-white-confirm btnAcceptFriendRequest" style="height: 32px; padding: 0 16px; font-size: 12.5px;">Sim</button>
+                            </div>
+                        `;
+
+                        // Clicar em "Sim" (Aceitar amizade)
+                        row.querySelector(".btnAcceptFriendRequest").onclick = async () => {
+                            await setDoc(doc(db, "friend_requests", docSnap.id), { status: "accepted" }, { merge: true });
+
+                            // Adiciona amigos no perfil dos dois
+                            const myKey = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                            const senderKey = req.from.replace(/[^a-zA-Z0-9]/g, '_');
+
+                            try {
+                                const mySnap = await getDoc(doc(db, "users_profiles", myKey));
+                                const myFriends = mySnap.exists() ? (mySnap.data().friends || []) : [];
+                                if (!myFriends.includes(req.from)) myFriends.push(req.from);
+                                await setDoc(doc(db, "users_profiles", myKey), { friends: myFriends }, { merge: true });
+
+                                const senderSnap = await getDoc(doc(db, "users_profiles", senderKey));
+                                const senderFriends = senderSnap.exists() ? (senderSnap.data().friends || []) : [];
+                                if (!senderFriends.includes(currentUserEmail)) senderFriends.push(currentUserEmail);
+                                await setDoc(doc(db, "users_profiles", senderKey), { friends: senderFriends }, { merge: true });
+                            } catch(e) {}
+
+                            row.remove();
+                            showToast(`Agora você e ${req.fromName} são amigos!`);
+                        };
+
+                        // Clicar em "Não" (Recusar: o botão 'adicionar' do outro some definitivamente)
+                        row.querySelector(".btnRejectFriendRequest").onclick = async () => {
+                            await setDoc(doc(db, "friend_requests", docSnap.id), { status: "rejected" }, { merge: true });
+                            row.remove();
+                            showToast("Solicitação de amizade recusada.");
+                        };
+
+                        notifsContainer.prepend(row);
+                    }
+                });
+            });
+        }
+
+        // ==========================================================================
+        // EDIÇÃO POR TOQUE DUPLO NA FOTO DE PERFIL E NA FOTO DE CAPA
+        // ==========================================================================
+        const userChannelAvatarBox = document.getElementById("userChannelAvatarBox");
+        const userChannelBannerBox = document.getElementById("userChannelBannerBox");
+
+        // Toque duplo ou duplo clique no Avatar
+        function handleAvatarDoubleClick() {
+            const isOwner = Boolean(currentUserEmail && (activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
+            if (!isOwner) return;
+
+            inputUserAvatarUrlModal.value = userChannelAvatarImg.src;
+            modalEditUserAvatarUrl.classList.add("active");
+            inputUserAvatarUrlModal.focus();
+        }
+
+        if (userChannelAvatarBox) {
+            userChannelAvatarBox.addEventListener("dblclick", handleAvatarDoubleClick);
+            userChannelAvatarBox.addEventListener("touchend", (e) => {
+                const now = Date.now();
+                if (now - lastAvatarTapTime < 300) {
+                    handleAvatarDoubleClick();
+                }
+                lastAvatarTapTime = now;
+            });
+        }
+
+        btnCancelUserAvatarModal.onclick = () => modalEditUserAvatarUrl.classList.remove("active");
+        btnConfirmUserAvatarModal.onclick = async () => {
+            const url = inputUserAvatarUrlModal.value.trim();
+            if (url) {
+                userChannelAvatarImg.src = url;
+                const key = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                await setDoc(doc(db, "users_profiles", key), { avatarUrl: url }, { merge: true });
+                showToast("Foto de perfil atualizada!");
+            }
+            modalEditUserAvatarUrl.classList.remove("active");
+        };
+
+        // Toque duplo ou duplo clique na Capa (Banner)
+        function handleBannerDoubleClick() {
+            const isOwner = Boolean(currentUserEmail && (activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
+            if (!isOwner) return;
+
+            inputUserBannerUrlModal.value = userChannelBannerImg.src;
+            modalEditUserBannerUrl.classList.add("active");
+            inputUserBannerUrlModal.focus();
+        }
+
+        if (userChannelBannerBox) {
+            userChannelBannerBox.addEventListener("dblclick", handleBannerDoubleClick);
+            userChannelBannerBox.addEventListener("touchend", (e) => {
+                const now = Date.now();
+                if (now - lastBannerTapTime < 300) {
+                    handleBannerDoubleClick();
+                }
+                lastBannerTapTime = now;
+            });
+        }
+
+        btnCancelUserBannerModal.onclick = () => modalEditUserBannerUrl.classList.remove("active");
+        btnConfirmUserBannerModal.onclick = async () => {
+            const url = inputUserBannerUrlModal.value.trim();
+            if (url) {
+                userChannelBannerImg.src = url;
+                const key = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                await setDoc(doc(db, "users_profiles", key), { bannerUrl: url }, { merge: true });
+                showToast("Foto de capa atualizada!");
+            }
+            modalEditUserBannerUrl.classList.remove("active");
+        };
+
+        // ==========================================================================
+        // BOTÃO PERSONALIZAR O PERFIL (NOME E BIOGRAFIA)
+        // ==========================================================================
+        if (btnUserChannelCustomizeProfile) {
+            btnUserChannelCustomizeProfile.onclick = () => {
+                inputEditProfileUsername.value = userChannelNameH1.textContent;
+                txtAreaEditProfileBio.value = userChannelBioText.textContent;
+                modalCustomizeUserProfile.classList.add("active");
+            };
+        }
+
+        btnCancelCustomizeProfile.onclick = () => modalCustomizeUserProfile.classList.remove("active");
+        btnConfirmCustomizeProfile.onclick = async () => {
+            const newName = inputEditProfileUsername.value.trim();
+            const newBio = txtAreaEditProfileBio.value.trim();
+
+            if (newName) {
+                userChannelNameH1.textContent = newName;
+                userChannelTopBarTitle.textContent = newName;
+                userChannelHandleText.textContent = "@" + newName.toLowerCase().replace(/\s+/g, '');
+            }
+            if (newBio) {
+                userChannelBioText.textContent = newBio;
+            }
+
+            const key = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+            await setDoc(doc(db, "users_profiles", key), {
+                username: newName || userChannelNameH1.textContent,
+                bio: newBio || userChannelBioText.textContent
+            }, { merge: true });
+
+            modalCustomizeUserProfile.classList.remove("active");
+            showToast("Perfil atualizado com sucesso!");
+        };
+
+        // ==========================================================================
+        // CARREGAMENTO DOS VÍDEOS, SHORTS E PLAYLISTS DO CANAL ESPECÍFICO
+        // ==========================================================================
+        function loadUserChannelContent(targetEmail, isOwner) {
+            onSnapshot(frutasColecao, (snapshot) => {
+                const userVideos = [];
+                const userShorts = [];
+
+                snapshot.forEach(docSnap => {
+                    const ep = { id: docSnap.id, ...docSnap.data() };
+                    const isAuthor = (ep.author && ep.author.toLowerCase() === targetEmail.toLowerCase());
+                    const isChannel = (ep.channel && ep.channel.toLowerCase() === targetEmail.toLowerCase());
+
+                    if (isAuthor || isChannel) {
+                        if (ep.contentType === "Reels") {
+                            userShorts.push(ep);
+                        } else {
+                            userVideos.push(ep);
+                        }
+                    }
+                });
+
+                // Atualiza contagem real de vídeos
+                const totalVideos = userVideos.length + userShorts.length;
+                userChannelVideosCount.textContent = `${totalVideos} vídeos`;
+
+                // Renderiza Vídeos com Filtros
+                renderUserChannelVideos(userVideos, isOwner);
+
+                // Renderiza Shorts (Print A4 e C1)
+                renderUserChannelShorts(userShorts);
+
+                // Renderiza Playlists (Print A5): Públicas para outros; Públicas + Privadas para o dono
+                renderUserChannelPlaylistsTab(targetEmail, isOwner);
+            });
+        }
+
+        // Renderização dos Vídeos na Aba Vídeos com Filtro e Kebab (Print A1)
+        function renderUserChannelVideos(videos, isOwner) {
+            userChannelVideosListContainer.innerHTML = "";
+
+            let sorted = [...videos];
+            if (userChannelSortMode === "recent") {
+                sorted.sort((a, b) => ((b.timestamp && b.timestamp.seconds) || 0) - ((a.timestamp && a.timestamp.seconds) || 0));
+            } else if (userChannelSortMode === "popular") {
+                // Em alta: Mais curtidos e mais visualizados somados
+                sorted.sort((a, b) => (Number(b.viewsCount || 0) + Number(b.likesCount || 0)) - (Number(a.viewsCount || 0) + Number(a.likesCount || 0)));
+            } else if (userChannelSortMode === "oldest") {
+                sorted.sort((a, b) => ((a.timestamp && a.timestamp.seconds) || 0) - ((b.timestamp && b.timestamp.seconds) || 0));
+            }
+
+            if (sorted.length === 0) {
+                userChannelVideosListContainer.innerHTML = `<div style="padding: 30px 16px; text-align: center; color: #888; font-size: 13.5px;">Nenhum vídeo publicado por este usuário.</div>`;
+                return;
+            }
+
+            sorted.forEach(item => {
+                const row = document.createElement("div");
+                row.className = "channel-horizontal-video-row";
+                row.innerHTML = `
+                    <div class="channel-horizontal-thumb">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
+                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                    </div>
+                    <div class="channel-horizontal-details">
+                        <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
+                        <div class="channel-horizontal-meta">
+                            <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
+                            <span>•</span>
+                            <span>${formatTimeAgo(item.timestamp)}</span>
+                        </div>
+                    </div>
+                    ${isOwner ? `
+                        <button class="fs-kebab-btn-mini btnUserVideoKebabTrigger" type="button" aria-label="Mais opções">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    ` : ''}
+                `;
+
+                row.onclick = (e) => {
+                    if (e.target.closest(".btnUserVideoKebabTrigger")) return;
+                    openWatchScreen(item, item.id);
+                };
+
+                if (isOwner) {
+                    const kebab = row.querySelector(".btnUserVideoKebabTrigger");
+                    if (kebab) {
+                        kebab.onclick = (e) => {
+                            e.stopPropagation();
+                            currentUserVideoBeingManaged = item;
+                            drawerUserVideoManageKebab.classList.add("active");
+                        };
+                    }
+                }
+
+                userChannelVideosListContainer.appendChild(row);
+            });
+        }
+
+        // Filtros da aba de vídeos
+        chipUserSortRecent.onclick = () => {
+            [chipUserSortRecent, chipUserSortPopular, chipUserSortOldest].forEach(c => c.classList.remove("active"));
+            chipUserSortRecent.classList.add("active");
+            userChannelSortMode = "recent";
+            loadUserChannelContent(activeTargetUserEmail, Boolean(currentUserEmail && activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
+        };
+
+        chipUserSortPopular.onclick = () => {
+            [chipUserSortRecent, chipUserSortPopular, chipUserSortOldest].forEach(c => c.classList.remove("active"));
+            chipUserSortPopular.classList.add("active");
+            userChannelSortMode = "popular";
+            loadUserChannelContent(activeTargetUserEmail, Boolean(currentUserEmail && activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
+        };
+
+        chipUserSortOldest.onclick = () => {
+            [chipUserSortRecent, chipUserSortPopular, chipUserSortOldest].forEach(c => c.classList.remove("active"));
+            chipUserSortOldest.classList.add("active");
+            userChannelSortMode = "oldest";
+            loadUserChannelContent(activeTargetUserEmail, Boolean(currentUserEmail && activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
+        };
+
+        // ==========================================================================
+        // EDITAR E EXCLUIR VÍDEO DO USUÁRIO
+        // ==========================================================================
+        btnActionDeleteUserVideo.onclick = async () => {
+            drawerUserVideoManageKebab.classList.remove("active");
+            if (!currentUserVideoBeingManaged) return;
+
+            if (confirm(`Deseja realmente excluir o vídeo "${currentUserVideoBeingManaged.name}"?`)) {
+                try {
+                    await deleteDoc(doc(db, "frutas", currentUserVideoBeingManaged.id));
+                    showToast("Vídeo excluído com sucesso.");
+                } catch(e) {
+                    console.error("Erro ao excluir vídeo:", e);
+                }
+            }
+        };
+
+        btnActionEditUserVideo.onclick = () => {
+            drawerUserVideoManageKebab.classList.remove("active");
+            if (!currentUserVideoBeingManaged) return;
+
+            inputEditVideoUrlField.value = currentUserVideoBeingManaged.videoUrl || "";
+            inputEditVideoThumbField.value = currentUserVideoBeingManaged.thumbUrl || "";
+            inputEditVideoDurationField.value = currentUserVideoBeingManaged.duration || "24:00";
+
+            modalEditVideoDetails.classList.add("active");
+        };
+
+        btnCancelEditVideoDetails.onclick = () => modalEditVideoDetails.classList.remove("active");
+        btnConfirmEditVideoDetails.onclick = async () => {
+            if (!currentUserVideoBeingManaged) return;
+
+            const newUrl = inputEditVideoUrlField.value.trim();
+            const newThumb = inputEditVideoThumbField.value.trim();
+            const newDur = inputEditVideoDurationField.value.trim();
+
+            try {
+                await setDoc(doc(db, "frutas", currentUserVideoBeingManaged.id), {
+                    videoUrl: newUrl,
+                    thumbUrl: newThumb,
+                    duration: newDur || "24:00"
+                }, { merge: true });
+
+                modalEditVideoDetails.classList.remove("active");
+                showToast("Vídeo atualizado com sucesso!");
+            } catch(e) {
+                console.error("Erro ao editar vídeo:", e);
+            }
+        };
+
+        // Renderização dos Shorts na Aba Shorts (Print A4)
+        function renderUserChannelShorts(shorts) {
+            userChannelShortsGridContainer.innerHTML = "";
+
+            if (shorts.length === 0) {
+                userChannelShortsGridContainer.innerHTML = `<div style="grid-column: span 2; padding: 30px 16px; text-align: center; color: #888; font-size: 13.5px;">Nenhum Shorts publicado ainda.</div>`;
+                return;
+            }
+
+            shorts.forEach(sh => {
+                const card = document.createElement("div");
+                card.className = "channel-short-grid-card";
+                card.innerHTML = `
+                    <img src="${escapeHtml(sh.thumbUrl || 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400')}" alt="Short">
+                    <div class="channel-short-grid-overlay">
+                        <div class="channel-short-grid-top"></div>
+                        <div>
+                            <div class="channel-short-grid-title">${escapeHtml(sh.name)}</div>
+                            <div class="channel-short-grid-views">${formatNumber(sh.viewsCount || 0)} visualizações</div>
+                        </div>
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    currentActiveShortsList = [sh];
+                    openShortsFullScreen();
+                };
+
+                userChannelShortsGridContainer.appendChild(card);
+            });
+        }
+
+        // Renderização das Playlists na Aba Playlists (Print A5)
+        function renderUserChannelPlaylistsTab(targetEmail, isOwner) {
+            userChannelPlaylistsListContainer.innerHTML = "";
+
+            onSnapshot(collection(db, "playlists"), (snap) => {
+                userChannelPlaylistsListContainer.innerHTML = "";
+                const list = [];
+
+                snap.forEach(d => {
+                    const pl = { id: d.id, ...d.data() };
+                    if (pl.user && pl.user.toLowerCase() === targetEmail.toLowerCase()) {
+                        const isPublic = (pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público");
+                        // O dono vê Públicas e Privadas; visitantes só veem Públicas
+                        if (isOwner || isPublic) {
+                            list.push(pl);
+                        }
+                    }
+                });
+
+                if (list.length === 0) {
+                    userChannelPlaylistsListContainer.innerHTML = `<div style="padding: 30px 16px; text-align: center; color: #888; font-size: 13.5px;">Nenhuma playlist disponível.</div>`;
+                    return;
+                }
+
+                list.forEach(pl => {
+                    const totalVids = Array.isArray(pl.videos) ? pl.videos.length : 0;
+                    const row = document.createElement("div");
+                    row.className = "all-playlists-item-card";
+                    row.style.padding = "10px 16px";
+
+                    row.innerHTML = `
+                        <div class="all-playlists-item-left">
+                            <div class="all-playlists-stacked-thumb-box" style="width: 120px; min-width: 120px; height: 70px;">
+                                <img src="${escapeHtml(pl.coverUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
+                                <div class="all-playlists-badge-count">≡ ${totalVids}</div>
+                            </div>
+                            <div class="all-playlists-item-info">
+                                <div class="all-playlists-item-title">${escapeHtml(pl.title || "Playlist")}</div>
+                                <div class="all-playlists-item-sub">${escapeHtml(pl.visibility || "Pública")} • Playlist</div>
+                            </div>
+                        </div>
+                    `;
+
+                    row.onclick = () => {
+                        openPlaylistDetailPage(pl.id, pl.title);
+                    };
+
+                    userChannelPlaylistsListContainer.appendChild(row);
+                });
+            });
+        }
+
+        // Pesquisa dentro do canal
+        inputSearchInsideUserChannel.oninput = () => {
+            const query = inputSearchInsideUserChannel.value.trim().toLowerCase();
+            userChannelSearchResultsList.innerHTML = "";
+            if (!query) return;
+
+            const matched = loadedEpisodesCache.filter(ep => {
+                const isUserVideo = (ep.author && ep.author.toLowerCase() === activeTargetUserEmail.toLowerCase());
+                return isUserVideo && (ep.name || "").toLowerCase().includes(query);
+            });
+
+            matched.forEach(item => {
+                const row = document.createElement("div");
+                row.className = "channel-horizontal-video-row";
+                row.innerHTML = `
+                    <div class="channel-horizontal-thumb">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
+                        <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                    </div>
+                    <div class="channel-horizontal-details">
+                        <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
+                        <div class="channel-horizontal-meta">
+                            <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
+                        </div>
+                    </div>
+                `;
+                row.onclick = () => openWatchScreen(item, item.id);
+                userChannelSearchResultsList.appendChild(row);
+            });
+        };
+
+        // Torna todos os avatares de comentários e cards clicáveis para abrir o perfil
+        document.addEventListener("click", (e) => {
+            const avatarTarget = e.target.closest(".yt-comment-avatar") || e.target.closest(".fs-channel-avatar-mini");
+            if (avatarTarget) {
+                const userEmailAttr = avatarTarget.getAttribute("data-author-email");
+                if (userEmailAttr) {
+                    openUserProfilePage(userEmailAttr);
+                }
+            }
+        });
+
+        // Inicia a escuta de solicitações de amizade no sininho
+        initFriendRequestsNotificationListener();
 
         // ==========================================================================
         // SISTEMA COMPLETO DE PLAYLISTS (PRINTS A ATÉ E4)
