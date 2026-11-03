@@ -16774,6 +16774,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             openScreen(viewUserChannel);
             window.scrollTo(0, 0);
 
+            // Atualiza a URL do navegador no padrão ?user=email
+            updateAppBrowserUrl({ user: activeTargetUserEmail }, true);
+
             // Carrega dados do perfil (do Firestore ou localStorage)
             let profileData = {
                 username: getNameFromEmail(activeTargetUserEmail),
@@ -22831,7 +22834,14 @@ inputUniversalWildSearch.addEventListener("keydown", (e) => {
                 return;
             }
 
-            // 9. Pesquisa (?search_query=...)
+            // 9. Perfil do Usuário / Seus Vídeos (?user=email ou ?channel=email)
+            const targetUserParam = params.get("user") || params.get("channel") || params.get("u");
+            if (targetUserParam) {
+                openUserProfilePage(targetUserParam);
+                return;
+            }
+
+            // 10. Pesquisa (?search_query=...)
             if (targetSearchQuery) {
                 openSearchInputMode();
                 inputGlobalSearchQuery.value = targetSearchQuery;
