@@ -2686,6 +2686,8 @@
             display: none;
             flex-direction: column;
             width: 100%;
+            height: 100vh;
+            height: 100dvh;
             min-height: 100vh;
             background-color: #0f0f0f;
             position: fixed;
@@ -2694,9 +2696,10 @@
             transform: translateX(-50%);
             max-width: 480px;
             z-index: 9998;
-            overflow-y: auto;
+            overflow-y: scroll;
             -webkit-overflow-scrolling: touch;
-            padding-bottom: 60px;
+            padding-bottom: 125px !important;
+            box-sizing: border-box;
         }
 
         .series-channel-view.active {
@@ -13267,32 +13270,30 @@
             </div>
         </div>
 
-        <!-- MODAL: ALTERAR FOTO DE PERFIL (AVATAR) -->
+        <!-- MODAL: URL DA FOTO DE PERFIL (2 TOQUES NO AVATAR) -->
         <div class="yt-center-modal-backdrop" id="modalEditUserAvatarUrl" style="z-index: 10045;">
             <div class="yt-center-dialog">
-                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">Alterar foto de perfil</h3>
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">url da foto de perfil</h3>
                 <div class="yt-form-control">
-                    <label style="color: #aaaaaa; font-size: 12px;">Link (URL) da imagem:</label>
                     <input type="url" id="inputUserAvatarUrlModal" class="yt-input" placeholder="Cole o link da foto de perfil aqui">
                 </div>
                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
-                    <button type="button" class="profile-pill-btn" id="btnCancelUserAvatarModal" style="flex: none; padding: 0 16px;">Cancelar</button>
-                    <button type="button" class="yt-btn-primary" id="btnConfirmUserAvatarModal" style="padding: 8px 22px;">Concluir</button>
+                    <button type="button" class="profile-pill-btn" id="btnCancelUserAvatarModal" style="flex: none; padding: 0 16px;">cancelar</button>
+                    <button type="button" class="yt-btn-primary" id="btnConfirmUserAvatarModal" style="padding: 8px 22px;">concluir</button>
                 </div>
             </div>
         </div>
 
-        <!-- MODAL: ALTERAR FOTO DE CAPA (BANNER) -->
+        <!-- MODAL: URL DA FOTO DE CAPA (2 TOQUES NA CAPA) -->
         <div class="yt-center-modal-backdrop" id="modalEditUserBannerUrl" style="z-index: 10045;">
             <div class="yt-center-dialog">
-                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">Alterar foto de capa</h3>
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff;">url da foto de capa</h3>
                 <div class="yt-form-control">
-                    <label style="color: #aaaaaa; font-size: 12px;">Link (URL) da imagem da capa:</label>
                     <input type="url" id="inputUserBannerUrlModal" class="yt-input" placeholder="Cole o link da foto de capa aqui">
                 </div>
                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
-                    <button type="button" class="profile-pill-btn" id="btnCancelUserBannerModal" style="flex: none; padding: 0 16px;">Cancelar</button>
-                    <button type="button" class="yt-btn-primary" id="btnConfirmUserBannerModal" style="padding: 8px 22px;">Concluir</button>
+                    <button type="button" class="profile-pill-btn" id="btnCancelUserBannerModal" style="flex: none; padding: 0 16px;">cancelar</button>
+                    <button type="button" class="yt-btn-primary" id="btnConfirmUserBannerModal" style="padding: 8px 22px;">concluir</button>
                 </div>
             </div>
         </div>
@@ -17030,29 +17031,51 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         // ==========================================================================
         const userChannelAvatarBox = document.getElementById("userChannelAvatarBox");
         const userChannelBannerBox = document.getElementById("userChannelBannerBox");
+        const btnUserChannelSearchHeader = document.getElementById("btnUserChannelSearchHeader");
 
-        // Toque duplo ou duplo clique no Avatar
-        function handleAvatarDoubleClick() {
+        // Função universal de duplo toque / duplo clique compatível com celulares e computadores
+        function attachDoubleTapAction(domElement, onDoubleTapCallback) {
+            if (!domElement) return;
+
+            let touchCount = 0;
+            let touchTimer = null;
+
+            domElement.addEventListener("touchend", (event) => {
+                touchCount++;
+                if (touchCount === 1) {
+                    touchTimer = setTimeout(() => {
+                        touchCount = 0;
+                    }, 350);
+                } else if (touchCount === 2) {
+                    clearTimeout(touchTimer);
+                    touchCount = 0;
+                    event.preventDefault();
+                    onDoubleTapCallback();
+                }
+            });
+
+            domElement.addEventListener("dblclick", (event) => {
+                event.preventDefault();
+                onDoubleTapCallback();
+            });
+        }
+
+        // 1. Toque duplo no Avatar abre "url da foto de perfil"
+        function triggerAvatarModalOpen() {
             const isOwner = Boolean(currentUserEmail && (activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
             if (!isOwner) return;
 
-            inputUserAvatarUrlModal.value = userChannelAvatarImg.src;
+            inputUserAvatarUrlModal.value = (userChannelAvatarImg && userChannelAvatarImg.src) ? userChannelAvatarImg.src : "";
             modalEditUserAvatarUrl.classList.add("active");
             inputUserAvatarUrlModal.focus();
         }
 
-        if (userChannelAvatarBox) {
-            userChannelAvatarBox.addEventListener("dblclick", handleAvatarDoubleClick);
-            userChannelAvatarBox.addEventListener("touchend", (e) => {
-                const now = Date.now();
-                if (now - lastAvatarTapTime < 300) {
-                    handleAvatarDoubleClick();
-                }
-                lastAvatarTapTime = now;
-            });
-        }
+        attachDoubleTapAction(userChannelAvatarBox, triggerAvatarModalOpen);
 
-        btnCancelUserAvatarModal.onclick = () => modalEditUserAvatarUrl.classList.remove("active");
+        btnCancelUserAvatarModal.onclick = () => {
+            modalEditUserAvatarUrl.classList.remove("active");
+        };
+
         btnConfirmUserAvatarModal.onclick = async () => {
             const url = inputUserAvatarUrlModal.value.trim();
             if (url) {
@@ -17064,28 +17087,22 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             modalEditUserAvatarUrl.classList.remove("active");
         };
 
-        // Toque duplo ou duplo clique na Capa (Banner)
-        function handleBannerDoubleClick() {
+        // 2. Toque duplo na Capa abre "url da foto de capa"
+        function triggerBannerModalOpen() {
             const isOwner = Boolean(currentUserEmail && (activeTargetUserEmail.toLowerCase() === currentUserEmail.toLowerCase()));
             if (!isOwner) return;
 
-            inputUserBannerUrlModal.value = userChannelBannerImg.src;
+            inputUserBannerUrlModal.value = (userChannelBannerImg && userChannelBannerImg.src) ? userChannelBannerImg.src : "";
             modalEditUserBannerUrl.classList.add("active");
             inputUserBannerUrlModal.focus();
         }
 
-        if (userChannelBannerBox) {
-            userChannelBannerBox.addEventListener("dblclick", handleBannerDoubleClick);
-            userChannelBannerBox.addEventListener("touchend", (e) => {
-                const now = Date.now();
-                if (now - lastBannerTapTime < 300) {
-                    handleBannerDoubleClick();
-                }
-                lastBannerTapTime = now;
-            });
-        }
+        attachDoubleTapAction(userChannelBannerBox, triggerBannerModalOpen);
 
-        btnCancelUserBannerModal.onclick = () => modalEditUserBannerUrl.classList.remove("active");
+        btnCancelUserBannerModal.onclick = () => {
+            modalEditUserBannerUrl.classList.remove("active");
+        };
+
         btnConfirmUserBannerModal.onclick = async () => {
             const url = inputUserBannerUrlModal.value.trim();
             if (url) {
@@ -17096,6 +17113,13 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
             modalEditUserBannerUrl.classList.remove("active");
         };
+
+        // 3. Botão da Lupa no topo do Perfil abre o campo de pesquisa padrão
+        if (btnUserChannelSearchHeader) {
+            btnUserChannelSearchHeader.addEventListener("click", () => {
+                openSearchInputMode("user_channel");
+            });
+        }
 
         // ==========================================================================
         // BOTÃO PERSONALIZAR O PERFIL (NOME E BIOGRAFIA)
@@ -23418,6 +23442,8 @@ if (btnBackFromSearchInput) {
             openNewTabHomeScreen(Boolean(currentUserEmail));
         } else if (previousActiveScreenBeforeSearch === "watch") {
             openScreen(viewWatchVideo);
+        } else if (previousActiveScreenBeforeSearch === "user_channel") {
+            openScreen(viewUserChannel);
         } else {
             openScreen("home");
         }
