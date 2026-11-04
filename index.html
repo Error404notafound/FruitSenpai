@@ -9871,28 +9871,28 @@
                 <button class="channel-subscribe-full-btn" id="btnChannelSubscribe">Inscrever-se</button>
             </div>
 
-            <!-- Abas de Navegação e Cápsula de Ações Deslizando Juntas no Mesmo Trilho -->
-            <div class="channel-tabs-bar">
-                <button class="channel-tab-item active" id="tabChannelNavInicio">Início</button>
-                <button class="channel-tab-item" id="tabChannelNavVideos">Vídeos</button>
-                <button class="channel-tab-item" id="tabChannelNavShorts">Shorts</button>
-                <button class="channel-tab-item">Pesquisar</button>
+            <!-- Abas de Navegação e Cápsula de Ações Restauradas da Série (Print B) -->
+            <div class="channel-tabs-bar" id="seriesChannelTabsBar">
+                <button class="channel-tab-item active" id="tabChannelNavInicio" type="button">Início</button>
+                <button class="channel-tab-item" id="tabChannelNavVideos" type="button">Vídeos</button>
+                <button class="channel-tab-item" id="tabChannelNavShorts" type="button">Shorts</button>
+                <button class="channel-tab-item" id="tabChannelNavSearch" type="button">Pesquisar</button>
 
-                <!-- Cápsula de Ações da Série (👍 👎 ↗ ✨ ...) que desliza junto sem sobreposição -->
+                <!-- Cápsula de Ações da Série (👍 👎 ↗ ✨ ⋮) que desliza junto no trilho -->
                 <div class="channel-action-capsule">
-                    <button class="channel-action-capsule-btn" id="btnChannelLike" aria-label="Gostei">
+                    <button class="channel-action-capsule-btn" id="btnChannelLike" aria-label="Gostei" type="button">
                         <svg viewBox="0 0 24 24"><path d="M18.77,11h-4.23l1.52-4.94C16.38,5.03,15.54,4,14.38,4c-0.58,0-1.14,0.24-1.52,0.65L7,11H3v10h4h1h9.43c1.06,0,1.98-0.67,2.19-1.61l1.34-6C21.23,12.15,20.18,11,18.77,11z M7,20H4v-8h3V20z M19.98,13.17l-1.34,6C18.54,19.65,18.03,20,17.43,20H8v-8.61l5.6-6.06C13.79,5.12,14.08,5,14.38,5c0.26,0,0.5,0.11,0.63,0.3c0.07,0.1,0.15,0.26,0.09,0.47l-1.52,4.94L13.18,12h1.35h4.23c0.41,0,0.8,0.17,1.03,0.46C19.92,12.61,20.05,12.86,19.98,13.17z"/></svg>
                     </button>
-                    <button class="channel-action-capsule-btn" id="btnChannelDislike" aria-label="Não gostei">
+                    <button class="channel-action-capsule-btn" id="btnChannelDislike" aria-label="Não gostei" type="button">
                         <svg viewBox="0 0 24 24"><path d="M17,4h-1H6.57C5.5,4,4.59,4.67,4.38,5.61l-1.34,6C2.77,12.85,3.82,14,5.23,14h4.23l-1.52,4.94C7.62,19.97,8.46,21,9.62,21c0.58,0,1.14-0.24,1.52-0.65L17,14h4V4H17z M10.4,19.67C10.21,19.88,9.92,20,9.62,20c-0.26,0-0.5-0.11-0.63-0.3c-0.07-0.1-0.15-0.26-0.09-0.47l1.52-4.94l0.4-1.29H9.46H5.23c-0.41,0-0.8-0.17-1.03-0.46c-0.12-0.15-0.25-0.4-0.18-0.71l1.34-6C5.46,5.35,5.97,5,6.57,5H16v8.61l-5.6,6.06z M20,13h-3V5h3V13z"/></svg>
                     </button>
-                    <button class="channel-action-capsule-btn" id="btnChannelShare" aria-label="Compartilhar">
+                    <button class="channel-action-capsule-btn" id="btnChannelShare" aria-label="Compartilhar" type="button">
                         <svg viewBox="0 0 24 24"><path d="M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z"/></svg>
                     </button>
-                    <button class="channel-action-capsule-btn" id="btnChannelSparkle" aria-label="Resumo">
+                    <button class="channel-action-capsule-btn" id="btnChannelSparkle" aria-label="Resumo" type="button">
                         <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
                     </button>
-                    <button class="channel-action-capsule-btn" id="btnChannelKebab" aria-label="Mais opções">
+                    <button class="channel-action-capsule-btn" id="btnChannelKebab" aria-label="Mais opções" type="button">
                         <svg viewBox="0 0 24 24"><path d="M7.5 12c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm6 0c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5zm6 0c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z"/></svg>
                     </button>
                 </div>
@@ -13151,9 +13151,102 @@
                 </div>
             </div>
 
-            <!-- Contracapa Horizontal do Usuário (Toque duplo altera foto) -->
-            <div class="channel-banner-container" id="userChannelBannerBox" title="Dê 2 toques para alterar a capa">
-                <img id="userChannelBannerImg" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Banner do Usuário">
+            <!-- Contracapa Horizontal do Usuário com Altura Fixa Visível (Dê 2 toques para alterar) -->
+            <div class="channel-banner-container" id="userChannelBannerBox" style="width: 100%; aspect-ratio: 16 / 5; min-height: 120px; background-color: #1a1a1a; overflow: hidden; display: block;" title="Dê 2 toques para alterar a capa">
+                <img id="userChannelBannerImg" src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800" alt="Banner do Usuário" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+            </div>
+
+            <!-- Cabeçalho de Perfil do Usuário -->
+            <div class="channel-profile-header">
+                <div class="channel-profile-row">
+                    <div class="channel-avatar-circle" id="userChannelAvatarBox" title="Dê 2 toques para alterar a foto">
+                        <img id="userChannelAvatarImg" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" alt="Avatar">
+                    </div>
+                    <div>
+                        <h1 class="channel-name-h1" id="userChannelNameH1">Mouton</h1>
+                        <div class="channel-handle-text" id="userChannelHandleText">@kalebmouton404</div>
+                        <div class="channel-meta-counters">
+                            <span id="userChannelFriendsCount">0 amigos</span>
+                            <span>•</span>
+                            <span id="userChannelVideosCount">0 vídeos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biografia do Usuário -->
+                <div class="channel-desc-preview-row" id="userChannelBioBox" style="-webkit-line-clamp: 2;">
+                    <span id="userChannelBioText">Música</span>
+                    <span class="channel-more-text" id="btnUserChannelBioMore">...mais</span>
+                </div>
+
+                <!-- Botões de Ação para o Dono (Print A) -->
+                <div class="profile-actions-row" id="userChannelOwnerActionsRow" style="padding: 6px 0 0 0; display: flex; gap: 8px;">
+                    <button class="profile-pill-btn" id="btnUserChannelCustomizeProfile" type="button" style="background-color: #272727; font-weight: 700; height: 38px;">Personalizar o perfil</button>
+                    <button class="profile-pill-btn" id="btnUserChannelManageVideos" type="button" style="background-color: #272727; font-weight: 700; height: 38px;">Gerenciar vídeos</button>
+                </div>
+
+                <!-- Botões de Ação para Visitantes (Prints A1, A2, A3) -->
+                <div class="profile-actions-row" id="userChannelVisitorActionsRow" style="padding: 6px 0 0 0; display: none; gap: 8px;">
+                    <button class="profile-pill-btn" id="btnUserChannelFriendAction" type="button" style="background-color: #272727; font-weight: 700; height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                        <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        <span id="txtUserChannelFriendAction">adicionar</span>
+                    </button>
+                    <button class="profile-pill-btn" id="btnUserChannelSendMessage" type="button" style="background-color: #272727; font-weight: 700; height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                        <svg style="width: 18px; height: 18px; fill: currentColor;" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                        <span>mensagem</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Abas Oficiais do Perfil do Usuário Restauradas (Circulado em Vermelho no Print A) -->
+            <div class="channel-tabs-bar" id="userChannelTabsBar" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                <button class="channel-tab-item active" id="tabUserChannelVideos" type="button">Vídeos</button>
+                <button class="channel-tab-item" id="tabUserChannelShorts" type="button">Shorts</button>
+                <button class="channel-tab-item" id="tabUserChannelPlaylists" type="button">Playlists</button>
+                <button class="channel-tab-item" id="tabUserChannelPosts" type="button">Posts</button>
+                <button class="channel-tab-item" id="tabUserChannelSearch" type="button">Pesquisar</button>
+            </div>
+
+            <!-- Painel 1: Vídeos do Usuário (Prints A, A1, A2, A3) -->
+            <div class="channel-tab-pane active" id="paneUserChannelVideos">
+                <div class="channel-chips-filter-row">
+                    <button class="channel-chip-pill active" id="chipUserSortRecent" type="button">Mais recentes</button>
+                    <button class="channel-chip-pill" id="chipUserSortPopular" type="button">Em alta</button>
+                    <button class="channel-chip-pill" id="chipUserSortOldest" type="button">Mais antigos</button>
+                </div>
+                <div id="userChannelVideosListContainer" style="display: flex; flex-direction: column;"></div>
+            </div>
+
+            <!-- Painel 2: Shorts do Usuário (Print A4) -->
+            <div class="channel-tab-pane" id="paneUserChannelShorts">
+                <div class="channel-shorts-tab-grid" id="userChannelShortsGridContainer"></div>
+            </div>
+
+            <!-- Painel 3: Playlists Públicas do Usuário (Print A5) -->
+            <div class="channel-tab-pane" id="paneUserChannelPlaylists">
+                <div style="padding: 10px 16px;">
+                    <button class="channel-chip-pill active" id="btnUserChannelPlaylistSortDropdown" type="button" style="display: inline-flex; align-items: center; gap: 6px;">
+                        <span id="txtUserChannelPlaylistSortLabel">Data de inclusão (mais recente)</span>
+                        <svg style="width: 14px; height: 14px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+                    </button>
+                </div>
+                <div id="userChannelPlaylistsListContainer" style="display: flex; flex-direction: column; gap: 14px; padding-bottom: 20px;"></div>
+            </div>
+
+            <!-- Painel 4: Posts Comunitários do Usuário -->
+            <div class="channel-tab-pane" id="paneUserChannelPosts">
+                <div id="userChannelPostsListContainer" style="display: flex; flex-direction: column;"></div>
+            </div>
+
+            <!-- Painel 5: Pesquisar Dentro do Canal -->
+            <div class="channel-tab-pane" id="paneUserChannelSearch">
+                <div style="padding: 14px 16px;">
+                    <div class="search-input-pill-box">
+                        <input type="text" id="inputSearchInsideUserChannel" placeholder="Pesquisar canal">
+                        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: #ffffff;"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </div>
+                </div>
+                <div id="userChannelSearchResultsList" style="display: flex; flex-direction: column;"></div>
             </div>
 
             <!-- Cabeçalho de Perfil do Usuário -->
@@ -16800,15 +16893,17 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 }
             } catch(e) {}
 
-            // Preenche cabeçalho
+            // Preenche cabeçalho e assegura a foto da capa do perfil (Banner)
             const cleanName = profileData.username || getNameFromEmail(activeTargetUserEmail);
             const handleText = "@" + cleanName.toLowerCase().replace(/\s+/g, '');
+            const fallbackBanner = "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+            const fallbackAvatar = "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200";
 
             userChannelTopBarTitle.textContent = cleanName;
             userChannelNameH1.textContent = cleanName;
             userChannelHandleText.textContent = handleText;
-            userChannelAvatarImg.src = profileData.avatarUrl;
-            userChannelBannerImg.src = profileData.bannerUrl;
+            userChannelAvatarImg.src = profileData.avatarUrl || fallbackAvatar;
+            userChannelBannerImg.src = profileData.bannerUrl || fallbackBanner;
 
             // Biografia (2 linhas padrão)
             userChannelBioText.textContent = profileData.bio || "Música";
@@ -17362,54 +17457,87 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Renderização das Playlists na Aba Playlists (Print A5)
+        // Renderização das Playlists Específicas do Usuário (Print A5)
         function renderUserChannelPlaylistsTab(targetEmail, isOwner) {
             userChannelPlaylistsListContainer.innerHTML = "";
+            const cleanTargetEmail = (targetEmail || "").trim().toLowerCase();
 
-            onSnapshot(collection(db, "playlists"), (snap) => {
-                userChannelPlaylistsListContainer.innerHTML = "";
-                const list = [];
+            // Consulta tanto as playlists de episódios quanto as de séries criadas por aquele usuário
+            onSnapshot(collection(db, "playlists"), (epSnap) => {
+                onSnapshot(collection(db, "series_playlists"), (seriesSnap) => {
+                    userChannelPlaylistsListContainer.innerHTML = "";
+                    const playlistsFound = [];
 
-                snap.forEach(d => {
-                    const pl = { id: d.id, ...d.data() };
-                    if (pl.user && pl.user.toLowerCase() === targetEmail.toLowerCase()) {
-                        const isPublic = (pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público");
-                        // O dono vê Públicas e Privadas; visitantes só veem Públicas
-                        if (isOwner || isPublic) {
-                            list.push(pl);
+                    epSnap.forEach(d => {
+                        const pl = { id: d.id, _collection: "playlists", ...d.data() };
+                        const plAuthor = (pl.user || "").trim().toLowerCase();
+                        if (plAuthor === cleanTargetEmail) {
+                            const isPublic = (pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público");
+                            if (isOwner || isPublic) {
+                                playlistsFound.push(pl);
+                            }
                         }
+                    });
+
+                    seriesSnap.forEach(d => {
+                        const pl = { id: d.id, _collection: "series_playlists", ...d.data() };
+                        const plAuthor = (pl.user || "").trim().toLowerCase();
+                        if (plAuthor === cleanTargetEmail) {
+                            const isPublic = (pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público");
+                            if (isOwner || isPublic) {
+                                playlistsFound.push(pl);
+                            }
+                        }
+                    });
+
+                    // Remove duplicações por título e ID
+                    const uniqueMap = new Map();
+                    playlistsFound.forEach(p => {
+                        const key = p.originalPlaylistId || p.id;
+                        if (!uniqueMap.has(key)) {
+                            uniqueMap.set(key, p);
+                        }
+                    });
+                    const finalList = Array.from(uniqueMap.values());
+
+                    if (finalList.length === 0) {
+                        userChannelPlaylistsListContainer.innerHTML = `<div style="padding: 30px 16px; text-align: center; color: #888888; font-size: 13.5px;">Nenhuma playlist pública disponível para este usuário.</div>`;
+                        return;
                     }
-                });
 
-                if (list.length === 0) {
-                    userChannelPlaylistsListContainer.innerHTML = `<div style="padding: 30px 16px; text-align: center; color: #888; font-size: 13.5px;">Nenhuma playlist disponível.</div>`;
-                    return;
-                }
+                    finalList.forEach(pl => {
+                        const itemsList = Array.isArray(pl.videos) ? pl.videos : (Array.isArray(pl.series) ? pl.series : []);
+                        const count = itemsList.length;
+                        const coverImg = pl.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+                        const visLabel = pl.visibility || (isOwner ? "Particular" : "Pública");
 
-                list.forEach(pl => {
-                    const totalVids = Array.isArray(pl.videos) ? pl.videos.length : 0;
-                    const row = document.createElement("div");
-                    row.className = "all-playlists-item-card";
-                    row.style.padding = "10px 16px";
+                        const cardRow = document.createElement("div");
+                        cardRow.className = "all-playlists-item-card";
+                        cardRow.style.padding = "0 16px";
 
-                    row.innerHTML = `
-                        <div class="all-playlists-item-left">
-                            <div class="all-playlists-stacked-thumb-box" style="width: 120px; min-width: 120px; height: 70px;">
-                                <img src="${escapeHtml(pl.coverUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
-                                <div class="all-playlists-badge-count">≡ ${totalVids}</div>
+                        cardRow.innerHTML = `
+                            <div class="all-playlists-item-left">
+                                <div class="all-playlists-stacked-thumb-box" style="width: 130px; min-width: 130px; height: 74px;">
+                                    <img src="${escapeHtml(coverImg)}" alt="Capa da Playlist">
+                                    <div class="all-playlists-badge-count">≡ ${count}</div>
+                                </div>
+                                <div class="all-playlists-item-info">
+                                    <div class="all-playlists-item-title">${escapeHtml(pl.title || "Playlist")}</div>
+                                    <div class="all-playlists-item-sub">${escapeHtml(visLabel)} • Playlist</div>
+                                </div>
                             </div>
-                            <div class="all-playlists-item-info">
-                                <div class="all-playlists-item-title">${escapeHtml(pl.title || "Playlist")}</div>
-                                <div class="all-playlists-item-sub">${escapeHtml(pl.visibility || "Pública")} • Playlist</div>
-                            </div>
-                        </div>
-                    `;
+                            <button class="all-playlists-item-kebab-btn" type="button" aria-label="Mais opções">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
+                        `;
 
-                    row.onclick = () => {
-                        openPlaylistDetailPage(pl.id, pl.title);
-                    };
+                        cardRow.onclick = (e) => {
+                            if (e.target.closest(".all-playlists-item-kebab-btn")) return;
+                            openPlaylistDetailPage(pl.id, pl.title);
+                        };
 
-                    userChannelPlaylistsListContainer.appendChild(row);
+                        userChannelPlaylistsListContainer.appendChild(cardRow);
+                    });
                 });
             });
         }
