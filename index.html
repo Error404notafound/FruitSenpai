@@ -2875,40 +2875,52 @@
         }
 
         /* Trilho Único de Rolagem Horizontal (Abas + Cápsula Deslizando Juntos) */
+        /* Impede que o Flexbox comprima ou faça sumir qualquer bloco da tela da série */
+        .series-channel-view > * {
+            flex-shrink: 0 !important;
+        }
+
+        /* Barra de Abas da Série: Altura travada em 46px com rolagem horizontal suave */
         .channel-tabs-bar {
-            height: 44px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            padding: 0 16px;
-            overflow-x: auto;
-            white-space: nowrap;
-            scrollbar-width: none;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 6px;
-            -webkit-overflow-scrolling: touch;
-            width: 100%;
+            height: 46px !important;
+            min-height: 46px !important;
+            max-height: 46px !important;
+            flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 18px !important;
+            padding: 0 16px !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            white-space: nowrap !important;
+            scrollbar-width: none !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            margin-top: 4px !important;
+            -webkit-overflow-scrolling: touch !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
         }
 
         .channel-tabs-bar::-webkit-scrollbar {
-            display: none;
+            display: none !important;
         }
 
         .channel-tab-item {
-            font-size: 13.5px;
-            font-weight: 500;
-            color: #aaaaaa;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px 0;
-            position: relative;
-            flex-shrink: 0;
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            color: #aaaaaa !important;
+            background: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            padding: 12px 2px !important;
+            position: relative !important;
+            flex-shrink: 0 !important;
+            white-space: nowrap !important;
         }
 
         .channel-tab-item.active {
-            color: #ffffff;
-            font-weight: 700;
+            color: #ffffff !important;
+            font-weight: 700 !important;
         }
 
         .channel-tab-item.active::after {
@@ -2921,36 +2933,36 @@
             background-color: #ffffff;
         }
 
-        /* Cápsula de Ações da Série dentro do trilho único arrastável */
+        /* Cápsula de Ações da Série (👍 👎 ↗ ✨ ⋮) com espaçamento anti-colisão */
         .channel-action-capsule {
-            display: flex;
-            align-items: center;
-            background-color: #272727;
-            border-radius: 18px;
-            height: 32px;
-            padding: 0 10px;
-            gap: 12px;
-            flex-shrink: 0;
-            margin-left: 6px;
-            margin-right: 8px;
+            display: inline-flex !important;
+            align-items: center !important;
+            background-color: #272727 !important;
+            border-radius: 18px !important;
+            height: 32px !important;
+            padding: 0 12px !important;
+            gap: 14px !important;
+            flex-shrink: 0 !important;
+            margin-left: 10px !important;
+            margin-right: 16px !important;
         }
 
         .channel-action-capsule-btn {
-            background: none;
-            border: none;
-            color: #ffffff;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            flex-shrink: 0;
+            background: none !important;
+            border: none !important;
+            color: #ffffff !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            flex-shrink: 0 !important;
         }
 
         .channel-action-capsule-btn svg {
-            width: 17px;
-            height: 17px;
-            fill: #ffffff;
+            width: 17px !important;
+            height: 17px !important;
+            fill: #ffffff !important;
         }
 
         .channel-action-capsule-btn:active svg {
@@ -19811,11 +19823,35 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             document.getElementById("drawerSeriesInfoUrl").textContent = `www.youtube.com/${handleText}`;
             document.getElementById("channelLinkUrlPreview").textContent = `fruitsenpai.app/${cleanName.toLowerCase().replace(/\s+/g, '')} e mais 1 link`;
 
+            // Reseta a imagem de capa para evitar que a foto vermelha de outro canal fique visível
+            const channelBannerImgEl = document.getElementById("channelBannerImg");
+            if (channelBannerImgEl) {
+                channelBannerImgEl.src = "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
+            }
+
             // Abre a tela do canal e atualiza a URL para ?series=NomeDaSerie
             document.querySelectorAll(".yt-subview, .all-subs-page-view").forEach(s => s.classList.remove("active"));
             viewSeriesChannel.classList.add("active");
             window.scrollTo(0, 0);
             updateAppBrowserUrl({ series: cleanName }, true);
+
+            // Garante que a barra de abas e a cápsula de ações fiquem 100% visíveis e não sumam
+            const seriesTabsBar = document.getElementById("seriesChannelTabsBar") || viewSeriesChannel.querySelector(".channel-tabs-bar");
+            if (seriesTabsBar) {
+                seriesTabsBar.style.display = "flex";
+                seriesTabsBar.style.visibility = "visible";
+                seriesTabsBar.style.opacity = "1";
+            }
+
+            // Ativa por padrão a aba Início
+            const tabInicioInit = document.getElementById("tabChannelNavInicio");
+            const paneInicioInit = document.getElementById("paneChannelInicio");
+            if (tabInicioInit && paneInicioInit) {
+                document.querySelectorAll("#viewSeriesChannel .channel-tab-item").forEach(t => t.classList.remove("active"));
+                document.querySelectorAll("#viewSeriesChannel .channel-tab-pane").forEach(p => p.classList.remove("active"));
+                tabInicioInit.classList.add("active");
+                paneInicioInit.classList.add("active");
+            }
 
             // Sincroniza o estado do botão Inscrever-se nesta série
             syncSeriesSubscriptionUI(cleanName, btnChannelSubscribe);
