@@ -18985,13 +18985,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
             unit.onclick = () => {
                 if (isFavoritesEditModeActive) {
-                    // No modo de edição: clicar alterna o item para dentro ou para fora dos favoritos (Print C)
                     toggleHostFavoriteStatus(item.baseName || item.name);
                     return;
                 }
 
                 if (item.url) {
-                    // Troca imediata do vídeo no player para o link daquela hospedagem
                     if (watchIframe) {
                         let finalSrc = item.url.trim();
                         const ytMatch = finalSrc.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
@@ -19005,7 +19003,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         txtSettingOtherPlayersActiveHost.textContent = item.name;
                     }
 
-                    // Registra tendência de uso (+50% vira favorito automaticamente)
                     registerHostUsageTendency(item.baseName || item.name);
 
                     drawerOtherPlayersB.classList.remove("active");
@@ -19018,7 +19015,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             return unit;
         }
 
-        // Tendência de uso: se o usuário escolhe uma hospedagem mais de 50% das vezes, ela entra nos favoritos
         function registerHostUsageTendency(hostName) {
             hostSelectionHistoryCounts[hostName] = (hostSelectionHistoryCounts[hostName] || 0) + 1;
             localStorage.setItem("fs_host_usage_counts", JSON.stringify(hostSelectionHistoryCounts));
@@ -19035,7 +19031,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         }
 
-        // Lápis (seta rosa) ativa o Modo de Edição (Print C)
         if (btnEditFavoritesPencil) {
             btnEditFavoritesPencil.addEventListener("click", () => {
                 isFavoritesEditModeActive = true;
@@ -19046,7 +19041,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Alterna uma hospedagem entre a área de favoritos e a área externa
         function toggleHostFavoriteStatus(hostName) {
             if (tempEditingFavoritesList.includes(hostName)) {
                 tempEditingFavoritesList = tempEditingFavoritesList.filter(h => h !== hostName);
@@ -19095,7 +19089,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             episodesList.forEach(ep => {
                 const epKey = `${ep.season || '1'}_${ep.episodeNum || '1'}`;
                 if (!groupedMap.has(epKey)) {
-                    // Primeiro episódio registrado deste número
                     const initialSources = Array.isArray(ep.sources) && ep.sources.length > 0
                         ? [...ep.sources]
                         : [{ url: ep.videoUrl, hostName: "Player 1" }];
@@ -19105,7 +19098,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         sources: initialSources
                     });
                 } else {
-                    // Episódio repetido: agrupa o link dentro do mesmo card em vez de duplicar na tela
                     const existing = groupedMap.get(epKey);
                     if (Array.isArray(ep.sources) && ep.sources.length > 0) {
                         existing.sources.push(...ep.sources);
@@ -19120,6 +19112,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
             return Array.from(groupedMap.values());
         }
+
+            
+
 
         // ==========================================================================
         // PLAYER PRINCIPAL: CARREGAMENTO COM SUPORTE A MÚLTIPLOS PLAYERS
@@ -24643,9 +24638,19 @@ if (btnBackFromSearchInput) {
         handleAppRoutingFromUrlParams(false);
         updateWeeklyNotificationsBellCount();
 
-    // ==========================================================================
-// MOTOR EXCLUSIVO DE PESQUISA DAS ABAS (PRINTS A1 ATÉ H8)
-// ==========================================================================
+        // ==========================================================================
+        // MOTOR DE HOSPEDAGENS, FONTES MÚLTIPLAS E MODAL DE LINKS (PRINTS D E E)
+        // ==========================================================================
+        const modalEpisodeSourceLink = document.getElementById("modalEpisodeSourceLink");
+        const inputModalSourceUrl = document.getElementById("inputModalSourceUrl");
+        const inputModalSourceHostSearch = document.getElementById("inputModalSourceHostSearch");
+        const boxHostSuggestionsDropdown = document.getElementById("boxHostSuggestionsDropdown");
+        const btnTriggerCreateHostExpander = document.getElementById("btnTriggerCreateHostExpander");
+        const containerNewHostFields = document.getElementById("containerNewHostFields");
+        const inputNewHostPhotoUrl = document.getElementById("inputNewHostPhotoUrl");
+        const inputNewHostNameText = document.getElementById("inputNewHostNameText");
+        const btnCloseModalSourceLink = document.getElementById("btnCloseModalSourceLink");
+        const btnConfirmModalSourceLink = document.getElementById("btnConfirmModalSourceLink");
 const viewTabSearchResults = document.getElementById("viewTabSearchResults");
 const inputTabSearchQuery = document.getElementById("inputTabSearchQuery");
 const btnClearTabSearchInput = document.getElementById("btnClearTabSearchInput");
