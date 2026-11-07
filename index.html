@@ -14190,6 +14190,10 @@
             renderUploadEpisodesScroll();
         }
 
+        // Elementos capturados do DOM sem violar o Temporal Dead Zone (TDZ)
+        const inputSeasonNumberVal = document.getElementById("inputSeasonNumberVal");
+        const inputEpisodeNumberVal = document.getElementById("inputEpisodeNumberVal");
+
         if (inputSeasonNumberVal) {
             inputSeasonNumberVal.addEventListener("input", (e) => {
                 updateActiveEpisodeArcNarrative(e.target.value.trim(), null);
@@ -24633,11 +24637,6 @@ if (btnBackFromSearchInput) {
             });
         }
 
-        initAppTabsAndStorage();
-        loadSeriesFromFirestore();
-        handleAppRoutingFromUrlParams(false);
-        updateWeeklyNotificationsBellCount();
-
         // ==========================================================================
         // NOVA TELA OFICIAL DE PESQUISA DAS ABAS (PRINTS A1 ATÉ G1.4)
         // ==========================================================================
@@ -26156,6 +26155,16 @@ if (dockedMiniPlayerEdgeHandle) {
         showToast("Vídeo flutuante restaurado.");
     });
 }
+
+// ==========================================================================
+// INICIALIZAÇÃO GLOBAL SEGURA (EXECUTA APÓS TODAS AS VARIÁVEIS EXISTIREM)
+// ==========================================================================
+initAppTabsAndStorage();
+loadSeriesFromFirestore();
+handleAppRoutingFromUrlParams(false);
+updateWeeklyNotificationsBellCount();
+    
+    </script>
     
     </script>
 </body>
