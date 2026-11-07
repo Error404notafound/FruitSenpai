@@ -9684,6 +9684,18 @@
                 </div>
             </div>
 
+            <!-- OPÇÃO: OUTROS PLAYERS / HOSPEDAGEM (PRINT A) -->
+            <div class="player-settings-item-row" id="rowSettingOtherPlayers">
+                <div class="player-settings-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+                    <span>Outros players</span>
+                </div>
+                <div class="player-settings-item-right">
+                    <span id="txtSettingOtherPlayersActiveHost" style="color: #ffffff; font-weight: 600;">YouTube</span>
+                    <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#aaa;"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                </div>
+            </div>
+
             <!-- 5. Filtrar apenas dublados -->
             <div class="player-settings-item-row" id="rowSettingFilterDubbed">
                 <div class="player-settings-item-left">
@@ -13351,6 +13363,75 @@
             </div>
         </div>
 
+        <!-- MODAL: LINK DO EPISÓDIO & HOSPEDAGEM (PRINTS D E E) -->
+        <div class="yt-center-modal-backdrop" id="modalEpisodeSourceLink" style="z-index: 10050;">
+            <div class="yt-center-dialog" style="background-color: #1e1e1e; border-radius: 20px; padding: 20px;">
+                <h3 style="font-size: 16px; font-weight: 700; color: #ffffff; margin-bottom: 12px;">Link do episódio</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <input type="text" id="inputModalSourceUrl" class="yt-input" style="border: 1px solid #3ea6ff; border-radius: 10px; height: 46px; background-color: #121212;" placeholder="Link do episódio (Embed/Drive/YouTube...)">
+                    <input type="text" id="inputModalSourceHostSearch" class="yt-input" style="border: 1px solid #3ea6ff; border-radius: 10px; height: 46px; background-color: #121212;" placeholder="Buscar o nome da hospedagem">
+                    <div id="boxHostSuggestionsDropdown" style="display: none; background-color: #121212; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); max-height: 120px; overflow-y: auto;"></div>
+
+                    <!-- Botão expansível: criar player/hospedagem -->
+                    <div id="btnTriggerCreateHostExpander" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 4px; cursor: pointer; color: #ffffff;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <svg style="width: 22px; height: 22px; fill: none; stroke: #ffffff; stroke-width: 2;" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                            <span style="font-size: 14px; font-weight: 500;">criar player/hospedagem</span>
+                        </div>
+                        <svg style="width: 22px; height: 22px; fill: #ffffff;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    </div>
+
+                    <!-- Campos do Print E que expandem -->
+                    <div id="containerNewHostFields" style="display: none; flex-direction: column; gap: 10px;">
+                        <input type="text" id="inputNewHostPhotoUrl" class="yt-input" style="border: 1px solid #3ea6ff; border-radius: 10px; height: 46px; background-color: #121212;" placeholder="Link url da foto da hospedagem">
+                        <input type="text" id="inputNewHostNameText" class="yt-input" style="border: 1px solid #3ea6ff; border-radius: 10px; height: 46px; background-color: #121212;" placeholder="Nome da hospedagem">
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
+                    <button type="button" class="btn-modal-blue-close" id="btnCloseModalSourceLink">Fechar</button>
+                    <button type="button" class="btn-modal-white-confirm" id="btnConfirmModalSourceLink">Concluir</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA INFERIOR: ESCOLHA DE HOSPEDAGENS / SEUS FAVORITOS (PRINTS B, B1 E C) -->
+        <div class="accounts-drawer" id="drawerOtherPlayersB" style="z-index: 10040;">
+            <div class="accounts-sheet" style="border-radius: 24px 24px 0 0; background-color: #18191c; padding: 18px 16px 30px 16px; max-height: 85vh; overflow-y: auto;">
+                
+                <!-- Modo Normal: Cabeçalho com lápis (Print B) -->
+                <div id="headerFavoritesNormalMode" style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px;">
+                    <h3 style="font-size: 18px; font-weight: 700; color: #ffffff;">Seus favoritos</h3>
+                    <button type="button" id="btnEditFavoritesPencil" style="background-color: rgba(255,255,255,0.12); border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ffffff;">
+                        <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: currentColor;"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                    </button>
+                </div>
+
+                <!-- Modo de Edição: Cancelar e Concluído (Print C) -->
+                <div id="headerFavoritesEditMode" style="display: none; align-items: center; justify-content: space-between; padding-bottom: 12px;">
+                    <button type="button" id="btnCancelFavoritesEditMode" class="profile-pill-btn" style="flex: none; padding: 0 16px; height: 36px;">Cancelar</button>
+                    <span style="font-size: 13.5px; font-weight: 600; color: #ffffff;">Arraste e solte apps</span>
+                    <button type="button" id="btnConfirmFavoritesEditMode" class="yt-btn-primary" style="padding: 6px 18px; height: 36px; border-radius: 18px;">Concluído</button>
+                </div>
+
+                <!-- Card Escuro Arredondado Superior (Contém Conta + Até 12 Favoritos) -->
+                <div id="boxFavoritesDarkCard" style="background-color: #212429; border-radius: 20px; padding: 16px 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 10px; margin-bottom: 18px;">
+                    <!-- Ícone Fixo 1: Conta (Avatar do Usuário -> Leva para página Você) -->
+                    <div id="btnFavoriteAccountShortcut" style="display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;">
+                        <div id="avatarFavoritesAccountCircle" style="width: 48px; height: 48px; border-radius: 50%; overflow: hidden; background-color: #00897b; color: #ffffff; font-weight: 700; font-size: 20px; display: flex; align-items: center; justify-content: center;">
+                            E
+                        </div>
+                        <span style="font-size: 11.5px; font-weight: 500; color: #ffffff;">Conta</span>
+                    </div>
+                    <!-- Itens favoritos dinâmicos entram aqui -->
+                    <div id="containerDynamicFavoritesGrid" style="display: contents;"></div>
+                </div>
+
+                <!-- Área Inferior: Todas as Outras Hospedagens (Fora dos Favoritos - Setas Verdes Prints B e B1) -->
+                <div id="containerOtherHostsNonFavoritesGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 10px;"></div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ==========================================================================
@@ -13936,14 +14017,188 @@
         // Atualiza em tempo real com o carrossel do banner principal sem permitir clique que saia da página
         setInterval(syncMiniBannerWithHeroMain, 500);
 
-        // 2. Seta Rosa (Link 🔗): foca no campo de link do episódio
+        // ==========================================================================
+        // MOTOR DE HOSPEDAGENS, FONTES MÚLTIPLAS E MODAL DE LINKS (PRINTS D E E)
+        // ==========================================================================
+        const modalEpisodeSourceLink = document.getElementById("modalEpisodeSourceLink");
+        const inputModalSourceUrl = document.getElementById("inputModalSourceUrl");
+        const inputModalSourceHostSearch = document.getElementById("inputModalSourceHostSearch");
+        const boxHostSuggestionsDropdown = document.getElementById("boxHostSuggestionsDropdown");
+        const btnTriggerCreateHostExpander = document.getElementById("btnTriggerCreateHostExpander");
+        const containerNewHostFields = document.getElementById("containerNewHostFields");
+        const inputNewHostPhotoUrl = document.getElementById("inputNewHostPhotoUrl");
+        const inputNewHostNameText = document.getElementById("inputNewHostNameText");
+        const btnCloseModalSourceLink = document.getElementById("btnCloseModalSourceLink");
+        const btnConfirmModalSourceLink = document.getElementById("btnConfirmModalSourceLink");
+
+        // Lista padrão de hospedagens conhecidas com logotipos oficiais
+        let knownVideoHostsList = [
+            { name: "YouTube", icon: "https://www.youtube.com/s/desktop/f1e73994/img/favicon_144x144.png" },
+            { name: "Drive", icon: "https://ssl.gstatic.com/docs/doclist/images/drive_2020q4_32dp.png" },
+            { name: "Blogger", icon: "https://www.blogger.com/favicon.ico" },
+            { name: "Mega", icon: "https://mega.io/favicon.ico" },
+            { name: "Mediafire", icon: "https://www.mediafire.com/favicon.ico" },
+            { name: "Vids", icon: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100" }
+        ];
+
+        // 1. O clique no SVG de link (🔗) da capa abre o modal de link do episódio (Print D)
         if (btnThumbEpisodeLink) {
             btnThumbEpisodeLink.addEventListener("click", () => {
-                const target = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
-                if (target) {
-                    target.focus();
-                    target.scrollIntoView({ behavior: "smooth", block: "center" });
+                const currentEp = addedEpisodesList[currentActiveEpisodeIndex];
+                if (!currentEp) return;
+
+                // Preenche com o link atual ou a primeira fonte do episódio aberto
+                const currentUrl = currentEp.videoUrl || (currentEp.sources && currentEp.sources[0] ? currentEp.sources[0].url : "");
+                inputModalSourceUrl.value = currentUrl;
+                inputModalSourceUrl.placeholder = `Link do ${currentEp.episodeNum}º episódio (Embed/Drive/YouTube...)`;
+
+                inputModalSourceHostSearch.value = (currentEp.sources && currentEp.sources[0]) ? currentEp.sources[0].hostName : "";
+                containerNewHostFields.style.display = "none";
+                boxHostSuggestionsDropdown.style.display = "none";
+
+                modalEpisodeSourceLink.classList.add("active");
+                inputModalSourceUrl.focus();
+            });
+        }
+
+        // Alterna os campos extras de criação de player/hospedagem (Print D -> Print E)
+        if (btnTriggerCreateHostExpander) {
+            btnTriggerCreateHostExpander.addEventListener("click", () => {
+                const isExpanded = containerNewHostFields.style.display === "flex";
+                containerNewHostFields.style.display = isExpanded ? "none" : "flex";
+                if (!isExpanded) {
+                    inputNewHostPhotoUrl.focus();
                 }
+            });
+        }
+
+        // Sugestões de hospedagem enquanto digita
+        if (inputModalSourceHostSearch) {
+            inputModalSourceHostSearch.addEventListener("input", () => {
+                const query = inputModalSourceHostSearch.value.trim().toLowerCase();
+                boxHostSuggestionsDropdown.innerHTML = "";
+                if (!query) {
+                    boxHostSuggestionsDropdown.style.display = "none";
+                    return;
+                }
+
+                const matches = knownVideoHostsList.filter(h => h.name.toLowerCase().includes(query));
+                if (matches.length > 0) {
+                    matches.forEach(m => {
+                        const row = document.createElement("div");
+                        row.style.padding = "8px 12px";
+                        row.style.display = "flex";
+                        row.style.alignItems = "center";
+                        row.style.gap = "8px";
+                        row.style.cursor = "pointer";
+                        row.style.color = "#ffffff";
+                        row.innerHTML = `<img src="${m.icon}" style="width:18px;height:18px;object-fit:cover;border-radius:4px;"><span>${m.name}</span>`;
+                        row.onclick = () => {
+                            inputModalSourceHostSearch.value = m.name;
+                            boxHostSuggestionsDropdown.style.display = "none";
+                        };
+                        boxHostSuggestionsDropdown.appendChild(row);
+                    });
+                    boxHostSuggestionsDropdown.style.display = "block";
+                } else {
+                    boxHostSuggestionsDropdown.style.display = "none";
+                }
+            });
+        }
+
+        if (btnCloseModalSourceLink) {
+            btnCloseModalSourceLink.addEventListener("click", () => {
+                modalEpisodeSourceLink.classList.remove("active");
+            });
+        }
+
+        // Concluir no modal de links: salva no episódio em tempo real
+        if (btnConfirmModalSourceLink) {
+            btnConfirmModalSourceLink.addEventListener("click", () => {
+                const currentEp = addedEpisodesList[currentActiveEpisodeIndex];
+                if (!currentEp) return;
+
+                const urlVal = inputModalSourceUrl.value.trim();
+                let hostNameVal = inputModalSourceHostSearch.value.trim();
+                const newHostPhoto = inputNewHostPhotoUrl.value.trim();
+                const newHostName = inputNewHostNameText.value.trim();
+
+                // Se criou uma nova hospedagem no Print E
+                if (newHostName) {
+                    hostNameVal = newHostName;
+                    knownVideoHostsList.push({
+                        name: newHostName,
+                        icon: newHostPhoto || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100"
+                    });
+                }
+
+                // Identifica automaticamente a hospedagem se o usuário não digitou
+                if (!hostNameVal) {
+                    if (urlVal.includes("youtube.com") || urlVal.includes("youtu.be")) hostNameVal = "YouTube";
+                    else if (urlVal.includes("drive.google.com")) hostNameVal = "Drive";
+                    else if (urlVal.includes("blogger.com") || urlVal.includes("blogspot.com")) hostNameVal = "Blogger";
+                    else if (urlVal.includes("mega.nz")) hostNameVal = "Mega";
+                    else hostNameVal = "Player";
+                }
+
+                const foundHostObj = knownVideoHostsList.find(h => h.name.toLowerCase() === hostNameVal.toLowerCase());
+                const finalIcon = foundHostObj ? foundHostObj.icon : (newHostPhoto || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100");
+
+                currentEp.videoUrl = urlVal;
+                if (!Array.isArray(currentEp.sources)) currentEp.sources = [];
+
+                currentEp.sources.push({
+                    url: urlVal,
+                    hostName: hostNameVal,
+                    hostIcon: finalIcon,
+                    createdAt: Date.now()
+                });
+
+                // Atualiza o campo de texto correspondente
+                const inputEpUrl = document.getElementById("uploadFirstEpisodeUrl") || document.getElementById("uploadEpisodeVideoUrl");
+                if (inputEpUrl) inputEpUrl.value = urlVal;
+
+                modalEpisodeSourceLink.classList.remove("active");
+                showToast(`Link de ${hostNameVal} vinculado ao episódio!`);
+            });
+        }
+
+        // ==========================================================================
+        // ATUALIZAÇÃO EM TEMPO REAL: ETIQUETAGEM DO ARCO NARRATIVO POR EPISÓDIO
+        // ==========================================================================
+        // Atualiza o episódio ativo quando o usuário digita nos campos da temporada/episódio
+        function updateActiveEpisodeArcNarrative(seasonVal, episodeVal) {
+            if (!addedEpisodesList[currentActiveEpisodeIndex]) return;
+            const targetEp = addedEpisodesList[currentActiveEpisodeIndex];
+
+            if (seasonVal) {
+                targetEp.season = `${seasonVal}ª Temporada`;
+            }
+            if (episodeVal) {
+                targetEp.episodeNum = Number(episodeVal) || episodeVal;
+                targetEp.episode = `${episodeVal}º Episódio`;
+
+                // Re-etiqueta o título mantendo o nome da série
+                const currentTitleInput = document.getElementById("uploadSeriesName") || document.getElementById("uploadEpisodeTitle");
+                const seriesName = (currentTitleInput && currentTitleInput.value.trim()) ? currentTitleInput.value.trim() : targetEp.seriesName;
+                targetEp.title = `${seriesName} - Episódio ${episodeVal}`;
+
+                if (uploadHeaderTitleText) {
+                    uploadHeaderTitleText.textContent = targetEp.title;
+                }
+            }
+            renderUploadEpisodesScroll();
+        }
+
+        if (inputSeasonNumberVal) {
+            inputSeasonNumberVal.addEventListener("input", (e) => {
+                updateActiveEpisodeArcNarrative(e.target.value.trim(), null);
+            });
+        }
+
+        if (inputEpisodeNumberVal) {
+            inputEpisodeNumberVal.addEventListener("input", (e) => {
+                updateActiveEpisodeArcNarrative(null, e.target.value.trim());
             });
         }
 
@@ -18597,6 +18852,278 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         }
 
+        // ==========================================================================
+        // VARIÁVEIS DO MODAL DE OUTROS PLAYERS E CONTROLE DE HOSPEDAGENS (PRINTS A, B, B1 E C)
+        // ==========================================================================
+        const rowSettingOtherPlayers = document.getElementById("rowSettingOtherPlayers");
+        const txtSettingOtherPlayersActiveHost = document.getElementById("txtSettingOtherPlayersActiveHost");
+        const drawerOtherPlayersB = document.getElementById("drawerOtherPlayersB");
+
+        const headerFavoritesNormalMode = document.getElementById("headerFavoritesNormalMode");
+        const headerFavoritesEditMode = document.getElementById("headerFavoritesEditMode");
+        const btnEditFavoritesPencil = document.getElementById("btnEditFavoritesPencil");
+        const btnCancelFavoritesEditMode = document.getElementById("btnCancelFavoritesEditMode");
+        const btnConfirmFavoritesEditMode = document.getElementById("btnConfirmFavoritesEditMode");
+
+        const containerDynamicFavoritesGrid = document.getElementById("containerDynamicFavoritesGrid");
+        const containerOtherHostsNonFavoritesGrid = document.getElementById("containerOtherHostsNonFavoritesGrid");
+        const btnFavoriteAccountShortcut = document.getElementById("btnFavoriteAccountShortcut");
+        const avatarFavoritesAccountCircle = document.getElementById("avatarFavoritesAccountCircle");
+
+        let currentActiveEpisodeSourcesList = [];
+        let isFavoritesEditModeActive = false;
+        let tempEditingFavoritesList = [];
+        let hostSelectionHistoryCounts = JSON.parse(localStorage.getItem("fs_host_usage_counts") || "{}");
+        let manualFavoritesList = JSON.parse(localStorage.getItem("fs_manual_favorites") || '["YouTube", "Drive", "Blogger", "Mega", "Mediafire", "Vids"]');
+        let blacklistedAutoFavorites = JSON.parse(localStorage.getItem("fs_blacklisted_favorites") || "[]");
+
+        // Clicar em "Conta" no modal de hospedagens leva diretamente para a página Você
+        if (btnFavoriteAccountShortcut) {
+            btnFavoriteAccountShortcut.addEventListener("click", () => {
+                drawerOtherPlayersB.classList.remove("active");
+                if (drawerPlayerSettingsA7) drawerPlayerSettingsA7.classList.remove("active");
+                openScreen(viewYou);
+            });
+        }
+
+        // Linha "Outros players" da engrenagem (Print A) abre a gaveta de hospedagens (Print B)
+        if (rowSettingOtherPlayers) {
+            rowSettingOtherPlayers.addEventListener("click", () => {
+                if (drawerPlayerSettingsA7) drawerPlayerSettingsA7.classList.remove("active");
+                openOtherPlayersModal();
+            });
+        }
+
+        function openOtherPlayersModal() {
+            isFavoritesEditModeActive = false;
+            headerFavoritesNormalMode.style.display = "flex";
+            headerFavoritesEditMode.style.display = "none";
+
+            // Atualiza o círculo "Conta" com a foto de perfil do usuário atual
+            if (avatarFavoritesAccountCircle) {
+                const userAvatarEl = document.getElementById("userChannelAvatarImg");
+                if (userAvatarEl && userAvatarEl.src) {
+                    avatarFavoritesAccountCircle.innerHTML = `<img src="${userAvatarEl.src}" style="width:100%;height:100%;object-fit:cover;">`;
+                } else {
+                    avatarFavoritesAccountCircle.textContent = currentUserEmail ? currentUserEmail.charAt(0).toUpperCase() : "E";
+                }
+            }
+
+            renderOtherPlayersModalContent();
+            drawerOtherPlayersB.classList.add("active");
+        }
+
+        // Renderiza as hospedagens disponíveis (separando até 12 favoritos no card superior escuro)
+        function renderOtherPlayersModalContent() {
+            containerDynamicFavoritesGrid.innerHTML = "";
+            containerOtherHostsNonFavoritesGrid.innerHTML = "";
+
+            // Coleta todas as fontes de vídeo deste episódio
+            let hostsToDisplay = [];
+
+            if (currentActiveEpisodeSourcesList.length > 0) {
+                // Numera hospedagens repetidas da mesma origem: Blogger 1, Blogger 2, YouTube 1, etc.
+                const hostNameCounts = {};
+                currentActiveEpisodeSourcesList.forEach(src => {
+                    const baseName = src.hostName || "Player";
+                    hostNameCounts[baseName] = (hostNameCounts[baseName] || 0) + 1;
+                    const numberedName = hostNameCounts[baseName] > 1 ? `${baseName} ${hostNameCounts[baseName]}` : baseName;
+
+                    hostsToDisplay.push({
+                        name: numberedName,
+                        baseName: baseName,
+                        icon: src.hostIcon || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100",
+                        url: src.url || src.videoUrl,
+                        isFromCurrentEpisode: true
+                    });
+                });
+            } else {
+                // Se o vídeo não tiver array de fontes, usa as hospedagens padrão conhecidas
+                knownVideoHostsList.forEach(k => {
+                    hostsToDisplay.push({
+                        name: k.name,
+                        baseName: k.name,
+                        icon: k.icon,
+                        url: "",
+                        isFromCurrentEpisode: false
+                    });
+                });
+            }
+
+            // Separação: favoritos manuais ou em edição temporária
+            const favoritesPool = isFavoritesEditModeActive ? tempEditingFavoritesList : manualFavoritesList;
+
+            hostsToDisplay.forEach(item => {
+                const isFav = favoritesPool.includes(item.baseName) || favoritesPool.includes(item.name);
+                const itemEl = createHostIconUnit(item, isFav);
+
+                // No máximo 11 favoritos dinâmicos adicionados (somando com o ícone Conta dá 12 no card)
+                if (isFav && containerDynamicFavoritesGrid.children.length < 11) {
+                    containerDynamicFavoritesGrid.appendChild(itemEl);
+                } else {
+                    containerOtherHostsNonFavoritesGrid.appendChild(itemEl);
+                }
+            });
+        }
+
+        // Cria cada unidade visual de ícone de hospedagem
+        function createHostIconUnit(item, isFavorite) {
+            const unit = document.createElement("div");
+            unit.style.display = "flex";
+            unit.style.flexDirection = "column";
+            unit.style.alignItems = "center";
+            unit.style.gap = "6px";
+            unit.style.cursor = "pointer";
+            unit.style.userSelect = "none";
+
+            unit.innerHTML = `
+                <div style="width: 48px; height: 48px; border-radius: 12px; overflow: hidden; background-color: #2a2e35; display: flex; align-items: center; justify-content: center;">
+                    <img src="${escapeHtml(item.icon)}" alt="${escapeHtml(item.name)}" style="width: 32px; height: 32px; object-fit: contain;">
+                </div>
+                <span style="font-size: 11.5px; font-weight: 500; color: #ffffff; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 64px;">${escapeHtml(item.name)}</span>
+            `;
+
+            unit.onclick = () => {
+                if (isFavoritesEditModeActive) {
+                    // No modo de edição: clicar alterna o item para dentro ou para fora dos favoritos (Print C)
+                    toggleHostFavoriteStatus(item.baseName || item.name);
+                    return;
+                }
+
+                if (item.url) {
+                    // Troca imediata do vídeo no player para o link daquela hospedagem
+                    if (watchIframe) {
+                        let finalSrc = item.url.trim();
+                        const ytMatch = finalSrc.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+                        if (ytMatch && ytMatch[1]) {
+                            finalSrc = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
+                        }
+                        watchIframe.src = finalSrc;
+                    }
+
+                    if (txtSettingOtherPlayersActiveHost) {
+                        txtSettingOtherPlayersActiveHost.textContent = item.name;
+                    }
+
+                    // Registra tendência de uso (+50% vira favorito automaticamente)
+                    registerHostUsageTendency(item.baseName || item.name);
+
+                    drawerOtherPlayersB.classList.remove("active");
+                    showToast(`Player alternado para: ${item.name}`);
+                } else {
+                    showToast(`Hospedagem selecionada: ${item.name}`);
+                }
+            };
+
+            return unit;
+        }
+
+        // Tendência de uso: se o usuário escolhe uma hospedagem mais de 50% das vezes, ela entra nos favoritos
+        function registerHostUsageTendency(hostName) {
+            hostSelectionHistoryCounts[hostName] = (hostSelectionHistoryCounts[hostName] || 0) + 1;
+            localStorage.setItem("fs_host_usage_counts", JSON.stringify(hostSelectionHistoryCounts));
+
+            let totalSelections = 0;
+            Object.values(hostSelectionHistoryCounts).forEach(c => totalSelections += c);
+
+            const frequency = (hostSelectionHistoryCounts[hostName] / totalSelections);
+            if (frequency >= 0.5 && !manualFavoritesList.includes(hostName) && !blacklistedAutoFavorites.includes(hostName)) {
+                if (manualFavoritesList.length < 11) {
+                    manualFavoritesList.push(hostName);
+                    localStorage.setItem("fs_manual_favorites", JSON.stringify(manualFavoritesList));
+                }
+            }
+        }
+
+        // Lápis (seta rosa) ativa o Modo de Edição (Print C)
+        if (btnEditFavoritesPencil) {
+            btnEditFavoritesPencil.addEventListener("click", () => {
+                isFavoritesEditModeActive = true;
+                tempEditingFavoritesList = [...manualFavoritesList];
+                headerFavoritesNormalMode.style.display = "none";
+                headerFavoritesEditMode.style.display = "flex";
+                renderOtherPlayersModalContent();
+            });
+        }
+
+        // Alterna uma hospedagem entre a área de favoritos e a área externa
+        function toggleHostFavoriteStatus(hostName) {
+            if (tempEditingFavoritesList.includes(hostName)) {
+                tempEditingFavoritesList = tempEditingFavoritesList.filter(h => h !== hostName);
+                if (!blacklistedAutoFavorites.includes(hostName)) {
+                    blacklistedAutoFavorites.push(hostName);
+                    localStorage.setItem("fs_blacklisted_favorites", JSON.stringify(blacklistedAutoFavorites));
+                }
+            } else {
+                if (tempEditingFavoritesList.length < 11) {
+                    tempEditingFavoritesList.push(hostName);
+                } else {
+                    showToast("Limite de 12 favoritos atingido.");
+                }
+            }
+            renderOtherPlayersModalContent();
+        }
+
+        if (btnCancelFavoritesEditMode) {
+            btnCancelFavoritesEditMode.addEventListener("click", () => {
+                isFavoritesEditModeActive = false;
+                headerFavoritesNormalMode.style.display = "flex";
+                headerFavoritesEditMode.style.display = "none";
+                renderOtherPlayersModalContent();
+            });
+        }
+
+        if (btnConfirmFavoritesEditMode) {
+            btnConfirmFavoritesEditMode.addEventListener("click", () => {
+                manualFavoritesList = [...tempEditingFavoritesList];
+                localStorage.setItem("fs_manual_favorites", JSON.stringify(manualFavoritesList));
+
+                isFavoritesEditModeActive = false;
+                headerFavoritesNormalMode.style.display = "flex";
+                headerFavoritesEditMode.style.display = "none";
+                renderOtherPlayersModalContent();
+                showToast("Favoritos atualizados!");
+            });
+        }
+
+        // ==========================================================================
+        // FUNÇÃO DE AGRUPAMENTO DE EPISÓDIOS REPETIDOS
+        // ==========================================================================
+        function groupEpisodesByNumber(episodesList) {
+            const groupedMap = new Map();
+
+            episodesList.forEach(ep => {
+                const epKey = `${ep.season || '1'}_${ep.episodeNum || '1'}`;
+                if (!groupedMap.has(epKey)) {
+                    // Primeiro episódio registrado deste número
+                    const initialSources = Array.isArray(ep.sources) && ep.sources.length > 0
+                        ? [...ep.sources]
+                        : [{ url: ep.videoUrl, hostName: "Player 1" }];
+
+                    groupedMap.set(epKey, {
+                        ...ep,
+                        sources: initialSources
+                    });
+                } else {
+                    // Episódio repetido: agrupa o link dentro do mesmo card em vez de duplicar na tela
+                    const existing = groupedMap.get(epKey);
+                    if (Array.isArray(ep.sources) && ep.sources.length > 0) {
+                        existing.sources.push(...ep.sources);
+                    } else if (ep.videoUrl) {
+                        existing.sources.push({
+                            url: ep.videoUrl,
+                            hostName: `Player ${existing.sources.length + 1}`
+                        });
+                    }
+                }
+            });
+
+            return Array.from(groupedMap.values());
+        }
+
+        // ==========================================================================
+        // PLAYER PRINCIPAL: CARREGAMENTO COM SUPORTE A MÚLTIPLOS PLAYERS
+        // ==========================================================================
         function openWatchScreen(videoData, videoId) {
             currentWatchVideoId = videoId;
             openScreen(viewWatchVideo);
@@ -18607,13 +19134,29 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Grava automaticamente este episódio nos 7 últimos vídeos assistidos do histórico (Print A)
             saveVideoToUserHistory(videoData, videoId);
 
-            // Adiciona tags do vídeo visualizado (1 tag para logado, 2 para visitante com sessão de 1 dia)
+            // Adiciona tags do vídeo visualizado
             if (typeof addTagsToActiveSession === "function") {
                 addTagsToActiveSession(videoData, currentUserEmail ? 1 : 2);
             }
 
             const title = videoData.name || "Vídeo sem título";
             if (watchVideoTitle) watchVideoTitle.textContent = title;
+
+            // Extrai as fontes de hospedagem disponíveis para este episódio
+            if (Array.isArray(videoData.sources) && videoData.sources.length > 0) {
+                currentActiveEpisodeSourcesList = [...videoData.sources];
+            } else {
+                currentActiveEpisodeSourcesList = [{
+                    url: videoData.videoUrl,
+                    hostName: "YouTube",
+                    hostIcon: "https://www.youtube.com/s/desktop/f1e73994/img/favicon_144x144.png"
+                }];
+            }
+
+            // Define o nome da hospedagem ativa no menu de opções (Print A)
+            if (txtSettingOtherPlayersActiveHost) {
+                txtSettingOtherPlayersActiveHost.textContent = currentActiveEpisodeSourcesList[0].hostName || "YouTube";
+            }
 
             // Extrai e normaliza o nome da Série
             let seriesLabel = "Série";
@@ -18651,7 +19194,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     watchChannelAvatar.innerHTML = `<div style="width:36px; height:36px; border-radius:50%; background:#272727; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700;">${seriesLabel.charAt(0).toUpperCase()}</div>`;
                 }
 
-                // Clicar na foto redonda ao lado de "Inscrever-se" abre a página da série
                 watchChannelAvatar.onclick = () => {
                     if (watchIframe) watchIframe.src = "";
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
@@ -18668,7 +19210,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 };
             }
 
-            // PREENCHE A GAVETA DE DESCRIÇÃO (Capturas 3, 4, 5 e 6)
+            // Preenche a gaveta de descrição
             const descTitle = document.getElementById("descModalVideoTitle");
             const descChanName = document.getElementById("descModalChannelName");
             const descAvatar = document.getElementById("descModalAvatar");
@@ -18689,8 +19231,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             if (descFullViews) descFullViews.textContent = viewsCount.toLocaleString('pt-BR');
             if (descFullLikes) descFullLikes.textContent = likesCount.toLocaleString('pt-BR');
 
-            // Carrega Iframe do Vídeo
-            let srcUrl = (videoData.videoUrl || "").trim();
+            // Carrega Iframe do Vídeo usando a fonte ativa
+            const activeSourceUrl = (currentActiveEpisodeSourcesList[0] && currentActiveEpisodeSourcesList[0].url) 
+                ? currentActiveEpisodeSourcesList[0].url 
+                : (videoData.videoUrl || "");
+
+            let srcUrl = activeSourceUrl.trim();
             if (srcUrl) {
                 const ytMatch = srcUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
                 if (ytMatch && ytMatch[1]) {
@@ -18721,18 +19267,20 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 loadCommentsRealtime(videoId);
             } catch(e) { console.error(e); }
 
-            // Carrega os próximos episódios da série
+            // Carrega os próximos episódios da série agrupados
             loadRelatedEpisodes(videoData, videoId);
 
             // Atualiza a fila e a navegação sequencial de episódios da série
             updateSeriesEpisodesNavigation(videoData, videoId);
 
-            // Garante que o player inicie limpo (formato do Print A) sem botões na tela
+            // Garante que o player inicie limpo sem botões na tela
             hidePlayerControls();
 
             // Configura o timer automático do Modo Maratona caso esteja ativo
             setupMarathonPlaybackTimer(videoData);
         }
+
+            
 
         // CARREGA PRÓXIMOS EPISÓDIOS DA SÉRIE (FOTO COM X VERDE/VERMELHO CORRIGIDA)
         function loadRelatedEpisodes(videoData, videoId) {
@@ -19779,9 +20327,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 });
             } catch (err) {}
 
-            // Consulta todos os posts filhos (episódios de todos os usuários ligados a esta série)
+            // Consulta todos os posts filhos (episódios ligados a esta série) e aplica o agrupamento
             onSnapshot(frutasColecao, (snapshot) => {
-                currentActiveSeriesEpisodes = [];
+                const rawEpisodesFound = [];
                 let totalAccumulatedViews = 0;
                 let seriesCoverImage = "";
 
@@ -19792,13 +20340,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     const target = cleanName.toLowerCase();
 
                     if (epChan === target || epChan.includes(target) || epName.includes(target)) {
-                        currentActiveSeriesEpisodes.push(ep);
+                        rawEpisodesFound.push(ep);
                         totalAccumulatedViews += Number(ep.viewsCount || 0);
                         if (!seriesCoverImage && (ep.seriesCover || ep.thumbUrl)) {
                             seriesCoverImage = ep.seriesCover || ep.thumbUrl;
                         }
                     }
                 });
+
+                // APLICA O AGRUPAMENTO: Episódios com o mesmo número são fundidos em um só card com múltiplos players
+                currentActiveSeriesEpisodes = groupEpisodesByNumber(rawEpisodesFound);
 
                 // Atualiza Imagens do Banner e Avatar e salva para o Snackbar Oficial (Print E e D2)
                 const finalThumb = (matchedSeriesData && matchedSeriesData.coverUrl) || seriesCoverImage || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800";
