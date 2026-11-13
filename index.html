@@ -11905,8 +11905,8 @@
                     <img id="uploadHeaderCircleThumb" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200" alt="Capa da Série">
                 </div>
                 <div class="upload-video-header-texts">
-                    <h2 class="upload-video-header-title" id="uploadHeaderTitleText">The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life - Episódio 1</h2>
-                    <span class="upload-video-header-sub" id="uploadHeaderSubText">The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life</span>
+                    <h2 class="upload-video-header-title" id="uploadHeaderTitleText">Nome da série - Episódio 1</h2>
+                    <span class="upload-video-header-sub" id="uploadHeaderSubText">Nome da série</span>
                 </div>
             </div>
 
@@ -13540,15 +13540,15 @@
         // Sem mockups: Inicia APENAS com o Episódio 1 verdadeiro
         let addedEpisodesList = [
             {
-                title: "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life - Episódio 1",
-                seriesName: "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+                title: "Nome da série - Episódio 1",
+                seriesName: "Nome da série",
                 season: "1ª Temporada",
                 episode: "1º Episódio",
                 episodeNum: 1,
                 age: "12+",
-                duration: "23:40",
+                duration: "00:00",
                 videoUrl: "",
-                thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800"
+                thumbUrl: "https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_024242.png"
             }
         ];
 
@@ -13627,10 +13627,10 @@
             }
 
             const currentTitleInput = document.getElementById("uploadSeriesName") || document.getElementById("uploadEpisodeTitle");
-            const seriesName = (currentTitleInput && currentTitleInput.value.trim()) ? currentTitleInput.value.trim() : "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life";
+            const seriesName = (currentTitleInput && currentTitleInput.value.trim()) ? currentTitleInput.value.trim() : "Nome da série";
             
             const currentDurationInput = document.getElementById("uploadFirstEpisodeDuration") || document.getElementById("uploadEpisodeDuration");
-            const duration = (currentDurationInput && currentDurationInput.value.trim()) ? currentDurationInput.value.trim() : "23:40";
+            const duration = (currentDurationInput && currentDurationInput.value.trim()) ? currentDurationInput.value.trim() : "00:00";
 
             const nextEpNumber = addedEpisodesList.length + 1;
             const currentAgeBadge = selectedAgeBadge || "14+";
@@ -13847,7 +13847,7 @@
         if (inputSeriesTitleSync) {
             inputSeriesTitleSync.addEventListener("input", (e) => {
                 const text = e.target.value.trim();
-                const displayTitle = text || "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life";
+                const displayTitle = text || "Nome da série";
 
                 if (uploadHeaderTitleText) {
                     uploadHeaderTitleText.textContent = `${displayTitle} - Episódio ${currentActiveEpisodeIndex + 1}`;
