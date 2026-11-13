@@ -17,6 +17,7 @@ jobs:
         run: |
           mkdir -p www assets
           cp index.html www/
+          sed -i 's/signInWithPopup/signInWithRedirect/g' www/index.html
           cp 20261001_022059.png www/
           cp 20261001_022059.png assets/icon.png
           cp 20261001_022059.png assets/splash.png
