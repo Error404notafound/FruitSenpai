@@ -11866,7 +11866,7 @@
 
             <!-- Preview do Vídeo com botão de edição de capa e os 5 novos botões das setas -->
             <div class="upload-thumb-area">
-                <img id="uploadVideoThumb" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80" alt="Capa">
+                <img id="uploadVideoThumb" src="https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_015844.png" alt="Capa">
                 
                 <!-- Já existente (Superior Esquerdo): Lápis -->
                 <button class="upload-thumb-edit-btn" id="btnEditUploadThumb" title="Alterar miniatura" type="button">
@@ -14249,7 +14249,7 @@
             visibility: "Público",
             audience: "Não é conteúdo para crianças",
             rating: "Livre (L)",
-            thumbUrl: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80"
+            thumbUrl: "https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_015844.png"
         };
 
         // Alternância entre as abas 'Criar Série' e 'Postar Episódio'
@@ -14280,7 +14280,7 @@
                 currentUploadSettings.thumbUrl = url;
             } else {
                 // Imagem padrão caso o campo seja apagado
-                uploadVideoThumb.src = "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80";
+                uploadVideoThumb.src = "https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_015844.png";
                 currentUploadSettings.thumbUrl = uploadVideoThumb.src;
             }
         });
@@ -14888,7 +14888,7 @@
 
                 card.innerHTML = `
                     <div class="yt-thumbnail-wrapper" style="cursor:pointer;">
-                        <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
+                        <img src="${escapeHtml(item.thumbUrl || 'https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_015844.png')}" alt="Capa">
                         <span class="fs-badge-age">${escapeHtml(ageRating)}</span>
                         <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                     </div>
@@ -19331,7 +19331,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     card.style.cursor = "pointer";
                     card.innerHTML = `
                         <div class="yt-thumbnail-wrapper">
-                            <img src="${escapeHtml(ep.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop&q=80')}" alt="Capa">
+                            <img src="${escapeHtml(ep.thumbUrl || 'https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_015844.png')}" alt="Capa">
                             <div class="yt-duration-badge">${escapeHtml(formatDurationBadge(ep.duration))}</div>
                         </div>
                         <div class="yt-video-info-row">
