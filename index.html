@@ -10390,6 +10390,14 @@
                     </button>
                 </div>
 
+                <!-- Seção Histórico na tela Você (Print A3) -->
+                <div class="profile-section-title-row" id="rowProfileHistoryHeader">
+                    <h3>Histórico</h3>
+                    <button class="profile-ver-tudo-btn" id="btnHistorySeeAllFromYou" type="button">Ver tudo</button>
+                </div>
+                <!-- Carrossel Horizontal do Histórico na tela Você (Print A3) -->
+                <div class="profile-playlists-carousel" id="profileHistoryCarouselYou"></div>
+
                 <!-- Seção Playlists (Print B) -->
                 <div class="profile-section-title-row">
                     <h3>Playlists</h3>
@@ -10590,6 +10598,33 @@
                         <div style="font-size:11px; color:#aaa;">Ficção • 2026</div>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             TELA OFICIAL DO HISTÓRICO - VER TUDO (PRINT A3.1)
+             ========================================================================== -->
+        <section class="yt-subview" id="viewHistoryAll">
+            <div class="yt-subview-header" style="background:#0f0f0f; position:sticky; top:0; z-index:50;">
+                <div class="yt-subview-header-left">
+                    <button class="yt-icon-btn" id="btnBackFromHistoryAll" type="button" aria-label="Voltar">
+                        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                    </button>
+                    <span class="yt-subview-title">Histórico</span>
+                </div>
+                <div class="yt-header-actions">
+                    <button class="yt-icon-btn" id="btnHistorySearch" type="button" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </button>
+                    <button class="yt-icon-btn" id="btnHistoryHeaderKebab" type="button" aria-label="Mais opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div style="display:flex; flex-direction:column; padding:0 0 90px 0;">
+                <h1 style="font-size:24px; font-weight:800; color:#ffffff; padding:12px 16px 8px 16px;">Histórico</h1>
+                <div id="historyAllVerticalContainer" style="display:flex; flex-direction:column;"></div>
             </div>
         </section>
 
@@ -11255,7 +11290,7 @@
                     </button>
                 </div>
                 <div class="yt-header-actions">
-                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
+                    <button class="yt-icon-btn" id="btnPlaylistSearch" type="button" aria-label="Pesquisar na playlist"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
                     <button class="yt-icon-btn" id="btnTopPlaylistKebab"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
                 </div>
             </div>
@@ -13432,6 +13467,62 @@
             </div>
         </div>
 
+        <!-- GAVETA PRINT A3.3: OPÇÕES DO HISTÓRICO NA PÁGINA VOCÊ (SETAS VERDES) -->
+        <div class="accounts-drawer" id="drawerHistoryItemA33" style="z-index: 10030;">
+            <div class="accounts-sheet" style="padding: 10px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnA33SaveWatchLater">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        <span style="font-size:14.5px;">Salvar em "Assistir mais tarde"</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnA33SaveToPlaylist">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span style="font-size:14.5px;">Salvar na playlist</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnA33RemoveFromHistory">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        <span style="font-size:14.5px;">Remover do histórico de exibição</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GAVETA PRINT A3.2: OPÇÕES DO VÍDEO NA PÁGINA HISTÓRICO -->
+        <div class="accounts-drawer" id="drawerHistoryItemA32" style="z-index: 10030;">
+            <div class="accounts-sheet" style="padding: 10px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnA32RemoveFromHistory">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        <span style="font-size:14.5px;">Remover do histórico de exibição</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnA32SaveWatchLater">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                        <span style="font-size:14.5px;">Salvar em "Assistir mais tarde"</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnA32SaveToPlaylist">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                        <span style="font-size:14.5px;">Salvar na playlist</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnA32ShareVideo">
+                    <div class="account-item-left">
+                        <svg style="width:22px;height:22px;fill:#fff" viewBox="0 0 24 24"><path d="M15 5.63 20.66 12 15 18.37V14h-1c-3.96 0-7.14 1-9.75 3.09 1.84-4.07 5.11-6.4 9.89-7.1l.86-.13V5.63M14 3v6C6.22 10.13 3.11 15.33 2 21c2.78-3.97 6.44-6 12-6v6l8-9-8-9z"/></svg>
+                        <span style="font-size:14.5px;">Compartilhar</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <!-- ==========================================================================
@@ -15452,12 +15543,33 @@
             });
         }
 
-        // Elementos do Histórico (Prints A e B)
+        // Elementos do Histórico (Prints A, A3, A3.1, A3.2 e A3.3)
         const historyLoggedOutBox = document.getElementById("historyLoggedOutBox");
         const userHistoryCarousel = document.getElementById("userHistoryCarousel");
-        let currentUserHistoryList = [];
+        const rowProfileHistoryHeader = document.getElementById("rowProfileHistoryHeader");
+        const btnHistorySeeAllFromYou = document.getElementById("btnHistorySeeAllFromYou");
+        const profileHistoryCarouselYou = document.getElementById("profileHistoryCarouselYou");
 
-        // Salva o vídeo reproduzido no histórico do usuário logado (máximo 7 vídeos)
+        const viewHistoryAll = document.getElementById("viewHistoryAll");
+        const btnBackFromHistoryAll = document.getElementById("btnBackFromHistoryAll");
+        const btnHistorySearch = document.getElementById("btnHistorySearch");
+        const historyAllVerticalContainer = document.getElementById("historyAllVerticalContainer");
+
+        const drawerHistoryItemA33 = document.getElementById("drawerHistoryItemA33");
+        const btnA33SaveWatchLater = document.getElementById("btnA33SaveWatchLater");
+        const btnA33SaveToPlaylist = document.getElementById("btnA33SaveToPlaylist");
+        const btnA33RemoveFromHistory = document.getElementById("btnA33RemoveFromHistory");
+
+        const drawerHistoryItemA32 = document.getElementById("drawerHistoryItemA32");
+        const btnA32RemoveFromHistory = document.getElementById("btnA32RemoveFromHistory");
+        const btnA32SaveWatchLater = document.getElementById("btnA32SaveWatchLater");
+        const btnA32SaveToPlaylist = document.getElementById("btnA32SaveToPlaylist");
+        const btnA32ShareVideo = document.getElementById("btnA32ShareVideo");
+
+        let currentUserHistoryList = [];
+        let currentSelectedHistoryVideo = null;
+
+        // Salva o vídeo reproduzido no histórico do usuário logado
         async function saveVideoToUserHistory(videoData, videoId) {
             if (!currentUserEmail || !auth.currentUser) return;
 
@@ -15471,24 +15583,18 @@
                 timestamp: new Date().toISOString()
             };
 
-            // Remove ocorrência anterior do mesmo vídeo para evitar duplicata
             currentUserHistoryList = currentUserHistoryList.filter(item => item.id !== videoId);
-            // Coloca no topo (mais recente primeiro)
             currentUserHistoryList.unshift(videoEntry);
-            // Mantém no máximo os 7 últimos vídeos
-            if (currentUserHistoryList.length > 7) {
-                currentUserHistoryList = currentUserHistoryList.slice(0, 7);
+            if (currentUserHistoryList.length > 50) {
+                currentUserHistoryList = currentUserHistoryList.slice(0, 50);
             }
 
-            // Salva no Firestore sob o perfil do usuário
             try {
                 const userRef = doc(db, "users", auth.currentUser.uid);
                 await setDoc(userRef, { history: currentUserHistoryList }, { merge: true });
             } catch (err) {}
 
-            // Salva no cache local do dispositivo
             localStorage.setItem(`history_${currentUserEmail}`, JSON.stringify(currentUserHistoryList));
-
             renderUserHistoryCarousel();
         }
 
@@ -15498,14 +15604,16 @@
                 currentUserHistoryList = [];
                 if (historyLoggedOutBox) historyLoggedOutBox.style.display = "block";
                 if (userHistoryCarousel) userHistoryCarousel.style.display = "none";
+                if (rowProfileHistoryHeader) rowProfileHistoryHeader.style.display = "none";
+                if (profileHistoryCarouselYou) profileHistoryCarouselYou.style.display = "none";
                 return;
             }
 
-            // Usuário logado: esconde o aviso e exibe o carrossel (Print A)
             if (historyLoggedOutBox) historyLoggedOutBox.style.display = "none";
             if (userHistoryCarousel) userHistoryCarousel.style.display = "flex";
+            if (rowProfileHistoryHeader) rowProfileHistoryHeader.style.display = "flex";
+            if (profileHistoryCarouselYou) profileHistoryCarouselYou.style.display = "flex";
 
-            // Lê primeiro do cache local para resposta instantânea
             const localData = localStorage.getItem(`history_${currentUserEmail}`);
             if (localData) {
                 try {
@@ -15514,66 +15622,304 @@
                 } catch(e) {}
             }
 
-            // Sincroniza em tempo real com o Firestore
             try {
                 const userRef = doc(db, "users", auth.currentUser.uid);
                 const snap = await getDoc(userRef);
                 if (snap.exists() && Array.isArray(snap.data().history)) {
-                    currentUserHistoryList = snap.data().history.slice(0, 7);
+                    currentUserHistoryList = snap.data().history;
                     localStorage.setItem(`history_${currentUserEmail}`, JSON.stringify(currentUserHistoryList));
                     renderUserHistoryCarousel();
                 }
             } catch(err) {}
         }
 
-        // Renderiza o carrossel dos 7 últimos episódios assistidos (Print A)
+        // Renderiza os carrosséis de histórico da Home e da tela Você (Print A3)
         function renderUserHistoryCarousel() {
-            if (!userHistoryCarousel) return;
-            userHistoryCarousel.innerHTML = "";
+            if (userHistoryCarousel) userHistoryCarousel.innerHTML = "";
+            if (profileHistoryCarouselYou) profileHistoryCarouselYou.innerHTML = "";
 
             if (currentUserHistoryList.length === 0) {
-                userHistoryCarousel.innerHTML = `<div style="padding:16px 14px; font-size:12px; color:#888888;">Nenhum vídeo assistido recentemente.</div>`;
+                if (userHistoryCarousel) userHistoryCarousel.innerHTML = `<div style="padding:16px 14px; font-size:12px; color:#888888;">Nenhum vídeo assistido recentemente.</div>`;
+                if (profileHistoryCarouselYou) profileHistoryCarouselYou.innerHTML = `<div style="padding:16px 14px; font-size:12px; color:#888888;">Nenhum vídeo assistido recentemente.</div>`;
                 return;
             }
 
+            // 1. Renderiza no carrossel da Home
+            if (userHistoryCarousel) {
+                currentUserHistoryList.slice(0, 7).forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "history-card";
+                    card.innerHTML = `
+                        <div class="history-thumb-box">
+                            <img src="${escapeHtml(item.thumbUrl)}" alt="Capa">
+                            <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                            <div class="history-progress-bar"></div>
+                        </div>
+                        <div class="history-card-details">
+                            <div class="history-card-texts">
+                                <div class="history-card-title" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+                                <div class="history-card-channel">${escapeHtml(item.channel || "Fruit Senpai")}</div>
+                                <div class="history-card-meta">${formatNumber(item.viewsCount || 0)} visualizações • ${formatTimeAgo(item.timestamp)}</div>
+                            </div>
+                            <button class="fs-kebab-btn-mini btnHistoryItemKebab" type="button" aria-label="Mais opções">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
+                        </div>
+                    `;
+
+                    card.onclick = (e) => {
+                        if (e.target.closest(".btnHistoryItemKebab")) return;
+                        openWatchScreen(item, item.id);
+                    };
+
+                    const kebabBtn = card.querySelector(".btnHistoryItemKebab");
+                    if (kebabBtn) {
+                        kebabBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            currentSelectedHistoryVideo = item;
+                            drawerHistoryItemA33.classList.add("active");
+                        };
+                    }
+
+                    userHistoryCarousel.appendChild(card);
+                });
+            }
+
+            // 2. Renderiza no carrossel da tela Você (Print A3) com kebab abrindo o modal Print A3.3
+            if (profileHistoryCarouselYou) {
+                currentUserHistoryList.forEach(item => {
+                    const card = document.createElement("div");
+                    card.className = "history-card";
+                    card.innerHTML = `
+                        <div class="history-thumb-box">
+                            <img src="${escapeHtml(item.thumbUrl)}" alt="Capa">
+                            <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
+                            <div class="history-progress-bar"></div>
+                        </div>
+                        <div class="history-card-details">
+                            <div class="history-card-texts">
+                                <div class="history-card-title" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+                                <div class="history-card-channel">${escapeHtml(item.channel || "Fruit Senpai")}</div>
+                                <div class="history-card-meta">${formatNumber(item.viewsCount || 0)} visualizações</div>
+                            </div>
+                            <!-- Kebab vertical das setas verdes do Print A3 -->
+                            <button class="fs-kebab-btn-mini btnHistoryCardKebabYou" type="button" aria-label="Mais opções">
+                                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                            </button>
+                        </div>
+                    `;
+
+                    card.onclick = (e) => {
+                        if (e.target.closest(".btnHistoryCardKebabYou")) return;
+                        openWatchScreen(item, item.id);
+                    };
+
+                    const kebabBtn = card.querySelector(".btnHistoryCardKebabYou");
+                    if (kebabBtn) {
+                        kebabBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            currentSelectedHistoryVideo = item;
+                            drawerHistoryItemA33.classList.add("active");
+                        };
+                    }
+
+                    profileHistoryCarouselYou.appendChild(card);
+                });
+            }
+        }
+
+        // Ações do Modal Print A3.3
+        if (btnA33SaveWatchLater) {
+            btnA33SaveWatchLater.onclick = async () => {
+                drawerHistoryItemA33.classList.remove("active");
+                if (currentSelectedHistoryVideo) {
+                    showToast('Salvo em "Assistir mais tarde"');
+                }
+            };
+        }
+
+        if (btnA33SaveToPlaylist) {
+            btnA33SaveToPlaylist.onclick = () => {
+                drawerHistoryItemA33.classList.remove("active");
+                if (currentSelectedHistoryVideo) {
+                    currentWatchVideoId = currentSelectedHistoryVideo.id;
+                    loadUserPlaylists();
+                    drawerSavePlaylist.classList.add("active");
+                }
+            };
+        }
+
+        if (btnA33RemoveFromHistory) {
+            btnA33RemoveFromHistory.onclick = async () => {
+                drawerHistoryItemA33.classList.remove("active");
+                if (!currentSelectedHistoryVideo) return;
+
+                currentUserHistoryList = currentUserHistoryList.filter(v => v.id !== currentSelectedHistoryVideo.id);
+                localStorage.setItem(`history_${currentUserEmail}`, JSON.stringify(currentUserHistoryList));
+
+                try {
+                    if (auth.currentUser) {
+                        const userRef = doc(db, "users", auth.currentUser.uid);
+                        await setDoc(userRef, { history: currentUserHistoryList }, { merge: true });
+                    }
+                } catch(e) {}
+
+                renderUserHistoryCarousel();
+                renderAllHistoryPage();
+                showToast("Removido do histórico de exibição");
+            };
+        }
+
+        // Clicar em "Ver tudo" no Histórico (Seta vermelha do Print A3) abre a página Print A3.1
+        if (btnHistorySeeAllFromYou) {
+            btnHistorySeeAllFromYou.onclick = () => {
+                openScreen(viewHistoryAll);
+                renderAllHistoryPage();
+            };
+        }
+
+        const btnHistorySeeAll = document.getElementById("btnHistorySeeAll");
+        if (btnHistorySeeAll) {
+            btnHistorySeeAll.onclick = () => {
+                openScreen(viewHistoryAll);
+                renderAllHistoryPage();
+            };
+        }
+
+        if (btnBackFromHistoryAll) {
+            btnBackFromHistoryAll.onclick = () => {
+                navigateBack();
+            };
+        }
+
+        // Lupa da página de Histórico abre a pesquisa mantendo o histórico de retorno
+        if (btnHistorySearch) {
+            btnHistorySearch.onclick = () => {
+                openSearchInputMode("history");
+            };
+        }
+
+        // Renderização da Página Oficial de Histórico (Print A3.1)
+        function renderAllHistoryPage() {
+            if (!historyAllVerticalContainer) return;
+            historyAllVerticalContainer.innerHTML = "";
+
+            if (currentUserHistoryList.length === 0) {
+                historyAllVerticalContainer.innerHTML = `<div style="padding:40px 16px; text-align:center; color:#aaaaaa; font-size:14px;">Nenhum vídeo no histórico de exibição.</div>`;
+                return;
+            }
+
+            const headerToday = document.createElement("div");
+            headerToday.style.fontSize = "14.5px";
+            headerToday.style.fontWeight = "700";
+            headerToday.style.color = "#ffffff";
+            headerToday.style.padding = "8px 16px 4px 16px";
+            headerToday.textContent = "Hoje";
+            historyAllVerticalContainer.appendChild(headerToday);
+
             currentUserHistoryList.forEach(item => {
-                const card = document.createElement("div");
-                card.className = "history-card";
-                card.innerHTML = `
-                    <div class="history-thumb-box">
+                const row = document.createElement("div");
+                row.className = "channel-horizontal-video-row";
+                row.style.padding = "10px 16px";
+                row.innerHTML = `
+                    <div class="channel-horizontal-thumb" style="width:145px; min-width:145px; position:relative;">
                         <img src="${escapeHtml(item.thumbUrl)}" alt="Capa">
                         <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
                         <div class="history-progress-bar"></div>
                     </div>
-                    <div class="history-card-details">
-                        <div class="history-card-texts">
-                            <div class="history-card-title" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
-                            <div class="history-card-channel">${escapeHtml(item.channel || "Fruit Senpai")}</div>
-                            <div class="history-card-meta">${formatNumber(item.viewsCount || 0)} visualizações • ${formatTimeAgo(item.timestamp)}</div>
+                    <div class="channel-horizontal-details">
+                        <h4 class="channel-horizontal-title">${escapeHtml(item.name)}</h4>
+                        <div class="channel-horizontal-meta">
+                            <span>${escapeHtml(item.channel || "Fruit Senpai")}</span>
+                            <span>•</span>
+                            <span>${formatNumber(item.viewsCount || 0)} visualizações</span>
                         </div>
-                        <button class="fs-kebab-btn-mini btnHistoryItemKebab" type="button" aria-label="Mais opções">
-                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-                        </button>
                     </div>
+                    <!-- Kebab vertical da página de Histórico (Print A3.1) -->
+                    <button class="fs-kebab-btn-mini btnHistoryAllItemKebab" type="button" aria-label="Opções">
+                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </button>
                 `;
 
-                // Ao clicar no card, abre direto a página do player daquele vídeo
-                card.onclick = (e) => {
-                    if (e.target.closest(".btnHistoryItemKebab")) return;
+                row.onclick = (e) => {
+                    if (e.target.closest(".btnHistoryAllItemKebab")) return;
                     openWatchScreen(item, item.id);
                 };
 
-                const kebabBtn = card.querySelector(".btnHistoryItemKebab");
-                if (kebabBtn) {
-                    kebabBtn.onclick = (e) => {
+                const kebab = row.querySelector(".btnHistoryAllItemKebab");
+                if (kebab) {
+                    kebab.onclick = (e) => {
                         e.stopPropagation();
-                        currentWatchVideoId = item.id;
-                        drawerVideoKebab.classList.add("active");
+                        currentSelectedHistoryVideo = item;
+                        drawerHistoryItemA32.classList.add("active");
                     };
                 }
 
-                userHistoryCarousel.appendChild(card);
+                historyAllVerticalContainer.appendChild(row);
             });
+        }
+
+        // Ações do Modal Print A3.2
+        if (btnA32RemoveFromHistory) {
+            btnA32RemoveFromHistory.onclick = async () => {
+                drawerHistoryItemA32.classList.remove("active");
+                if (!currentSelectedHistoryVideo) return;
+
+                currentUserHistoryList = currentUserHistoryList.filter(v => v.id !== currentSelectedHistoryVideo.id);
+                localStorage.setItem(`history_${currentUserEmail}`, JSON.stringify(currentUserHistoryList));
+
+                try {
+                    if (auth.currentUser) {
+                        const userRef = doc(db, "users", auth.currentUser.uid);
+                        await setDoc(userRef, { history: currentUserHistoryList }, { merge: true });
+                    }
+                } catch(e) {}
+
+                renderAllHistoryPage();
+                renderUserHistoryCarousel();
+                showToast("Removido do histórico de exibição");
+            };
+        }
+
+        if (btnA32SaveWatchLater) {
+            btnA32SaveWatchLater.onclick = async () => {
+                drawerHistoryItemA32.classList.remove("active");
+                if (currentSelectedHistoryVideo) {
+                    showToast('Salvo em "Assistir mais tarde"');
+                }
+            };
+        }
+
+        if (btnA32SaveToPlaylist) {
+            btnA32SaveToPlaylist.onclick = () => {
+                drawerHistoryItemA32.classList.remove("active");
+                if (currentSelectedHistoryVideo) {
+                    currentWatchVideoId = currentSelectedHistoryVideo.id;
+                    loadUserPlaylists();
+                    drawerSavePlaylist.classList.add("active");
+                }
+            };
+        }
+
+        // Opção Compartilhar: Copia o link exatamente no formato pedido
+        if (btnA32ShareVideo) {
+            btnA32ShareVideo.onclick = async () => {
+                drawerHistoryItemA32.classList.remove("active");
+                if (!currentSelectedHistoryVideo) return;
+
+                const shareUrl = `https://error404notafound.github.io/FruitSenpai/?v=${currentSelectedHistoryVideo.id}`;
+
+                if (navigator.clipboard) {
+                    try {
+                        await navigator.clipboard.writeText(shareUrl);
+                        showToast(`Link copiado: ${shareUrl}`);
+                    } catch(err) {
+                        prompt("Copie o link do vídeo:", shareUrl);
+                    }
+                } else {
+                    prompt("Copie o link do vídeo:", shareUrl);
+                }
+            };
         }
 
         if (btnAddNewAccount) {
@@ -18328,6 +18674,14 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         btnOpenPlaylistKebabModal.addEventListener("click", openPlaylistOptionsDrawer);
         btnTopPlaylistKebab.addEventListener("click", openPlaylistOptionsDrawer);
 
+        // Conecta o clique da lupa no topo da playlist para abrir a barra de pesquisa
+        const btnPlaylistSearch = document.getElementById("btnPlaylistSearch");
+        if (btnPlaylistSearch) {
+            btnPlaylistSearch.addEventListener("click", () => {
+                openSearchInputMode("playlist");
+            });
+        }
+
         // Ordem aleatória a partir de B1
         btnOptionShufflePlay.addEventListener("click", () => {
             drawerPlaylistMainOptions.classList.remove("active");
@@ -18603,6 +18957,33 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         });
                     }
 
+                    // Função auxiliar que garante que a capa da playlist seja sempre a foto do último episódio adicionado
+        function resolvePlaylistLatestCover(pl, itemsList) {
+            if (pl.coverUrl && String(pl.coverUrl).trim()) return String(pl.coverUrl).trim();
+            if (!itemsList || itemsList.length === 0) return "";
+
+            // O último item adicionado (fim da lista) se torna a capa da playlist (Print A2 e A2.1)
+            const lastItem = itemsList[itemsList.length - 1];
+            const foundEp = loadedEpisodesCache.find(ep => ep.id === lastItem || (ep.name && ep.name.toLowerCase() === String(lastItem).toLowerCase()) || (ep.channel && ep.channel.toLowerCase() === String(lastItem).toLowerCase()));
+            if (foundEp && (foundEp.thumbUrl || foundEp.seriesCover)) {
+                return foundEp.thumbUrl || foundEp.seriesCover;
+            }
+
+            const foundSeries = availableSeriesList.find(s => s.id === lastItem || (s.title && s.title.toLowerCase() === String(lastItem).toLowerCase()));
+            if (foundSeries && foundSeries.coverUrl) {
+                return foundSeries.coverUrl;
+            }
+
+            // Fallback para o primeiro item se houver
+            const firstItem = itemsList[0];
+            const foundFirstEp = loadedEpisodesCache.find(ep => ep.id === firstItem || (ep.name && ep.name.toLowerCase() === String(firstItem).toLowerCase()) || (ep.channel && ep.channel.toLowerCase() === String(firstItem).toLowerCase()));
+            if (foundFirstEp && (foundFirstEp.thumbUrl || foundFirstEp.seriesCover)) {
+                return foundFirstEp.thumbUrl || foundFirstEp.seriesCover;
+            }
+
+            return "";
+        }
+
                     // 1. RENDERIZA NO CARROSSEL HORIZONTAL DA TELA "VOCÊ" (PRINT B)
                     if (profilePlaylistsCarousel) {
                         profilePlaylistsCarousel.innerHTML = "";
@@ -18610,7 +18991,8 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         mergedPlaylists.forEach(pl => {
                             const itemsList = Array.isArray(pl.series) && pl.series.length > 0 ? pl.series : (Array.isArray(pl.videos) ? pl.videos : []);
                             const count = itemsList.length;
-                            const hasCover = count > 0 && pl.coverUrl;
+                            const resolvedCover = resolvePlaylistLatestCover(pl, itemsList);
+                            const hasCover = count > 0 && Boolean(resolvedCover);
                             const isWatchLater = (pl.title || "").toLowerCase().includes("watch later") || (pl.title || "").toLowerCase().includes("assistir mais tarde");
                             const isLiked = (pl.title || "").toLowerCase().includes("gostei");
 
@@ -18619,7 +19001,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                             card.innerHTML = `
                                 <div class="profile-playlist-thumb" style="position:relative; width:140px; height:80px; overflow:hidden; background:#383838;">
                                     ${hasCover 
-                                        ? `<img src="${escapeHtml(pl.coverUrl)}" alt="Capa">`
+                                        ? `<img src="${escapeHtml(resolvedCover)}" alt="Capa">`
                                         : (isWatchLater 
                                             ? `<svg style="width:28px;height:28px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`
                                             : (isLiked 
@@ -18659,7 +19041,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                 <div class="all-playlists-item-left">
                                     <div class="all-playlists-stacked-thumb-box">
                                         ${hasCover 
-                                            ? `<img src="${escapeHtml(pl.coverUrl)}" alt="Capa">`
+                                        ? `<img src="${escapeHtml(resolvedCover)}" alt="Capa">`
                                             : (isWatchLater 
                                                 ? `<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`
                                                 : (isLiked 
@@ -24072,6 +24454,10 @@ if (btnBackFromSearchInput) {
             openScreen(viewWatchVideo);
         } else if (previousActiveScreenBeforeSearch === "user_channel") {
             openScreen(viewUserChannel);
+        } else if (previousActiveScreenBeforeSearch === "playlist") {
+            openScreen(viewPlaylists);
+        } else if (previousActiveScreenBeforeSearch === "history") {
+            openScreen(viewHistoryAll);
         } else {
             openScreen("home");
         }
