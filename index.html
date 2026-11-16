@@ -4499,6 +4499,8 @@
             margin-bottom: 6px;
             color: #ffffff;
             box-shadow: 2px -4px 0px #383838;
+            position: relative;
+            overflow: hidden;
         }
 
         .profile-playlist-thumb svg {
@@ -4516,6 +4518,35 @@
         .profile-playlist-sub {
             font-size: 11px;
             color: var(--yt-text-secondary);
+        }
+
+        /* Camada sobreposta centralizada para Relógio e Gostei (Prints A1, A2 e A3) */
+        .playlist-special-thumb-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.42);
+            z-index: 3;
+            gap: 2px;
+            pointer-events: none;
+        }
+
+        .playlist-special-overlay-icon {
+            width: 24px;
+            height: 24px;
+            fill: #ffffff;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8));
+        }
+
+        .playlist-special-overlay-count {
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+            line-height: 1.2;
         }
 
         /* Lista de Menus de Navegação (E - Filmes, etc.) */
@@ -15733,7 +15764,7 @@
             btnA33SaveWatchLater.onclick = async () => {
                 drawerHistoryItemA33.classList.remove("active");
                 if (currentSelectedHistoryVideo) {
-                    showToast('Salvo em "Assistir mais tarde"');
+                    await saveVideoToWatchLater(currentSelectedHistoryVideo, currentSelectedHistoryVideo.id);
                 }
             };
         }
@@ -15885,7 +15916,7 @@
             btnA32SaveWatchLater.onclick = async () => {
                 drawerHistoryItemA32.classList.remove("active");
                 if (currentSelectedHistoryVideo) {
-                    showToast('Salvo em "Assistir mais tarde"');
+                    await saveVideoToWatchLater(currentSelectedHistoryVideo, currentSelectedHistoryVideo.id);
                 }
             };
         }
@@ -17228,7 +17259,7 @@
             btnSubsKebabWatchLater.addEventListener("click", async () => {
                 drawerSubsVideoKebab.classList.remove("active");
                 if (currentFeedVideoForKebab) {
-                    showToast("Salvo em Assistir mais tarde");
+                    await saveVideoToWatchLater(currentFeedVideoForKebab, currentFeedVideoForKebab.id);
                 }
             });
         }
@@ -18894,6 +18925,105 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             loadAllUserPlaylistsDynamic();
         }
 
+        // Salva qualquer vídeo ou série diretamente dentro de "Assistir mais tarde" (Watch Later)
+        async function saveVideoToWatchLater(videoData, videoId) {
+            if (!currentUserEmail || !auth.currentUser) {
+                openAuthModal();
+                return;
+            }
+            try {
+                const userKey = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                const plRef = doc(db, "playlists", `watch_later_${userKey}`);
+                const plSnap = await getDoc(plRef);
+                let vids = [];
+                const cover = videoData.thumbUrl || videoData.seriesCover || "";
+
+                if (plSnap.exists()) {
+                    const data = plSnap.data();
+                    vids = Array.isArray(data.videos) ? [...data.videos] : [];
+                }
+
+                if (!vids.includes(videoId)) {
+                    vids.push(videoId);
+                }
+
+                await setDoc(plRef, {
+                    title: "Assistir mais tarde",
+                    visibility: "Privado",
+                    user: currentUserEmail,
+                    videos: vids,
+                    coverUrl: cover,
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                showToast('Salvo em "Assistir mais tarde"');
+                loadAllUserPlaylistsDynamic();
+            } catch (err) {
+                console.error("Erro ao salvar em Assistir mais tarde:", err);
+            }
+        }
+
+        // Adiciona ou remove automaticamente o vídeo da playlist "Vídeos com Gostei" ao curtir no player
+        async function toggleLikedVideosPlaylist(videoData, videoId, isLiked) {
+            if (!currentUserEmail || !auth.currentUser) return;
+            try {
+                const userKey = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                const plRef = doc(db, "playlists", `liked_videos_${userKey}`);
+                const plSnap = await getDoc(plRef);
+                let vids = [];
+                let cover = videoData.thumbUrl || videoData.seriesCover || "";
+
+                if (plSnap.exists()) {
+                    const data = plSnap.data();
+                    vids = Array.isArray(data.videos) ? [...data.videos] : [];
+                }
+
+                if (isLiked) {
+                    if (!vids.includes(videoId)) {
+                        vids.push(videoId);
+                    }
+                } else {
+                    vids = vids.filter(id => id !== videoId);
+                    if (vids.length > 0) {
+                        const lastId = vids[vids.length - 1];
+                        const lastEp = loadedEpisodesCache.find(ep => ep.id === lastId);
+                        cover = lastEp ? (lastEp.thumbUrl || lastEp.seriesCover || "") : "";
+                    } else {
+                        cover = "";
+                    }
+                }
+
+                await setDoc(plRef, {
+                    title: 'Vídeos com "Gostei"',
+                    visibility: "Privado",
+                    user: currentUserEmail,
+                    videos: vids,
+                    coverUrl: cover,
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                loadAllUserPlaylistsDynamic();
+            } catch (err) {
+                console.error("Erro ao atualizar Vídeos com Gostei:", err);
+            }
+        }
+
+        // Resolve dinamicamente a foto do último vídeo adicionado para ser a capa da playlist
+        function resolvePlaylistLatestCover(pl, itemsList) {
+            if (itemsList && itemsList.length > 0) {
+                const lastItem = itemsList[itemsList.length - 1];
+                const foundEp = loadedEpisodesCache.find(ep => ep.id === lastItem || (ep.name && ep.name.toLowerCase() === String(lastItem).toLowerCase()) || (ep.channel && ep.channel.toLowerCase() === String(lastItem).toLowerCase()));
+                if (foundEp && (foundEp.thumbUrl || foundEp.seriesCover)) {
+                    return foundEp.thumbUrl || foundEp.seriesCover;
+                }
+                const foundSeries = availableSeriesList.find(s => s.id === lastItem || (s.title && s.title.toLowerCase() === String(lastItem).toLowerCase()));
+                if (foundSeries && foundSeries.coverUrl) {
+                    return foundSeries.coverUrl;
+                }
+            }
+            return pl.coverUrl || "";
+        }
+
         // Carrega as playlists em tempo real para o carrossel da tela "Você" (Print B) e para a tela "Ver tudo" (Print C)
         function loadAllUserPlaylistsDynamic() {
             if (!currentUserEmail) return;
@@ -18902,7 +19032,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 onSnapshot(collection(db, "playlists"), (epPlSnap) => {
                     const mergedPlaylists = [];
 
-                    // Puxa as playlists de séries criadas pelo usuário
                     seriesPlSnap.forEach(d => {
                         const data = { id: d.id, _collection: "series_playlists", ...d.data() };
                         if (data.user === currentUserEmail) {
@@ -18910,7 +19039,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         }
                     });
 
-                    // Puxa as playlists de episódios criadas pelo usuário
                     epPlSnap.forEach(d => {
                         const data = { id: d.id, _collection: "playlists", ...d.data() };
                         if (data.user === currentUserEmail) {
@@ -18918,7 +19046,6 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         }
                     });
 
-                    // Remove duplicatas caso a mesma playlist já tenha sido salva como cópia
                     const uniquePlaylistMap = new Map();
                     mergedPlaylists.forEach(pl => {
                         const uniqueKey = pl.originalPlaylistId || pl.id;
@@ -18928,27 +19055,12 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     });
                     const cleanedMergedPlaylists = Array.from(uniquePlaylistMap.values());
 
-                    // Garante a existência do "Watch later" e "Vídeos com Gostei" caso ainda não tenham sido criados
-                    const hasWatchLater = mergedPlaylists.some(p => (p.title || "").toLowerCase().includes("watch later") || (p.title || "").toLowerCase().includes("assistir mais tarde"));
+                    const hasWatchLater = cleanedMergedPlaylists.some(p => (p.title || "").toLowerCase().includes("watch later") || (p.title || "").toLowerCase().includes("assistir mais tarde"));
                     if (!hasWatchLater) {
-                        mergedPlaylists.unshift({
+                        cleanedMergedPlaylists.unshift({
                             id: `watch_later_${currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_')}`,
-                            title: "Watch later",
-                            visibility: "Particular",
-                            user: currentUserEmail,
-                            series: [],
-                            videos: [],
-                            _collection: "series_playlists",
-                            isDefaultItem: true
-                        });
-                    }
-
-                    const hasLikedVideos = mergedPlaylists.some(p => (p.title || "").toLowerCase().includes("gostei"));
-                    if (!hasLikedVideos) {
-                        mergedPlaylists.push({
-                            id: `liked_videos_${currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_')}`,
-                            title: "Vídeos com \"Gostei\"",
-                            visibility: "Particular",
+                            title: "Assistir mais tarde",
+                            visibility: "Privado",
                             user: currentUserEmail,
                             series: [],
                             videos: [],
@@ -18957,63 +19069,67 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         });
                     }
 
-                    // Função auxiliar que garante que a capa da playlist seja sempre a foto do último episódio adicionado
-        function resolvePlaylistLatestCover(pl, itemsList) {
-            if (pl.coverUrl && String(pl.coverUrl).trim()) return String(pl.coverUrl).trim();
-            if (!itemsList || itemsList.length === 0) return "";
+                    const hasLikedVideos = cleanedMergedPlaylists.some(p => (p.title || "").toLowerCase().includes("gostei"));
+                    if (!hasLikedVideos) {
+                        cleanedMergedPlaylists.push({
+                            id: `liked_videos_${currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_')}`,
+                            title: 'Vídeos com "Gostei"',
+                            visibility: "Privado",
+                            user: currentUserEmail,
+                            series: [],
+                            videos: [],
+                            _collection: "playlists",
+                            isDefaultItem: true
+                        });
+                    }
 
-            // O último item adicionado (fim da lista) se torna a capa da playlist (Print A2 e A2.1)
-            const lastItem = itemsList[itemsList.length - 1];
-            const foundEp = loadedEpisodesCache.find(ep => ep.id === lastItem || (ep.name && ep.name.toLowerCase() === String(lastItem).toLowerCase()) || (ep.channel && ep.channel.toLowerCase() === String(lastItem).toLowerCase()));
-            if (foundEp && (foundEp.thumbUrl || foundEp.seriesCover)) {
-                return foundEp.thumbUrl || foundEp.seriesCover;
-            }
-
-            const foundSeries = availableSeriesList.find(s => s.id === lastItem || (s.title && s.title.toLowerCase() === String(lastItem).toLowerCase()));
-            if (foundSeries && foundSeries.coverUrl) {
-                return foundSeries.coverUrl;
-            }
-
-            // Fallback para o primeiro item se houver
-            const firstItem = itemsList[0];
-            const foundFirstEp = loadedEpisodesCache.find(ep => ep.id === firstItem || (ep.name && ep.name.toLowerCase() === String(firstItem).toLowerCase()) || (ep.channel && ep.channel.toLowerCase() === String(firstItem).toLowerCase()));
-            if (foundFirstEp && (foundFirstEp.thumbUrl || foundFirstEp.seriesCover)) {
-                return foundFirstEp.thumbUrl || foundFirstEp.seriesCover;
-            }
-
-            return "";
-        }
-
-                    // 1. RENDERIZA NO CARROSSEL HORIZONTAL DA TELA "VOCÊ" (PRINT B)
+                    // 1. RENDERIZA NO CARROSSEL HORIZONTAL DA TELA "VOCÊ" (PRINTS A1 E A2)
                     if (profilePlaylistsCarousel) {
                         profilePlaylistsCarousel.innerHTML = "";
 
-                        mergedPlaylists.forEach(pl => {
+                        cleanedMergedPlaylists.forEach(pl => {
                             const itemsList = Array.isArray(pl.series) && pl.series.length > 0 ? pl.series : (Array.isArray(pl.videos) ? pl.videos : []);
                             const count = itemsList.length;
                             const resolvedCover = resolvePlaylistLatestCover(pl, itemsList);
                             const hasCover = count > 0 && Boolean(resolvedCover);
+
                             const isWatchLater = (pl.title || "").toLowerCase().includes("watch later") || (pl.title || "").toLowerCase().includes("assistir mais tarde");
                             const isLiked = (pl.title || "").toLowerCase().includes("gostei");
+
+                            const countLabel = count === 1 ? "1 vídeo" : `${count} vídeos`;
 
                             const card = document.createElement("div");
                             card.className = "profile-playlist-card";
                             card.innerHTML = `
-                                <div class="profile-playlist-thumb" style="position:relative; width:140px; height:80px; overflow:hidden; background:#383838;">
+                                <div class="profile-playlist-thumb" style="position:relative; width:140px; height:80px; overflow:hidden; background:#212429;">
                                     ${hasCover 
-                                        ? `<img src="${escapeHtml(resolvedCover)}" alt="Capa">`
-                                        : (isWatchLater 
-                                            ? `<svg style="width:28px;height:28px;fill:#fff" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`
-                                            : (isLiked 
-                                                ? `<svg style="width:28px;height:28px;fill:#fff" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>`
-                                                : `<svg style="width:28px;height:28px;fill:#fff" viewBox="0 0 24 24"><path d="M19 9H2v2h17V9zm0-4H2v2h17V5zM2 15h11v-2H2v2zm13-2v6l5-3-5-3z"/></svg>`
-                                              )
-                                          )
+                                        ? `<img src="${escapeHtml(resolvedCover)}" alt="Capa" style="width:100%;height:100%;object-fit:cover;">`
+                                        : `<div style="width:100%;height:100%;background:#2a2d33;"></div>`
                                     }
-                                    <div class="profile-playlist-badge-count">≡ ${count}</div>
+
+                                    <!-- Ícone de Relógio e contagem centralizada sobre a capa (Print A1) -->
+                                    ${isWatchLater ? `
+                                        <div class="playlist-special-thumb-overlay">
+                                            <svg class="playlist-special-overlay-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                            <span class="playlist-special-overlay-count">${countLabel}</span>
+                                        </div>
+                                    ` : ''}
+
+                                    <!-- Ícone de Gostei (Joinha) e contagem centralizada sobre a capa (Print A2) -->
+                                    ${isLiked ? `
+                                        <div class="playlist-special-thumb-overlay">
+                                            <svg class="playlist-special-overlay-icon" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                                            <span class="playlist-special-overlay-count">${countLabel}</span>
+                                        </div>
+                                    ` : ''}
+
+                                    <!-- Badge tradicional nas demais playlists -->
+                                    ${(!isWatchLater && !isLiked) ? `
+                                        <div class="profile-playlist-badge-count">≡ ${count}</div>
+                                    ` : ''}
                                 </div>
                                 <div class="profile-playlist-name">${escapeHtml(pl.title || "Playlist")}</div>
-                                <div class="profile-playlist-sub">${escapeHtml(pl.visibility || "Privado")} • Playlist</div>
+                                <div class="profile-playlist-sub">${escapeHtml(pl.visibility || "Particular")} • Playlist</div>
                             `;
 
                             card.onclick = () => {
@@ -19024,14 +19140,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                         });
                     }
 
-                    // 2. RENDERIZA NA LISTA VERTICAL DA PÁGINA "VER TUDO" (PRINT C)
+                    // 2. RENDERIZA NA LISTA VERTICAL DA PÁGINA "PLAYLISTS - VER TUDO" (PRINT A3)
                     if (allPlaylistsVerticalContainer) {
                         allPlaylistsVerticalContainer.innerHTML = "";
 
-                        mergedPlaylists.forEach(pl => {
+                        cleanedMergedPlaylists.forEach(pl => {
                             const itemsList = Array.isArray(pl.series) && pl.series.length > 0 ? pl.series : (Array.isArray(pl.videos) ? pl.videos : []);
                             const count = itemsList.length;
-                            const hasCover = count > 0 && pl.coverUrl;
+                            const resolvedCover = resolvePlaylistLatestCover(pl, itemsList);
+                            const hasCover = count > 0 && Boolean(resolvedCover);
+
                             const isWatchLater = (pl.title || "").toLowerCase().includes("watch later") || (pl.title || "").toLowerCase().includes("assistir mais tarde");
                             const isLiked = (pl.title || "").toLowerCase().includes("gostei");
 
@@ -19039,23 +19157,33 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                             row.className = "all-playlists-item-card";
                             row.innerHTML = `
                                 <div class="all-playlists-item-left">
-                                    <div class="all-playlists-stacked-thumb-box">
+                                    <div class="all-playlists-stacked-thumb-box" style="position:relative; width:130px; min-width:130px; height:74px; overflow:hidden;">
                                         ${hasCover 
-                                        ? `<img src="${escapeHtml(resolvedCover)}" alt="Capa">`
-                                            : (isWatchLater 
-                                                ? `<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>`
-                                                : (isLiked 
-                                                    ? `<svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>`
-                                                    : `<svg viewBox="0 0 24 24"><path d="M19 9H2v2h17V9zm0-4H2v2h17V5zM2 15h11v-2H2v2zm13-2v6l5-3-5-3z"/></svg>`
-                                                  )
-                                              )
+                                            ? `<img src="${escapeHtml(resolvedCover)}" alt="Capa" style="width:100%;height:100%;object-fit:cover;">`
+                                            : `<div style="width:100%;height:100%;background:#2a2d33;"></div>`
                                         }
-                                        <div class="all-playlists-badge-count">≡ ${count === 0 ? 'Nenhum vídeo' : (count === 1 ? 'Um vídeo' : `${count} vídeos`)}</div>
+
+                                        ${isWatchLater ? `
+                                            <div class="playlist-special-thumb-overlay">
+                                                <svg class="playlist-special-overlay-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                                                <span class="playlist-special-overlay-count">${count}</span>
+                                            </div>
+                                        ` : ''}
+
+                                        ${isLiked ? `
+                                            <div class="playlist-special-thumb-overlay">
+                                                <svg class="playlist-special-overlay-icon" viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                                                <span class="playlist-special-overlay-count">${count}</span>
+                                            </div>
+                                        ` : ''}
+
+                                        ${(!isWatchLater && !isLiked) ? `
+                                            <div class="all-playlists-badge-count">≡ ${count}</div>
+                                        ` : ''}
                                     </div>
                                     <div class="all-playlists-item-info">
                                         <div class="all-playlists-item-title">${escapeHtml(pl.title || "Playlist")}</div>
-                                        <div class="all-playlists-item-sub">${escapeHtml(pl.visibility || "Privado")} • Playlist</div>
-                                        <div class="all-playlists-item-sub">Atualizado hoje</div>
+                                        <div class="all-playlists-item-sub">${escapeHtml(pl.visibility || "Privado")}</div>
                                     </div>
                                 </div>
                                 <button class="all-playlists-item-kebab-btn btnPlItemOptions" type="button" aria-label="Opções">
@@ -19830,14 +19958,17 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     currentLikes = Number(videoDoc.data().likesCount || 0);
                 }
 
+                const currentEpObj = loadedEpisodesCache.find(v => v.id === currentWatchVideoId) || { id: currentWatchVideoId, name: watchVideoTitle.textContent };
+
                 if (currentVideoUserVote === "like") {
-                    // Clicar novamente no Like remove a curtida (volta ao Print A)
+                    // Clicar novamente no Like remove a curtida e remove da playlist
                     await deleteDoc(userVoteRef);
                     currentLikes = Math.max(0, currentLikes - 1);
                     currentVideoUserVote = null;
                     updateLikeDislikeButtonsUI(null);
+                    await toggleLikedVideosPlaylist(currentEpObj, currentWatchVideoId, false);
                 } else {
-                    // Aplica Like e anula o deslike caso existisse (Print B)
+                    // Aplica Like e insere automaticamente na playlist Vídeos com "Gostei"
                     await setDoc(userVoteRef, {
                         vote: "like",
                         user: currentUserEmail,
@@ -19848,9 +19979,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     currentVideoUserVote = "like";
                     updateLikeDislikeButtonsUI("like");
 
+                    // Atualiza a playlist oficial de Vídeos com Gostei
+                    await toggleLikedVideosPlaylist(currentEpObj, currentWatchVideoId, true);
+
                     // Adiciona 2 tags do vídeo marcado como "Gostei" à barra de pílulas do usuário
-                    const currentEpObj = loadedEpisodesCache.find(v => v.id === currentWatchVideoId);
-                    if (currentEpObj && typeof addTagsToActiveSession === "function") {
+                    if (typeof addTagsToActiveSession === "function") {
                         addTagsToActiveSession(currentEpObj, 2);
                     }
                 }
@@ -21468,8 +21601,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                 const seriesArray = Array.isArray(pl.series) ? pl.series : [];
                                 const isPublic = pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público";
 
-                                if (isPublic && seriesArray.length >= 4) {
-                                    // Pega 4 capas para a grade 2x2
+                                if (isPublic && seriesArray.length > 0) {
                                     const fourCovers = [];
                                     for (let i = 0; i < seriesArray.length && fourCovers.length < 4; i++) {
                                         const sName = String(seriesArray[i]).toLowerCase().trim();
@@ -21479,7 +21611,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                         }
                                     }
                                     while (fourCovers.length < 4) {
-                                        fourCovers.push(pl.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400");
+                                        fourCovers.push(pl.coverUrl || (fourCovers[0] ? fourCovers[0] : "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=400"));
                                     }
 
                                     publicCollectionsList.push({
@@ -21498,7 +21630,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                 const vidsArray = Array.isArray(pl.videos) ? pl.videos : [];
                                 const isPublic = pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público";
 
-                                if (isPublic && vidsArray.length >= 4) {
+                                if (isPublic && vidsArray.length > 0) {
                                     const fourCovers = [];
                                     for (let i = 0; i < vidsArray.length && fourCovers.length < 4; i++) {
                                         const vIdOrName = String(vidsArray[i]).toLowerCase().trim();
@@ -21508,7 +21640,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                         }
                                     }
                                     while (fourCovers.length < 4) {
-                                        fourCovers.push(pl.coverUrl || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400");
+                                        fourCovers.push(pl.coverUrl || (fourCovers[0] ? fourCovers[0] : "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400"));
                                     }
 
                                     publicCollectionsList.push({
