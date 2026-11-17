@@ -18366,9 +18366,15 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 // Atualiza contagem de vídeos por extenso
                 plVideosCountLabelText.textContent = formatVideosCountWord(currentPlaylistVideosList.length);
 
-                // Capa da playlist: Se tiver vídeos, usa o primeiro. Se vazia, mostra o cinza E4
-                if (firstCover) {
-                    plCoverImg.src = firstCover;
+                // Capa superior da playlist: usa a foto do último episódio adicionado (Prints A1.1 e A2.1)
+                let latestCover = currentPlaylistData.coverUrl || "";
+                if (currentPlaylistVideosList.length > 0) {
+                    const lastAddedVideo = currentPlaylistVideosList[currentPlaylistVideosList.length - 1];
+                    latestCover = lastAddedVideo.thumbUrl || lastAddedVideo.seriesCover || latestCover;
+                }
+
+                if (latestCover) {
+                    plCoverImg.src = latestCover;
                     plCoverImg.style.display = "block";
                     plCoverEmptyPlaceholder.style.display = "none";
                 } else {
@@ -18900,12 +18906,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         btnItemKebabSaveWatchLater.addEventListener("click", async () => {
             drawerPlaylistItemKebab.classList.remove("active");
             if (currentSelectedVideoForRemoval) {
-                showToast("Salvo em Assistir mais tarde");
+                await saveVideoToWatchLater(currentSelectedVideoForRemoval, currentSelectedVideoForRemoval.id);
             }
         });
 
         btnItemKebabSaveOtherPlaylist.addEventListener("click", () => {
             drawerPlaylistItemKebab.classList.remove("active");
+            if (currentSelectedVideoForRemoval) {
+                currentWatchVideoId = currentSelectedVideoForRemoval.id;
+                targetVideoToSaveInPlaylist = currentSelectedVideoForRemoval;
+            }
             loadUserPlaylists();
             drawerSavePlaylist.classList.add("active");
         });
@@ -20096,33 +20106,117 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             } catch(e) { console.error(e); }
         });
 
+        let targetVideoToSaveInPlaylist = null;
+
         async function loadUserPlaylists() {
             const container = document.getElementById("userPlaylistsList");
+            if (!container) return;
             container.innerHTML = "";
+
+            if (!currentUserEmail) {
+                openAuthModal();
+                return;
+            }
+
+            const userKey = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+
             onSnapshot(collection(db, "playlists"), (snap) => {
                 container.innerHTML = "";
+
+                const userCustomPlaylists = [];
+                let foundWatchLater = null;
+                let foundLiked = null;
+
                 snap.forEach(docSnap => {
-                    const pl = docSnap.data();
+                    const pl = { id: docSnap.id, ...docSnap.data() };
                     if (pl.user === currentUserEmail) {
-                        const row = document.createElement("div");
-                        row.className = "account-item-row";
-                        row.innerHTML = `<div><div style="font-weight:600;">${escapeHtml(pl.title)}</div><small style="color:#aaa;">${pl.visibility}</small></div>`;
-                        row.addEventListener("click", async () => {
-                            try {
-                                const playlistRef = doc(db, "playlists", docSnap.id);
-                                const list = Array.isArray(pl.videos) ? [...pl.videos] : [];
-                                if (!list.includes(currentWatchVideoId)) {
-                                    list.push(currentWatchVideoId);
-                                    await setDoc(playlistRef, { videos: list }, { merge: true });
-                                    showToast(`Salvo em ${pl.title}`);
-                                } else {
-                                    showToast(`Já está salvo em ${pl.title}`);
-                                }
-                                drawerSavePlaylist.classList.remove("active");
-                            } catch(err) { console.error(err); }
-                        });
-                        container.appendChild(row);
+                        const lowTitle = (pl.title || "").toLowerCase();
+                        if (lowTitle.includes("watch later") || lowTitle.includes("assistir mais tarde")) {
+                            foundWatchLater = pl;
+                        } else if (lowTitle.includes("gostei")) {
+                            foundLiked = pl;
+                        } else {
+                            userCustomPlaylists.push(pl);
+                        }
                     }
+                });
+
+                // Se ainda não existem fisicamente no banco, garante a exibição como opções padrão
+                if (!foundLiked) {
+                    foundLiked = {
+                        id: `liked_videos_${userKey}`,
+                        title: 'Vídeos com "Gostei"',
+                        visibility: "Privado",
+                        user: currentUserEmail,
+                        videos: []
+                    };
+                }
+
+                if (!foundWatchLater) {
+                    foundWatchLater = {
+                        id: `watch_later_${userKey}`,
+                        title: "Assistir mais tarde",
+                        visibility: "Privado",
+                        user: currentUserEmail,
+                        videos: []
+                    };
+                }
+
+                // Ordem oficial idêntica ao print: Playlists normais primeiro, depois Vídeos com Gostei e Assistir mais tarde
+                const allPlaylistsList = [...userCustomPlaylists, foundLiked, foundWatchLater];
+
+                allPlaylistsList.forEach(pl => {
+                    const row = document.createElement("div");
+                    row.className = "account-item-row";
+                    row.style.padding = "12px 0";
+                    row.style.cursor = "pointer";
+
+                    row.innerHTML = `
+                        <div>
+                            <div style="font-weight:600; font-size:14.5px; color:#ffffff;">${escapeHtml(pl.title)}</div>
+                            <small style="color:#aaaaaa; font-size:12px;">${escapeHtml(pl.visibility || "Privado")}</small>
+                        </div>
+                    `;
+
+                    row.onclick = async () => {
+                        try {
+                            const targetVideo = targetVideoToSaveInPlaylist || loadedEpisodesCache.find(v => v.id === currentWatchVideoId) || currentSelectedVideoForRemoval;
+                            const targetId = targetVideo ? targetVideo.id : currentWatchVideoId;
+                            const targetThumb = targetVideo ? (targetVideo.thumbUrl || targetVideo.seriesCover || "") : "";
+
+                            if (!targetId) {
+                                showToast("Nenhum vídeo selecionado.");
+                                drawerSavePlaylist.classList.remove("active");
+                                return;
+                            }
+
+                            const playlistRef = doc(db, "playlists", pl.id);
+                            const vidsList = Array.isArray(pl.videos) ? [...pl.videos] : [];
+
+                            if (!vidsList.includes(targetId)) {
+                                vidsList.push(targetId);
+                            }
+
+                            // Grava o vídeo e atualiza imediatamente a capa da playlist para ser a deste vídeo
+                            await setDoc(playlistRef, {
+                                title: pl.title,
+                                visibility: pl.visibility || "Privado",
+                                user: currentUserEmail,
+                                videos: vidsList,
+                                coverUrl: targetThumb || pl.coverUrl || "",
+                                updatedAt: serverTimestamp()
+                            }, { merge: true });
+
+                            showToast(`Salvo em ${pl.title}`);
+                            drawerSavePlaylist.classList.remove("active");
+                            targetVideoToSaveInPlaylist = null;
+                            loadAllUserPlaylistsDynamic();
+                        } catch(err) {
+                            console.error("Erro ao salvar na playlist:", err);
+                        }
+                    };
+
+                    container.appendChild(row);
                 });
             });
         }
