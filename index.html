@@ -3166,6 +3166,60 @@
             text-align: center;
         }
 
+        /* Card Vertical Correto dos Shorts dentro do Canal da Série (Print A) */
+        .channel-short-shelf-card {
+            width: 140px !important;
+            min-width: 140px !important;
+            aspect-ratio: 9 / 16 !important;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            background-color: #1a1a1a !important;
+            cursor: pointer !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+            flex-shrink: 0 !important;
+        }
+
+        .channel-short-shelf-card img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            display: block !important;
+        }
+
+        .channel-short-shelf-overlay {
+            position: absolute !important;
+            inset: 0 !important;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, transparent 40%, rgba(0, 0, 0, 0.88) 100%) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            padding: 8px 10px 10px 10px !important;
+        }
+
+        .channel-short-shelf-top {
+            display: flex !important;
+            justify-content: flex-end !important;
+        }
+
+        .channel-short-kebab-btn {
+            background: none !important;
+            border: none !important;
+            color: #ffffff !important;
+            cursor: pointer !important;
+            padding: 2px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .channel-short-kebab-btn svg {
+            width: 18px !important;
+            height: 18px !important;
+            fill: #ffffff !important;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8)) !important;
+        }
+
         .channel-playlist-horizontal-card {
             width: 150px;
             min-width: 150px;
@@ -21096,30 +21150,55 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 // 5. Seção "Canais associados" (Cruzamento de tags/gêneros semelhantes)
                 renderAssociatedSeries(cleanName, matchedSeriesData);
 
-                // 6. Seção "Shorts" (Ou aviso de ausência)
+                // 6. Seção "Shorts" com proporção vertical travada e kebab de Salvar/Denunciar (Print A)
                 const shortsContainer = document.getElementById("channelShortsContainer");
                 shortsContainer.innerHTML = "";
-                const seriesShorts = currentActiveSeriesEpisodes.filter(ep => ep.isShort || (ep.duration && ep.duration.includes("0:")));
+                const seriesShorts = currentActiveSeriesEpisodes.filter(ep => ep.contentType === "Reels" || ep.isShort || (ep.duration && ep.duration.startsWith("0:")));
 
                 if (seriesShorts.length > 0) {
                     const rowShorts = document.createElement("div");
                     rowShorts.className = "fs-carousel";
+                    rowShorts.style.display = "flex";
+                    rowShorts.style.gap = "10px";
+                    rowShorts.style.padding = "0 14px";
+
                     seriesShorts.forEach(sh => {
                         const shCard = document.createElement("div");
-                        shCard.className = "yt-short-card";
-                        shCard.style.width = "120px";
-                        shCard.style.minWidth = "120px";
+                        shCard.className = "channel-short-shelf-card";
+                        const coverImg = sh.thumbUrl || finalThumb;
+
                         shCard.innerHTML = `
-                            <img src="${escapeHtml(sh.thumbUrl || finalThumb)}" alt="Short">
-                            <div class="yt-short-overlay">
-                                <div></div>
-                                <div class="yt-short-title-area">
-                                    <div class="yt-short-title-text">${escapeHtml(sh.name)}</div>
-                                    <div class="yt-short-views-text">${formatNumber(sh.viewsCount || 0)} views</div>
+                            <img src="${escapeHtml(coverImg)}" alt="Short">
+                            <div class="channel-short-shelf-overlay">
+                                <div class="channel-short-shelf-top">
+                                    <button class="channel-short-kebab-btn btnShortKebabInSeries" type="button" aria-label="Mais opções">
+                                        <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                                    </button>
+                                </div>
+                                <div>
+                                    <div style="font-size:12.5px; font-weight:700; color:#ffffff; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHtml(sh.name)}</div>
+                                    <div style="font-size:11px; color:rgba(255,255,255,0.8); margin-top:2px;">${formatNumber(sh.viewsCount || 0)} visualizações</div>
                                 </div>
                             </div>
                         `;
-                        shCard.onclick = () => openWatchScreen(sh, sh.id);
+
+                        // Clicar no card abre o player
+                        shCard.onclick = (e) => {
+                            if (e.target.closest(".btnShortKebabInSeries")) return;
+                            currentActiveShortsList = [sh, ...seriesShorts.filter(s => s.id !== sh.id)];
+                            openShortsFullScreen();
+                        };
+
+                        // Kebab abre a gaveta inferior com as opções "Salvar" e "Denunciar"
+                        const kebabBtn = shCard.querySelector(".btnShortKebabInSeries");
+                        if (kebabBtn) {
+                            kebabBtn.onclick = (e) => {
+                                e.stopPropagation();
+                                currentWatchVideoId = sh.id;
+                                drawerVideoKebab.classList.add("active");
+                            };
+                        }
+
                         rowShorts.appendChild(shCard);
                     });
                     shortsContainer.appendChild(rowShorts);
@@ -21127,10 +21206,10 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     shortsContainer.innerHTML = `<div class="channel-empty-warning-box">Ainda não há shorts nessa série</div>`;
                 }
 
-                // 7. Seção "Playlists" (Playlists públicas com mais de 4 episódios da série)
-                renderChannelPlaylists(currentActiveSeriesEpisodes.map(ep => ep.id), finalThumb);
-            });
-        }
+                // 7. Seção "Playlists": exibe a playlist padrão oficial com todos os episódios da série (Print 4)
+        renderChannelPlaylists(currentActiveSeriesEpisodes, finalThumb, cleanName);
+    });
+}
 
         // Renderiza a lista de vídeos recentes com tempo na capa, data relativa e botão kebab
         function renderRecentChannelVideos() {
@@ -21190,80 +21269,218 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Renderiza Canais Associados aleatórios com cruzamento de gêneros
+        // Renderiza Canais Associados reais filtrando séries que compartilham 2 ou mais gêneros
         function renderAssociatedSeries(currentName, currentData) {
             const container = document.getElementById("channelAssociatedList");
+            const block = document.getElementById("channelAssociatedBlock");
+            if (!container) return;
             container.innerHTML = "";
 
-            const sampleAssociated = [
-                { name: "Mundo em Revolução", handle: "@wrevolving", subs: "385 mil inscritos", img: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=120" },
-                { name: "Visão Libertária", handle: "@visao_libertaria", subs: "488 mil inscritos", img: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=120" },
-                { name: "ANCAPSU Classic", handle: "@ANCAPSUClassic", subs: "58,8 mil inscritos", img: "https://images.unsplash.com/photo-1563089145-599997674d42?w=120" }
-            ].sort(() => 0.5 - Math.random());
+            // Coleta os gêneros da série atual em minúsculo
+            const targetGenres = [];
+            if (currentData && Array.isArray(currentData.genres)) {
+                currentData.genres.forEach(g => targetGenres.push(String(g).trim().toLowerCase()));
+            } else if (currentData && currentData.genre) {
+                targetGenres.push(String(currentData.genre).trim().toLowerCase());
+            }
 
-            sampleAssociated.forEach(assoc => {
+            // Fallback: se a série não tiver gêneros cadastrados, extrai dos episódios
+            if (targetGenres.length === 0 && Array.isArray(currentActiveSeriesEpisodes)) {
+                currentActiveSeriesEpisodes.forEach(ep => {
+                    if (Array.isArray(ep.genres)) {
+                        ep.genres.forEach(g => {
+                            const clean = String(g).trim().toLowerCase();
+                            if (!targetGenres.includes(clean)) targetGenres.push(clean);
+                        });
+                    }
+                });
+            }
+
+            const cleanCurrentTitle = (currentName || "").trim().toLowerCase();
+            const matchingSeries = [];
+
+            // Compara com todas as outras séries cadastradas
+            if (Array.isArray(availableSeriesList)) {
+                availableSeriesList.forEach(seriesItem => {
+                    const otherTitle = (seriesItem.title || "").trim().toLowerCase();
+                    if (!otherTitle || otherTitle === cleanCurrentTitle) return;
+
+                    const otherGenres = [];
+                    if (Array.isArray(seriesItem.genres)) {
+                        seriesItem.genres.forEach(g => otherGenres.push(String(g).trim().toLowerCase()));
+                    } else if (seriesItem.genre) {
+                        otherGenres.push(String(seriesItem.genre).trim().toLowerCase());
+                    }
+
+                    // Conta a quantidade de gêneros em comum (2, 3, 4...)
+                    let sharedCount = 0;
+                    otherGenres.forEach(og => {
+                        if (targetGenres.includes(og)) {
+                            sharedCount++;
+                        }
+                    });
+
+                    // Regra: precisa ter 2 ou mais gêneros em comum
+                    if (sharedCount >= 2) {
+                        matchingSeries.push(seriesItem);
+                    }
+                });
+            }
+
+            // Se não houver séries com 2 gêneros idênticos, tenta com pelo menos 1 gênero semelhante
+            if (matchingSeries.length === 0 && targetGenres.length > 0 && Array.isArray(availableSeriesList)) {
+                availableSeriesList.forEach(seriesItem => {
+                    const otherTitle = (seriesItem.title || "").trim().toLowerCase();
+                    if (!otherTitle || otherTitle === cleanCurrentTitle) return;
+
+                    const otherGenres = Array.isArray(seriesItem.genres) 
+                        ? seriesItem.genres.map(g => String(g).trim().toLowerCase()) 
+                        : (seriesItem.genre ? [String(seriesItem.genre).trim().toLowerCase()] : []);
+
+                    if (otherGenres.some(og => targetGenres.includes(og))) {
+                        matchingSeries.push(seriesItem);
+                    }
+                });
+            }
+
+            if (matchingSeries.length === 0) {
+                if (block) block.style.display = "none";
+                return;
+            }
+
+            if (block) block.style.display = "flex";
+
+            // Embaralha e exibe até 4 canais associados reais
+            matchingSeries.sort(() => 0.5 - Math.random());
+            const toDisplay = matchingSeries.slice(0, 4);
+
+            toDisplay.forEach(series => {
                 const item = document.createElement("div");
                 item.className = "channel-associated-item";
+
+                const seriesTitle = series.title || "Série";
+                const handle = "@" + seriesTitle.toLowerCase().replace(/\s+/g, '');
+                const subsCountText = formatSubscribersCountDisplay(series.subscribersCount || 0);
+                const coverPhoto = series.coverUrl || "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=120";
+
                 item.innerHTML = `
                     <div class="channel-associated-avatar">
-                        <img src="${assoc.img}" alt="Avatar">
+                        <img src="${escapeHtml(coverPhoto)}" alt="Avatar">
                     </div>
                     <div class="channel-associated-info">
-                        <div class="channel-associated-name">${assoc.name}</div>
-                        <div class="channel-associated-handle">${assoc.handle}</div>
-                        <div class="channel-associated-subs">${assoc.subs}</div>
+                        <div class="channel-associated-name">${escapeHtml(seriesTitle)}</div>
+                        <div class="channel-associated-handle">${escapeHtml(handle)}</div>
+                        <div class="channel-associated-subs">${subsCountText}</div>
                     </div>
                 `;
-                item.onclick = () => openSeriesChannel(assoc.name);
+
+                item.onclick = () => {
+                    openSeriesChannel(seriesTitle);
+                };
+
                 container.appendChild(item);
             });
         }
 
-        // Renderiza Playlists públicas com mais de 4 episódios daquela série
-        function renderChannelPlaylists(seriesEpIds, defaultThumb) {
-            const container = document.getElementById("channelPlaylistsCarousel");
-            container.innerHTML = "";
+        
 
-            onSnapshot(collection(db, "playlists"), (snap) => {
-                container.innerHTML = "";
-                let count = 0;
+// Abre a playlist padrão oficial do sistema (pública, sem edição e sem exclusão)
+function openOfficialSeriesPlaylist(seriesTitle, episodesList, coverImage) {
+    currentOpenPlaylistDocId = `official_${seriesTitle.toLowerCase().replace(/[^a-z0-9_-]/g, '_')}`;
 
-                snap.forEach(docSnap => {
-                    const pl = docSnap.data();
-                    const vids = Array.isArray(pl.videos) ? pl.videos : [];
-                    const matchesCount = vids.filter(id => seriesEpIds.includes(id)).length;
+    currentPlaylistData = {
+        id: currentOpenPlaylistDocId,
+        title: "Todos os Episódios Oficiais",
+        user: seriesTitle,
+        originalAuthor: seriesTitle,
+        visibility: "Pública",
+        isSystemDefault: true,
+        description: `Todos os episódios oficiais da série ${seriesTitle}.`,
+        videos: episodesList.map(ep => ep.id),
+        coverUrl: coverImage
+    };
 
-                    if (matchesCount >= 4) {
-                        count++;
-                        const card = document.createElement("div");
-                        card.className = "channel-playlist-horizontal-card";
-                        card.innerHTML = `
-                            <div class="channel-playlist-cover-wrapper">
-                                <img src="${defaultThumb}" alt="Playlist">
-                                <div class="channel-playlist-badge-count">
-                                    <svg style="width:12px;height:12px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 9H2v2h17V9zm0-4H2v2h17V5zM2 15h11v-2H2v2zm13-2v6l5-3-5-3z"/></svg>
-                                    <span>${matchesCount}</span>
-                                </div>
-                            </div>
-                            <div class="channel-playlist-title-text">${escapeHtml(pl.title)}</div>
-                        `;
-                        container.appendChild(card);
-                    }
-                });
+    openScreen(viewPlaylists);
+    window.scrollTo(0, 0);
 
-                if (count === 0) {
-                    container.innerHTML = `
-                        <div class="channel-playlist-horizontal-card">
-                            <div class="channel-playlist-cover-wrapper">
-                                <img src="${defaultThumb}" alt="Playlist">
-                                <div class="channel-playlist-badge-count">≡ 14</div>
-                            </div>
-                            <div class="channel-playlist-title-text">Todos os Episódios Oficiais</div>
-                        </div>
-                    `;
-                }
-            });
-        }
+    plNotFoundMessage.style.display = "none";
+    plMainContainerView.style.display = "flex";
+
+    // Bloqueia qualquer edição ou exclusão (playlist protegida)
+    btnOpenEditPlaylistModal.style.display = "none";
+    btnOptionDeletePlaylist.style.display = "none";
+    btnSavePlaylistBookmarkAction.style.display = "flex";
+    btnSharePlaylistVisitorAction.style.display = "flex";
+
+    plDetailHeaderTitle.textContent = "Todos os Episódios Oficiais";
+    plCreatorNameText.textContent = seriesTitle;
+    plCreatorAvatarLetter.textContent = seriesTitle.charAt(0).toUpperCase();
+    plVisibilityBadgeText.textContent = "Pública";
+    plViewsCountLabelText.textContent = `${episodesList.length} vídeos`;
+
+    plCoverImg.src = coverImage;
+    plCoverImg.style.display = "block";
+    plCoverEmptyPlaceholder.style.display = "none";
+
+    plDescriptionDisplayBox.textContent = `Todos os episódios oficiais de ${seriesTitle}.`;
+    plDescriptionDisplayBox.style.display = "-webkit-box";
+
+    currentPlaylistVideosList = [...episodesList];
+    renderPlaylistVideosRows();
+    checkIfPlaylistIsSavedByVisitor(currentOpenPlaylistDocId);
+}
+
+function renderChannelPlaylists(episodesList, defaultThumb, seriesName) {
+    const container = document.getElementById("channelPlaylistsCarousel");
+    if (!container) return;
+    container.innerHTML = "";
+
+    const totalEps = episodesList.length;
+
+    // Card fixo da Playlist Oficial da Série (Print 4)
+    const officialCard = document.createElement("div");
+    officialCard.className = "channel-playlist-horizontal-card";
+    officialCard.innerHTML = `
+        <div class="channel-playlist-cover-wrapper">
+            <img src="${escapeHtml(defaultThumb)}" alt="Playlist Oficial">
+            <div class="channel-playlist-badge-count">≡ ${totalEps}</div>
+        </div>
+        <div class="channel-playlist-title-text">Todos os Episódios Oficiais</div>
+    `;
+
+    officialCard.onclick = () => {
+        openOfficialSeriesPlaylist(seriesName, episodesList, defaultThumb);
+    };
+
+    container.appendChild(officialCard);
+
+    // Consulta e acrescenta outras playlists públicas que contenham episódios desta série
+    const seriesEpIds = episodesList.map(ep => ep.id);
+    onSnapshot(collection(db, "playlists"), (snap) => {
+        snap.forEach(docSnap => {
+            const pl = { id: docSnap.id, ...docSnap.data() };
+            const isPublic = (pl.visibility === "Pública" || pl.visibility === "Publica" || pl.visibility === "Público");
+            const vids = Array.isArray(pl.videos) ? pl.videos : [];
+            const matchesCount = vids.filter(id => seriesEpIds.includes(id)).length;
+
+            if (isPublic && matchesCount >= 2 && !pl.id.startsWith("official_")) {
+                const extraCard = document.createElement("div");
+                extraCard.className = "channel-playlist-horizontal-card";
+                extraCard.innerHTML = `
+                    <div class="channel-playlist-cover-wrapper">
+                        <img src="${escapeHtml(pl.coverUrl || defaultThumb)}" alt="Playlist">
+                        <div class="channel-playlist-badge-count">≡ ${matchesCount}</div>
+                    </div>
+                    <div class="channel-playlist-title-text">${escapeHtml(pl.title)}</div>
+                `;
+                extraCard.onclick = () => {
+                    openPlaylistDetailPage(pl.id, pl.title);
+                };
+                container.appendChild(extraCard);
+            }
+        });
+    });
+}
 
         // Carrega em tempo real 'Animes mais recentes', 'Hentais mais recentes' e 'Filmes mais recentes' sem duplicidade
         const recentAnimesCarousel = document.getElementById("recentAnimesCarousel");
