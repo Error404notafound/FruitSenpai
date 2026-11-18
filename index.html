@@ -6317,6 +6317,131 @@
             pointer-events: none;
         }
 
+        /* Camada Oficial de Vídeo Sugerido ao Fim da Reprodução (Conforme o Print) */
+        .watch-suggested-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.94);
+            z-index: 45;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 14px;
+            box-sizing: border-box;
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        .watch-suggested-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .watch-suggested-header-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .watch-suggested-card-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 4px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .watch-suggested-thumb-wrapper {
+            width: 135px;
+            min-width: 135px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background-color: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .watch-suggested-thumb-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .watch-suggested-info-col {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .watch-suggested-video-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .watch-suggested-channel-name {
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        .watch-suggested-buttons-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .watch-suggested-btn-close {
+            flex: 1;
+            height: 38px;
+            border-radius: 19px;
+            background-color: #272727;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .watch-suggested-btn-close:active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .watch-suggested-btn-play {
+            flex: 1;
+            height: 38px;
+            border-radius: 19px;
+            background-color: #ffffff;
+            color: #0f0f0f;
+            border: none;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .watch-suggested-btn-play:active {
+            background-color: #e5e5e5;
+        }
+
         /* Barra Superior do Player */
         .watch-overlay-top-row {
             display: flex;
@@ -9617,6 +9742,35 @@
 
         <!-- Aba Lateral Estilo Menu Assistente (Print A) -->
         <button class="watch-mini-overlay-toggle-btn" id="btnShowPlayerControlsMini" type="button" aria-label="Mostrar controles"></button>
+
+        <!-- Camada de Vídeo Sugerido ao Fim da Reprodução (Conforme o Print) -->
+        <div class="watch-suggested-overlay" id="watchSuggestedVideoOverlay" style="display: none;">
+            <div class="watch-suggested-top-row">
+                <span class="watch-suggested-header-title">Vídeo sugerido</span>
+                <button class="yt-icon-btn" id="btnCloseSuggestedOverlayX" type="button" aria-label="Fechar">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+
+            <div class="watch-suggested-card-row" id="cardSuggestedVideoUnit">
+                <!-- Seta Vermelha: Card do episódio sugerido com miniatura e tempo (Seta Azul) -->
+                <div class="watch-suggested-thumb-wrapper">
+                    <img id="imgSuggestedVideoThumb" src="" alt="Capa">
+                    <div class="yt-duration-badge" id="badgeSuggestedVideoDuration">00:00</div>
+                </div>
+                <div class="watch-suggested-info-col">
+                    <!-- Seta Verde: Nome do episódio sugerido -->
+                    <div class="watch-suggested-video-title" id="txtSuggestedVideoTitle">Título do Episódio</div>
+                    <!-- Seta Laranja: Nome da série sugerida -->
+                    <div class="watch-suggested-channel-name" id="txtSuggestedVideoChannel">Nome da série</div>
+                </div>
+            </div>
+
+            <div class="watch-suggested-buttons-row">
+                <button class="watch-suggested-btn-close" id="btnSuggestedVideoClose" type="button">Fechar</button>
+                <button class="watch-suggested-btn-play" id="btnSuggestedVideoPlayNow" type="button">Reproduzir agora</button>
+            </div>
+        </div>
 
         <!-- Camada Completa de Controles sobre o Vídeo (Inicia 100% Oculta) -->
         <div class="watch-player-overlay-controls hidden-overlay" id="watchPlayerOverlayControls">
@@ -19020,6 +19174,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     updatedAt: serverTimestamp()
                 }, { merge: true });
 
+                // Alimenta as tags da recomendação ao salvar em "Assistir mais tarde"
+                if (videoData && typeof addTagsToActiveSession === "function") {
+                    addTagsToActiveSession(videoData, 2);
+                }
+
                 showToast('Salvo em "Assistir mais tarde"');
                 loadAllUserPlaylistsDynamic();
             } catch (err) {
@@ -20260,6 +20419,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                                 coverUrl: targetThumb || pl.coverUrl || "",
                                 updatedAt: serverTimestamp()
                             }, { merge: true });
+
+                            // Alimenta as tags da recomendação ao salvar em uma playlist
+                            if (targetVideo && typeof addTagsToActiveSession === "function") {
+                                addTagsToActiveSession(targetVideo, 2);
+                            }
 
                             showToast(`Salvo em ${pl.title}`);
                             drawerSavePlaylist.classList.remove("active");
@@ -26162,17 +26326,154 @@ if (btnWatchMarathonToggle) {
     });
 }
 
-// 3. Temporizador de Pulo Automático do Modo Maratona
+// Elementos da Camada de Vídeo Sugerido
+const watchSuggestedVideoOverlay = document.getElementById("watchSuggestedVideoOverlay");
+const btnCloseSuggestedOverlayX = document.getElementById("btnCloseSuggestedOverlayX");
+const cardSuggestedVideoUnit = document.getElementById("cardSuggestedVideoUnit");
+const imgSuggestedVideoThumb = document.getElementById("imgSuggestedVideoThumb");
+const badgeSuggestedVideoDuration = document.getElementById("badgeSuggestedVideoDuration");
+const txtSuggestedVideoTitle = document.getElementById("txtSuggestedVideoTitle");
+const txtSuggestedVideoChannel = document.getElementById("txtSuggestedVideoChannel");
+const btnSuggestedVideoClose = document.getElementById("btnSuggestedVideoClose");
+const btnSuggestedVideoPlayNow = document.getElementById("btnSuggestedVideoPlayNow");
+
+let suggestedVideoEndTimer = null;
+let currentSuggestedEpisode = null;
+
+// Algoritmo de recomendação por cruzamento de tags do vídeo atual + tags de vídeos curtidos e salvos
+function getSuggestedVideoForEpisode(currentVideoData) {
+    if (!Array.isArray(loadedEpisodesCache) || loadedEpisodesCache.length === 0) return null;
+
+    // 1. Coleta as tags do vídeo que está passando (ex: "macaco", "pamonha assada")
+    const currentVideoTags = extractTagsFromEpisode(currentVideoData).map(t => String(t).trim().toLowerCase());
+
+    // 2. Coleta as tags que o usuário acumulou ao curtir ou salvar vídeos (munição de recomendação)
+    const userStoredTags = getStoredUserTags().map(t => String(t).trim().toLowerCase());
+
+    // Pool combinado de tags alvo
+    const targetTagsPool = Array.from(new Set([...currentVideoTags, ...userStoredTags]));
+
+    // Filtra todos os episódios disponíveis exceto o próprio vídeo atual e sem ser Reels
+    const candidates = loadedEpisodesCache.filter(ep => ep.id !== currentVideoData.id && ep.contentType !== "Reels");
+    if (candidates.length === 0) return null;
+
+    // Calcula a pontuação de relevância de cada candidato por cruzamento de tags
+    const scoredCandidates = candidates.map(candidate => {
+        const candidateTags = extractTagsFromEpisode(candidate).map(t => String(t).trim().toLowerCase());
+        let score = 0;
+
+        candidateTags.forEach(ct => {
+            // Se coincidir diretamente com as tags do vídeo assistido agora, ganha peso maior (+3)
+            if (currentVideoTags.includes(ct)) {
+                score += 3;
+            }
+            // Se coincidir com tags que o usuário curtiu/salvou anteriormente, ganha peso extra (+1)
+            else if (targetTagsPool.includes(ct)) {
+                score += 1;
+            }
+        });
+
+        return {
+            candidate: candidate,
+            score: score
+        };
+    });
+
+    // Ordena pelo maior número de tags coincidentes
+    scoredCandidates.sort((a, b) => b.score - a.score);
+
+    const matchingPool = scoredCandidates.filter(item => item.score > 0);
+
+    if (matchingPool.length > 0) {
+        // Escolhe o melhor resultado ou sorteia entre os melhores
+        const topPool = matchingPool.slice(0, Math.min(3, matchingPool.length));
+        return topPool[Math.floor(Math.random() * topPool.length)].candidate;
+    }
+
+    // Se nenhuma tag coincidir, seleciona outro episódio da lista
+    return candidates[Math.floor(Math.random() * candidates.length)];
+}
+
+// Exibe a tela de sugestão dentro do player
+function showSuggestedVideoOverlay(videoData) {
+    const suggestedEp = getSuggestedVideoForEpisode(videoData);
+    if (!suggestedEp) return;
+
+    currentSuggestedEpisode = suggestedEp;
+
+    // Preenche miniatura, duração, nome do episódio e nome da série
+    imgSuggestedVideoThumb.src = suggestedEp.thumbUrl || suggestedEp.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400";
+    badgeSuggestedVideoDuration.textContent = formatDurationBadge(suggestedEp.duration);
+    txtSuggestedVideoTitle.textContent = suggestedEp.name || "Vídeo sugerido";
+    txtSuggestedVideoChannel.textContent = suggestedEp.channel || "Fruit Senpai";
+
+    hidePlayerControls();
+    watchSuggestedVideoOverlay.style.display = "flex";
+}
+
+function hideSuggestedVideoOverlay() {
+    if (watchSuggestedVideoOverlay) {
+        watchSuggestedVideoOverlay.style.display = "none";
+    }
+}
+
+// 3. Temporizador de Pulo Automático (Modo Maratona) ou Sugestão (Modo Maratona Desativado)
 function setupMarathonPlaybackTimer(episodeData) {
     if (marathonTimerInstance) clearTimeout(marathonTimerInstance);
-    if (!isMarathonModeActive()) return;
+    if (suggestedVideoEndTimer) clearTimeout(suggestedVideoEndTimer);
+
+    hideSuggestedVideoOverlay();
 
     const durationMs = parseDurationToMs(episodeData.duration) || 1440000;
-    marathonTimerInstance = setTimeout(() => {
-        if (isMarathonModeActive()) {
-            advanceSeriesEpisodeNext();
+
+    // Se o modo maratona estiver ATIVADO: pula automaticamente para o próximo episódio
+    if (isMarathonModeActive()) {
+        marathonTimerInstance = setTimeout(() => {
+            if (isMarathonModeActive()) {
+                advanceSeriesEpisodeNext();
+            }
+        }, durationMs);
+    } 
+    // Se o modo maratona estiver DESATIVADO: ao término exato da duração exibe o vídeo sugerido
+    else {
+        suggestedVideoEndTimer = setTimeout(() => {
+            if (!isMarathonModeActive() && currentWatchVideoId === episodeData.id) {
+                showSuggestedVideoOverlay(episodeData);
+            }
+        }, durationMs);
+    }
+}
+
+// Ações de clique na sugestão: Abrir o vídeo sugerido ao tocar no card ou em "Reproduzir agora"
+if (cardSuggestedVideoUnit) {
+    cardSuggestedVideoUnit.onclick = () => {
+        if (currentSuggestedEpisode) {
+            hideSuggestedVideoOverlay();
+            openWatchScreen(currentSuggestedEpisode, currentSuggestedEpisode.id);
         }
-    }, durationMs);
+    };
+}
+
+if (btnSuggestedVideoPlayNow) {
+    btnSuggestedVideoPlayNow.onclick = () => {
+        if (currentSuggestedEpisode) {
+            hideSuggestedVideoOverlay();
+            openWatchScreen(currentSuggestedEpisode, currentSuggestedEpisode.id);
+        }
+    };
+}
+
+// Fechar sugestão e voltar a tela normal do player ao tocar em "Fechar" ou no "✕"
+if (btnSuggestedVideoClose) {
+    btnSuggestedVideoClose.onclick = () => {
+        hideSuggestedVideoOverlay();
+    };
+}
+
+if (btnCloseSuggestedOverlayX) {
+    btnCloseSuggestedOverlayX.onclick = () => {
+        hideSuggestedVideoOverlay();
+    };
 }
 
 // 4. Alternância de Legendas CC (Print A1 e A4)
