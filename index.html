@@ -5924,6 +5924,72 @@
             font-size: 14px;
         }
 
+        /* Botão de Upload Direto para Cloudflare / Telegram */
+        .upload-direct-file-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 2px 16px 12px 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .btn-direct-video-upload {
+            width: 100%;
+            height: 42px;
+            background-color: #1e1e1e;
+            border: 1px dashed rgba(255, 255, 255, 0.28);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            outline: none;
+            transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+            font-family: inherit;
+        }
+
+        .btn-direct-video-upload:hover,
+        .btn-direct-video-upload:active {
+            background-color: #272727;
+            border-color: #3ea6ff;
+            color: #3ea6ff;
+        }
+
+        .btn-direct-video-upload svg {
+            width: 19px;
+            height: 19px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .upload-direct-status-text {
+            font-size: 12px;
+            color: #aaaaaa;
+            line-height: 1.35;
+            min-height: 16px;
+            word-break: break-all;
+        }
+
+        .upload-direct-status-text.loading {
+            color: #3ea6ff;
+            font-weight: 500;
+        }
+
+        .upload-direct-status-text.success {
+            color: #2ba640;
+            font-weight: 600;
+        }
+
+        .upload-direct-status-text.error {
+            color: #ff4e45;
+            font-weight: 600;
+        }
+
         /* Linhas de Opções (Visibilidade, Público, Comunidade, etc.) */
         .upload-opt-row {
             display: flex;
@@ -12313,6 +12379,17 @@
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadFirstEpisodeUrl" class="upload-title-input" placeholder="Link do 1º episódio (Embed/Drive/YouTube, opcional)">
                 </div>
+
+                <!-- Botão de Upload Direto no Modo 1 (Criar Série) -->
+                <div class="upload-direct-file-box">
+                    <input type="file" id="fileDirectVideoMode1" accept="video/mp4,video/*" style="display: none;">
+                    <button type="button" class="btn-direct-video-upload" id="btnTriggerDirectUploadMode1">
+                        <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                        <span>Enviar vídeo direto (.mp4 até 20MB)</span>
+                    </button>
+                    <div class="upload-direct-status-text" id="statusDirectUploadMode1"></div>
+                </div>
+
                 <!-- Campo de Duração do 1º Episódio ao Criar Série -->
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadFirstEpisodeDuration" class="upload-title-input" placeholder="Duração do 1º episódio (ex: 24:00 ou 12 min, opcional)">
@@ -12343,6 +12420,16 @@
 
                 <div class="upload-title-box" style="padding-top: 0;">
                     <input type="text" id="uploadEpisodeVideoUrl" class="upload-title-input" placeholder="Link do Vídeo (Embed YouTube/Drive/Outros)">
+                </div>
+
+                <!-- Botão de Upload Direto no Modo 2 (Postar Episódio) -->
+                <div class="upload-direct-file-box">
+                    <input type="file" id="fileDirectVideoMode2" accept="video/mp4,video/*" style="display: none;">
+                    <button type="button" class="btn-direct-video-upload" id="btnTriggerDirectUploadMode2">
+                        <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
+                        <span>Enviar vídeo direto (.mp4 até 20MB)</span>
+                    </button>
+                    <div class="upload-direct-status-text" id="statusDirectUploadMode2"></div>
                 </div>
 
                 <!-- Duração opcional -->
@@ -14105,6 +14192,122 @@
             inputEpisodeVideoUrl.addEventListener("input", (e) => {
                 syncActiveEpisodeVideoUrl(e.target.value);
             });
+        }
+
+        // ==========================================================================
+        // UPLOAD DIRETO DE VÍDEO (.MP4 ATÉ 20MB) VIA CLOUDFLARE WORKER + TELEGRAM
+        // ==========================================================================
+        // Coloque aqui o link do seu Worker (terminando com /upload)
+        const CLOUDFLARE_WORKER_UPLOAD_ENDPOINT = "https://fruitsenpai-bot.workers.dev/upload";
+
+        const fileDirectVideoMode1 = document.getElementById("fileDirectVideoMode1");
+        const btnTriggerDirectUploadMode1 = document.getElementById("btnTriggerDirectUploadMode1");
+        const statusDirectUploadMode1 = document.getElementById("statusDirectUploadMode1");
+
+        const fileDirectVideoMode2 = document.getElementById("fileDirectVideoMode2");
+        const btnTriggerDirectUploadMode2 = document.getElementById("btnTriggerDirectUploadMode2");
+        const statusDirectUploadMode2 = document.getElementById("statusDirectUploadMode2");
+
+        if (btnTriggerDirectUploadMode1 && fileDirectVideoMode1) {
+            btnTriggerDirectUploadMode1.addEventListener("click", () => {
+                fileDirectVideoMode1.click();
+            });
+            fileDirectVideoMode1.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    processDirectVideoUpload(file, "uploadFirstEpisodeUrl", statusDirectUploadMode1, btnTriggerDirectUploadMode1);
+                }
+            });
+        }
+
+        if (btnTriggerDirectUploadMode2 && fileDirectVideoMode2) {
+            btnTriggerDirectUploadMode2.addEventListener("click", () => {
+                fileDirectVideoMode2.click();
+            });
+            fileDirectVideoMode2.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    processDirectVideoUpload(file, "uploadEpisodeVideoUrl", statusDirectUploadMode2, btnTriggerDirectUploadMode2);
+                }
+            });
+        }
+
+        async function processDirectVideoUpload(file, targetInputId, statusElement, triggerButton) {
+            if (!file) return;
+
+            const targetInput = document.getElementById(targetInputId);
+            const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
+
+            // 1. Validação estrita de tamanho no front-end
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                const sizeInMb = (file.size / (1024 * 1024)).toFixed(1);
+                statusElement.className = "upload-direct-status-text error";
+                statusElement.textContent = `❌ Arquivo tem ${sizeInMb}MB! O limite máximo permitido é 20MB.`;
+                showToast("Vídeo maior que 20MB! Escolha um menor.");
+                return;
+            }
+
+            // 2. Indicador visual de progresso
+            statusElement.className = "upload-direct-status-text loading";
+            statusElement.textContent = `⏳ Enviando "${file.name}" para a Cloudflare e Telegram... aguarde...`;
+            if (triggerButton) {
+                triggerButton.disabled = true;
+                triggerButton.style.opacity = "0.6";
+            }
+
+            const formData = new FormData();
+            formData.append("video", file, file.name || "episodio.mp4");
+
+            try {
+                const response = await fetch(CLOUDFLARE_WORKER_UPLOAD_ENDPOINT, {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.ok && data.url) {
+                    statusElement.className = "upload-direct-status-text success";
+                    statusElement.textContent = `✅ Upload concluído com sucesso!`;
+
+                    // 3. Preenchimento automático do campo de input de URL
+                    if (targetInput) {
+                        targetInput.value = data.url;
+                        targetInput.dispatchEvent(new Event("input", { bubbles: true }));
+                        targetInput.dispatchEvent(new Event("change", { bubbles: true }));
+                    }
+
+                    // 4. Sincroniza diretamente com o episódio ativo em memória
+                    if (typeof addedEpisodesList !== "undefined" && addedEpisodesList[currentActiveEpisodeIndex]) {
+                        addedEpisodesList[currentActiveEpisodeIndex].videoUrl = data.url;
+                        if (!Array.isArray(addedEpisodesList[currentActiveEpisodeIndex].sources)) {
+                            addedEpisodesList[currentActiveEpisodeIndex].sources = [];
+                        }
+                        addedEpisodesList[currentActiveEpisodeIndex].sources.push({
+                            url: data.url,
+                            hostName: "Telegram",
+                            hostIcon: "https://telegram.org/img/favicon.ico",
+                            createdAt: Date.now()
+                        });
+                    }
+
+                    showToast("Link do vídeo gerado e preenchido!");
+                } else {
+                    statusElement.className = "upload-direct-status-text error";
+                    statusElement.textContent = `❌ Erro no envio: ${data.erro || "Falha no servidor"}`;
+                    showToast("Erro no upload do vídeo.");
+                }
+            } catch (err) {
+                console.error("Erro no fetch do upload:", err);
+                statusElement.className = "upload-direct-status-text error";
+                statusElement.textContent = "❌ Falha de conexão com a Cloudflare. Verifique a URL do Worker.";
+                showToast("Falha de conexão com o servidor.");
+            } finally {
+                if (triggerButton) {
+                    triggerButton.disabled = false;
+                    triggerButton.style.opacity = "1";
+                }
+            }
         }
 
         // Seta Vermelha: SVG de lápis do canto direito do card superior abre o modal de nome do episódio
