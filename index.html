@@ -14448,7 +14448,7 @@
                     throw new Error(config?.erro || `Não foi possível obter o link de conexão com o servidor ${displayName}`);
                 }
 
-                // Etapa 2: Monta o FormData sem cabeçalhos manuais (evita o bloqueio de OPTIONS / CORS)
+                // Etapa 2: Monta o FormData com os campos extras exigidos pelo servidor
                 const formData = new FormData();
                 if (config.extraData && typeof config.extraData === "object") {
                     for (const [chave, valor] of Object.entries(config.extraData)) {
@@ -14458,14 +14458,21 @@
                 // Streamtape exige 'file1'; Filemoon e DoodStream exigem 'file'
                 formData.append(config.fieldName || "file", file, file.name || "video.mp4");
 
-                // Etapa 3: Upload direto do navegador com barra de progresso real (0% a 100%)
+                // Etapa 3: Upload direto do navegador com barra de progresso real
                 statusElement.textContent = `📤 Enviando ${file.name} (${fileSizeMb}MB) para o ${displayName}: 0%`;
 
                 const embedUrl = await new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     xhr.open("POST", config.uploadUrl, true);
 
-                    // ATENÇÃO: Nenhum setRequestHeader() é chamado para não disparar requisições OPTIONS bloqueadas pelo servidor
+                    // Aplica cabeçalhos autorizados caso existam (como Authorization Bearer da Filemoon)
+                    if (config.headers && typeof config.headers === "object") {
+                        for (const [hKey, hVal] of Object.entries(config.headers)) {
+                            try {
+                                xhr.setRequestHeader(hKey, hVal);
+                            } catch (eH) {}
+                        }
+                    }
 
                     xhr.upload.onprogress = (evento) => {
                         if (evento.lengthComputable) {
