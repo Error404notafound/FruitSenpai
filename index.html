@@ -14445,30 +14445,27 @@
                 const config = await configRes.json();
 
                 if (!config || !config.uploadUrl) {
-                    throw new Error(config?.erro || `Não foi possível obter o link de envio do ${displayName}`);
+                    throw new Error(config?.erro || `Não foi possível obter o link de conexão com o servidor ${displayName}`);
                 }
 
-                // Etapa 2: Monta o FormData do arquivo com campos adicionais exigidos pela API
+                // Etapa 2: Monta o FormData sem cabeçalhos manuais (evita o bloqueio de OPTIONS / CORS)
                 const formData = new FormData();
                 if (config.extraData && typeof config.extraData === "object") {
                     for (const [chave, valor] of Object.entries(config.extraData)) {
                         formData.append(chave, valor);
                     }
                 }
+                // Streamtape exige 'file1'; Filemoon e DoodStream exigem 'file'
                 formData.append(config.fieldName || "file", file, file.name || "video.mp4");
 
-                // Etapa 3: Upload direto do navegador para o servidor com barra de progresso de 0% a 100%
+                // Etapa 3: Upload direto do navegador com barra de progresso real (0% a 100%)
                 statusElement.textContent = `📤 Enviando ${file.name} (${fileSizeMb}MB) para o ${displayName}: 0%`;
 
                 const embedUrl = await new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     xhr.open("POST", config.uploadUrl, true);
 
-                    if (config.headers && typeof config.headers === "object") {
-                        for (const [hKey, hVal] of Object.entries(config.headers)) {
-                            xhr.setRequestHeader(hKey, hVal);
-                        }
-                    }
+                    // ATENÇÃO: Nenhum setRequestHeader() é chamado para não disparar requisições OPTIONS bloqueadas pelo servidor
 
                     xhr.upload.onprogress = (evento) => {
                         if (evento.lengthComputable) {
@@ -14481,19 +14478,27 @@
                     };
 
                     xhr.onload = () => {
-                        if (xhr.status >= 200 && xhr.status < 300) {
+                        if (xhr.status >= 200 && xhr.status < 400) {
                             try {
                                 const resposta = JSON.parse(xhr.responseText);
                                 let generatedEmbed = "";
 
+                                // 1. Extração do link da Filemoon
                                 if (provider === "filemoon") {
-                                    const code = resposta.result?.[0]?.filecode || resposta.data?.file_code;
+                                    const code = resposta.result?.[0]?.filecode || resposta.data?.file_code || resposta.files?.[0]?.filecode;
                                     if (code) generatedEmbed = `https://filemoon.sx/e/${code}`;
-                                } else if (provider === "doodstream") {
-                                    const code = resposta.result?.[0]?.filecode;
+                                }
+                                // 2. Extração do link da DoodStream
+                                else if (provider === "doodstream") {
+                                    const code = resposta.result?.[0]?.filecode || resposta.filecode;
                                     if (code) generatedEmbed = `https://dood.to/e/${code}`;
-                                } else if (provider === "streamtape") {
-                                    generatedEmbed = resposta.result?.url ? resposta.result.url.replace("/v/", "/e/") : "";
+                                }
+                                // 3. Extração do link da Streamtape (converte /v/ para /e/)
+                                else if (provider === "streamtape") {
+                                    const rawUrl = resposta.result?.url || resposta.url || "";
+                                    if (rawUrl) {
+                                        generatedEmbed = rawUrl.replace("/v/", "/e/");
+                                    }
                                 }
 
                                 if (!generatedEmbed && resposta.url) {
@@ -14503,27 +14508,30 @@
                                 if (generatedEmbed) {
                                     resolve(generatedEmbed);
                                 } else {
-                                    reject(new Error("O servidor respondeu com sucesso, mas o link do player não foi localizado"));
+                                    reject(new Error(`O servidor ${displayName} respondeu, mas o código do vídeo não foi localizado.`));
                                 }
                             } catch (e) {
-                                reject(new Error("Erro ao processar resposta do servidor"));
+                                reject(new Error(`Erro ao interpretar resposta do servidor ${displayName}: ${xhr.responseText.substring(0, 80)}`));
                             }
                         } else {
-                            reject(new Error(`Falha no envio para o ${displayName} (Código ${xhr.status})`));
+                            reject(new Error(`Servidor ${displayName} rejeitou o upload com código ${xhr.status}.`));
                         }
                     };
 
-                    xhr.onerror = () => reject(new Error(`Erro de conexão com o servidor ${displayName}`));
+                    xhr.onerror = () => {
+                        reject(new Error(`Erro de conexão com o servidor ${displayName}. Verifique se o arquivo não ultrapassa o limite permitido.`));
+                    };
+
                     xhr.send(formData);
                 });
 
-                // Etapa 4: Preenche automaticamente o campo de URL e salva nas fontes do episódio
+                // Etapa 4: Conclusão do upload e preenchimento automático
                 if (progressContainer) {
                     progressContainer.style.display = "none";
                 }
 
                 statusElement.className = "upload-direct-status-text success";
-                statusElement.textContent = `✅ Vídeo hospedado com sucesso no ${displayName}!`;
+                statusElement.textContent = `✅ Vídeo hospedado com sucesso no ${displayName}! Link gerado.`;
 
                 if (targetInput) {
                     targetInput.value = embedUrl;
