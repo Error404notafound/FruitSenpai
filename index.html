@@ -14504,19 +14504,28 @@
                                     } catch (errRaw) {}
                                 }
 
-                                // 1. Extração Filemoon
+                                // 1. Extração Filemoon (API v1 Oficial com shared_id)
                                 if (provider === "filemoon") {
-                                    const code = resposta?.result?.[0]?.filecode || 
+                                    const code = resposta?.shared_id || 
+                                                 resposta?.data?.shared_id || 
+                                                 resposta?.data?.slug || 
+                                                 resposta?.data?.id || 
+                                                 resposta?.data?.filecode || 
                                                  resposta?.data?.file_code || 
-                                                 resposta?.files?.[0]?.filecode || 
+                                                 resposta?.result?.[0]?.filecode || 
+                                                 resposta?.file?.id || 
+                                                 resposta?.id || 
                                                  resposta?.filecode;
 
                                     if (code) {
-                                        generatedEmbed = `https://filemoon.sx/e/${code}`;
+                                        generatedEmbed = `https://filemoon.org/e/${code}`;
+                                    } else if (resposta?.data?.embed_url || resposta?.embed_url || resposta?.download_link || resposta?.url) {
+                                        const rawLink = resposta?.data?.embed_url || resposta?.embed_url || resposta?.download_link || resposta?.url;
+                                        generatedEmbed = rawLink.replace("/d/", "/e/");
                                     } else {
-                                        const codeRegex = rawText.match(/(?:filecode|file_code)["']?\s*:\s*["']?([a-zA-Z0-9_-]+)/i);
+                                        const codeRegex = rawText.match(/(?:shared_id|slug|filecode|file_code|id)["']?\s*:\s*["']?([a-zA-Z0-9_-]+)/i);
                                         if (codeRegex && codeRegex[1]) {
-                                            generatedEmbed = `https://filemoon.sx/e/${codeRegex[1]}`;
+                                            generatedEmbed = `https://filemoon.org/e/${codeRegex[1]}`;
                                         }
                                     }
                                 }
