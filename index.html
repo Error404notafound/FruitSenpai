@@ -3697,6 +3697,291 @@
             animation: slideUp 0.22s cubic-bezier(0.1, 0.9, 0.2, 1);
         }
 
+        /* ==========================================================================
+           ESTILOS DO CHAT GEMINI AI (PRINTS 5, 6 E 7)
+           ========================================================================== */
+        .gemini-chat-drawer-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 480px;
+            height: 78vh;
+            max-height: 78vh;
+            background-color: #0f0f0f;
+            border-radius: 18px 18px 0 0;
+            z-index: 10025;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            animation: slideUp 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .gemini-chat-drawer-sheet.active {
+            display: flex !important;
+        }
+
+        .gemini-chat-top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #0f0f0f;
+            flex-shrink: 0;
+        }
+
+        .gemini-chat-title-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .gemini-chat-scroll-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Cartões de Perguntas Rápidas (Print 7) */
+        .gemini-quick-prompts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .gemini-quick-prompt-btn {
+            width: 100%;
+            background-color: #1f1f1f;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ffffff;
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: left;
+            transition: background-color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .gemini-quick-prompt-btn:active {
+            background-color: #2a2a2a;
+            border-color: #3ea6ff;
+        }
+
+        .gemini-quick-prompt-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #ffffff;
+            flex-shrink: 0;
+        }
+
+        .gemini-disclaimer-box {
+            font-size: 11px;
+            color: #888888;
+            text-align: center;
+            line-height: 1.4;
+            padding: 4px 10px;
+        }
+
+        .gemini-disclaimer-box a {
+            color: #aaaaaa;
+            text-decoration: underline;
+        }
+
+        /* Mensagens do Chat */
+        .gemini-message-row {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .gemini-message-bubble {
+            max-width: 86%;
+            padding: 10px 14px;
+            border-radius: 16px;
+            font-size: 13.5px;
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        .gemini-message-row.user {
+            align-items: flex-end;
+        }
+
+        .gemini-message-row.user .gemini-message-bubble {
+            background-color: #27415d;
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .gemini-message-row.ai {
+            align-items: flex-start;
+        }
+
+        .gemini-message-row.ai .gemini-message-bubble {
+            background-color: #1e1e1e;
+            color: #f1f1f1;
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gemini-message-author-tag {
+            font-size: 11px;
+            color: #8da0b6;
+            margin-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .gemini-message-author-tag svg {
+            width: 13px;
+            height: 13px;
+            fill: #7fcfff;
+        }
+
+        /* Barra de Digitação Inferior (Prints 5, 6 e 7) */
+        .gemini-chat-bottom-bar {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #0f0f0f;
+            gap: 8px;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+
+        .gemini-chat-input-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: #1f1f1f;
+            border-radius: 24px;
+            height: 46px;
+            padding: 0 8px 0 16px;
+            gap: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .gemini-chat-input-wrapper input {
+            flex: 1;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .gemini-chat-input-wrapper input::placeholder {
+            color: #777777;
+        }
+
+        .gemini-chat-send-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            border: none;
+            color: #0f0f0f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        .gemini-chat-send-btn:active {
+            transform: scale(1.1);
+            background-color: #e0e0e0;
+        }
+
+        .gemini-chat-send-btn svg {
+            width: 17px;
+            height: 17px;
+            fill: #0f0f0f;
+        }
+
+        .gemini-pill-footer-indicator {
+            align-self: center;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            padding: 4px 12px;
+            font-size: 11px;
+            color: #aaaaaa;
+        }
+
+        .gemini-pill-footer-indicator svg {
+            width: 12px;
+            height: 12px;
+            fill: #7fcfff;
+        }
+
+        /* Tela Completa Modo IA (Prints 5 e 6) */
+        .gemini-fullscreen-view {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            background-color: #121316;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            max-width: 480px;
+            z-index: 10020;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .gemini-fullscreen-view.active {
+            display: flex !important;
+        }
+
+        .gemini-fullscreen-greeting-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 36px 20px 20px 20px;
+            gap: 8px;
+        }
+
+        .gemini-fullscreen-greeting-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.25;
+            letter-spacing: -0.5px;
+        }
+
+        .gemini-fullscreen-greeting-sub {
+            font-size: 13px;
+            color: #8da0b6;
+        }
+
         .watch-playlist-drawer-sheet.active {
             display: flex;
         }
@@ -13225,6 +13510,93 @@
             </div>
         </div>
 
+        <!-- ==========================================================================
+             GAVETA OFICIAL DO CHAT GEMINI AI (PRINT 7)
+             ========================================================================== -->
+        <div class="gemini-chat-drawer-sheet" id="drawerGeminiChat">
+            <div class="yt-sheet-drag-handle"></div>
+
+            <div class="gemini-chat-top-header">
+                <span class="gemini-chat-title-text" id="txtGeminiChatHeaderTitle">Faça perguntas sobre este vídeo</span>
+                <button class="yt-icon-btn" id="btnCloseGeminiChatDrawer" type="button" aria-label="Fechar">
+                    <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                </button>
+            </div>
+
+            <!-- Área de Conversa e Sugestões do Print 7 -->
+            <div class="gemini-chat-scroll-area" id="geminiChatMessagesScroll">
+                <div class="gemini-quick-prompts-container" id="geminiQuickPromptsContainer">
+                    <button type="button" class="gemini-quick-prompt-btn" data-prompt="Resuma este conteúdo em tópicos simples e diretos.">
+                        <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                        <span id="lblGeminiPromptResume">Resuma o vídeo</span>
+                    </button>
+                    <button type="button" class="gemini-quick-prompt-btn" data-prompt="Recomende outros animes ou vídeos parecidos com este.">
+                        <svg viewBox="0 0 24 24"><path d="M10 8v8l5-4-5-4zm9-5H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/></svg>
+                        <span>Recomende um conteúdo relacionado</span>
+                    </button>
+                    <button type="button" class="gemini-quick-prompt-btn" data-prompt="Qual é o tema principal e a mensagem desta obra?">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                        <span>Qual é o tema do vídeo?</span>
+                    </button>
+                    <button type="button" class="gemini-quick-prompt-btn" data-prompt="Explique o que significa a descrição e sinopse desta obra.">
+                        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/></svg>
+                        <span>O que significa a descrição?</span>
+                    </button>
+                </div>
+
+                <div class="gemini-disclaimer-box">
+                    A IA pode cometer erros. Por isso, é importante checar as respostas. <a href="#">Saiba mais</a>
+                </div>
+
+                <div id="geminiChatMessagesList" style="display:flex; flex-direction:column; gap:10px;"></div>
+            </div>
+
+            <!-- Barra de Pergunta Inferior (Print 7) -->
+            <div class="gemini-chat-bottom-bar">
+                <div class="gemini-chat-input-wrapper">
+                    <input type="text" id="inputGeminiChatDrawerField" placeholder="Faça uma pergunta...">
+                    <button type="button" class="gemini-chat-send-btn" id="btnSendGeminiChatDrawer" aria-label="Enviar pergunta">
+                        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </button>
+                </div>
+                <div class="gemini-pill-footer-indicator">
+                    <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                    <span>Pergunte sobre ✨ Gemini 2.5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================================================
+             TELA COMPLETA DO MODO IA (PRINTS 5 E 6)
+             ========================================================================== -->
+        <section class="gemini-fullscreen-view" id="viewGeminiFullChat">
+            <div class="tabs-switcher-header" style="background:#121316;">
+                <button class="yt-icon-btn" id="btnBackFromGeminiFullScreen" type="button" aria-label="Voltar">
+                    <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+                </button>
+                <div style="font-weight:700; color:#fff; font-size:16px;">Modo IA</div>
+                <div style="width:36px;"></div>
+            </div>
+
+            <div class="gemini-chat-scroll-area" id="geminiFullChatMessagesScroll">
+                <div class="gemini-fullscreen-greeting-box" id="geminiFullscreenGreetingBox">
+                    <h1 class="gemini-fullscreen-greeting-title" id="txtGeminiGreetingUserTitle">Olá, Usuário!<br>No que você está pensando?</h1>
+                    <div class="gemini-fullscreen-greeting-sub">Pergunte sobre episódios, animes, sinopses ou qualquer dúvida geral.</div>
+                </div>
+
+                <div id="geminiFullChatMessagesList" style="display:flex; flex-direction:column; gap:12px;"></div>
+            </div>
+
+            <div class="gemini-chat-bottom-bar">
+                <div class="gemini-chat-input-wrapper">
+                    <input type="text" id="inputGeminiFullScreenPrompt" placeholder="Pergunte o que quiser...">
+                    <button type="button" class="gemini-chat-send-btn" id="btnSendGeminiFullScreen" aria-label="Enviar">
+                        <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <!-- 🟢 GAVETA DE DESCRIÇÃO (ADICIONADA AQUI) 🟢 -->
         <div class="accounts-drawer" id="drawerVideoDescription">
             <div class="accounts-sheet yt-description-drawer-content">
@@ -20076,7 +20448,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         // Abre a descrição ao clicar em "...mais" ou no botão de IA ✨
         if (btnOpenDescriptionInline) btnOpenDescriptionInline.addEventListener("click", () => drawerVideoDescription.classList.add("active"));
-        if (btnWatchSparkle) btnWatchSparkle.addEventListener("click", () => drawerVideoDescription.classList.add("active"));
+        
         if (btnCloseDescriptionDrawer) btnCloseDescriptionDrawer.addEventListener("click", () => drawerVideoDescription.classList.remove("active"));
         if (drawerVideoDescription) {
             drawerVideoDescription.addEventListener("click", (e) => {
@@ -21169,9 +21541,223 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
+        // ==========================================================================
+        // INTEGRAÇÃO COMPLETA DO CHAT GEMINI 2.5 (PRINTS 5, 6 E 7)
+        // ==========================================================================
+        const CLOUDFLARE_GEMINI_ENDPOINT = `${CLOUDFLARE_WORKER_BASE_URL}/gemini-chat`;
+
+        const drawerGeminiChat = document.getElementById("drawerGeminiChat");
+        const btnCloseGeminiChatDrawer = document.getElementById("btnCloseGeminiChatDrawer");
+        const txtGeminiChatHeaderTitle = document.getElementById("txtGeminiChatHeaderTitle");
+        const lblGeminiPromptResume = document.getElementById("lblGeminiPromptResume");
+        const geminiChatMessagesList = document.getElementById("geminiChatMessagesList");
+        const geminiChatMessagesScroll = document.getElementById("geminiChatMessagesScroll");
+        const inputGeminiChatDrawerField = document.getElementById("inputGeminiChatDrawerField");
+        const btnSendGeminiChatDrawer = document.getElementById("btnSendGeminiChatDrawer");
+        const geminiQuickPromptsContainer = document.getElementById("geminiQuickPromptsContainer");
+
+        const viewGeminiFullChat = document.getElementById("viewGeminiFullChat");
+        const btnBackFromGeminiFullScreen = document.getElementById("btnBackFromGeminiFullScreen");
+        const txtGeminiGreetingUserTitle = document.getElementById("txtGeminiGreetingUserTitle");
+        const geminiFullChatMessagesList = document.getElementById("geminiFullChatMessagesList");
+        const geminiFullChatMessagesScroll = document.getElementById("geminiFullChatMessagesScroll");
+        const inputGeminiFullScreenPrompt = document.getElementById("inputGeminiFullScreenPrompt");
+        const btnSendGeminiFullScreen = document.getElementById("btnSendGeminiFullScreen");
+        const geminiFullscreenGreetingBox = document.getElementById("geminiFullscreenGreetingBox");
+        const btnNewTabModeAI = document.getElementById("btnNewTabModeAI");
+
+        let activeGeminiContextText = "";
+        let isGeminiWaitingResponse = false;
+
+        // Formatação simples de negrito e quebras de linha para respostas da IA
+        function formatGeminiReplyText(raw) {
+            if (!raw) return "";
+            return escapeHtml(raw)
+                .replace(/\*\*(.*?)\*\*/g, '<b>$1</b>')
+                .replace(/\*(.*?)\*/g, '<i>$1</i>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // Função de envio e consumo da API do Gemini via Cloudflare Worker
+        async function askGeminiQuestion(promptText, contextText, targetListContainer, targetScrollContainer) {
+            if (!promptText || isGeminiWaitingResponse) return;
+
+            const cleanPrompt = promptText.trim();
+            if (!cleanPrompt) return;
+
+            isGeminiWaitingResponse = true;
+
+            // 1. Bolha do Usuário
+            const userBubble = document.createElement("div");
+            userBubble.className = "gemini-message-row user";
+            userBubble.innerHTML = `<div class="gemini-message-bubble">${escapeHtml(cleanPrompt)}</div>`;
+            targetListContainer.appendChild(userBubble);
+
+            // 2. Bolha da IA com indicador de carregamento
+            const aiBubble = document.createElement("div");
+            aiBubble.className = "gemini-message-row ai";
+            aiBubble.innerHTML = `
+                <div class="gemini-message-author-tag">
+                    <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                    <span>Gemini</span>
+                </div>
+                <div class="gemini-message-bubble">Pensando...</div>
+            `;
+            targetListContainer.appendChild(aiBubble);
+
+            if (targetScrollContainer) {
+                targetScrollContainer.scrollTop = targetScrollContainer.scrollHeight;
+            }
+
+            try {
+                const response = await fetch(CLOUDFLARE_GEMINI_ENDPOINT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        prompt: cleanPrompt,
+                        context: contextText || activeGeminiContextText || ""
+                    })
+                });
+
+                const data = await response.json();
+                const contentDiv = aiBubble.querySelector(".gemini-message-bubble");
+
+                if (data.ok && data.reply) {
+                    contentDiv.innerHTML = formatGeminiReplyText(data.reply);
+                } else {
+                    contentDiv.textContent = `❌ ${data.erro || "Não foi possível obter resposta da IA."}`;
+                }
+            } catch (err) {
+                const contentDiv = aiBubble.querySelector(".gemini-message-bubble");
+                contentDiv.textContent = "❌ Falha de conexão com o assistente Gemini.";
+            } finally {
+                isGeminiWaitingResponse = false;
+                if (targetScrollContainer) {
+                    targetScrollContainer.scrollTop = targetScrollContainer.scrollHeight;
+                }
+            }
+        }
+
+        // Abre a gaveta de Chat no Player de Vídeo (Print 7)
+        if (btnWatchSparkle) {
+            btnWatchSparkle.addEventListener("click", () => {
+                const title = (watchVideoTitle && watchVideoTitle.textContent) ? watchVideoTitle.textContent : "este vídeo";
+                const channel = (watchChannelName && watchChannelName.textContent) ? watchChannelName.textContent : "Canal";
+                const desc = (document.getElementById("descModalBodyText")) ? document.getElementById("descModalBodyText").textContent : "";
+
+                activeGeminiContextText = `Vídeo: ${title}. Canal/Série: ${channel}. Descrição: ${desc}.`;
+
+                txtGeminiChatHeaderTitle.textContent = "Faça perguntas sobre este vídeo";
+                lblGeminiPromptResume.textContent = "Resuma o vídeo";
+                geminiChatMessagesList.innerHTML = "";
+                inputGeminiChatDrawerField.value = "";
+
+                drawerGeminiChat.classList.add("active");
+            });
+        }
+
+        // Abre a gaveta de Chat na Página da Série (Print 1)
         if (btnChannelSparkle) {
             btnChannelSparkle.addEventListener("click", () => {
-                drawerSeriesDescription.classList.add("active");
+                const seriesTitle = currentActiveSeriesName || "esta série";
+                const seriesBio = (document.getElementById("drawerSeriesFullDescription")) ? document.getElementById("drawerSeriesFullDescription").textContent : "";
+
+                activeGeminiContextText = `Série: ${seriesTitle}. Sinopse/Biografia: ${seriesBio}. Total de episódios: ${currentActiveSeriesEpisodes.length}.`;
+
+                txtGeminiChatHeaderTitle.textContent = "Faça perguntas sobre esta série";
+                lblGeminiPromptResume.textContent = "Resuma a série";
+                geminiChatMessagesList.innerHTML = "";
+                inputGeminiChatDrawerField.value = "";
+
+                drawerGeminiChat.classList.add("active");
+            });
+        }
+
+        // Fechar a Gaveta
+        if (btnCloseGeminiChatDrawer) {
+            btnCloseGeminiChatDrawer.addEventListener("click", () => {
+                drawerGeminiChat.classList.remove("active");
+            });
+        }
+
+        // Cliques nas 4 sugestões prontas do Print 7
+        document.querySelectorAll(".gemini-quick-prompt-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const promptVal = btn.getAttribute("data-prompt");
+                if (promptVal) {
+                    askGeminiQuestion(promptVal, activeGeminiContextText, geminiChatMessagesList, geminiChatMessagesScroll);
+                }
+            });
+        });
+
+        // Envio digitado na gaveta do Print 7
+        if (btnSendGeminiChatDrawer) {
+            btnSendGeminiChatDrawer.addEventListener("click", () => {
+                const text = inputGeminiChatDrawerField.value;
+                inputGeminiChatDrawerField.value = "";
+                askGeminiQuestion(text, activeGeminiContextText, geminiChatMessagesList, geminiChatMessagesScroll);
+            });
+        }
+
+        if (inputGeminiChatDrawerField) {
+            inputGeminiChatDrawerField.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    const text = inputGeminiChatDrawerField.value;
+                    inputGeminiChatDrawerField.value = "";
+                    askGeminiQuestion(text, activeGeminiContextText, geminiChatMessagesList, geminiChatMessagesScroll);
+                }
+            });
+        }
+
+        // Abre o "Modo IA" em Tela Cheia (Prints 5 e 6)
+        function openGeminiFullScreenChat() {
+            const userName = currentUserEmail ? getNameFromEmail(currentUserEmail) : "Visitante";
+            txtGeminiGreetingUserTitle.innerHTML = `Olá, ${escapeHtml(userName)}!<br>No que você está pensando?`;
+            geminiFullChatMessagesList.innerHTML = "";
+            inputGeminiFullScreenPrompt.value = "";
+            activeGeminiContextText = "Modo conversa livre no app FruitSenpai.";
+            openScreen(viewGeminiFullChat);
+        }
+
+        if (btnNewTabModeAI) {
+            btnNewTabModeAI.addEventListener("click", () => {
+                openGeminiFullScreenChat();
+            });
+        }
+
+        // Pílula Modo IA na barra de categorias da busca
+        const pillModoIaCategory = document.querySelector('.tab-search-cat-pill[data-tab-cat="ia"]');
+        if (pillModoIaCategory) {
+            pillModoIaCategory.addEventListener("click", () => {
+                openGeminiFullScreenChat();
+            });
+        }
+
+        if (btnBackFromGeminiFullScreen) {
+            btnBackFromGeminiFullScreen.addEventListener("click", () => {
+                navigateBack();
+            });
+        }
+
+        if (btnSendGeminiFullScreen) {
+            btnSendGeminiFullScreen.addEventListener("click", () => {
+                const text = inputGeminiFullScreenPrompt.value;
+                inputGeminiFullScreenPrompt.value = "";
+                geminiFullscreenGreetingBox.style.display = "none";
+                askGeminiQuestion(text, activeGeminiContextText, geminiFullChatMessagesList, geminiFullChatMessagesScroll);
+            });
+        }
+
+        if (inputGeminiFullScreenPrompt) {
+            inputGeminiFullScreenPrompt.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") {
+                    e.preventDefault();
+                    const text = inputGeminiFullScreenPrompt.value;
+                    inputGeminiFullScreenPrompt.value = "";
+                    geminiFullscreenGreetingBox.style.display = "none";
+                    askGeminiQuestion(text, activeGeminiContextText, geminiFullChatMessagesList, geminiFullChatMessagesScroll);
+                }
             });
         }
 
