@@ -6735,6 +6735,125 @@
             pointer-events: none;
         }
 
+        /* Pílula de Recomendação Aleatória no Canto Superior Direito (Seta Vermelha) */
+        .watch-top-rec-pill {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background-color: rgba(15, 15, 15, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            height: 36px;
+            padding: 2px 8px 2px 4px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            z-index: 50;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.7);
+            max-width: 220px;
+            box-sizing: border-box;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        .watch-top-rec-pill.active {
+            display: flex !important;
+        }
+
+        .watch-top-rec-avatar {
+            width: 28px;
+            height: 28px;
+            min-width: 28px;
+            border-radius: 50% !important;
+            overflow: hidden !important;
+            background-color: #272727;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .watch-top-rec-avatar img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 50% !important;
+            display: block;
+        }
+
+        .watch-top-rec-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+            line-height: 1.2;
+        }
+
+        .watch-top-rec-close-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.75);
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            outline: none;
+        }
+
+        .watch-top-rec-close-btn:active {
+            color: #ffffff;
+        }
+
+        .watch-top-rec-close-btn svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+        }
+
+        /* Botão "=" de Duas Linhas para Reordenar Playlists (Setas Amarelas) */
+        .playlist-drag-handle-btn {
+            background: none;
+            border: none;
+            color: #ffffff;
+            opacity: 0.85;
+            cursor: grab;
+            padding: 6px 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            outline: none;
+        }
+
+        .playlist-drag-handle-btn:active {
+            cursor: grabbing;
+            opacity: 1;
+        }
+
+        .playlist-drag-handle-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .playlist-video-row-card.dragging-active,
+        .watch-queue-item-card-row.dragging-active {
+            background-color: #27415d !important;
+            opacity: 0.65;
+            transform: scale(0.98);
+            border-radius: 8px;
+        }
+
         /* Camada Oficial de Vídeo Sugerido ao Fim da Reprodução (Conforme o Print) */
         .watch-suggested-overlay {
             position: absolute;
@@ -10157,6 +10276,17 @@
 
     <div class="yt-player-box" id="watchPlayerBox">
         <iframe id="watchIframe" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+
+        <!-- Pílula de Recomendação Aleatória no Canto Superior Direito (Seta Vermelha) -->
+        <div class="watch-top-rec-pill" id="watchTopRecPill">
+            <div class="watch-top-rec-avatar">
+                <img id="imgWatchTopRecThumb" src="" alt="Capa">
+            </div>
+            <span class="watch-top-rec-title" id="txtWatchTopRecTitle">Dancing After Death</span>
+            <button type="button" class="watch-top-rec-close-btn" id="btnCloseWatchTopRec" aria-label="Fechar recomendação">
+                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </button>
+        </div>
 
         <!-- Aba Lateral Estilo Menu Assistente (Print A) -->
         <button class="watch-mini-overlay-toggle-btn" id="btnShowPlayerControlsMini" type="button" aria-label="Mostrar controles"></button>
@@ -19576,10 +19706,24 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 return;
             }
 
+            const isPlaylistOwner = Boolean(
+                currentUserEmail &&
+                currentPlaylistData &&
+                currentPlaylistData.user &&
+                (currentPlaylistData.user.trim().toLowerCase() === currentUserEmail.trim().toLowerCase()) &&
+                !currentPlaylistData.isSavedFromOtherUser
+            );
+
             currentPlaylistVideosList.forEach((item, index) => {
                 const row = document.createElement("div");
                 row.className = "playlist-video-row-card";
+                row.setAttribute("data-video-idx", index);
                 row.innerHTML = `
+                    ${isPlaylistOwner ? `
+                        <button class="playlist-drag-handle-btn btnHoldToReorderRow" type="button" aria-label="Reordenar">
+                            <svg viewBox="0 0 24 24"><path d="M4 9h16v2H4zm0 4h16v2H4z"/></svg>
+                        </button>
+                    ` : ''}
                     <div class="playlist-video-thumb-box">
                         <img src="${escapeHtml(item.thumbUrl || item.seriesCover || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" alt="Capa">
                         <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
@@ -19594,9 +19738,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 `;
 
                 row.onclick = (e) => {
-                    if (e.target.closest(".btnVideoItemKebabTrigger")) return;
+                    if (e.target.closest(".btnVideoItemKebabTrigger") || e.target.closest(".btnHoldToReorderRow")) return;
                     startPlaylistPlaybackAt(index);
                 };
+
+                if (isPlaylistOwner) {
+                    const dragBtn = row.querySelector(".btnHoldToReorderRow");
+                    if (dragBtn) {
+                        setupPlaylistRowHoldToDrag(dragBtn, row, plVideosListContainer);
+                    }
+                }
 
                 const kebab = row.querySelector(".btnVideoItemKebabTrigger");
                 if (kebab) {
@@ -19671,12 +19822,28 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             watchMiniBarPlaylistSub.textContent = `${playlistTitle} • ${currentNumber} / ${total}`;
 
             // Renderiza os vídeos dentro da gaveta com destaque no ativo
+            // Renderiza os vídeos dentro da gaveta com destaque no ativo
             if (watchQueueItemsList) {
                 watchQueueItemsList.innerHTML = "";
+
+                const isPlaylistOwner = Boolean(
+                    currentUserEmail &&
+                    currentPlaylistData &&
+                    currentPlaylistData.user &&
+                    (currentPlaylistData.user.trim().toLowerCase() === currentUserEmail.trim().toLowerCase()) &&
+                    !currentPlaylistData.isSavedFromOtherUser
+                );
+
                 currentPlaylistVideosList.forEach((item, idx) => {
                     const row = document.createElement("div");
                     row.className = `watch-queue-item-card-row ${idx === currentPlaylistQueueIndex ? 'playing-active' : ''}`;
+                    row.setAttribute("data-video-idx", idx);
                     row.innerHTML = `
+                        ${isPlaylistOwner ? `
+                            <button class="playlist-drag-handle-btn btnHoldToReorderRow" type="button" aria-label="Reordenar">
+                                <svg viewBox="0 0 24 24"><path d="M4 9h16v2H4zm0 4h16v2H4z"/></svg>
+                            </button>
+                        ` : ''}
                         <div style="width:120px; min-width:120px; aspect-ratio:16/9; border-radius:6px; overflow:hidden; position:relative; background:#212121;">
                             <img src="${escapeHtml(item.thumbUrl || 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=400')}" style="width:100%;height:100%;object-fit:cover;">
                             <div class="yt-duration-badge">${escapeHtml(item.duration || "24:00")}</div>
@@ -19687,9 +19854,19 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                             <div style="font-size:10.5px; color:#aaa;">${formatNumber(item.viewsCount || 0)} visualizações • ${formatTimeAgo(item.timestamp)}</div>
                         </div>
                     `;
-                    row.onclick = () => {
+
+                    row.onclick = (e) => {
+                        if (e.target.closest(".btnHoldToReorderRow")) return;
                         startPlaylistPlaybackAt(idx);
                     };
+
+                    if (isPlaylistOwner) {
+                        const dragBtn = row.querySelector(".btnHoldToReorderRow");
+                        if (dragBtn) {
+                            setupPlaylistRowHoldToDrag(dragBtn, row, watchQueueItemsList);
+                        }
+                    }
+
                     watchQueueItemsList.appendChild(row);
                 });
             }
@@ -20933,6 +21110,9 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             if (descChanMention) descChanMention.textContent = seriesHandle;
             if (descFullViews) descFullViews.textContent = viewsCount.toLocaleString('pt-BR');
             if (descFullLikes) descFullLikes.textContent = likesCount.toLocaleString('pt-BR');
+
+            // Dispara a recomendação aleatória no topo direito do player (Seta Vermelha)
+            triggerTopRightRandomRecommendation(videoData);
 
             // Carrega Iframe do Vídeo usando a fonte ativa
             const activeSourceUrl = (currentActiveEpisodeSourcesList[0] && currentActiveEpisodeSourcesList[0].url) 
@@ -28236,14 +28416,226 @@ let isHoldingMiniPlayer = false;
 let miniPlayerTouchStartX = 0;
 let miniPlayerTouchStartY = 0;
 
-// 1. Ativa a Janela Flutuante ao Clicar na Seta Para Baixo (Print C1)
-function minimizeWatchPlayerToPip() {
+// ==========================================================================
+// 1. RECOMENDAÇÃO ALEATÓRIA NO CANTO SUPERIOR DIREITO DO PLAYER (SETA VERMELHA)
+// ==========================================================================
+const watchTopRecPill = document.getElementById("watchTopRecPill");
+const imgWatchTopRecThumb = document.getElementById("imgWatchTopRecThumb");
+const txtWatchTopRecTitle = document.getElementById("txtWatchTopRecTitle");
+const btnCloseWatchTopRec = document.getElementById("btnCloseWatchTopRec");
+
+let topRecPillDismissTimer = null;
+let currentTopRecommendedEpisode = null;
+
+function triggerTopRightRandomRecommendation(currentVideo) {
+    if (!watchTopRecPill || !Array.isArray(loadedEpisodesCache) || loadedEpisodesCache.length <= 1) return;
+
+    if (topRecPillDismissTimer) clearTimeout(topRecPillDismissTimer);
+
+    // Filtra para não recomendar o mesmo vídeo que está passando
+    const otherEpisodes = loadedEpisodesCache.filter(ep => ep.id !== currentVideo.id && ep.contentType !== "Reels");
+    if (otherEpisodes.length === 0) return;
+
+    // Sorteia um episódio aleatório baseado nas tags ou do catálogo geral
+    const rec = otherEpisodes[Math.floor(Math.random() * otherEpisodes.length)];
+    currentTopRecommendedEpisode = rec;
+
+    // Foto forçada redonda e título do episódio
+    imgWatchTopRecThumb.src = rec.thumbUrl || rec.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200";
+    txtWatchTopRecTitle.textContent = rec.name || "Recomendado";
+
+    watchTopRecPill.classList.add("active");
+
+    // Some automaticamente após 4 segundos
+    topRecPillDismissTimer = setTimeout(() => {
+        watchTopRecPill.classList.remove("active");
+    }, 4000);
+}
+
+// Clicar no botão X fecha manualmente na hora
+if (btnCloseWatchTopRec) {
+    btnCloseWatchTopRec.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (topRecPillDismissTimer) clearTimeout(topRecPillDismissTimer);
+        watchTopRecPill.classList.remove("active");
+    });
+}
+
+// Clicar na pílula abre o vídeo recomendado
+if (watchTopRecPill) {
+    watchTopRecPill.addEventListener("click", (e) => {
+        if (e.target.closest("#btnCloseWatchTopRec")) return;
+        if (topRecPillDismissTimer) clearTimeout(topRecPillDismissTimer);
+        watchTopRecPill.classList.remove("active");
+        if (currentTopRecommendedEpisode) {
+            openWatchScreen(currentTopRecommendedEpisode, currentTopRecommendedEpisode.id);
+        }
+    });
+}
+
+// ==========================================================================
+// 2. REORDENAÇÃO MANUAL POR ARRASTE (SEGURAR 2s NO "=") EXCLUSIVA DO DONO
+// ==========================================================================
+function setupPlaylistRowHoldToDrag(handleBtn, rowElement, containerElement) {
+    let holdTimer = null;
+    let isDraggingRow = false;
+    let startY = 0;
+
+    function startHold(e) {
+        startY = (e.touches ? e.touches[0].clientY : e.clientY);
+        isDraggingRow = false;
+
+        if (holdTimer) clearTimeout(holdTimer);
+
+        // Segurar por 2 segundos ativa o arraste
+        holdTimer = setTimeout(() => {
+            isDraggingRow = true;
+            if (navigator.vibrate) navigator.vibrate(50);
+            rowElement.classList.add("dragging-active");
+            showToast("Arraste para cima ou para baixo para reordenar.");
+        }, 2000);
+    }
+
+    function moveHold(e) {
+        const currentY = (e.touches ? e.touches[0].clientY : e.clientY);
+        const diffY = Math.abs(currentY - startY);
+
+        if (!isDraggingRow && diffY > 15) {
+            clearTimeout(holdTimer);
+        }
+
+        if (isDraggingRow) {
+            if (e.preventDefault) e.preventDefault();
+            const elementUnder = document.elementFromPoint(e.touches ? e.touches[0].clientX : e.clientX, currentY);
+            if (!elementUnder) return;
+
+            const targetRow = elementUnder.closest(".playlist-video-row-card, .watch-queue-item-card-row");
+            if (targetRow && targetRow !== rowElement && targetRow.parentElement === containerElement) {
+                const rect = targetRow.getBoundingClientRect();
+                const next = (currentY - rect.top) / (rect.bottom - rect.top) > 0.5;
+                containerElement.insertBefore(rowElement, next ? targetRow.nextSibling : targetRow);
+            }
+        }
+    }
+
+    async function endHold() {
+        if (holdTimer) clearTimeout(holdTimer);
+
+        if (isDraggingRow) {
+            isDraggingRow = false;
+            rowElement.classList.remove("dragging-active");
+
+            // Recria a ordem do array com base na nova posição dos elementos no DOM
+            const newOrderedList = [];
+            const rowsInDom = containerElement.querySelectorAll(".playlist-video-row-card, .watch-queue-item-card-row");
+
+            rowsInDom.forEach(r => {
+                const originalIdx = parseInt(r.getAttribute("data-video-idx"), 10);
+                if (!isNaN(originalIdx) && currentPlaylistVideosList[originalIdx]) {
+                    newOrderedList.push(currentPlaylistVideosList[originalIdx]);
+                }
+            });
+
+            if (newOrderedList.length === currentPlaylistVideosList.length) {
+                currentPlaylistVideosList = newOrderedList;
+
+                // Salva a nova ordem definitiva no Firestore da playlist do usuário
+                if (currentPlaylistData && currentOpenPlaylistDocId) {
+                    try {
+                        const col = currentPlaylistData._collection || "playlists";
+                        const updatedIds = currentPlaylistVideosList.map(v => v.id);
+                        await setDoc(doc(db, col, currentOpenPlaylistDocId), {
+                            videos: updatedIds,
+                            series: updatedIds,
+                            updatedAt: serverTimestamp()
+                        }, { merge: true });
+                        showToast("Ordem da playlist atualizada!");
+                    } catch(err) {
+                        console.error("Erro ao salvar ordem da playlist:", err);
+                    }
+                }
+            }
+        }
+    }
+
+    handleBtn.addEventListener("touchstart", startHold, { passive: true });
+    window.addEventListener("touchmove", moveHold, { passive: false });
+    window.addEventListener("touchend", endHold, { passive: true });
+
+    handleBtn.addEventListener("mousedown", startHold);
+    window.addEventListener("mousemove", moveHold);
+    window.addEventListener("mouseup", endHold);
+}
+
+// ==========================================================================
+// 3. PICTURE-IN-PICTURE NATIVO FORA DO CHROME / FORA DA ABA
+// ==========================================================================
+let nativePipWindowInstance = null;
+
+async function requestNativeOutOfBrowserPip() {
+    // 1. Suporte a Document Picture-in-Picture (Chromium: abre janela fora do Chrome)
+    if ("documentPictureInPicture" in window) {
+        try {
+            if (nativePipWindowInstance) {
+                nativePipWindowInstance.close();
+                nativePipWindowInstance = null;
+            }
+
+            const pipWindow = await window.documentPictureInPicture.requestWindow({
+                width: 360,
+                height: 202
+            });
+
+            nativePipWindowInstance = pipWindow;
+
+            // Clona o estilo escuro do app para a janela flutuante nativa
+            pipWindow.document.body.style.margin = "0";
+            pipWindow.document.body.style.backgroundColor = "#000000";
+            pipWindow.document.body.style.display = "flex";
+            pipWindow.document.body.style.alignItems = "center";
+            pipWindow.document.body.style.justifyContent = "center";
+            pipWindow.document.body.style.overflow = "hidden";
+
+            // Transfere o iframe do player para a janela flutuante nativa do sistema operacional
+            if (watchIframe) {
+                pipWindow.document.body.appendChild(watchIframe);
+            }
+
+            pipWindow.addEventListener("pagehide", () => {
+                if (watchPlayerBox && watchIframe) {
+                    watchPlayerBox.prepend(watchIframe);
+                }
+                nativePipWindowInstance = null;
+            });
+
+            return true;
+        } catch(err) {
+            console.log("Document PiP não ativado, usando PiP em tela:", err);
+        }
+    }
+
+    // 2. Suporte padrão a tag <video> se houver reprodução direta
+    const videoTag = document.querySelector("#watchPlayerBox video");
+    if (videoTag && document.pictureInPictureEnabled && !document.pictureInPictureElement) {
+        try {
+            await videoTag.requestPictureInPicture();
+            return true;
+        } catch(e) {}
+    }
+
+    return false;
+}
+
+// Ativa a Janela Flutuante ao Clicar na Seta Para Baixo (com PiP fora da aba)
+async function minimizeWatchPlayerToPip() {
     if (!currentWatchVideoId) return;
+
+    // Tenta primeiro abrir a janela nativa flutuante que sai do Chrome
+    await requestNativeOutOfBrowserPip();
 
     isMiniPlayerModeActive = true;
     viewWatchVideo.classList.add("minimized-pip-mode");
 
-    // Retorna para a tela de onde o usuário veio mantendo o vídeo rodando
     if (previousActiveScreenBeforeSearch === "you") {
         openScreen(viewYou, false);
     } else if (previousActiveScreenBeforeSearch === "subscriptions") {
