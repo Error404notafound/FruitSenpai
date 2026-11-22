@@ -28424,38 +28424,54 @@ const imgWatchTopRecThumb = document.getElementById("imgWatchTopRecThumb");
 const txtWatchTopRecTitle = document.getElementById("txtWatchTopRecTitle");
 const btnCloseWatchTopRec = document.getElementById("btnCloseWatchTopRec");
 
+let topRecPillTriggerTimer = null;
 let topRecPillDismissTimer = null;
 let currentTopRecommendedEpisode = null;
 
 function triggerTopRightRandomRecommendation(currentVideo) {
     if (!watchTopRecPill || !Array.isArray(loadedEpisodesCache) || loadedEpisodesCache.length <= 1) return;
 
+    // Cancela contagens anteriores e garante que a pílula comece 100% invisível
+    if (topRecPillTriggerTimer) clearTimeout(topRecPillTriggerTimer);
     if (topRecPillDismissTimer) clearTimeout(topRecPillDismissTimer);
+    watchTopRecPill.classList.remove("active");
 
-    // Filtra para não recomendar o mesmo vídeo que está passando
-    const otherEpisodes = loadedEpisodesCache.filter(ep => ep.id !== currentVideo.id && ep.contentType !== "Reels");
-    if (otherEpisodes.length === 0) return;
+    // Calcula a metade exata (50%) do tempo total do vídeo em milissegundos
+    const totalDurationMs = parseDurationToMs(currentVideo.duration) || 1440000;
+    const halfDurationDelayMs = Math.floor(totalDurationMs / 2);
 
-    // Sorteia um episódio aleatório baseado nas tags ou do catálogo geral
-    const rec = otherEpisodes[Math.floor(Math.random() * otherEpisodes.length)];
-    currentTopRecommendedEpisode = rec;
+    // Agenda a aparição para a metade do vídeo (ex: 5 minutos se tiver 10 minutos de duração)
+    topRecPillTriggerTimer = setTimeout(() => {
+        // Confirma se o usuário ainda está assistindo a este mesmo vídeo
+        if (currentWatchVideoId !== currentVideo.id) return;
 
-    // Foto forçada redonda e título do episódio
-    imgWatchTopRecThumb.src = rec.thumbUrl || rec.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200";
-    txtWatchTopRecTitle.textContent = rec.name || "Recomendado";
+        // Filtra para não recomendar o mesmo vídeo que está passando
+        const otherEpisodes = loadedEpisodesCache.filter(ep => ep.id !== currentVideo.id && ep.contentType !== "Reels");
+        if (otherEpisodes.length === 0) return;
 
-    watchTopRecPill.classList.add("active");
+        // Sorteia um episódio aleatório do catálogo geral
+        const rec = otherEpisodes[Math.floor(Math.random() * otherEpisodes.length)];
+        currentTopRecommendedEpisode = rec;
 
-    // Some automaticamente após 4 segundos
-    topRecPillDismissTimer = setTimeout(() => {
-        watchTopRecPill.classList.remove("active");
-    }, 4000);
+        // Foto forçada redonda e título do episódio recomendado
+        imgWatchTopRecThumb.src = rec.thumbUrl || rec.seriesCover || "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=200";
+        txtWatchTopRecTitle.textContent = rec.name || "Recomendado";
+
+        // Exibe a pílula no topo direito do container do player
+        watchTopRecPill.classList.add("active");
+
+        // Permanece visível por exatamente 4 segundos e desaparece automaticamente
+        topRecPillDismissTimer = setTimeout(() => {
+            watchTopRecPill.classList.remove("active");
+        }, 4000);
+    }, halfDurationDelayMs);
 }
 
 // Clicar no botão X fecha manualmente na hora
 if (btnCloseWatchTopRec) {
     btnCloseWatchTopRec.addEventListener("click", (e) => {
         e.stopPropagation();
+        if (topRecPillTriggerTimer) clearTimeout(topRecPillTriggerTimer);
         if (topRecPillDismissTimer) clearTimeout(topRecPillDismissTimer);
         watchTopRecPill.classList.remove("active");
     });
@@ -28465,6 +28481,7 @@ if (btnCloseWatchTopRec) {
 if (watchTopRecPill) {
     watchTopRecPill.addEventListener("click", (e) => {
         if (e.target.closest("#btnCloseWatchTopRec")) return;
+        if (topRecPillTriggerTimer) clearTimeout(topRecPillTriggerTimer);
         if (topRecPillDismissTimer) clearTimeout(topRecPillDismissTimer);
         watchTopRecPill.classList.remove("active");
         if (currentTopRecommendedEpisode) {
