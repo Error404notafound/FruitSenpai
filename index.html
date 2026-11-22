@@ -3702,24 +3702,33 @@
            ========================================================================== */
         .gemini-chat-drawer-sheet {
             position: fixed;
+            top: calc(var(--yt-header-h, 48px) + min(100vw * 9 / 16, 270px));
             bottom: 0;
             left: 0;
             right: 0;
             margin: 0 auto;
             width: 100%;
             max-width: 480px;
-            height: 78vh;
-            max-height: 78vh;
+            height: calc(100dvh - var(--yt-header-h, 48px) - min(100vw * 9 / 16, 270px));
+            max-height: calc(100dvh - var(--yt-header-h, 48px) - min(100vw * 9 / 16, 270px));
             background-color: #0f0f0f;
-            border-radius: 18px 18px 0 0;
-            z-index: 10025;
+            border-radius: 14px 14px 0 0;
+            z-index: 10002;
             display: none;
             flex-direction: column;
-            box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.95);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.95);
             border-top: 1px solid rgba(255, 255, 255, 0.12);
-            animation: slideUp 0.25s cubic-bezier(0.1, 0.9, 0.2, 1);
+            animation: slideUp 0.22s cubic-bezier(0.1, 0.9, 0.2, 1);
             overflow: hidden;
             box-sizing: border-box;
+        }
+
+        /* Quando aberta na página da série (onde não há o player de vídeo no topo) */
+        .gemini-chat-drawer-sheet.channel-mode {
+            top: 24vh;
+            height: 76vh;
+            max-height: 76vh;
+            border-radius: 18px 18px 0 0;
         }
 
         .gemini-chat-drawer-sheet.active {
@@ -10499,8 +10508,10 @@
                     <span class="channel-top-bar-title" id="topBarChannelTitle">Nome da Série</span>
                 </div>
                 <div class="yt-header-actions">
-                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg></button>
-                    <button class="yt-icon-btn"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
+                    <button class="yt-icon-btn" id="btnSeriesChannelSearch" type="button" aria-label="Pesquisar">
+                        <svg viewBox="0 0 24 24"><path d="M20.87 19.46l-4.7-4.7A7.94 7.94 0 0018 10c0-4.42-3.58-8-8-8s-8 3.58-8 8 3.58 8 8 8a7.94 7.94 0 004.76-1.57l4.7 4.7 1.41-1.41zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"/></svg>
+                    </button>
+                    <button class="yt-icon-btn" type="button" aria-label="Opções"><svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></button>
                 </div>
             </div>
 
@@ -21638,38 +21649,45 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         }
 
-        // Abre a gaveta de Chat no Player de Vídeo (Print 7)
-        if (btnWatchSparkle) {
-            btnWatchSparkle.addEventListener("click", () => {
-                const title = (watchVideoTitle && watchVideoTitle.textContent) ? watchVideoTitle.textContent : "este vídeo";
-                const channel = (watchChannelName && watchChannelName.textContent) ? watchChannelName.textContent : "Canal";
-                const desc = (document.getElementById("descModalBodyText")) ? document.getElementById("descModalBodyText").textContent : "";
+        // ==========================================================================
+        // CONTROLE DE NAVEGAÇÃO DO MODO IA E RETORNO PRECISO (PRINT A)
+        // ==========================================================================
+        let previousScreenBeforeGeminiFull = "home";
 
-                activeGeminiContextText = `Vídeo: ${title}. Canal/Série: ${channel}. Descrição: ${desc}.`;
+        function openGeminiFullScreenChat(originScreen = "home") {
+            previousScreenBeforeGeminiFull = originScreen;
+            const userName = currentUserEmail ? getNameFromEmail(currentUserEmail) : "Visitante";
+            txtGeminiGreetingUserTitle.innerHTML = `Olá, ${escapeHtml(userName)}!<br>No que você está pensando?`;
+            geminiFullChatMessagesList.innerHTML = "";
+            inputGeminiFullScreenPrompt.value = "";
+            activeGeminiContextText = "Modo conversa livre no app FruitSenpai.";
+            openScreen(viewGeminiFullChat, false);
+        }
 
-                txtGeminiChatHeaderTitle.textContent = "Faça perguntas sobre este vídeo";
-                lblGeminiPromptResume.textContent = "Resuma o vídeo";
-                geminiChatMessagesList.innerHTML = "";
-                inputGeminiChatDrawerField.value = "";
-
-                drawerGeminiChat.classList.add("active");
+        if (btnNewTabModeAI) {
+            btnNewTabModeAI.addEventListener("click", () => {
+                openGeminiFullScreenChat("newtab");
             });
         }
 
-        // Abre a gaveta de Chat na Página da Série (Print 1)
-        if (btnChannelSparkle) {
-            btnChannelSparkle.addEventListener("click", () => {
-                const seriesTitle = currentActiveSeriesName || "esta série";
-                const seriesBio = (document.getElementById("drawerSeriesFullDescription")) ? document.getElementById("drawerSeriesFullDescription").textContent : "";
+        const pillModoIaCategory = document.querySelector('.tab-search-cat-pill[data-tab-cat="ia"]');
+        if (pillModoIaCategory) {
+            pillModoIaCategory.addEventListener("click", () => {
+                openGeminiFullScreenChat("tab_search");
+            });
+        }
 
-                activeGeminiContextText = `Série: ${seriesTitle}. Sinopse/Biografia: ${seriesBio}. Total de episódios: ${currentActiveSeriesEpisodes.length}.`;
-
-                txtGeminiChatHeaderTitle.textContent = "Faça perguntas sobre esta série";
-                lblGeminiPromptResume.textContent = "Resuma a série";
-                geminiChatMessagesList.innerHTML = "";
-                inputGeminiChatDrawerField.value = "";
-
-                drawerGeminiChat.classList.add("active");
+        // Botão de Voltar do Modo IA (Seta vermelha do Print A)
+        if (btnBackFromGeminiFullScreen) {
+            btnBackFromGeminiFullScreen.addEventListener("click", () => {
+                viewGeminiFullChat.classList.remove("active");
+                if (previousScreenBeforeGeminiFull === "newtab") {
+                    openScreen(viewNewTabHome, false);
+                } else if (previousScreenBeforeGeminiFull === "tab_search") {
+                    openScreen(viewTabSearchResults, false);
+                } else {
+                    openScreen("home", false);
+                }
             });
         }
 
@@ -21710,33 +21728,42 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Abre o "Modo IA" em Tela Cheia (Prints 5 e 6)
-        function openGeminiFullScreenChat() {
-            const userName = currentUserEmail ? getNameFromEmail(currentUserEmail) : "Visitante";
-            txtGeminiGreetingUserTitle.innerHTML = `Olá, ${escapeHtml(userName)}!<br>No que você está pensando?`;
-            geminiFullChatMessagesList.innerHTML = "";
-            inputGeminiFullScreenPrompt.value = "";
-            activeGeminiContextText = "Modo conversa livre no app FruitSenpai.";
-            openScreen(viewGeminiFullChat);
-        }
+        // Abre a gaveta de Chat no Player de Vídeo SEM cobrir o vídeo (Print C -> C1)
+        if (btnWatchSparkle) {
+            btnWatchSparkle.addEventListener("click", () => {
+                const title = (watchVideoTitle && watchVideoTitle.textContent) ? watchVideoTitle.textContent : "este vídeo";
+                const channel = (watchChannelName && watchChannelName.textContent) ? watchChannelName.textContent : "Canal";
+                const desc = (document.getElementById("descModalBodyText")) ? document.getElementById("descModalBodyText").textContent : "";
 
-        if (btnNewTabModeAI) {
-            btnNewTabModeAI.addEventListener("click", () => {
-                openGeminiFullScreenChat();
+                activeGeminiContextText = `Vídeo: ${title}. Canal/Série: ${channel}. Descrição: ${desc}.`;
+
+                txtGeminiChatHeaderTitle.textContent = "Faça perguntas sobre este vídeo";
+                lblGeminiPromptResume.textContent = "Resuma o vídeo";
+                geminiChatMessagesList.innerHTML = "";
+                inputGeminiChatDrawerField.value = "";
+
+                // Remove a classe de canal para se ajustar exatamente abaixo do player de vídeo
+                drawerGeminiChat.classList.remove("channel-mode");
+                drawerGeminiChat.classList.add("active");
             });
         }
 
-        // Pílula Modo IA na barra de categorias da busca
-        const pillModoIaCategory = document.querySelector('.tab-search-cat-pill[data-tab-cat="ia"]');
-        if (pillModoIaCategory) {
-            pillModoIaCategory.addEventListener("click", () => {
-                openGeminiFullScreenChat();
-            });
-        }
+        // Abre a gaveta de Chat na Página da Série (Print 1)
+        if (btnChannelSparkle) {
+            btnChannelSparkle.addEventListener("click", () => {
+                const seriesTitle = currentActiveSeriesName || "esta série";
+                const seriesBio = (document.getElementById("drawerSeriesFullDescription")) ? document.getElementById("drawerSeriesFullDescription").textContent : "";
 
-        if (btnBackFromGeminiFullScreen) {
-            btnBackFromGeminiFullScreen.addEventListener("click", () => {
-                navigateBack();
+                activeGeminiContextText = `Série: ${seriesTitle}. Sinopse/Biografia: ${seriesBio}. Total de episódios: ${currentActiveSeriesEpisodes.length}.`;
+
+                txtGeminiChatHeaderTitle.textContent = "Faça perguntas sobre esta série";
+                lblGeminiPromptResume.textContent = "Resuma a série";
+                geminiChatMessagesList.innerHTML = "";
+                inputGeminiChatDrawerField.value = "";
+
+                // Adiciona o modo canal para ocupar a proporção ideal na página da série
+                drawerGeminiChat.classList.add("channel-mode");
+                drawerGeminiChat.classList.add("active");
             });
         }
 
@@ -26218,34 +26245,43 @@ inputUniversalWildSearch.addEventListener("keydown", (e) => {
         }
 
         // Seta voltar do campo de busca: apenas fecha o campo de pesquisa e retorna à tela onde o usuário estava
-if (btnBackFromSearchInput) {
-    btnBackFromSearchInput.addEventListener("click", () => {
-        ytSearchActiveHeaderBar.classList.remove("active");
-        ytDefaultHeaderBar.style.display = "flex";
-        inputGlobalSearchQuery.value = "";
-
-        // Restaura a tela exata de onde a busca foi acionada
-        if (previousActiveScreenBeforeSearch === "shorts") {
-            openShortsFullScreen();
-        } else if (previousActiveScreenBeforeSearch === "subscriptions") {
-            openScreen(viewSubscriptions);
-        } else if (previousActiveScreenBeforeSearch === "you") {
-            openScreen(viewYou);
-        } else if (previousActiveScreenBeforeSearch === "newtab") {
-            openNewTabHomeScreen(Boolean(currentUserEmail));
-        } else if (previousActiveScreenBeforeSearch === "watch") {
-            openScreen(viewWatchVideo);
-        } else if (previousActiveScreenBeforeSearch === "user_channel") {
-            openScreen(viewUserChannel);
-        } else if (previousActiveScreenBeforeSearch === "playlist") {
-            openScreen(viewPlaylists);
-        } else if (previousActiveScreenBeforeSearch === "history") {
-            openScreen(viewHistoryAll);
-        } else {
-            openScreen("home");
+const btnSeriesChannelSearch = document.getElementById("btnSeriesChannelSearch");
+        if (btnSeriesChannelSearch) {
+            btnSeriesChannelSearch.addEventListener("click", () => {
+                openSearchInputMode("series_channel");
+            });
         }
-    });
-}
+
+        // Retorno da barra de pesquisa incluindo a página da série
+        if (btnBackFromSearchInput) {
+            btnBackFromSearchInput.addEventListener("click", () => {
+                ytSearchActiveHeaderBar.classList.remove("active");
+                ytDefaultHeaderBar.style.display = "flex";
+                inputGlobalSearchQuery.value = "";
+
+                if (previousActiveScreenBeforeSearch === "shorts") {
+                    openShortsFullScreen();
+                } else if (previousActiveScreenBeforeSearch === "subscriptions") {
+                    openScreen(viewSubscriptions);
+                } else if (previousActiveScreenBeforeSearch === "you") {
+                    openScreen(viewYou);
+                } else if (previousActiveScreenBeforeSearch === "newtab") {
+                    openNewTabHomeScreen(Boolean(currentUserEmail));
+                } else if (previousActiveScreenBeforeSearch === "watch") {
+                    openScreen(viewWatchVideo);
+                } else if (previousActiveScreenBeforeSearch === "series_channel") {
+                    openScreen(viewSeriesChannel, false);
+                } else if (previousActiveScreenBeforeSearch === "user_channel") {
+                    openScreen(viewUserChannel);
+                } else if (previousActiveScreenBeforeSearch === "playlist") {
+                    openScreen(viewPlaylists);
+                } else if (previousActiveScreenBeforeSearch === "history") {
+                    openScreen(viewHistoryAll);
+                } else {
+                    openScreen("home");
+                }
+            });
+        }
 
         // Digitar no input de busca: gerencia o botão ✕ (Print A3)
         inputGlobalSearchQuery.addEventListener("input", () => {
