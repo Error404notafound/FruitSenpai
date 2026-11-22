@@ -6832,6 +6832,7 @@
             touch-action: none;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-touch-callout: none !important;
             outline: none;
         }
 
@@ -6844,6 +6845,25 @@
             width: 20px;
             height: 20px;
             fill: currentColor;
+            pointer-events: none;
+        }
+
+        /* Bloqueio definitivo do menu de contexto de imagem no celular */
+        .playlist-video-row-card,
+        .playlist-video-row-card *,
+        .watch-queue-item-card-row,
+        .watch-queue-item-card-row * {
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
+        }
+
+        .playlist-video-row-card img,
+        .watch-queue-item-card-row img {
+            pointer-events: none !important;
+            -webkit-touch-callout: none !important;
+            -webkit-user-select: none !important;
+            user-select: none !important;
         }
 
         .playlist-video-row-card.dragging-active,
@@ -10275,7 +10295,8 @@
     </div>
 
     <div class="yt-player-box" id="watchPlayerBox">
-        <iframe id="watchIframe" src="" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>
+        <iframe id="watchIframe" src="" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        <video id="watchNativeVideo" playsinline controls style="display:none; width:100%; height:100%; object-fit:contain; background:#000000; border:none;"></video>
 
         <!-- Pílula de Recomendação Aleatória no Canto Superior Direito (Seta Vermelha) -->
         <div class="watch-top-rec-pill" id="watchTopRecPill">
@@ -19646,33 +19667,44 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             loadPlaylistVideosRealtime();
         }
 
-        // Carrega em tempo real os vídeos da playlist
+        // Carrega em tempo real os vídeos da playlist mantendo a ordem exata definida pelo usuário
         function loadPlaylistVideosRealtime() {
             plVideosListContainer.innerHTML = "";
-            const idsList = Array.isArray(currentPlaylistData.videos) ? currentPlaylistData.videos : (Array.isArray(currentPlaylistData.series) ? currentPlaylistData.series : []);
+            const idsList = Array.isArray(currentPlaylistData.videos) && currentPlaylistData.videos.length > 0 
+                ? currentPlaylistData.videos 
+                : (Array.isArray(currentPlaylistData.series) ? currentPlaylistData.series : []);
 
             onSnapshot(frutasColecao, (snap) => {
-                currentPlaylistVideosList = [];
-                let firstCover = "";
+                const fetchedMap = new Map();
 
                 snap.forEach(d => {
                     const videoItem = { id: d.id, ...d.data() };
-                    const targetName = (videoItem.channel || "").toLowerCase();
-                    const targetTitle = (videoItem.name || "").toLowerCase();
+                    fetchedMap.set(d.id, videoItem);
+                });
 
-                    // Verifica se o item pertence à lista da playlist
-                    const isMatch = idsList.some(idOrName => {
-                        const clean = String(idOrName).toLowerCase();
-                        return idOrName === d.id || targetName === clean || targetName.includes(clean) || targetTitle.includes(clean);
-                    });
+                // Ordena os vídeos exatamente na sequência de IDs salva pelo usuário
+                const orderedVideos = [];
+                idsList.forEach(idOrName => {
+                    const clean = String(idOrName).toLowerCase();
+                    let match = fetchedMap.get(idOrName);
 
-                    if (isMatch) {
-                        currentPlaylistVideosList.push(videoItem);
-                        if (!firstCover) {
-                            firstCover = videoItem.thumbUrl || videoItem.seriesCover || "";
+                    if (!match) {
+                        for (const item of fetchedMap.values()) {
+                            const nameLower = (item.name || "").toLowerCase();
+                            const channelLower = (item.channel || "").toLowerCase();
+                            if (nameLower === clean || channelLower === clean || nameLower.includes(clean)) {
+                                match = item;
+                                break;
+                            }
                         }
                     }
+
+                    if (match && !orderedVideos.some(v => v.id === match.id)) {
+                        orderedVideos.push(match);
+                    }
                 });
+
+                currentPlaylistVideosList = orderedVideos;
 
                 // Atualiza contagem de vídeos por extenso
                 plVideosCountLabelText.textContent = formatVideosCountWord(currentPlaylistVideosList.length);
@@ -20611,6 +20643,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
         const viewWatchVideo = document.getElementById("viewWatchVideo");
         const watchIframe = document.getElementById("watchIframe");
+        const watchNativeVideo = document.getElementById("watchNativeVideo");
         const watchVideoTitle = document.getElementById("watchVideoTitle");
         const watchViewsCount = document.getElementById("watchViewsCount");
         const watchLikesCount = document.getElementById("watchLikesCount");
@@ -21114,23 +21147,52 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             // Dispara a recomendação aleatória no topo direito do player (Seta Vermelha)
             triggerTopRightRandomRecommendation(videoData);
 
-            // Carrega Iframe do Vídeo usando a fonte ativa
+            // Carrega Iframe ou Vídeo Nativo HTML5 para permitir PiP fora do Chrome (como no Google Drive)
             const activeSourceUrl = (currentActiveEpisodeSourcesList[0] && currentActiveEpisodeSourcesList[0].url) 
                 ? currentActiveEpisodeSourcesList[0].url 
                 : (videoData.videoUrl || "");
 
             let srcUrl = activeSourceUrl.trim();
-            if (srcUrl) {
-                const ytMatch = srcUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-                if (ytMatch && ytMatch[1]) {
-                    srcUrl = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
+            const isDirectStreamVideo = Boolean(
+                srcUrl.includes("/stream/") ||
+                srcUrl.endsWith(".mp4") ||
+                srcUrl.endsWith(".webm") ||
+                srcUrl.endsWith(".mkv") ||
+                srcUrl.includes(".mp4?") ||
+                srcUrl.includes("blob:")
+            );
+
+            if (isDirectStreamVideo && watchNativeVideo) {
+                if (watchIframe) {
+                    watchIframe.src = "";
+                    watchIframe.style.display = "none";
+                }
+                watchNativeVideo.style.display = "block";
+                watchNativeVideo.src = srcUrl;
+                watchNativeVideo.play().catch(() => {});
+            } else {
+                if (watchNativeVideo) {
+                    watchNativeVideo.pause();
+                    watchNativeVideo.src = "";
+                    watchNativeVideo.style.display = "none";
+                }
+                if (watchIframe) {
+                    watchIframe.style.display = "block";
+                    const ytMatch = srcUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+                    if (ytMatch && ytMatch[1]) {
+                        srcUrl = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
+                    }
+                    watchIframe.src = srcUrl;
                 }
             }
-            if (watchIframe) watchIframe.src = srcUrl;
 
             if (btnBackFromWatch) {
                 btnBackFromWatch.onclick = () => {
                     if (watchIframe) watchIframe.src = "";
+                    if (watchNativeVideo) {
+                        watchNativeVideo.pause();
+                        watchNativeVideo.src = "";
+                    }
                     if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
                     navigateBack();
                 };
@@ -28498,13 +28560,29 @@ function setupPlaylistRowHoldToDrag(handleBtn, rowElement, containerElement) {
     let isDraggingRow = false;
     let startY = 0;
 
+    // Bloqueia expressamente o menu nativo de imagem do Chrome (Print de download da imagem)
+    handleBtn.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+
+    rowElement.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
+    });
+
     function startHold(e) {
+        if (e.target.closest("img")) {
+            e.preventDefault();
+        }
         startY = (e.touches ? e.touches[0].clientY : e.clientY);
         isDraggingRow = false;
 
         if (holdTimer) clearTimeout(holdTimer);
 
-        // Segurar por 2 segundos ativa o arraste
+        // Segurar por 2 segundos ativa o arraste sem abrir nenhum menu do navegador
         holdTimer = setTimeout(() => {
             isDraggingRow = true;
             if (navigator.vibrate) navigator.vibrate(50);
@@ -28517,13 +28595,14 @@ function setupPlaylistRowHoldToDrag(handleBtn, rowElement, containerElement) {
         const currentY = (e.touches ? e.touches[0].clientY : e.clientY);
         const diffY = Math.abs(currentY - startY);
 
-        if (!isDraggingRow && diffY > 15) {
+        if (!isDraggingRow && diffY > 12) {
             clearTimeout(holdTimer);
         }
 
         if (isDraggingRow) {
             if (e.preventDefault) e.preventDefault();
-            const elementUnder = document.elementFromPoint(e.touches ? e.touches[0].clientX : e.clientX, currentY);
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const elementUnder = document.elementFromPoint(clientX, currentY);
             if (!elementUnder) return;
 
             const targetRow = elementUnder.closest(".playlist-video-row-card, .watch-queue-item-card-row");
@@ -28542,7 +28621,7 @@ function setupPlaylistRowHoldToDrag(handleBtn, rowElement, containerElement) {
             isDraggingRow = false;
             rowElement.classList.remove("dragging-active");
 
-            // Recria a ordem do array com base na nova posição dos elementos no DOM
+            // Recria a ordem do array com base na nova posição física dos elementos
             const newOrderedList = [];
             const rowsInDom = containerElement.querySelectorAll(".playlist-video-row-card, .watch-queue-item-card-row");
 
@@ -28555,27 +28634,45 @@ function setupPlaylistRowHoldToDrag(handleBtn, rowElement, containerElement) {
 
             if (newOrderedList.length === currentPlaylistVideosList.length) {
                 currentPlaylistVideosList = newOrderedList;
+                const updatedIds = newOrderedList.map(v => v.id);
 
-                // Salva a nova ordem definitiva no Firestore da playlist do usuário
-                if (currentPlaylistData && currentOpenPlaylistDocId) {
+                // Atualiza a memória ativa da playlist
+                if (currentPlaylistData) {
+                    currentPlaylistData.videos = updatedIds;
+                    currentPlaylistData.series = updatedIds;
+                }
+
+                // Grava no Firestore na coleção exata (playlists ou series_playlists)
+                const targetPlaylistId = currentOpenPlaylistDocId || (currentPlaylistData ? currentPlaylistData.id : null);
+                if (targetPlaylistId) {
                     try {
-                        const col = currentPlaylistData._collection || "playlists";
-                        const updatedIds = currentPlaylistVideosList.map(v => v.id);
-                        await setDoc(doc(db, col, currentOpenPlaylistDocId), {
+                        const col = (currentPlaylistData && currentPlaylistData._collection) ? currentPlaylistData._collection : "playlists";
+                        await setDoc(doc(db, col, targetPlaylistId), {
                             videos: updatedIds,
                             series: updatedIds,
                             updatedAt: serverTimestamp()
                         }, { merge: true });
-                        showToast("Ordem da playlist atualizada!");
+
+                        showToast("Ordem da playlist salva com sucesso!");
+
+                        // Sincroniza os índices de atributos nos elementos para o próximo arraste
+                        rowsInDom.forEach((r, newIdx) => {
+                            r.setAttribute("data-video-idx", newIdx);
+                        });
+
+                        // Atualiza a fila da gaveta do player se estiver aberta
+                        if (typeof updateWatchQueueBarUI === "function" && isPlaylistQueueActive) {
+                            updateWatchQueueBarUI();
+                        }
                     } catch(err) {
-                        console.error("Erro ao salvar ordem da playlist:", err);
+                        console.error("Erro ao salvar ordem no banco de dados:", err);
                     }
                 }
             }
         }
     }
 
-    handleBtn.addEventListener("touchstart", startHold, { passive: true });
+    handleBtn.addEventListener("touchstart", startHold, { passive: false });
     window.addEventListener("touchmove", moveHold, { passive: false });
     window.addEventListener("touchend", endHold, { passive: true });
 
@@ -28585,12 +28682,24 @@ function setupPlaylistRowHoldToDrag(handleBtn, rowElement, containerElement) {
 }
 
 // ==========================================================================
-// 3. PICTURE-IN-PICTURE NATIVO FORA DO CHROME / FORA DA ABA
+// 3. PICTURE-IN-PICTURE NATIVO FORA DO CHROME (IGUAL AO GOOGLE DRIVE)
 // ==========================================================================
 let nativePipWindowInstance = null;
 
 async function requestNativeOutOfBrowserPip() {
-    // 1. Suporte a Document Picture-in-Picture (Chromium: abre janela fora do Chrome)
+    // 1. Suporte Nativo do Android / Chrome (Igual ao Google Drive via <video>)
+    if (watchNativeVideo && watchNativeVideo.src && !watchNativeVideo.paused) {
+        try {
+            if (document.pictureInPictureEnabled && watchNativeVideo !== document.pictureInPictureElement) {
+                await watchNativeVideo.requestPictureInPicture();
+                return true;
+            }
+        } catch (eNative) {
+            console.log("Erro no PiP nativo do Android:", eNative);
+        }
+    }
+
+    // 2. Suporte a Document Picture-in-Picture (Desktop / Janela Independente do Sistema)
     if ("documentPictureInPicture" in window) {
         try {
             if (nativePipWindowInstance) {
@@ -28604,8 +28713,6 @@ async function requestNativeOutOfBrowserPip() {
             });
 
             nativePipWindowInstance = pipWindow;
-
-            // Clona o estilo escuro do app para a janela flutuante nativa
             pipWindow.document.body.style.margin = "0";
             pipWindow.document.body.style.backgroundColor = "#000000";
             pipWindow.document.body.style.display = "flex";
@@ -28613,31 +28720,24 @@ async function requestNativeOutOfBrowserPip() {
             pipWindow.document.body.style.justifyContent = "center";
             pipWindow.document.body.style.overflow = "hidden";
 
-            // Transfere o iframe do player para a janela flutuante nativa do sistema operacional
-            if (watchIframe) {
+            if (watchNativeVideo && watchNativeVideo.style.display !== "none") {
+                pipWindow.document.body.appendChild(watchNativeVideo);
+            } else if (watchIframe) {
                 pipWindow.document.body.appendChild(watchIframe);
             }
 
             pipWindow.addEventListener("pagehide", () => {
-                if (watchPlayerBox && watchIframe) {
-                    watchPlayerBox.prepend(watchIframe);
+                if (watchPlayerBox) {
+                    if (watchNativeVideo) watchPlayerBox.prepend(watchNativeVideo);
+                    if (watchIframe) watchPlayerBox.prepend(watchIframe);
                 }
                 nativePipWindowInstance = null;
             });
 
             return true;
         } catch(err) {
-            console.log("Document PiP não ativado, usando PiP em tela:", err);
+            console.log("Document PiP não ativado, usando PiP flutuante interno:", err);
         }
-    }
-
-    // 2. Suporte padrão a tag <video> se houver reprodução direta
-    const videoTag = document.querySelector("#watchPlayerBox video");
-    if (videoTag && document.pictureInPictureEnabled && !document.pictureInPictureElement) {
-        try {
-            await videoTag.requestPictureInPicture();
-            return true;
-        } catch(e) {}
     }
 
     return false;
@@ -28648,7 +28748,7 @@ async function minimizeWatchPlayerToPip() {
     if (!currentWatchVideoId) return;
 
     // Tenta primeiro abrir a janela nativa flutuante que sai do Chrome
-    await requestNativeOutOfBrowserPip();
+    const outOfBrowserSuccess = await requestNativeOutOfBrowserPip();
 
     isMiniPlayerModeActive = true;
     viewWatchVideo.classList.add("minimized-pip-mode");
@@ -28665,6 +28765,10 @@ async function minimizeWatchPlayerToPip() {
     viewWatchVideo.classList.add("minimized-pip-mode");
 
     startMiniPipProgressBarAnimation();
+
+    if (outOfBrowserSuccess) {
+        showToast("Vídeo em janela flutuante do sistema!");
+    }
 }
 
 // 2. Restaura o Vídeo para a Tela Cheia (Exclusivo pelo Botão de Expandir)
