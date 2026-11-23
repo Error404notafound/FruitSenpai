@@ -12908,11 +12908,11 @@
                         </button>
                     </div>
 
-                    <!-- Slide 2: Prévia Interativa do Vídeo (Permite Assistir Ali Mesmo) -->
-                    <div class="upload-thumb-slide" id="slideVideoPreview">
-                        <iframe id="uploadPreviewIframe" src="" referrerpolicy="no-referrer" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen style="display:none; width:100%; height:100%; border:none;"></iframe>
-                        <video id="uploadPreviewVideo" controls playsinline style="display:none; width:100%; height:100%; object-fit:contain; background:#000000;"></video>
-                        <div id="uploadPreviewEmptyPlaceholder" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; background:#141414; color:#888888;">
+                    <!-- Slide 2: Prévia Interativa do Vídeo (Idêntica ao Container #watchPlayerBox) -->
+                    <div class="upload-thumb-slide yt-player-box" id="slideVideoPreview">
+                        <iframe id="uploadPreviewIframe" src="" referrerpolicy="no-referrer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="true" style="display:none; width:100%; height:100%; border:none; background:#000000;"></iframe>
+                        <video id="uploadPreviewVideo" controls playsinline style="display:none; width:100%; height:100%; object-fit:contain; background:#000000; border:none;"></video>
+                        <div id="uploadPreviewEmptyPlaceholder" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; background:#000000; color:#888888;">
                             <svg viewBox="0 0 24 24" style="width:44px; height:44px; fill:#444444; margin-bottom:8px;"><path d="M8 5v14l11-7z"/></svg>
                             <span style="font-size:12.5px; font-weight:600; color:#aaaaaa;">Prévia do Vídeo</span>
                             <span style="font-size:11px; color:#666666; margin-top:2px;">Insira o link do episódio para reproduzir aqui</span>
@@ -15886,15 +15886,16 @@
                 }
                 if (uploadPreviewIframe) {
                     uploadPreviewIframe.style.display = "block";
-                    uploadPreviewIframe.setAttribute("referrerpolicy", "no-referrer");
 
                     let embed = cleanUrl;
                     const ytMatch = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
                     if (ytMatch && ytMatch[1]) {
-                        embed = `https://www.youtube.com/embed/${ytMatch[1]}`;
+                        embed = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=0`;
                     } else if (cleanUrl.includes("drive.google.com")) {
                         embed = cleanUrl.replace(/\/view.*$/, "/preview");
                     }
+
+                    uploadPreviewIframe.setAttribute("referrerpolicy", "no-referrer");
                     uploadPreviewIframe.src = embed;
                 }
             }
