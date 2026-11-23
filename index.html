@@ -10456,7 +10456,7 @@
     </div>
 
     <div class="yt-player-box" id="watchPlayerBox">
-        <iframe id="watchIframe" src="" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
+        <iframe id="watchIframe" src="" referrerpolicy="no-referrer" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>
         <video id="watchNativeVideo" playsinline controls style="display:none; width:100%; height:100%; object-fit:contain; background:#000000; border:none;"></video>
 
         <!-- Pílula de Recomendação Aleatória no Canto Superior Direito (Seta Vermelha) -->
@@ -12910,7 +12910,7 @@
 
                     <!-- Slide 2: Prévia Interativa do Vídeo (Permite Assistir Ali Mesmo) -->
                     <div class="upload-thumb-slide" id="slideVideoPreview">
-                        <iframe id="uploadPreviewIframe" src="" allow="autoplay; fullscreen" style="display:none; width:100%; height:100%; border:none;"></iframe>
+                        <iframe id="uploadPreviewIframe" src="" referrerpolicy="no-referrer" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen style="display:none; width:100%; height:100%; border:none;"></iframe>
                         <video id="uploadPreviewVideo" controls playsinline style="display:none; width:100%; height:100%; object-fit:contain; background:#000000;"></video>
                         <div id="uploadPreviewEmptyPlaceholder" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; background:#141414; color:#888888;">
                             <svg viewBox="0 0 24 24" style="width:44px; height:44px; fill:#444444; margin-bottom:8px;"><path d="M8 5v14l11-7z"/></svg>
@@ -14791,9 +14791,12 @@
             currentActiveEpisodeIndex = index;
             const ep = addedEpisodesList[index];
 
+            const fallbackDefaultThumb = "https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_024242.png";
+            const currentThumbSrc = (ep.thumbUrl && ep.thumbUrl.trim()) ? ep.thumbUrl : fallbackDefaultThumb;
+
             // 1. Atualiza a foto horizontal superior (sem bordas arredondadas)
             if (uploadVideoThumb) {
-                uploadVideoThumb.src = ep.thumbUrl;
+                uploadVideoThumb.src = currentThumbSrc;
             }
 
             // 2. Atualiza a prévia superior de texto abaixo da capa
@@ -14815,6 +14818,9 @@
                 }
             }
 
+            // Atualiza a prévia do player do Slide 2 com o vídeo deste episódio
+            updateUploadVideoPreview(ep.videoUrl || "");
+
             renderUploadEpisodesScroll();
             showToast(`Editando no topo: ${ep.episode}`);
         }
@@ -14824,14 +14830,18 @@
             if (!uploadEpisodesScroll) return;
             uploadEpisodesScroll.innerHTML = "";
 
+            const fallbackDefaultThumb = "https://raw.githubusercontent.com/Error404notafound/FruitSenpai/refs/heads/main/20261113_024242.png";
+
             addedEpisodesList.forEach((ep, index) => {
                 const card = document.createElement("div");
                 const isSelected = (index === currentActiveEpisodeIndex);
                 card.className = `upload-ep-shelf-card ${isSelected ? 'active-editing-shelf' : ''}`;
 
+                const safeThumb = (ep.thumbUrl && ep.thumbUrl.trim()) ? ep.thumbUrl : fallbackDefaultThumb;
+
                 card.innerHTML = `
                     <div class="upload-ep-shelf-thumb">
-                        <img src="${escapeHtml(ep.thumbUrl)}" alt="${escapeHtml(ep.title)}">
+                        <img src="${escapeHtml(safeThumb)}" onerror="this.onerror=null;this.src='${fallbackDefaultThumb}';" alt="${escapeHtml(ep.title)}">
                         <!-- Seta Verde: Classificação Indicativa em tempo real -->
                         <span class="upload-ep-shelf-badge-age">${escapeHtml(ep.age)}</span>
                         <!-- Seta Amarela: Duração do Episódio em tempo real -->
@@ -14996,6 +15006,8 @@
             if (addedEpisodesList[currentActiveEpisodeIndex]) {
                 addedEpisodesList[currentActiveEpisodeIndex].videoUrl = cleanUrl;
             }
+            // Atualiza a prévia do Slide 2 em tempo real enquanto o usuário cola ou digita o link
+            updateUploadVideoPreview(cleanUrl);
         }
 
         if (inputFirstEpisodeUrl) {
@@ -15851,6 +15863,7 @@
                 cleanUrl.endsWith(".mp4") ||
                 cleanUrl.endsWith(".webm") ||
                 cleanUrl.endsWith(".mkv") ||
+                cleanUrl.includes(".mp4?") ||
                 cleanUrl.includes("blob:")
             );
 
@@ -15873,11 +15886,14 @@
                 }
                 if (uploadPreviewIframe) {
                     uploadPreviewIframe.style.display = "block";
+                    uploadPreviewIframe.setAttribute("referrerpolicy", "no-referrer");
 
                     let embed = cleanUrl;
                     const ytMatch = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
                     if (ytMatch && ytMatch[1]) {
                         embed = `https://www.youtube.com/embed/${ytMatch[1]}`;
+                    } else if (cleanUrl.includes("drive.google.com")) {
+                        embed = cleanUrl.replace(/\/view.*$/, "/preview");
                     }
                     uploadPreviewIframe.src = embed;
                 }
