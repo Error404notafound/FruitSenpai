@@ -16444,6 +16444,7 @@
                         selectedSeriesId = s.id;
                         uploadSearchSeries.value = s.title;
                         seriesSuggestionsList.style.display = "none";
+                        populateExistingSeriesDataToPreview(s);
                     });
                     seriesSuggestionsList.appendChild(row);
                 });
@@ -26878,6 +26879,44 @@ inputUniversalWildSearch.addEventListener("keydown", (e) => {
         const btnExecuteSearchMagnifier = document.getElementById("btnExecuteSearchMagnifier");
         const btnTriggerVoiceSearchModal = document.getElementById("btnTriggerVoiceSearchModal");
         const btnSearchHeaderKebab = document.getElementById("btnSearchHeaderKebab");
+
+        const btnSeriesChannelSearch = document.getElementById("btnSeriesChannelSearch");
+        if (btnSeriesChannelSearch) {
+            btnSeriesChannelSearch.addEventListener("click", () => {
+                openSearchInputMode("series_channel");
+            });
+        }
+
+        // Retorno da barra de pesquisa incluindo a página da série
+        if (btnBackFromSearchInput) {
+            btnBackFromSearchInput.addEventListener("click", () => {
+                ytSearchActiveHeaderBar.classList.remove("active");
+                ytDefaultHeaderBar.style.display = "flex";
+                inputGlobalSearchQuery.value = "";
+
+                if (previousActiveScreenBeforeSearch === "shorts") {
+                    openShortsFullScreen();
+                } else if (previousActiveScreenBeforeSearch === "subscriptions") {
+                    openScreen(viewSubscriptions);
+                } else if (previousActiveScreenBeforeSearch === "you") {
+                    openScreen(viewYou);
+                } else if (previousActiveScreenBeforeSearch === "newtab") {
+                    openNewTabHomeScreen(Boolean(currentUserEmail));
+                } else if (previousActiveScreenBeforeSearch === "watch") {
+                    openScreen(viewWatchVideo);
+                } else if (previousActiveScreenBeforeSearch === "series_channel") {
+                    openScreen(viewSeriesChannel, false);
+                } else if (previousActiveScreenBeforeSearch === "user_channel") {
+                    openScreen(viewUserChannel);
+                } else if (previousActiveScreenBeforeSearch === "playlist") {
+                    openScreen(viewPlaylists);
+                } else if (previousActiveScreenBeforeSearch === "history") {
+                    openScreen(viewHistoryAll);
+                } else {
+                    openScreen("home");
+                }
+            });
+        }
 
         const viewSearchResults = document.getElementById("viewSearchResults");
         const searchFiltersBar = document.getElementById("searchFiltersBar");
