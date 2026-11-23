@@ -13266,31 +13266,6 @@
                 </div>
             </div>
 
-                <!-- Tipo de Conteúdo (Ao vivo, Série, Filme, Trailer, Reels) -->
-                <button class="upload-opt-row" id="rowUploadContentType" type="button">
-                    <div class="upload-opt-left">
-                        <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
-                        <div class="upload-opt-texts">
-                            <span class="upload-opt-label">Tipo de conteúdo</span>
-                            <span class="upload-opt-value" id="valUploadContentType">Série</span>
-                        </div>
-                    </div>
-                    <svg class="upload-chevron-right" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-                </button>
-
-                <!-- Data de Lançamento (Próximo Episódio) -->
-                <div class="upload-title-box" style="padding-top: 10px;">
-                    <label style="font-size: 12px; color: var(--yt-text-secondary); display: block; margin-bottom: 4px;">Data do próximo episódio (opcional):</label>
-                    <input type="date" id="uploadNextEpDate" class="upload-title-input" style="color-scheme: dark;">
-                </div>
-
-                <!-- Checkbox +18 -->
-                <div style="padding: 10px 16px; display: flex; align-items: center; gap: 10px;">
-                    <input type="checkbox" id="uploadIsAdult" style="width: 18px; height: 18px; accent-color: #3ea6ff; cursor: pointer;">
-                    <label for="uploadIsAdult" style="font-size: 13.5px; color: #ffffff; cursor: pointer;">É Conteúdo Adulto (+18 - Ecchi/Hentai)?</label>
-                </div>
-            </div>
-
             <!-- Botão Retrátil Mostrar Mais / Menos -->
             <button class="upload-expand-btn" id="btnToggleUploadExpand">
                 <span id="txtUploadExpand">Mostrar mais</span>
@@ -15808,12 +15783,14 @@
         }
 
         // 8. Link do Vídeo (🔗): Ciano (#00e5ff)
-        if (btnConfirmModalSourceLink) {
-            btnConfirmModalSourceLink.addEventListener("click", () => {
+        const btnConfirmModalSourceLinkRef = document.getElementById("btnConfirmModalSourceLink");
+        if (btnConfirmModalSourceLinkRef) {
+            btnConfirmModalSourceLinkRef.addEventListener("click", () => {
+                const inputSrcUrl = document.getElementById("inputModalSourceUrl");
                 if (btnThumbEpisodeLink) {
-                    const hasVal = Boolean(inputModalSourceUrl && inputModalSourceUrl.value.trim());
+                    const hasVal = Boolean(inputSrcUrl && inputSrcUrl.value.trim());
                     btnThumbEpisodeLink.classList.toggle("svg-completed-link", hasVal);
-                    updateUploadVideoPreview(inputModalSourceUrl.value.trim());
+                    if (inputSrcUrl) updateUploadVideoPreview(inputSrcUrl.value.trim());
                 }
             });
         }
@@ -15822,10 +15799,12 @@
         }
 
         // 9. Capa do Episódio (Lápis do Topo): Rosa Magenta (#ff4081)
-        if (btnConfirmEditThumb) {
-            btnConfirmEditThumb.addEventListener("click", () => {
+        const btnConfirmEditThumbRef = document.getElementById("btnConfirmEditThumb");
+        if (btnConfirmEditThumbRef) {
+            btnConfirmEditThumbRef.addEventListener("click", () => {
+                const inputThumbUrl = document.getElementById("inputThumbModalUrl");
                 if (btnEditUploadThumb) {
-                    const hasVal = Boolean(inputThumbModalUrl && inputThumbModalUrl.value.trim());
+                    const hasVal = Boolean(inputThumbUrl && inputThumbUrl.value.trim());
                     btnEditUploadThumb.classList.toggle("svg-completed-thumb", hasVal);
                 }
             });
@@ -15854,12 +15833,16 @@
 
         function updateUploadVideoPreview(videoUrl) {
             if (!videoUrl) {
-                uploadPreviewIframe.src = "";
-                uploadPreviewIframe.style.display = "none";
-                uploadPreviewVideo.pause();
-                uploadPreviewVideo.src = "";
-                uploadPreviewVideo.style.display = "none";
-                uploadPreviewEmptyPlaceholder.style.display = "flex";
+                if (uploadPreviewIframe) {
+                    uploadPreviewIframe.src = "";
+                    uploadPreviewIframe.style.display = "none";
+                }
+                if (uploadPreviewVideo) {
+                    uploadPreviewVideo.pause();
+                    uploadPreviewVideo.src = "";
+                    uploadPreviewVideo.style.display = "none";
+                }
+                if (uploadPreviewEmptyPlaceholder) uploadPreviewEmptyPlaceholder.style.display = "flex";
                 return;
             }
 
@@ -15872,25 +15855,33 @@
                 cleanUrl.includes("blob:")
             );
 
-            uploadPreviewEmptyPlaceholder.style.display = "none";
+            if (uploadPreviewEmptyPlaceholder) uploadPreviewEmptyPlaceholder.style.display = "none";
 
             if (isDirectFile) {
-                uploadPreviewIframe.src = "";
-                uploadPreviewIframe.style.display = "none";
-                uploadPreviewVideo.style.display = "block";
-                uploadPreviewVideo.src = cleanUrl;
-            } else {
-                uploadPreviewVideo.pause();
-                uploadPreviewVideo.src = "";
-                uploadPreviewVideo.style.display = "none";
-                uploadPreviewIframe.style.display = "block";
-
-                let embed = cleanUrl;
-                const ytMatch = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-                if (ytMatch && ytMatch[1]) {
-                    embed = `https://www.youtube.com/embed/${ytMatch[1]}`;
+                if (uploadPreviewIframe) {
+                    uploadPreviewIframe.src = "";
+                    uploadPreviewIframe.style.display = "none";
                 }
-                uploadPreviewIframe.src = embed;
+                if (uploadPreviewVideo) {
+                    uploadPreviewVideo.style.display = "block";
+                    uploadPreviewVideo.src = cleanUrl;
+                }
+            } else {
+                if (uploadPreviewVideo) {
+                    uploadPreviewVideo.pause();
+                    uploadPreviewVideo.src = "";
+                    uploadPreviewVideo.style.display = "none";
+                }
+                if (uploadPreviewIframe) {
+                    uploadPreviewIframe.style.display = "block";
+
+                    let embed = cleanUrl;
+                    const ytMatch = cleanUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+                    if (ytMatch && ytMatch[1]) {
+                        embed = `https://www.youtube.com/embed/${ytMatch[1]}`;
+                    }
+                    uploadPreviewIframe.src = embed;
+                }
             }
         }
 
@@ -15948,22 +15939,9 @@
             showToast(`Dados de "${sTitle}" carregados na prévia!`);
         }
 
-        // Ao selecionar na lista suspensa do autocomplete
-        if (uploadSearchSeries) {
-            const originalInputHandler = uploadSearchSeries.oninput;
-            uploadSearchSeries.addEventListener("input", () => {
-                const query = uploadSearchSeries.value.toLowerCase().trim();
-                const matched = availableSeriesList.find(s => s.title && s.title.toLowerCase().trim() === query);
-                if (matched) {
-                    populateExistingSeriesDataToPreview(matched);
-                }
-            });
-        }
-
         // ==========================================================================
         // MINI BANNER: LINK PARA O CAMPO E ESPELHO EM TEMPO REAL DO BANNER PRINCIPAL
         // ==========================================================================
-        const btnMiniBannerLink = document.getElementById("btnMiniBannerLink");
         const imgMiniHeroBanner = document.getElementById("imgMiniHeroBanner");
         const txtMiniBannerTitle = document.getElementById("txtMiniBannerTitle");
         const txtMiniBannerGenre = document.getElementById("txtMiniBannerGenre");
