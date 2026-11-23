@@ -15710,7 +15710,6 @@
         const btnPosterEditGenres = document.getElementById("btnPosterEditGenres");
         const btnPosterEditSynopsis = document.getElementById("btnPosterEditSynopsis");
         const btnMiniBannerLink = document.getElementById("btnMiniBannerLink");
-        const btnThumbDuration = document.getElementById("btnThumbDuration");
 
         // 1. Título da Série
         if (btnPosterEditTitle) {
@@ -16433,6 +16432,12 @@
 
             const matches = availableSeriesList.filter(s => s.title && s.title.toLowerCase().includes(query));
 
+            // Se o nome digitado for idêntico ao de uma série existente, carrega a prévia imediatamente
+            const exactMatch = availableSeriesList.find(s => s.title && s.title.toLowerCase().trim() === query);
+            if (exactMatch) {
+                populateExistingSeriesDataToPreview(exactMatch);
+            }
+
             if (matches.length === 0) {
                 seriesSuggestionsList.innerHTML = `<div class="series-autocomplete-item" style="color:var(--yt-text-secondary);">Nenhuma série encontrada</div>`;
             } else {
@@ -16450,6 +16455,15 @@
                 });
             }
             seriesSuggestionsList.style.display = "block";
+        });
+
+        // Ao sair do campo de busca de série, confirma se a série digitada existe e carrega a prévia
+        uploadSearchSeries.addEventListener("change", () => {
+            const query = uploadSearchSeries.value.toLowerCase().trim();
+            const matchedSeries = availableSeriesList.find(s => s.title && s.title.toLowerCase().trim() === query);
+            if (matchedSeries) {
+                populateExistingSeriesDataToPreview(matchedSeries);
+            }
         });
 
         // Configuração do Tipo de Conteúdo (Ao vivo, Série, Filme, Trailer, Reels)
