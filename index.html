@@ -8110,13 +8110,201 @@
             height: 100%;
             max-height: 100%;
             box-sizing: border-box;
+            background-color: #0f0f0f;
         }
 
+        .yt-comments-drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px 8px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #0f0f0f;
+            flex-shrink: 0;
+        }
+
+        .yt-comments-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .yt-comments-header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .yt-comments-header-count {
+            font-size: 13.5px;
+            color: #aaaaaa;
+            font-weight: 500;
+        }
+
+        .yt-comments-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Barra de Pílulas / Chips dos Comentários (Print B) */
+        .yt-comments-chips-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background-color: #0f0f0f;
+            flex-shrink: 0;
+        }
+
+        .yt-comments-chips-bar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .yt-comment-chip {
+            background-color: #212121;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            height: 32px;
+            padding: 0 12px;
+            font-size: 12.5px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .yt-comment-chip.active {
+            background-color: #ffffff;
+            color: #0f0f0f;
+            font-weight: 700;
+            border-color: #ffffff;
+        }
+
+        .yt-comment-chip svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        /* Banner de Resumo por IA na Aba Tópicos (Print B1) */
+        .yt-comments-ai-banner {
+            display: flex;
+            flex-direction: column;
+            padding: 12px 16px 8px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background-color: #141414;
+        }
+
+        .yt-comments-ai-banner-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .yt-comments-ai-banner-sub {
+            font-size: 11.5px;
+            color: #888888;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .yt-comments-ai-banner-sub svg {
+            width: 14px;
+            height: 14px;
+            fill: #888888;
+        }
+
+        /* Cartões de Tópicos Resumidos (Print B1) */
+        .yt-comment-topic-card {
+            background-color: #1a1a1a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 8px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        .yt-comment-topic-card:active {
+            background-color: #242424;
+        }
+
+        .yt-comment-topic-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .yt-comment-topic-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .yt-comment-topic-chevron {
+            width: 18px;
+            height: 18px;
+            fill: #888888;
+        }
+
+        .yt-comment-topic-preview-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .yt-comment-topic-preview-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background-color: #333333;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #ffffff;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .yt-comment-topic-preview-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .yt-comment-topic-preview-text {
+            font-size: 12.5px;
+            color: #cccccc;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+
+        /* Lista de Comentários */
         .yt-comments-list {
             flex: 1;
             min-height: 0;
             overflow-y: auto;
-            padding: 12px 16px;
+            padding: 12px 16px 20px 16px;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -8124,52 +8312,417 @@
             box-sizing: border-box;
         }
 
+        .yt-comment-node {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
         .yt-comment-row {
             display: flex;
             gap: 12px;
             align-items: flex-start;
+            position: relative;
         }
 
         .yt-comment-avatar {
-            width: 32px;
-            height: 32px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             background-color: #00897b;
             color: #ffffff;
             font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .yt-comment-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .yt-comment-texts {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .yt-comment-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #aaaaaa;
+        }
+
+        .yt-comment-user {
+            color: #ffffff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .yt-comment-time {
+            color: #888888;
+        }
+
+        .yt-comment-body {
+            font-size: 13.5px;
+            color: #f1f1f1;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .yt-comment-mention-tag {
+            color: #3ea6ff;
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        /* Barra de Ações do Comentário (Like, Dislike, Responder, Kebab - Print A) */
+        .yt-comment-actions-bar {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-top: 6px;
+        }
+
+        .yt-comment-action-unit {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            cursor: pointer;
+            padding: 2px 0;
+            font-size: 12px;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .yt-comment-action-unit svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .yt-comment-action-unit.voted-active {
+            color: #3ea6ff;
+        }
+
+        .yt-comment-action-unit.voted-active svg {
+            fill: #3ea6ff;
+        }
+
+        .yt-comment-action-kebab {
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            cursor: pointer;
+            padding: 4px;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .yt-comment-action-kebab svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Botão Alternador de Respostas (Seta Azul do Print A: "4 respostas >") */
+        .yt-comment-replies-toggle-btn {
+            background: none;
+            border: none;
+            color: #3ea6ff;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0 4px 46px;
+            align-self: flex-start;
+        }
+
+        .yt-comment-replies-toggle-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            transition: transform 0.2s ease;
+        }
+
+        .yt-comment-replies-toggle-btn.open svg {
+            transform: rotate(90deg);
+        }
+
+        /* ==========================================================================
+           ESTRUTURA DA LINHA GUIA DE RESPOSTAS (PRINTS A1.1, A1.4 A A1.7 E REGRA A8)
+           ========================================================================== */
+        .yt-replies-branch-container {
+            display: none;
+            flex-direction: column;
+            position: relative;
+            margin-top: 8px;
+        }
+
+        .yt-replies-branch-container.active {
+            display: flex;
+        }
+
+        /* Níveis 1 a 4: Linha com Curvatura até o Avatar */
+        .yt-reply-item-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 12px;
+        }
+
+        .yt-reply-item-wrapper::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: -6px;
+            width: 14px;
+            height: 22px;
+            border-left: 2px solid #333333;
+            border-bottom: 2px solid #333333;
+            border-bottom-left-radius: 12px;
+        }
+
+        .yt-reply-item-wrapper::after {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: -6px;
+            bottom: -6px;
+            width: 2px;
+            border-left: 2px solid #333333;
+        }
+
+        .yt-reply-item-wrapper:last-child::after {
+            display: none;
+        }
+
+        .yt-reply-level-1 {
+            margin-left: 46px;
+        }
+
+        .yt-reply-level-2 {
+            margin-left: 36px;
+        }
+
+        .yt-reply-level-3 {
+            margin-left: 36px;
+        }
+
+        .yt-reply-level-4 {
+            margin-left: 36px;
+        }
+
+        /* Regra A8: Após a 4ª resposta (Nível 5+), a linha fica reta verticalmente e não recua mais */
+        .yt-reply-level-max {
+            margin-left: 36px !important;
+        }
+
+        .yt-reply-level-max::before {
+            border-left: 2px solid #333333;
+            border-bottom: none !important;
+            border-bottom-left-radius: 0 !important;
+            width: 0 !important;
+            height: 100% !important;
+        }
+
+        .yt-reply-level-max::after {
+            display: none !important;
+        }
+
+        /* Barra de Digitação Inferior com Prévia de Menção */
+        .yt-comment-input-bar {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 14px calc(10px + env(safe-area-inset-bottom, 0px)) 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: #141414;
+            flex-shrink: 0;
+            box-sizing: border-box;
+            gap: 6px;
+        }
+
+        .yt-comment-replying-pill-banner {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #242424;
+            border-radius: 14px;
+            padding: 4px 10px;
+            font-size: 11.5px;
+            color: #3ea6ff;
+            font-weight: 600;
+        }
+
+        .yt-comment-replying-pill-banner.active {
+            display: flex;
+        }
+
+        .yt-comment-replying-cancel-btn {
+            background: none;
+            border: none;
+            color: #aaaaaa;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .yt-comment-input-controls-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .yt-comment-user-avatar-current {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #9c27b0;
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
 
-        .yt-comment-texts {
+        .yt-comment-input-field {
+            flex: 1;
+            background-color: #212121;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border-radius: 20px;
+            height: 38px;
+            padding: 0 14px;
+            font-size: 13.5px;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .yt-comment-input-field:focus {
+            border-color: #3ea6ff;
+        }
+
+        /* Modal do Perfil do Usuário nos Comentários (Print A1.2) */
+        .user-card-drawer-sheet {
+            background-color: #1c1c1c;
+            border-radius: 18px 18px 0 0;
+            padding: 18px 16px 26px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-sizing: border-box;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-card-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .user-card-avatar-circle {
+            width: 62px;
+            height: 62px;
+            border-radius: 50%;
+            background-color: #333333;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            flex-shrink: 0;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .user-card-avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .user-card-info-texts {
             display: flex;
             flex-direction: column;
             gap: 2px;
             flex: 1;
+            min-width: 0;
         }
 
-        .yt-comment-user {
-            font-size: 11.5px;
+        .user-card-name-text {
+            font-size: 18px;
+            font-weight: 800;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-card-handle-text {
+            font-size: 13px;
             color: #aaaaaa;
         }
 
-        .yt-comment-body {
-            font-size: 13px;
-            color: #ffffff;
-            line-height: 1.35;
+        .user-card-meta-text {
+            font-size: 11.5px;
+            color: #888888;
+            margin-top: 2px;
         }
 
-        .yt-comment-input-bar {
+        .user-card-actions-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .user-card-btn-action {
+            flex: 1;
+            height: 40px;
+            border-radius: 20px;
+            border: none;
+            font-size: 13.5px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px)) 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            background-color: #1a1a1a;
-            flex-shrink: 0;
-            box-sizing: border-box;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .user-card-btn-action.primary {
+            background-color: #ffffff;
+            color: #0f0f0f;
+        }
+
+        .user-card-btn-action.secondary {
+            background-color: #2a2a2a;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         /* ==========================================================================
@@ -13814,24 +14367,164 @@
             </div>
         </div>
 
-        <!-- GAVETA: COMENTÁRIOS DO VÍDEO -->
+        <!-- GAVETA OFICIAL DE COMENTÁRIOS DO VÍDEO (PRINTS A, B E B1) -->
         <div class="accounts-drawer" id="drawerComments">
             <div class="accounts-sheet yt-comments-drawer-content">
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid rgba(255,255,255,0.1);">
-                    <div style="display:flex; align-items:center; gap:8px;">
-                        <h3 style="font-size:16px;">Comentários</h3>
-                        <span id="txtCommentsDrawerTotal" style="color:#aaa; font-size:13px;">0</span>
+                <div class="yt-sheet-drag-handle"></div>
+
+                <!-- Topo com Título, Total, Filtro de Data e Info (Prints A e B) -->
+                <div class="yt-comments-drawer-header">
+                    <div class="yt-comments-header-left">
+                        <span class="yt-comments-header-title">Comentários</span>
+                        <span class="yt-comments-header-count" id="txtCommentsDrawerTotal">0</span>
                     </div>
-                    <button class="yt-icon-btn" id="btnCloseCommentsDrawer">
-                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                    </button>
+                    <div class="yt-comments-header-actions">
+                        <!-- Seta Vermelha Print A: Abre Filtro de Data (Print A1.3) -->
+                        <button class="yt-icon-btn" id="btnOpenCommentFilters" type="button" aria-label="Filtrar comentários">
+                            <svg viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg>
+                        </button>
+                        <!-- Seta Rosa Print B: Abre "Sobre comentários" (Print B2) -->
+                        <button class="yt-icon-btn" id="btnOpenAboutCommentsModal" type="button" aria-label="Sobre comentários">
+                            <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </button>
+                        <!-- Fechar -->
+                        <button class="yt-icon-btn" id="btnCloseCommentsDrawer" type="button" aria-label="Fechar">
+                            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                        </button>
+                    </div>
                 </div>
 
+                <!-- Pílulas de Ordenação e Tópicos (Print B) -->
+                <div class="yt-comments-chips-bar" id="commentsChipsBar">
+                    <button class="yt-comment-chip active" id="chipCommentSortMain" type="button">Principais</button>
+                    <button class="yt-comment-chip" id="chipCommentTopics" type="button">
+                        <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                        <span>Tópicos</span>
+                    </button>
+                    <button class="yt-comment-chip" id="chipCommentSortRelevant" type="button">Mais relevantes</button>
+                    <button class="yt-comment-chip" id="chipCommentSortRecent" type="button">Mais recentes</button>
+                </div>
+
+                <!-- Painel da Aba Tópicos (Print B1 e B1.1) -->
+                <div id="panelCommentsTopics" style="display:none; flex-direction:column; overflow-y:auto; flex:1;">
+                    <div class="yt-comments-ai-banner">
+                        <span class="yt-comments-ai-banner-title">Resumidos por IA</span>
+                        <div class="yt-comments-ai-banner-sub">
+                            <span>A qualidade e a precisão podem variar</span>
+                            <svg viewBox="0 0 24 24"><path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+                        </div>
+                    </div>
+                    <div id="containerTopicsCardsList" style="display:flex; flex-direction:column;"></div>
+                </div>
+
+                <!-- Lista Oficial de Comentários e Respostas Aninhadas (Print A e A1.1) -->
                 <div class="yt-comments-list" id="watchCommentsListContainer"></div>
 
+                <!-- Barra de Digitação Inferior com Identificação do Usuário e Menção -->
                 <div class="yt-comment-input-bar">
-                    <input type="text" id="inputNewCommentText" class="yt-input" placeholder="Adicione um comentário...">
-                    <button class="yt-btn-primary" id="btnSendComment" style="padding:8px 16px; flex-shrink:0;">Enviar</button>
+                    <div class="yt-comment-replying-pill-banner" id="bannerReplyingToUser">
+                        <span id="txtReplyingToUsername">Respondendo para @usuario</span>
+                        <button type="button" class="yt-comment-replying-cancel-btn" id="btnCancelReplyingMention">✕</button>
+                    </div>
+                    <div class="yt-comment-input-controls-row">
+                        <div class="yt-comment-user-avatar-current" id="avatarCurrentLoggedCommentUser">U</div>
+                        <input type="text" id="inputNewCommentText" class="yt-comment-input-field" placeholder="Adicione um comentário...">
+                        <button class="yt-btn-primary" id="btnSendComment" style="padding:0 16px; height:38px; border-radius:19px; flex-shrink:0;">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT A1.2: PERFIL DO USUÁRIO NOS COMENTÁRIOS -->
+        <div class="accounts-drawer" id="drawerUserProfileCard" style="z-index: 10045;">
+            <div class="accounts-sheet user-card-drawer-sheet">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="user-card-profile-header">
+                    <div class="user-card-avatar-circle" id="userCardAvatarBox" title="Ver perfil completo">
+                        <img id="imgUserCardAvatar" src="" alt="Avatar" style="display:none;">
+                        <span id="txtUserCardAvatarInitial">U</span>
+                    </div>
+                    <div class="user-card-info-texts">
+                        <h3 class="user-card-name-text" id="txtUserCardDisplayName">Nome do Usuário</h3>
+                        <span class="user-card-handle-text" id="txtUserCardHandle">@usuario</span>
+                        <span class="user-card-meta-text" id="txtUserCardJoinedInfo">Entrou no FruitSenpai recentemente</span>
+                    </div>
+                </div>
+
+                <!-- Botões Substituídos: "Adicionar" e "Mensagem" -->
+                <div class="user-card-actions-row">
+                    <button class="user-card-btn-action primary" id="btnUserCardAddFriend" type="button">Adicionar</button>
+                    <button class="user-card-btn-action secondary" id="btnUserCardSendMessage" type="button">Mensagem</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT A1.3: FILTRO DE DATA DOS COMENTÁRIOS -->
+        <div class="accounts-drawer" id="modalCommentDateFilter" style="z-index: 10045;">
+            <div class="accounts-sheet" style="padding: 14px 0 24px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <h4 style="padding: 0 16px 12px 16px; font-size:16px; font-weight:700;">Filtrar comentários por data</h4>
+                <div class="search-filter-radio-row selected" data-date-filter="all">
+                    <span>Qualquer data</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="today">
+                    <span>Hoje</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="week">
+                    <span>Esta semana</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="month">
+                    <span>Este mês</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+                <div class="search-filter-radio-row" data-date-filter="year">
+                    <span>Este ano</span>
+                    <div class="search-filter-radio-circle"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT B2: "SOBRE COMENTÁRIOS" -->
+        <div class="accounts-drawer" id="drawerAboutComments" style="z-index: 10045;">
+            <div class="accounts-sheet" style="padding: 16px 18px 24px 18px; gap:10px;">
+                <div class="yt-sheet-drag-handle"></div>
+                <h3 style="font-size: 18px; font-weight: 800; color: #ffffff;">Sobre comentários</h3>
+                <p style="font-size: 13px; color: #aaaaaa; line-height: 1.45;">
+                    Ao selecionar a opção "Principais", você vai ver os comentários em destaque. Ao selecionar a opção "Mais recentes", você vai ver os comentários mais novos, incluindo os que podem ser spam. <a href="#" style="color:#3ea6ff; text-decoration:none;">Saiba mais</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- MODAL PRINT B3: MENU KEBAB DE OPÇÕES DO COMENTÁRIO -->
+        <div class="accounts-drawer" id="drawerCommentKebabMenu" style="z-index: 10045;">
+            <div class="accounts-sheet" style="padding: 10px 0 22px 0;">
+                <div class="yt-sheet-drag-handle"></div>
+                <div class="account-item-row" id="btnCommentKebabReply">
+                    <div class="account-item-left">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M10 9V5l-7 7 7 7v-4.1c5 0 8.5 1.6 11 5.1-1-5-4-10-11-11z"/></svg>
+                        <span style="font-size: 14.5px;">Responder</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnCommentKebabLike">
+                    <div class="account-item-left">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                        <span style="font-size: 14.5px;">Gostei</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnCommentKebabDislike">
+                    <div class="account-item-left">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                        <span style="font-size: 14.5px;">Não gostei</span>
+                    </div>
+                </div>
+                <div class="account-item-row" id="btnCommentKebabReport">
+                    <div class="account-item-left">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#fff;"><path d="M14.4 6L14 4H5v17h2v-7h5.6l.4 2h7V6z"/></svg>
+                        <span style="font-size: 14.5px;">Denunciar</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -22226,48 +22919,616 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
         });
         
+        // ==========================================================================
+        // MOTOR REESTRUTURADO DE COMENTÁRIOS COM IA, RESPOSTAS ANINHADAS E VOTOS
+        // ==========================================================================
+        const btnOpenCommentFilters = document.getElementById("btnOpenCommentFilters");
+        const btnOpenAboutCommentsModal = document.getElementById("btnOpenAboutCommentsModal");
+        const drawerAboutComments = document.getElementById("drawerAboutComments");
+        const modalCommentDateFilter = document.getElementById("modalCommentDateFilter");
+
+        const chipCommentSortMain = document.getElementById("chipCommentSortMain");
+        const chipCommentTopics = document.getElementById("chipCommentTopics");
+        const chipCommentSortRelevant = document.getElementById("chipCommentSortRelevant");
+        const chipCommentSortRecent = document.getElementById("chipCommentSortRecent");
+
+        const panelCommentsTopics = document.getElementById("panelCommentsTopics");
+        const containerTopicsCardsList = document.getElementById("containerTopicsCardsList");
+
+        const drawerUserProfileCard = document.getElementById("drawerUserProfileCard");
+        const imgUserCardAvatar = document.getElementById("imgUserCardAvatar");
+        const txtUserCardAvatarInitial = document.getElementById("txtUserCardAvatarInitial");
+        const txtUserCardDisplayName = document.getElementById("txtUserCardDisplayName");
+        const txtUserCardHandle = document.getElementById("txtUserCardHandle");
+        const txtUserCardJoinedInfo = document.getElementById("txtUserCardJoinedInfo");
+        const btnUserCardAddFriend = document.getElementById("btnUserCardAddFriend");
+        const btnUserCardSendMessage = document.getElementById("btnUserCardSendMessage");
+        const userCardAvatarBox = document.getElementById("userCardAvatarBox");
+
+        const drawerCommentKebabMenu = document.getElementById("drawerCommentKebabMenu");
+        const btnCommentKebabReply = document.getElementById("btnCommentKebabReply");
+        const btnCommentKebabLike = document.getElementById("btnCommentKebabLike");
+        const btnCommentKebabDislike = document.getElementById("btnCommentKebabDislike");
+        const btnCommentKebabReport = document.getElementById("btnCommentKebabReport");
+
+        const bannerReplyingToUser = document.getElementById("bannerReplyingToUser");
+        const txtReplyingToUsername = document.getElementById("txtReplyingToUsername");
+        const btnCancelReplyingMention = document.getElementById("btnCancelReplyingMention");
+        const avatarCurrentLoggedCommentUser = document.getElementById("avatarCurrentLoggedCommentUser");
+
+        let activeCommentSortFilter = "principais"; // principais, relevantes, recentes
+        let activeCommentDateFilter = "all";
+        let activeReplyingCommentId = null;
+        let activeReplyingUserHandle = null;
+        let activeCommentForKebab = null;
+        let targetUserCardEmail = null;
+        let cachedRawCommentsList = [];
+
+        // Atualiza avatar do usuário logado na barra de comentários
+        function updateCommentInputAvatar() {
+            if (avatarCurrentLoggedCommentUser) {
+                const initial = currentUserEmail ? currentUserEmail.charAt(0).toUpperCase() : "U";
+                avatarCurrentLoggedCommentUser.textContent = initial;
+            }
+        }
+        updateCommentInputAvatar();
+
+        // 1. Abrir Modal de Filtro de Data (Seta Vermelha Print A -> Print A1.3)
+        if (btnOpenCommentFilters) {
+            btnOpenCommentFilters.addEventListener("click", () => {
+                modalCommentDateFilter.classList.add("active");
+            });
+        }
+
+        document.querySelectorAll("#modalCommentDateFilter .search-filter-radio-row").forEach(row => {
+            row.addEventListener("click", () => {
+                document.querySelectorAll("#modalCommentDateFilter .search-filter-radio-row").forEach(r => r.classList.remove("selected"));
+                row.classList.add("selected");
+                activeCommentDateFilter = row.getAttribute("data-date-filter") || "all";
+                modalCommentDateFilter.classList.remove("active");
+                renderCommentsHierarchyTree();
+            });
+        });
+
+        // 2. Abrir Modal "Sobre comentários" (Seta Rosa Print B -> Print B2)
+        if (btnOpenAboutCommentsModal) {
+            btnOpenAboutCommentsModal.addEventListener("click", () => {
+                drawerAboutComments.classList.add("active");
+            });
+        }
+
+        // 3. Pílulas do Topo (Print B)
+        function setCommentSortPillActive(activeChip, mode) {
+            [chipCommentSortMain, chipCommentTopics, chipCommentSortRelevant, chipCommentSortRecent].forEach(c => c.classList.remove("active"));
+            activeChip.classList.add("active");
+            activeCommentSortFilter = mode;
+
+            if (mode === "topicos") {
+                panelCommentsTopics.style.display = "flex";
+                document.getElementById("watchCommentsListContainer").style.display = "none";
+                renderCommentsAiTopicsList();
+            } else {
+                panelCommentsTopics.style.display = "none";
+                document.getElementById("watchCommentsListContainer").style.display = "flex";
+                renderCommentsHierarchyTree();
+            }
+        }
+
+        chipCommentSortMain.addEventListener("click", () => setCommentSortPillActive(chipCommentSortMain, "principais"));
+        chipCommentTopics.addEventListener("click", () => setCommentSortPillActive(chipCommentTopics, "topicos"));
+        chipCommentSortRelevant.addEventListener("click", () => setCommentSortPillActive(chipCommentSortRelevant, "relevantes"));
+        chipCommentSortRecent.addEventListener("click", () => setCommentSortPillActive(chipCommentSortRecent, "recentes"));
+
+        // 4. Carregamento em Tempo Real dos Comentários
         function loadCommentsRealtime(videoId) {
             const commentsContainer = document.getElementById("watchCommentsListContainer");
             const counterPreview = document.getElementById("watchCommentsCount");
             const counterDrawer = document.getElementById("txtCommentsDrawerTotal");
 
             onSnapshot(collection(db, `frutas/${videoId}/comments`), (snap) => {
-                commentsContainer.innerHTML = "";
-                const total = snap.size;
-                counterPreview.textContent = total;
-                counterDrawer.textContent = total;
-
+                cachedRawCommentsList = [];
                 snap.forEach(docSnap => {
-                    const c = docSnap.data();
-                    const row = document.createElement("div");
-                    row.className = "yt-comment-row";
-                    row.innerHTML = `
-                        <div class="yt-comment-avatar">${(c.user || "U").charAt(0).toUpperCase()}</div>
-                        <div class="yt-comment-texts">
-                            <span class="yt-comment-user">@${escapeHtml(c.user ? c.user.split('@')[0] : 'usuario')}</span>
-                            <span class="yt-comment-body">${escapeHtml(c.text)}</span>
-                        </div>
-                    `;
-                    commentsContainer.appendChild(row);
+                    cachedRawCommentsList.push({ id: docSnap.id, ...docSnap.data() });
                 });
+
+                const total = cachedRawCommentsList.length;
+                counterPreview.textContent = formatNumber(total);
+                counterDrawer.textContent = formatNumber(total);
+
+                if (activeCommentSortFilter === "topicos") {
+                    renderCommentsAiTopicsList();
+                } else {
+                    renderCommentsHierarchyTree();
+                }
             });
         }
 
+        // Filtro por Data (Print A1.3)
+        function filterCommentsByDate(list) {
+            if (activeCommentDateFilter === "all") return list;
+            const now = Date.now();
+            const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+            return list.filter(item => {
+                const itemTime = item.createdAt?.seconds ? (item.createdAt.seconds * 1000) : new Date(item.createdAt || 0).getTime();
+                const diff = now - itemTime;
+                if (activeCommentDateFilter === "today") return diff <= ONE_DAY_MS;
+                if (activeCommentDateFilter === "week") return diff <= (7 * ONE_DAY_MS);
+                if (activeCommentDateFilter === "month") return diff <= (30 * ONE_DAY_MS);
+                if (activeCommentDateFilter === "year") return diff <= (365 * ONE_DAY_MS);
+                return true;
+            });
+        }
+
+        // Ordenação dos Comentários
+        function sortCommentsList(list) {
+            const sorted = [...list];
+            if (activeCommentSortFilter === "relevantes") {
+                // Mais curtidos ou com mais respostas primeiro
+                sorted.sort((a, b) => (Number(b.likesCount || 0) + Number(b.repliesCount || 0)) - (Number(a.likesCount || 0) + Number(a.repliesCount || 0)));
+            } else if (activeCommentSortFilter === "recentes") {
+                sorted.sort((a, b) => ((b.createdAt && b.createdAt.seconds) || 0) - ((a.createdAt && a.createdAt.seconds) || 0));
+            } else {
+                // Principais (padrão YouTube)
+                sorted.sort((a, b) => Number(b.likesCount || 0) - Number(a.likesCount || 0));
+            }
+            return sorted;
+        }
+
+        // 5. Renderização da Árvore de Comentários e Respostas Aninhadas (Regra A8)
+        function renderCommentsHierarchyTree() {
+            const container = document.getElementById("watchCommentsListContainer");
+            container.innerHTML = "";
+
+            const filteredByDate = filterCommentsByDate(cachedRawCommentsList);
+            const sorted = sortCommentsList(filteredByDate);
+
+            // Separa comentários principais de respostas
+            const primaryComments = sorted.filter(c => !c.parentId);
+            const repliesPool = sorted.filter(c => Boolean(c.parentId));
+
+            if (primaryComments.length === 0) {
+                container.innerHTML = `<div style="padding: 40px 16px; text-align: center; color: #888888; font-size: 13.5px;">Seja o primeiro a comentar!</div>`;
+                return;
+            }
+
+            primaryComments.forEach(primary => {
+                const node = document.createElement("div");
+                node.className = "yt-comment-node";
+
+                // Encontra todas as respostas deste comentário
+                const directReplies = repliesPool.filter(r => r.parentId === primary.id);
+
+                node.appendChild(createSingleCommentElement(primary, 0));
+
+                if (directReplies.length > 0) {
+                    const toggleBtn = document.createElement("button");
+                    toggleBtn.className = "yt-comment-replies-toggle-btn";
+                    toggleBtn.type = "button";
+                    toggleBtn.innerHTML = `
+                        <span>${directReplies.length} ${directReplies.length === 1 ? 'resposta' : 'respostas'}</span>
+                        <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                    `;
+
+                    const branchContainer = document.createElement("div");
+                    branchContainer.className = "yt-replies-branch-container";
+
+                    // Renderiza as respostas aplicando a Regra A8
+                    renderNestedRepliesBranch(branchContainer, directReplies, repliesPool, 1);
+
+                    toggleBtn.onclick = () => {
+                        const isOpen = branchContainer.classList.toggle("active");
+                        toggleBtn.classList.toggle("open", isOpen);
+                    };
+
+                    node.appendChild(toggleBtn);
+                    node.appendChild(branchContainer);
+                }
+
+                container.appendChild(node);
+            });
+        }
+
+        // Renderiza recursivamente até o 4º nível e alinha reto no 5º nível em diante (Regra A8)
+        function renderNestedRepliesBranch(container, repliesList, allRepliesPool, currentLevel) {
+            repliesList.forEach(reply => {
+                const wrapper = document.createElement("div");
+                wrapper.className = `yt-reply-item-wrapper ${currentLevel <= 4 ? `yt-reply-level-${currentLevel}` : 'yt-reply-level-max'}`;
+
+                wrapper.appendChild(createSingleCommentElement(reply, currentLevel));
+
+                // Busca respostas feitas para esta resposta
+                const subReplies = allRepliesPool.filter(r => r.parentId === reply.id);
+                if (subReplies.length > 0) {
+                    renderNestedRepliesBranch(wrapper, subReplies, allRepliesPool, currentLevel + 1);
+                }
+
+                container.appendChild(wrapper);
+            });
+        }
+
+        // 6. Criação do Elemento Visual de um Comentário com Likes/Deslikes e Ações
+        function createSingleCommentElement(commentData, level) {
+            const row = document.createElement("div");
+            row.className = "yt-comment-row";
+            row.setAttribute("data-comment-id", commentData.id);
+
+            const userEmail = commentData.user || "usuario@fruitsenpai.app";
+            const userHandle = `@${userEmail.split('@')[0]}`;
+            const initial = userHandle.charAt(1).toUpperCase();
+            const avatarPhoto = commentData.avatar || "";
+
+            const userVote = getUserVoteForComment(commentData.id);
+            const likesCount = Number(commentData.likesCount || 0);
+
+            row.innerHTML = `
+                <!-- Seta Verde Print A: Avatar abre modal de perfil A1.2 -->
+                <div class="yt-comment-avatar btnOpenUserProfileModalTrigger">
+                    ${avatarPhoto 
+                        ? `<img src="${escapeHtml(avatarPhoto)}" alt="Avatar">` 
+                        : initial
+                    }
+                </div>
+                <div class="yt-comment-texts">
+                    <div class="yt-comment-meta-row">
+                        <span class="yt-comment-user btnOpenUserProfileModalTrigger">${escapeHtml(userHandle)}</span>
+                        <span>•</span>
+                        <span class="yt-comment-time">${formatTimeAgo(commentData.createdAt)}</span>
+                    </div>
+                    <div class="yt-comment-body">
+                        ${commentData.replyToUser ? `<span class="yt-comment-mention-tag">${escapeHtml(commentData.replyToUser)}</span>` : ''}
+                        <span>${escapeHtml(commentData.text)}</span>
+                    </div>
+
+                    <!-- Barra de Ações (Like, Dislike, Responder, Kebab) -->
+                    <div class="yt-comment-actions-bar">
+                        <!-- Seta Amarela: Like com contagem real -->
+                        <button type="button" class="yt-comment-action-unit btnCommentLike ${userVote === 'like' ? 'voted-active' : ''}">
+                            <svg viewBox="0 0 24 24"><path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z"/></svg>
+                            <span class="lblCommentLikesCount">${likesCount > 0 ? formatNumber(likesCount) : ''}</span>
+                        </button>
+
+                        <!-- Seta Rosa: Dislike com anulação do like -->
+                        <button type="button" class="yt-comment-action-unit btnCommentDislike ${userVote === 'dislike' ? 'voted-active' : ''}">
+                            <svg viewBox="0 0 24 24"><path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.59-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z"/></svg>
+                        </button>
+
+                        <!-- Seta Rosa Print A1.1: Balão de fala marca o usuário para responder -->
+                        <button type="button" class="yt-comment-action-unit btnCommentReplyQuote" title="Responder">
+                            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                        </button>
+
+                        <!-- Seta Laranja Print A: Kebab abre o modal Print B3 -->
+                        <button type="button" class="yt-comment-action-kebab btnCommentKebabTrigger" aria-label="Mais opções">
+                            <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Clique no Avatar / Nome abre o Card de Perfil A1.2
+            row.querySelectorAll(".btnOpenUserProfileModalTrigger").forEach(el => {
+                el.onclick = () => {
+                    openUserProfileCardDrawer(userEmail, userHandle, avatarPhoto);
+                };
+            });
+
+            // Voto de Like (1 único por conta com cancelamento mútuo)
+            const btnLike = row.querySelector(".btnCommentLike");
+            btnLike.onclick = async () => {
+                if (!currentUserEmail) return openAuthModal();
+                await handleCommentVoting(commentData.id, "like");
+            };
+
+            // Voto de Dislike
+            const btnDislike = row.querySelector(".btnCommentDislike");
+            btnDislike.onclick = async () => {
+                if (!currentUserEmail) return openAuthModal();
+                await handleCommentVoting(commentData.id, "dislike");
+            };
+
+            // Balão de Responder: Marca @usuario no input
+            const btnReply = row.querySelector(".btnCommentReplyQuote");
+            btnReply.onclick = () => {
+                startReplyingToComment(commentData.id, userHandle, userEmail);
+            };
+
+            // Kebab abre o modal Print B3
+            const btnKebab = row.querySelector(".btnCommentKebabTrigger");
+            btnKebab.onclick = (e) => {
+                e.stopPropagation();
+                activeCommentForKebab = commentData;
+                drawerCommentKebabMenu.classList.add("active");
+            };
+
+            return row;
+        }
+
+        // 7. Controle de Votos dos Comentários (1 voto por usuário, anula like com dislike)
+        function getUserVoteForComment(commentId) {
+            const key = currentUserEmail ? `vote_${currentUserEmail}_${commentId}` : `vote_guest_${commentId}`;
+            return localStorage.getItem(key) || null;
+        }
+
+        async function handleCommentVoting(commentId, targetVoteType) {
+            if (!currentWatchVideoId) return;
+            const voteKey = `vote_${currentUserEmail}_${commentId}`;
+            const previousVote = localStorage.getItem(voteKey);
+
+            const targetComment = cachedRawCommentsList.find(c => c.id === commentId);
+            if (!targetComment) return;
+
+            let currentLikes = Number(targetComment.likesCount || 0);
+            let currentDislikes = Number(targetComment.dislikesCount || 0);
+
+            if (previousVote === targetVoteType) {
+                // Remove o voto ao tocar novamente
+                localStorage.removeItem(voteKey);
+                if (targetVoteType === "like") currentLikes = Math.max(0, currentLikes - 1);
+                if (targetVoteType === "dislike") currentDislikes = Math.max(0, currentDislikes - 1);
+            } else {
+                // Troca o voto (se deu like, remove o dislike e vice-versa)
+                if (previousVote === "like") currentLikes = Math.max(0, currentLikes - 1);
+                if (previousVote === "dislike") currentDislikes = Math.max(0, currentDislikes - 1);
+
+                if (targetVoteType === "like") currentLikes = currentLikes + 1;
+                if (targetVoteType === "dislike") currentDislikes = currentDislikes + 1;
+
+                localStorage.setItem(voteKey, targetVoteType);
+            }
+
+            try {
+                const commentRef = doc(db, `frutas/${currentWatchVideoId}/comments`, commentId);
+                await setDoc(commentRef, {
+                    likesCount: currentLikes,
+                    dislikesCount: currentDislikes
+                }, { merge: true });
+            } catch(e) {
+                console.error("Erro ao registrar voto no comentário:", e);
+            }
+        }
+
+        // 8. Responder com Menção `@usuario` e Notificação
+        function startReplyingToComment(commentId, userHandle, userEmail) {
+            activeReplyingCommentId = commentId;
+            activeReplyingUserHandle = userHandle;
+            targetUserCardEmail = userEmail;
+
+            bannerReplyingToUser.classList.add("active");
+            txtReplyingToUsername.textContent = `Respondendo para ${userHandle}`;
+
+            const input = document.getElementById("inputNewCommentText");
+            input.value = `${userHandle} `;
+            input.focus();
+        }
+
+        if (btnCancelReplyingMention) {
+            btnCancelReplyingMention.onclick = () => {
+                activeReplyingCommentId = null;
+                activeReplyingUserHandle = null;
+                targetUserCardEmail = null;
+                bannerReplyingToUser.classList.remove("active");
+                document.getElementById("inputNewCommentText").value = "";
+            };
+        }
+
+        // Envio do Comentário ou Resposta
         document.getElementById("btnSendComment").addEventListener("click", async () => {
             const input = document.getElementById("inputNewCommentText");
-            const text = input.value.trim();
-            if (!text || !currentWatchVideoId) return;
+            const rawText = input.value.trim();
+            if (!rawText || !currentWatchVideoId) return;
             if (!currentUserEmail) return openAuthModal();
 
             try {
+                let cleanText = rawText;
+                let replyTo = null;
+
+                if (activeReplyingUserHandle && rawText.startsWith(activeReplyingUserHandle)) {
+                    replyTo = activeReplyingUserHandle;
+                    cleanText = rawText.replace(activeReplyingUserHandle, "").trim();
+                }
+
                 await addDoc(collection(db, `frutas/${currentWatchVideoId}/comments`), {
-                    text: text,
+                    text: cleanText,
                     user: currentUserEmail,
+                    authorName: getNameFromEmail(currentUserEmail),
+                    parentId: activeReplyingCommentId || null,
+                    replyToUser: replyTo || null,
+                    likesCount: 0,
+                    dislikesCount: 0,
                     createdAt: serverTimestamp()
                 });
+
+                // Se respondeu ou mencionou outro usuário, envia notificação de menção para ele
+                if (targetUserCardEmail && targetUserCardEmail !== currentUserEmail) {
+                    try {
+                        const targetKey = targetUserCardEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                        await addDoc(collection(db, `user_notifications_${targetKey}`), {
+                            type: "mention",
+                            fromUser: currentUserEmail,
+                            fromName: getNameFromEmail(currentUserEmail),
+                            text: cleanText,
+                            videoId: currentWatchVideoId,
+                            createdAt: serverTimestamp()
+                        });
+                    } catch(eNotif) {}
+                }
+
                 input.value = "";
-            } catch(e) { console.error(e); }
+                if (btnCancelReplyingMention) btnCancelReplyingMention.click();
+            } catch(e) {
+                console.error("Erro ao enviar comentário:", e);
+            }
         });
+
+        // 9. Card de Perfil do Comentarista (Print A1.2)
+        async function openUserProfileCardDrawer(userEmail, userHandle, avatarPhoto) {
+            targetUserCardEmail = userEmail;
+
+            txtUserCardDisplayName.textContent = getNameFromEmail(userEmail);
+            txtUserCardHandle.textContent = userHandle;
+            txtUserCardJoinedInfo.textContent = "Entrou no FruitSenpai recentemente";
+
+            if (avatarPhoto) {
+                imgUserCardAvatar.src = avatarPhoto;
+                imgUserCardAvatar.style.display = "block";
+                txtUserCardAvatarInitial.style.display = "none";
+            } else {
+                imgUserCardAvatar.style.display = "none";
+                txtUserCardAvatarInitial.textContent = userHandle.charAt(1).toUpperCase();
+                txtUserCardAvatarInitial.style.display = "block";
+            }
+
+            // Toque no Avatar dentro do modal leva ao perfil do usuário
+            userCardAvatarBox.onclick = () => {
+                drawerUserProfileCard.classList.remove("active");
+                if (drawerComments) drawerComments.classList.remove("active");
+                openUserProfilePage(userEmail);
+            };
+
+            // Botão Adicionar: Dispara solicitação de amizade com notificação
+            btnUserCardAddFriend.onclick = async () => {
+                if (!currentUserEmail) return openAuthModal();
+                try {
+                    const myKey = currentUserEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                    const targetKey = userEmail.replace(/[^a-zA-Z0-9]/g, '_');
+
+                    await setDoc(doc(db, "friend_requests", `${myKey}___TO___${targetKey}`), {
+                        from: currentUserEmail,
+                        fromName: getNameFromEmail(currentUserEmail),
+                        to: userEmail,
+                        status: "pending",
+                        createdAt: serverTimestamp()
+                    });
+
+                    btnUserCardAddFriend.textContent = "Pendente";
+                    showToast("Solicitação de amizade enviada!");
+                } catch(e) {}
+            };
+
+            // Botão Mensagem: Abre a página do usuário
+            btnUserCardSendMessage.onclick = () => {
+                drawerUserProfileCard.classList.remove("active");
+                if (drawerComments) drawerComments.classList.remove("active");
+                openUserProfilePage(userEmail);
+            };
+
+            drawerUserProfileCard.classList.add("active");
+        }
+
+        // 10. Ações do Kebab do Comentário (Print B3)
+        if (btnCommentKebabReply) {
+            btnCommentKebabReply.onclick = () => {
+                drawerCommentKebabMenu.classList.remove("active");
+                if (activeCommentForKebab) {
+                    const handle = `@${(activeCommentForKebab.user || 'usuario').split('@')[0]}`;
+                    startReplyingToComment(activeCommentForKebab.id, handle, activeCommentForKebab.user);
+                }
+            };
+        }
+
+        if (btnCommentKebabLike) {
+            btnCommentKebabLike.onclick = async () => {
+                drawerCommentKebabMenu.classList.remove("active");
+                if (activeCommentForKebab) {
+                    if (!currentUserEmail) return openAuthModal();
+                    await handleCommentVoting(activeCommentForKebab.id, "like");
+                }
+            };
+        }
+
+        if (btnCommentKebabDislike) {
+            btnCommentKebabDislike.onclick = async () => {
+                drawerCommentKebabMenu.classList.remove("active");
+                if (activeCommentForKebab) {
+                    if (!currentUserEmail) return openAuthModal();
+                    await handleCommentVoting(activeCommentForKebab.id, "dislike");
+                }
+            };
+        }
+
+        if (btnCommentKebabReport) {
+            btnCommentKebabReport.onclick = () => {
+                drawerCommentKebabMenu.classList.remove("active");
+                showToast("Comentário denunciado com sucesso.");
+            };
+        }
+
+        // 11. Resumos por IA dos Comentários em Destaque (Print B1 e B1.1)
+        function renderCommentsAiTopicsList() {
+            containerTopicsCardsList.innerHTML = "";
+
+            // Filtra comentários relevantes (com 10 ou mais likes)
+            const topComments = cachedRawCommentsList.filter(c => Number(c.likesCount || 0) >= 10);
+
+            if (topComments.length === 0) {
+                containerTopicsCardsList.innerHTML = `
+                    <div style="padding: 40px 16px; text-align: center; color: #888888; font-size: 13px;">
+                        Ainda não há comentários com 10 ou mais curtidas para gerar tópicos por IA.
+                    </div>
+                `;
+                return;
+            }
+
+            topComments.forEach(comm => {
+                const card = document.createElement("div");
+                card.className = "yt-comment-topic-card";
+
+                const topicTitle = comm.text.length > 30 ? comm.text.substring(0, 30) + "..." : comm.text;
+                const avatarLetter = (comm.user || "U").charAt(0).toUpperCase();
+
+                card.innerHTML = `
+                    <div class="yt-comment-topic-header-row">
+                        <span class="yt-comment-topic-title">${escapeHtml(topicTitle)}</span>
+                        <svg class="yt-comment-topic-chevron" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                    </div>
+                    <div class="yt-comment-topic-preview-row">
+                        <div class="yt-comment-topic-preview-avatar">${avatarLetter}</div>
+                        <div class="yt-comment-topic-preview-text">${escapeHtml(comm.text)}</div>
+                    </div>
+                `;
+
+                // Clicar no tópico abre os comentários filtrados por aquele tema (Print B1.1)
+                card.onclick = () => {
+                    openTopicDrilldownView(comm);
+                };
+
+                containerTopicsCardsList.appendChild(card);
+            });
+        }
+
+        // Visualização do Tópico Específico (Print B1.1)
+        function openTopicDrilldownView(topicComment) {
+            panelCommentsTopics.style.display = "none";
+            const container = document.getElementById("watchCommentsListContainer");
+            container.style.display = "flex";
+            container.innerHTML = "";
+
+            const headerTopic = document.createElement("div");
+            headerTopic.style.cssText = "display:flex; align-items:center; gap:10px; padding:8px 0 12px 0; border-bottom:1px solid rgba(255,255,255,0.1);";
+            headerTopic.innerHTML = `
+                <button type="button" class="yt-icon-btn btnBackFromTopicDrilldown" style="padding:0;">
+                    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+                </button>
+                <span style="font-size:16px; font-weight:700; color:#ffffff;">Tópico: ${escapeHtml(topicComment.text.substring(0, 32))}</span>
+            `;
+
+            headerTopic.querySelector(".btnBackFromTopicDrilldown").onclick = () => {
+                setCommentSortPillActive(chipCommentTopics, "topicos");
+            };
+
+            container.appendChild(headerTopic);
+            container.appendChild(createSingleCommentElement(topicComment, 0));
+
+            // Respostas do tópico
+            const replies = cachedRawCommentsList.filter(r => r.parentId === topicComment.id);
+            if (replies.length > 0) {
+                const branch = document.createElement("div");
+                branch.className = "yt-replies-branch-container active";
+                renderNestedRepliesBranch(branch, replies, cachedRawCommentsList, 1);
+                container.appendChild(branch);
+            }
+        }
 
         // Função de escape para prevenir XSS com conversão segura de tipo
         function escapeHtml(text) {
