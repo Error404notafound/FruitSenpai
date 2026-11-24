@@ -8517,36 +8517,47 @@
         }
 
         .yt-reply-level-1 {
-            margin-left: 46px;
+            margin-left: 44px;
         }
 
         .yt-reply-level-2 {
-            margin-left: 36px;
+            margin-left: 26px;
         }
 
         .yt-reply-level-3 {
-            margin-left: 36px;
+            margin-left: 26px;
         }
 
-        .yt-reply-level-4 {
-            margin-left: 36px;
-        }
-
-        /* Regra A8: Após a 4ª resposta (Nível 5+), a linha fica reta verticalmente e não recua mais */
+        /* Regra Oficial A8 / Print B: A partir do 3º nível (Nível 4 em diante), ZERO recuo para a direita */
         .yt-reply-level-max {
-            margin-left: 36px !important;
+            margin-left: 0px !important;
+            padding-left: 0px !important;
         }
 
         .yt-reply-level-max::before {
-            border-left: 2px solid #333333;
-            border-bottom: none !important;
-            border-bottom-left-radius: 0 !important;
-            width: 0 !important;
-            height: 100% !important;
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: -6px;
+            width: 12px;
+            height: 22px;
+            border-left: 2px solid #383838;
+            border-bottom: 2px solid #383838;
+            border-bottom-left-radius: 10px;
         }
 
         .yt-reply-level-max::after {
-            display: none !important;
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: -6px;
+            bottom: -6px;
+            width: 2px;
+            border-left: 2px solid #383838;
+        }
+
+        .yt-reply-level-max:last-child::after {
+            display: none;
         }
 
         /* Barra de Digitação Inferior com Prévia de Menção */
@@ -23148,7 +23159,20 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             return sorted;
         }
 
-        // 5. Renderização da Árvore de Comentários e Respostas Aninhadas (Regra A8)
+        // Conta o total real de respostas da árvore inteira do comentário recursivamente
+        function countTotalRepliesInThread(rootCommentId, allCommentsPool) {
+            let totalCount = 0;
+            const directChildren = allCommentsPool.filter(item => item.parentId === rootCommentId);
+            totalCount += directChildren.length;
+
+            directChildren.forEach(child => {
+                totalCount += countTotalRepliesInThread(child.id, allCommentsPool);
+            });
+
+            return totalCount;
+        }
+
+        // 5. Renderização da Árvore de Comentários e Respostas Aninhadas (Regra A8 / Print B)
         function renderCommentsHierarchyTree() {
             const container = document.getElementById("watchCommentsListContainer");
             container.innerHTML = "";
@@ -23169,24 +23193,27 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 const node = document.createElement("div");
                 node.className = "yt-comment-node";
 
-                // Encontra todas as respostas deste comentário
+                // Encontra as respostas diretas do comentário pai
                 const directReplies = repliesPool.filter(r => r.parentId === primary.id);
+
+                // 1. Contagem real de todas as respostas descendentes deste comentário
+                const totalRealRepliesCount = countTotalRepliesInThread(primary.id, cachedRawCommentsList);
 
                 node.appendChild(createSingleCommentElement(primary, 0));
 
-                if (directReplies.length > 0) {
+                if (totalRealRepliesCount > 0) {
                     const toggleBtn = document.createElement("button");
                     toggleBtn.className = "yt-comment-replies-toggle-btn";
                     toggleBtn.type = "button";
                     toggleBtn.innerHTML = `
-                        <span>${directReplies.length} ${directReplies.length === 1 ? 'resposta' : 'respostas'}</span>
+                        <span>${totalRealRepliesCount} ${totalRealRepliesCount === 1 ? 'resposta' : 'respostas'}</span>
                         <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
                     `;
 
                     const branchContainer = document.createElement("div");
                     branchContainer.className = "yt-replies-branch-container";
 
-                    // Renderiza as respostas aplicando a Regra A8
+                    // Renderiza as respostas aplicando a Regra do Print B e A8
                     renderNestedRepliesBranch(branchContainer, directReplies, repliesPool, 1);
 
                     toggleBtn.onclick = () => {
@@ -23202,11 +23229,24 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             });
         }
 
-        // Renderiza recursivamente até o 4º nível e alinha reto no 5º nível em diante (Regra A8)
+        // Renderiza recursivamente até o 3º nível e trava na mesma linha vertical no 4º nível em diante (Print B e A8)
         function renderNestedRepliesBranch(container, repliesList, allRepliesPool, currentLevel) {
             repliesList.forEach(reply => {
                 const wrapper = document.createElement("div");
-                wrapper.className = `yt-reply-item-wrapper ${currentLevel <= 4 ? `yt-reply-level-${currentLevel}` : 'yt-reply-level-max'}`;
+
+                // Nível 1: Demonstração 1 | Nível 2: Demonstração 2 | Nível 3: Demonstração 3 | Nível 4+: Trava reta
+                let levelClass = "yt-reply-level-max";
+                if (currentLevel === 1) {
+                    levelClass = "yt-reply-level-1";
+                } else if (currentLevel === 2) {
+                    levelClass = "yt-reply-level-2";
+                } else if (currentLevel === 3) {
+                    levelClass = "yt-reply-level-3";
+                } else {
+                    levelClass = "yt-reply-level-max";
+                }
+
+                wrapper.className = `yt-reply-item-wrapper ${levelClass}`;
 
                 wrapper.appendChild(createSingleCommentElement(reply, currentLevel));
 
