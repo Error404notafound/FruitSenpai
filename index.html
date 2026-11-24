@@ -18694,6 +18694,14 @@
     chipsBar.style.display = "none";
     document.querySelectorAll(".yt-subview, .group-screen-view, .all-subs-page-view, .all-subs-shorts-view, .series-channel-view, .subs-feed-view, .notifs-page-view, .tab-search-screen-view, .new-tab-home-screen, .tabs-switcher-screen, .incognito-landing-screen").forEach(s => s.classList.remove("active"));
 
+    // Garante que a gaveta de comentários e a do Gemini não fiquem visíveis fora do vídeo
+    if (screen !== viewWatchVideo) {
+        const drawerCommentsEl = document.getElementById("drawerComments");
+        if (drawerCommentsEl) drawerCommentsEl.classList.remove("active");
+        const drawerGeminiChatEl = document.getElementById("drawerGeminiChat");
+        if (drawerGeminiChatEl) drawerGeminiChatEl.classList.remove("active");
+    }
+
     // Na tela Inicial (Home): URL limpa principal
     if (screen === "home") {
         document.querySelectorAll(".yt-nav-item").forEach(i => i.classList.remove("active"));
@@ -22437,16 +22445,27 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             }
 
             if (btnBackFromWatch) {
-                btnBackFromWatch.onclick = () => {
-                    if (watchIframe) watchIframe.src = "";
-                    if (watchNativeVideo) {
-                        watchNativeVideo.pause();
-                        watchNativeVideo.src = "";
-                    }
-                    if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
-                    navigateBack();
-                };
-            }
+            btnBackFromWatch.onclick = () => {
+                if (watchIframe) watchIframe.src = "";
+                if (watchNativeVideo) {
+                    watchNativeVideo.pause();
+                    watchNativeVideo.src = "";
+                }
+                if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
+
+                // Fecha expressamente a gaveta de comentários e a do Gemini ao sair do player
+                const drawerCommentsEl = document.getElementById("drawerComments");
+                if (drawerCommentsEl) {
+                    drawerCommentsEl.classList.remove("active");
+                }
+                const drawerGeminiChatEl = document.getElementById("drawerGeminiChat");
+                if (drawerGeminiChatEl) {
+                    drawerGeminiChatEl.classList.remove("active");
+                }
+
+                navigateBack();
+            };
+        }
 
             if (watchInvisibleTimer) clearTimeout(watchInvisibleTimer);
             watchInvisibleTimer = setTimeout(async () => {
@@ -22964,9 +22983,63 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         let targetUserCardEmail = null;
         let cachedRawCommentsList = [];
 
-        // Atualiza avatar do usuário logado na barra de comentários
-        function updateCommentInputAvatar() {
+        // Cache em memória para carregar as fotos dos comentaristas instantaneamente
+        const userAvatarsCache = new Map();
+
+        // Busca a foto de perfil real do usuário no Firestore ou no LocalStorage
+        async function getUserAvatarPhoto(userEmail) {
+            if (!userEmail) return "";
+            const cleanEmail = userEmail.trim().toLowerCase();
+
+            if (userAvatarsCache.has(cleanEmail)) {
+                return userAvatarsCache.get(cleanEmail);
+            }
+
+            // 1. Tenta carregar do perfil salvo no aparelho
+            const localSaved = localStorage.getItem(`profile_${cleanEmail}`);
+            if (localSaved) {
+                try {
+                    const parsed = JSON.parse(localSaved);
+                    if (parsed.avatarUrl) {
+                        userAvatarsCache.set(cleanEmail, parsed.avatarUrl);
+                        return parsed.avatarUrl;
+                    }
+                } catch(e) {}
+            }
+
+            // 2. Se for o usuário conectado, verifica a foto de perfil ativa na tela
+            if (currentUserEmail && cleanEmail === currentUserEmail.toLowerCase()) {
+                const activeAvatarEl = document.getElementById("userChannelAvatarImg");
+                if (activeAvatarEl && activeAvatarEl.src && !activeAvatarEl.src.includes("photo-1534447677768-be436bb09401")) {
+                    userAvatarsCache.set(cleanEmail, activeAvatarEl.src);
+                    return activeAvatarEl.src;
+                }
+            }
+
+            // 3. Busca no Firestore (na coleção users_profiles)
+            try {
+                const docKey = cleanEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                const snap = await getDoc(doc(db, "users_profiles", docKey));
+                if (snap.exists() && snap.data().avatarUrl) {
+                    const photo = snap.data().avatarUrl;
+                    userAvatarsCache.set(cleanEmail, photo);
+                    return photo;
+                }
+            } catch(e) {}
+
+            return "";
+        }
+
+        // Atualiza avatar do usuário logado na barra de comentários com foto real
+        async function updateCommentInputAvatar() {
             if (avatarCurrentLoggedCommentUser) {
+                if (currentUserEmail) {
+                    const photo = await getUserAvatarPhoto(currentUserEmail);
+                    if (photo) {
+                        avatarCurrentLoggedCommentUser.innerHTML = `<img src="${escapeHtml(photo)}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;">`;
+                        return;
+                    }
+                }
                 const initial = currentUserEmail ? currentUserEmail.charAt(0).toUpperCase() : "U";
                 avatarCurrentLoggedCommentUser.textContent = initial;
             }
@@ -23156,13 +23229,13 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             const userEmail = commentData.user || "usuario@fruitsenpai.app";
             const userHandle = `@${userEmail.split('@')[0]}`;
             const initial = userHandle.charAt(1).toUpperCase();
-            const avatarPhoto = commentData.avatar || "";
+            let avatarPhoto = commentData.avatar || userAvatarsCache.get(userEmail.toLowerCase()) || "";
 
             const userVote = getUserVoteForComment(commentData.id);
             const likesCount = Number(commentData.likesCount || 0);
 
             row.innerHTML = `
-                <!-- Seta Verde Print A: Avatar abre modal de perfil A1.2 -->
+                <!-- Seta Verde Print A: Avatar com foto de perfil real -->
                 <div class="yt-comment-avatar btnOpenUserProfileModalTrigger">
                     ${avatarPhoto 
                         ? `<img src="${escapeHtml(avatarPhoto)}" alt="Avatar">` 
@@ -23240,6 +23313,18 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 activeCommentForKebab = commentData;
                 drawerCommentKebabMenu.classList.add("active");
             };
+
+            // Se o comentário foi criado antes ou não veio com foto gravada, busca e insere a foto real
+            if (!avatarPhoto) {
+                getUserAvatarPhoto(userEmail).then(photoUrl => {
+                    if (photoUrl) {
+                        const avatarContainer = row.querySelector(".yt-comment-avatar");
+                        if (avatarContainer) {
+                            avatarContainer.innerHTML = `<img src="${escapeHtml(photoUrl)}" alt="Avatar">`;
+                        }
+                    }
+                });
+            }
 
             return row;
         }
@@ -23328,9 +23413,13 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     cleanText = rawText.replace(activeReplyingUserHandle, "").trim();
                 }
 
+                // Pega a foto de perfil atual do usuário para gravar junto ao comentário
+                const myProfilePhoto = await getUserAvatarPhoto(currentUserEmail);
+
                 await addDoc(collection(db, `frutas/${currentWatchVideoId}/comments`), {
                     text: cleanText,
                     user: currentUserEmail,
+                    avatar: myProfilePhoto || null,
                     authorName: getNameFromEmail(currentUserEmail),
                     parentId: activeReplyingCommentId || null,
                     replyToUser: replyTo || null,
@@ -23369,8 +23458,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             txtUserCardHandle.textContent = userHandle;
             txtUserCardJoinedInfo.textContent = "Entrou no FruitSenpai recentemente";
 
-            if (avatarPhoto) {
-                imgUserCardAvatar.src = avatarPhoto;
+            // Obtém a foto do cache ou do parâmetro
+            let initialPhoto = avatarPhoto || userAvatarsCache.get(userEmail.toLowerCase()) || "";
+
+            if (initialPhoto) {
+                imgUserCardAvatar.src = initialPhoto;
                 imgUserCardAvatar.style.display = "block";
                 txtUserCardAvatarInitial.style.display = "none";
             } else {
@@ -23378,6 +23470,33 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 txtUserCardAvatarInitial.textContent = userHandle.charAt(1).toUpperCase();
                 txtUserCardAvatarInitial.style.display = "block";
             }
+
+            drawerUserProfileCard.classList.add("active");
+
+            // Busca os dados atualizados e a foto de perfil real no Firestore
+            try {
+                const docKey = userEmail.replace(/[^a-zA-Z0-9]/g, '_');
+                const userDocSnap = await getDoc(doc(db, "users_profiles", docKey));
+                if (userDocSnap.exists()) {
+                    const data = userDocSnap.data();
+                    if (data.avatarUrl) {
+                        userAvatarsCache.set(userEmail.toLowerCase(), data.avatarUrl);
+                        imgUserCardAvatar.src = data.avatarUrl;
+                        imgUserCardAvatar.style.display = "block";
+                        txtUserCardAvatarInitial.style.display = "none";
+                    }
+                    if (data.username) {
+                        txtUserCardDisplayName.textContent = data.username;
+                    }
+                } else {
+                    const photoFound = await getUserAvatarPhoto(userEmail);
+                    if (photoFound) {
+                        imgUserCardAvatar.src = photoFound;
+                        imgUserCardAvatar.style.display = "block";
+                        txtUserCardAvatarInitial.style.display = "none";
+                    }
+                }
+            } catch(e) {}
 
             // Toque no Avatar dentro do modal leva ao perfil do usuário
             userCardAvatarBox.onclick = () => {
@@ -27729,6 +27848,12 @@ inputUniversalWildSearch.addEventListener("keydown", (e) => {
             if (viewUploadDetails) viewUploadDetails.classList.remove("active");
             if (viewAllSubscriptionsList) viewAllSubscriptionsList.classList.remove("active");
             if (viewAllSubscribedShorts) viewAllSubscribedShorts.classList.remove("active");
+
+            // Fecha qualquer gaveta flutuante aberta ao voltar pelo botão do celular
+            const drawerCommentsEl = document.getElementById("drawerComments");
+            if (drawerCommentsEl) drawerCommentsEl.classList.remove("active");
+            const drawerGeminiChatEl = document.getElementById("drawerGeminiChat");
+            if (drawerGeminiChatEl) drawerGeminiChatEl.classList.remove("active");
 
             if (!window.location.search) {
                 screenNavigationHistory = [];
