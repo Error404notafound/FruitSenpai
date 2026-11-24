@@ -4539,10 +4539,54 @@
             position: fixed;
             inset: 0;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
+            z-index: 10060 !important;
             display: none;
             align-items: flex-end;
             justify-content: center;
+        }
+
+        /* Cartão de Resposta da IA sobre os Comentários */
+        .yt-comment-ai-answer-card {
+            background-color: #1a222d;
+            border: 1px solid rgba(62, 166, 255, 0.25);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 8px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: fadeIn 0.25s ease-out;
+        }
+
+        .yt-comment-ai-answer-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #7fcfff;
+        }
+
+        .yt-comment-ai-answer-header svg {
+            width: 16px;
+            height: 16px;
+            fill: #7fcfff;
+        }
+
+        .yt-comment-ai-user-query {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.06);
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .yt-comment-ai-answer-body {
+            font-size: 13.5px;
+            color: #f1f1f1;
+            line-height: 1.45;
+            word-break: break-word;
         }
 
         .yt-modal-backdrop.active {
@@ -14537,6 +14581,13 @@
                         <span style="font-size: 14.5px;">Denunciar</span>
                     </div>
                 </div>
+                <!-- Opção Excluir Comentário (Visível apenas para o autor do comentário) -->
+                <div class="account-item-row" id="btnCommentKebabDelete" style="display: none;">
+                    <div class="account-item-left">
+                        <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:#ff453a;"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        <span style="font-size: 14.5px; color: #ff453a;">Excluir comentário</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -22986,13 +23037,17 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         const btnCancelReplyingMention = document.getElementById("btnCancelReplyingMention");
         const avatarCurrentLoggedCommentUser = document.getElementById("avatarCurrentLoggedCommentUser");
 
-        let activeCommentSortFilter = "principais"; // principais, relevantes, recentes
+        let activeCommentSortFilter = "principais"; // principais, relevantes, recentes, topicos
         let activeCommentDateFilter = "all";
         let activeReplyingCommentId = null;
         let activeReplyingUserHandle = null;
         let activeCommentForKebab = null;
         let targetUserCardEmail = null;
         let cachedRawCommentsList = [];
+
+        // Memória que preserva os ramos de respostas abertos durante likes e deslikes
+        const openReplyBranchesSet = new Set();
+        let geminiCommentsAiAnswerHistory = [];
 
         // Cache em memória para carregar as fotos dos comentaristas instantaneamente
         const userAvatarsCache = new Map();
@@ -23087,13 +23142,21 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             activeChip.classList.add("active");
             activeCommentSortFilter = mode;
 
+            const inputCommentEl = document.getElementById("inputNewCommentText");
+
             if (mode === "topicos") {
                 panelCommentsTopics.style.display = "flex";
                 document.getElementById("watchCommentsListContainer").style.display = "none";
+                if (inputCommentEl) {
+                    inputCommentEl.placeholder = "Pergunte à IA sobre os comentários...";
+                }
                 renderCommentsAiTopicsList();
             } else {
                 panelCommentsTopics.style.display = "none";
                 document.getElementById("watchCommentsListContainer").style.display = "flex";
+                if (inputCommentEl) {
+                    inputCommentEl.placeholder = "Adicione um comentário...";
+                }
                 renderCommentsHierarchyTree();
             }
         }
@@ -23213,12 +23276,24 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                     const branchContainer = document.createElement("div");
                     branchContainer.className = "yt-replies-branch-container";
 
+                    // Preserva o estado de abertura da árvore caso o usuário já tenha aberto antes de votar
+                    const isAlreadyOpen = openReplyBranchesSet.has(primary.id);
+                    if (isAlreadyOpen) {
+                        branchContainer.classList.add("active");
+                        toggleBtn.classList.add("open");
+                    }
+
                     // Renderiza as respostas aplicando a Regra do Print B e A8
                     renderNestedRepliesBranch(branchContainer, directReplies, repliesPool, 1);
 
                     toggleBtn.onclick = () => {
                         const isOpen = branchContainer.classList.toggle("active");
                         toggleBtn.classList.toggle("open", isOpen);
+                        if (isOpen) {
+                            openReplyBranchesSet.add(primary.id);
+                        } else {
+                            openReplyBranchesSet.delete(primary.id);
+                        }
                     };
 
                     node.appendChild(toggleBtn);
@@ -23346,11 +23421,18 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 startReplyingToComment(commentData.id, userHandle, userEmail);
             };
 
-            // Kebab abre o modal Print B3
+            // Kebab abre o modal Print B3 e controla a visibilidade de "Excluir comentário"
             const btnKebab = row.querySelector(".btnCommentKebabTrigger");
             btnKebab.onclick = (e) => {
                 e.stopPropagation();
                 activeCommentForKebab = commentData;
+
+                const isAuthor = Boolean(currentUserEmail && commentData.user && commentData.user.toLowerCase() === currentUserEmail.toLowerCase());
+                const btnDeleteOption = document.getElementById("btnCommentKebabDelete");
+                if (btnDeleteOption) {
+                    btnDeleteOption.style.display = isAuthor ? "flex" : "none";
+                }
+
                 drawerCommentKebabMenu.classList.add("active");
             };
 
@@ -23437,12 +23519,23 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             };
         }
 
-        // Envio do Comentário ou Resposta
+        // Envio do Comentário, Resposta ou Pergunta à IA sobre os Comentários
         document.getElementById("btnSendComment").addEventListener("click", async () => {
             const input = document.getElementById("inputNewCommentText");
             const rawText = input.value.trim();
             if (!rawText || !currentWatchVideoId) return;
-            if (!currentUserEmail) return openAuthModal();
+
+            // Se estiver na aba Tópicos, responde via Gemini AI sobre os comentários do vídeo
+            if (activeCommentSortFilter === "topicos") {
+                input.value = "";
+                await handleAskGeminiAboutComments(rawText);
+                return;
+            }
+
+            if (!currentUserEmail) {
+                openAuthModal();
+                return;
+            }
 
             try {
                 let cleanText = rawText;
@@ -23575,10 +23668,16 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
             drawerUserProfileCard.classList.add("active");
         }
 
-        // 10. Ações do Kebab do Comentário (Print B3)
+        // 10. Ações do Kebab do Comentário (Print B3) com Trava de Login e Exclusão Real
+        const btnCommentKebabDelete = document.getElementById("btnCommentKebabDelete");
+
         if (btnCommentKebabReply) {
             btnCommentKebabReply.onclick = () => {
                 drawerCommentKebabMenu.classList.remove("active");
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
                 if (activeCommentForKebab) {
                     const handle = `@${(activeCommentForKebab.user || 'usuario').split('@')[0]}`;
                     startReplyingToComment(activeCommentForKebab.id, handle, activeCommentForKebab.user);
@@ -23589,8 +23688,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         if (btnCommentKebabLike) {
             btnCommentKebabLike.onclick = async () => {
                 drawerCommentKebabMenu.classList.remove("active");
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
                 if (activeCommentForKebab) {
-                    if (!currentUserEmail) return openAuthModal();
                     await handleCommentVoting(activeCommentForKebab.id, "like");
                 }
             };
@@ -23599,8 +23701,11 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         if (btnCommentKebabDislike) {
             btnCommentKebabDislike.onclick = async () => {
                 drawerCommentKebabMenu.classList.remove("active");
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
                 if (activeCommentForKebab) {
-                    if (!currentUserEmail) return openAuthModal();
                     await handleCommentVoting(activeCommentForKebab.id, "dislike");
                 }
             };
@@ -23609,7 +23714,28 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
         if (btnCommentKebabReport) {
             btnCommentKebabReport.onclick = () => {
                 drawerCommentKebabMenu.classList.remove("active");
+                if (!currentUserEmail) {
+                    openAuthModal();
+                    return;
+                }
                 showToast("Comentário denunciado com sucesso.");
+            };
+        }
+
+        if (btnCommentKebabDelete) {
+            btnCommentKebabDelete.onclick = async () => {
+                drawerCommentKebabMenu.classList.remove("active");
+                if (!activeCommentForKebab || !currentWatchVideoId) return;
+
+                if (confirm("Deseja realmente excluir este comentário?")) {
+                    try {
+                        await deleteDoc(doc(db, `frutas/${currentWatchVideoId}/comments`, activeCommentForKebab.id));
+                        showToast("Comentário excluído com sucesso.");
+                    } catch(err) {
+                        console.error("Erro ao excluir comentário:", err);
+                        showToast("Erro ao excluir comentário.");
+                    }
+                }
             };
         }
 
@@ -23622,7 +23748,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
             if (topComments.length === 0) {
                 containerTopicsCardsList.innerHTML = `
-                    <div style="padding: 40px 16px; text-align: center; color: #888888; font-size: 13px;">
+                    <div style="padding: 40px 16px; text-align: center; color: #888888; font-size: 13.5px;">
                         Ainda não há comentários com 10 ou mais curtidas para gerar tópicos por IA.
                     </div>
                 `;
@@ -23633,7 +23759,7 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
                 const card = document.createElement("div");
                 card.className = "yt-comment-topic-card";
 
-                const topicTitle = comm.text.length > 30 ? comm.text.substring(0, 30) + "..." : comm.text;
+                const topicTitle = comm.text.length > 30 ? comm.text.substring(0, 30) : comm.text;
                 const avatarLetter = (comm.user || "U").charAt(0).toUpperCase();
 
                 card.innerHTML = `
@@ -23654,6 +23780,59 @@ document.getElementById("btnOpenSettings")?.addEventListener("click", () => open
 
                 containerTopicsCardsList.appendChild(card);
             });
+        }
+
+        // Consulta ao Gemini AI sobre todos os comentários do vídeo
+        async function handleAskGeminiAboutComments(questionText) {
+            if (!containerTopicsCardsList) return;
+
+            // Remove o aviso de vazio se ele estiver sendo exibido na tela
+            const emptyNotice = containerTopicsCardsList.querySelector("div");
+            if (emptyNotice && emptyNotice.textContent.includes("Ainda não há comentários com 10")) {
+                emptyNotice.remove();
+            }
+
+            // Cria o card interativo de resposta da IA na lista de Tópicos
+            const aiCard = document.createElement("div");
+            aiCard.className = "yt-comment-ai-answer-card";
+            aiCard.innerHTML = `
+                <div class="yt-comment-ai-answer-header">
+                    <svg viewBox="0 0 24 24"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                    <span>Gemini AI • Tópicos de Comentários</span>
+                </div>
+                <div class="yt-comment-ai-user-query">${escapeHtml(questionText)}</div>
+                <div class="yt-comment-ai-answer-body">Analisando os comentários deste vídeo... aguarde...</div>
+            `;
+            containerTopicsCardsList.prepend(aiCard);
+
+            try {
+                // Monta o contexto com todos os comentários postados no vídeo para enviar ao Gemini
+                const commentsSummary = cachedRawCommentsList.map(c => `- @${(c.user || 'usuario').split('@')[0]}: "${c.text}" (${c.likesCount || 0} curtidas)`).join("\n");
+                const videoTitle = watchVideoTitle ? watchVideoTitle.textContent : "Vídeo";
+
+                const aiContext = `Você é o assistente inteligente do app FruitSenpai. O usuário está fazendo uma pergunta sobre a seção de comentários do vídeo "${videoTitle}".\n\nAqui estão os comentários reais postados pelos usuários neste vídeo:\n${commentsSummary || "Ainda não há comentários postados."}`;
+
+                const response = await fetch(CLOUDFLARE_GEMINI_ENDPOINT, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        prompt: questionText,
+                        context: aiContext
+                    })
+                });
+
+                const data = await response.json();
+                const bodyDiv = aiCard.querySelector(".yt-comment-ai-answer-body");
+
+                if (data.ok && data.reply) {
+                    bodyDiv.innerHTML = formatGeminiReplyText(data.reply);
+                } else {
+                    bodyDiv.textContent = `❌ ${data.erro || "Não foi possível analisar os comentários no momento."}`;
+                }
+            } catch (err) {
+                const bodyDiv = aiCard.querySelector(".yt-comment-ai-answer-body");
+                bodyDiv.textContent = "❌ Falha de conexão com a IA do Gemini.";
+            }
         }
 
         // Visualização do Tópico Específico (Print B1.1)
