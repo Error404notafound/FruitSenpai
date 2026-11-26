@@ -19333,8 +19333,8 @@
                 const item = { id: docSnap.id, ...docSnap.data() };
                 allDatabaseEpisodes.push(item);
 
-                // Reels não entram no feed "Para você"
-                if (item.contentType === "Reels") return;
+                // Reels e Músicas não entram no feed "Para você" do feed principal
+                if (item.contentType === "Reels" || item.contentType === "Música") return;
 
                 if (item.videoUrl || item.contentType === "episode") {
                     episodeList.push(item);
@@ -20159,35 +20159,73 @@
             return card;
         }
 
+        // Instância global de áudio para o Music com controle nativo de Pause e Play
+        const globalMusicAudioPlayer = new Audio();
+
+        function formatMusicPlaybackSeconds(seconds) {
+            const sec = Math.floor(seconds) || 0;
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function updateMusicPlayPauseIcons(isPlaying) {
+            const playSvg = `<path d="M8 5v14l11-7z"/>`;
+            const pauseSvg = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+            if (svgMiniPlayIcon) svgMiniPlayIcon.innerHTML = isPlaying ? pauseSvg : playSvg;
+            if (svgFullPlayerPlayIcon) svgFullPlayerPlayIcon.innerHTML = isPlaying ? pauseSvg : playSvg;
+        }
+
         // 5. Iniciar Reprodução de Música e Abrir o Player (Prints B, B1, C)
         function startMusicPlayback(song) {
             currentPlayingMusicTrack = song;
-            isMusicPlayingActive = true;
 
             // Mini-player inferior
             imgMusicMiniArtwork.src = song.thumbUrl || song.seriesCover || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100";
             txtMusicMiniSongTitle.textContent = song.name || "Música";
             txtMusicMiniSongArtist.textContent = song.channel || "Artista";
-            svgMiniPlayIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
 
             // Player de tela cheia
             imgFullPlayerArtwork.src = song.thumbUrl || song.seriesCover || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600";
             txtFullPlayerSongTitle.textContent = song.name || "Música";
             txtFullPlayerArtistName.textContent = song.channel || "Artista";
             txtFullPlayerTotalDuration.textContent = formatDurationBadge(song.duration);
-            svgFullPlayerPlayIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
 
-            // Monta a fila com as músicas da mesma categoria/série
+            // Monta a fila com as músicas da mesma categoria ou álbum
             currentMusicActiveQueue = loadedEpisodesCache.filter(ep => ep.contentType === "Música" || ep.channel === song.channel);
             if (currentMusicActiveQueue.length === 0) currentMusicActiveQueue = [song];
             currentMusicQueueIndex = currentMusicActiveQueue.findIndex(item => item.id === song.id);
 
-            // Abre o player do YouTube em segundo plano
-            if (watchIframe && song.videoUrl) {
-                let embed = song.videoUrl.trim();
-                const ytMatch = embed.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
-                if (ytMatch && ytMatch[1]) embed = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
-                watchIframe.src = embed;
+            const streamUrl = (song.videoUrl || "").trim();
+            const isYouTubeUrl = streamUrl.includes("youtube.com") || streamUrl.includes("youtu.be");
+
+            // Se for arquivo de áudio direto (.mp3 ou /stream/ do Telegram)
+            if (!isYouTubeUrl && streamUrl) {
+                if (watchIframe) watchIframe.src = "";
+                if (watchNativeVideo) {
+                    watchNativeVideo.pause();
+                    watchNativeVideo.src = "";
+                }
+
+                globalMusicAudioPlayer.src = streamUrl;
+                globalMusicAudioPlayer.play().then(() => {
+                    isMusicPlayingActive = true;
+                    updateMusicPlayPauseIcons(true);
+                }).catch(() => {
+                    isMusicPlayingActive = true;
+                    updateMusicPlayPauseIcons(true);
+                });
+            } else if (isYouTubeUrl && streamUrl) {
+                globalMusicAudioPlayer.pause();
+                globalMusicAudioPlayer.src = "";
+
+                let embed = streamUrl;
+                const ytMatch = streamUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+                if (ytMatch && ytMatch[1]) embed = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&enablejsapi=1`;
+                if (watchIframe) watchIframe.src = embed;
+
+                isMusicPlayingActive = true;
+                updateMusicPlayPauseIcons(true);
             }
 
             // Exibe o player de tela cheia
@@ -20205,18 +20243,58 @@
             ytmusicFullPlayerView.classList.remove("active");
         });
 
-        // Alternância de Play/Pause
+        // Alternância Real de Play e Pause
         function toggleMusicPlayPauseState() {
-            isMusicPlayingActive = !isMusicPlayingActive;
-            const playSvg = `<path d="M8 5v14l11-7z"/>`;
-            const pauseSvg = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
-            svgMiniPlayIcon.innerHTML = isMusicPlayingActive ? pauseSvg : playSvg;
-            svgFullPlayerPlayIcon.innerHTML = isMusicPlayingActive ? pauseSvg : playSvg;
+            if (!currentPlayingMusicTrack) return;
 
-            if (watchNativeVideo && watchNativeVideo.src) {
-                if (isMusicPlayingActive) watchNativeVideo.play();
-                else watchNativeVideo.pause();
+            if (globalMusicAudioPlayer && globalMusicAudioPlayer.src) {
+                if (globalMusicAudioPlayer.paused) {
+                    globalMusicAudioPlayer.play().catch(() => {});
+                    isMusicPlayingActive = true;
+                } else {
+                    globalMusicAudioPlayer.pause();
+                    isMusicPlayingActive = false;
+                }
+            } else if (watchIframe && watchIframe.src) {
+                isMusicPlayingActive = !isMusicPlayingActive;
+                const cmd = isMusicPlayingActive ? '{"event":"command","func":"playVideo","args":""}' : '{"event":"command","func":"pauseVideo","args":""}';
+                watchIframe.contentWindow?.postMessage(cmd, '*');
             }
+
+            updateMusicPlayPauseIcons(isMusicPlayingActive);
+        }
+
+        // Atualiza a barra de progresso e o tempo em segundos em tempo real
+        globalMusicAudioPlayer.ontimeupdate = () => {
+            if (!globalMusicAudioPlayer.duration) return;
+            const cur = globalMusicAudioPlayer.currentTime;
+            const dur = globalMusicAudioPlayer.duration;
+            const percentage = (cur / dur) * 100;
+            if (fullPlayerScrubberFill) fullPlayerScrubberFill.style.width = `${percentage}%`;
+            if (txtFullPlayerCurrentTime) txtFullPlayerCurrentTime.textContent = formatMusicPlaybackSeconds(cur);
+            if (txtFullPlayerTotalDuration && !isNaN(dur) && dur > 0) {
+                txtFullPlayerTotalDuration.textContent = formatMusicPlaybackSeconds(dur);
+            }
+        };
+
+        // Avanço automático para a próxima música ao terminar a atual
+        globalMusicAudioPlayer.onended = () => {
+            if (currentMusicActiveQueue.length > 0) {
+                currentMusicQueueIndex = (currentMusicQueueIndex + 1) % currentMusicActiveQueue.length;
+                startMusicPlayback(currentMusicActiveQueue[currentMusicQueueIndex]);
+            }
+        };
+
+        // Arrastar ou clicar na barra para adiantar/retroceder o som
+        const fullPlayerScrubberTrackEl = document.getElementById("fullPlayerScrubberTrack");
+        if (fullPlayerScrubberTrackEl) {
+            fullPlayerScrubberTrackEl.addEventListener("click", (e) => {
+                if (!globalMusicAudioPlayer || !globalMusicAudioPlayer.duration) return;
+                const rect = fullPlayerScrubberTrackEl.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+                globalMusicAudioPlayer.currentTime = ratio * globalMusicAudioPlayer.duration;
+            });
         }
 
         btnToggleMusicPlayPauseMini.addEventListener("click", (e) => {
@@ -28505,6 +28583,7 @@ function renderChannelPlaylists(episodesList, defaultThumb, seriesName) {
 
                     seriesSnapshot.forEach((sDoc) => {
                         const sData = { id: sDoc.id, ...sDoc.data() };
+                        if (sData.contentType === "Música") return;
                         const seriesTitle = (sData.title || "").toLowerCase().trim();
                         if (!seriesTitle) return;
 
@@ -28602,6 +28681,7 @@ function renderChannelPlaylists(episodesList, defaultThumb, seriesName) {
 
                     seriesSnapshot.forEach((sDoc) => {
                         const sData = { id: sDoc.id, ...sDoc.data() };
+                        if (sData.contentType === "Música") return;
                         const sTitle = (sData.title || "").toLowerCase().trim();
                         if (!sTitle) return;
 
@@ -29545,8 +29625,8 @@ function renderChannelPlaylists(episodesList, defaultThumb, seriesName) {
                 snapshot.forEach(docSnap => {
                     const data = { id: docSnap.id, ...docSnap.data() };
 
-                    // Reels não entram na lista de "Novos episódios"
-                    if (data.contentType === "Reels") return;
+                    // Reels e Músicas não entram na lista de "Novos episódios"
+                    if (data.contentType === "Reels" || data.contentType === "Música") return;
 
                     if (data.videoUrl || data.contentType === "episode") {
                         epList.push(data);
