@@ -19019,18 +19019,28 @@
                     const heroBannerUrlVal = heroBannerInput ? heroBannerInput.value.trim() : "";
                     const firstEpUrl = firstEpUrlInput ? firstEpUrlInput.value.trim() : "";
 
-                    // 1. Grava a Série mãe no Firestore com a CAPA DA SÉRIE CORRETA
+                    // Se for do tipo Música, a capa vira a do álbum ou a da última música adicionada
+                    let finalSeriesOrAlbumCover = seriesCoverUrl;
+                    if (selectedContentType === "Música") {
+                        if (!seriesCoverInput || !seriesCoverInput.value.trim()) {
+                            if (episodesToSave.length > 0 && episodesToSave[episodesToSave.length - 1].thumbUrl) {
+                                finalSeriesOrAlbumCover = episodesToSave[episodesToSave.length - 1].thumbUrl;
+                            }
+                        }
+                    }
+
+                    // 1. Grava a Série mãe ou Álbum de Música no Firestore
                     await addDoc(collection(db, "series"), {
                         title: sName,
-                        coverUrl: seriesCoverUrl,
+                        coverUrl: finalSeriesOrAlbumCover,
                         heroBannerUrl: heroBannerUrlVal || null,
                         isRecentFeatured: isRecentFeaturedSelected,
                         synopsis: sSynopsis,
-                        genres: sGenres ? sGenres.split(",").map(g => g.trim()).filter(Boolean) : ["Anime"],
+                        genres: sGenres ? sGenres.split(",").map(g => g.trim()).filter(Boolean) : ["Música"],
                         visibility: currentUploadSettings.visibility,
                         isAdult: isAdult,
-                        ratingBadge: selectedAgeBadge || "14+",
-                        contentType: selectedContentType || "Anime",
+                        ratingBadge: selectedAgeBadge || "L",
+                        contentType: selectedContentType || "Música",
                         nextEpDate: nextEpDate || null,
                         author: currentUserEmail,
                         episodes: [],
@@ -19693,10 +19703,861 @@
             });
         }
 
+        // ==========================================================================
+        // MOTOR COMPLETO DO FRUITSENPAI MUSIC (YOUTUBE MUSIC)
+        // ==========================================================================
+        const viewYouTubeMusic = document.getElementById("viewYouTubeMusic");
+        const tabContentMusicHome = document.getElementById("tabContentMusicHome");
+        const tabContentMusicLibrary = document.getElementById("tabContentMusicLibrary");
+        const tabContentMusicDetail = document.getElementById("tabContentMusicDetail");
+        const tabContentMusicPlaylistDetail = document.getElementById("tabContentMusicPlaylistDetail");
+        const tabContentMusicSearchAdd = document.getElementById("tabContentMusicSearchAdd");
+
+        const navMusicHome = document.getElementById("navMusicHome");
+        const navMusicExplore = document.getElementById("navMusicExplore");
+        const navMusicLibrary = document.getElementById("navMusicLibrary");
+        const navMusicFruitSenpaiExit = document.getElementById("navMusicFruitSenpaiExit");
+
+        const ytmusicMiniPlayerBar = document.getElementById("ytmusicMiniPlayerBar");
+        const imgMusicMiniArtwork = document.getElementById("imgMusicMiniArtwork");
+        const txtMusicMiniSongTitle = document.getElementById("txtMusicMiniSongTitle");
+        const txtMusicMiniSongArtist = document.getElementById("txtMusicMiniSongArtist");
+        const btnToggleMusicPlayPauseMini = document.getElementById("btnToggleMusicPlayPauseMini");
+        const svgMiniPlayIcon = document.getElementById("svgMiniPlayIcon");
+
+        const ytmusicFullPlayerView = document.getElementById("ytmusicFullPlayerView");
+        const btnCloseFullMusicPlayer = document.getElementById("btnCloseFullMusicPlayer");
+        const imgFullPlayerArtwork = document.getElementById("imgFullPlayerArtwork");
+        const txtFullPlayerSongTitle = document.getElementById("txtFullPlayerSongTitle");
+        const txtFullPlayerArtistName = document.getElementById("txtFullPlayerArtistName");
+        const btnFullPlayerPlayPause = document.getElementById("btnFullPlayerPlayPause");
+        const svgFullPlayerPlayIcon = document.getElementById("svgFullPlayerPlayIcon");
+        const btnFullPlayerPrevTrack = document.getElementById("btnFullPlayerPrevTrack");
+        const btnFullPlayerNextTrack = document.getElementById("btnFullPlayerNextTrack");
+        const btnFullPlayerSavePlaylist = document.getElementById("btnFullPlayerSavePlaylist");
+        const btnFullPlayerShare = document.getElementById("btnFullPlayerShare");
+        const btnFullPlayerComments = document.getElementById("btnFullPlayerComments");
+        const txtFullPlayerCommentsCount = document.getElementById("txtFullPlayerCommentsCount");
+        const fullPlayerScrubberFill = document.getElementById("fullPlayerScrubberFill");
+        const txtFullPlayerCurrentTime = document.getElementById("txtFullPlayerCurrentTime");
+        const txtFullPlayerTotalDuration = document.getElementById("txtFullPlayerTotalDuration");
+
+        const btnTabUnderPlayerQueue = document.getElementById("btnTabUnderPlayerQueue");
+        const btnTabUnderPlayerRelated = document.getElementById("btnTabUnderPlayerRelated");
+        const drawerMusicQueueB2 = document.getElementById("drawerMusicQueueB2");
+        const drawerMusicRelatedB4 = document.getElementById("drawerMusicRelatedB4");
+        const containerMusicQueueItemsListB2 = document.getElementById("containerMusicQueueItemsListB2");
+
+        const drawerMusicSavePlaylistB11 = document.getElementById("drawerMusicSavePlaylistB11");
+        const btnCloseMusicSavePlaylistDrawer = document.getElementById("btnCloseMusicSavePlaylistDrawer");
+        const shelfRecentPlaylistsSaveModal = document.getElementById("shelfRecentPlaylistsSaveModal");
+        const containerAllPlaylistsListSaveModal = document.getElementById("containerAllPlaylistsListSaveModal");
+
+        const drawerMusicItemKebabC1 = document.getElementById("drawerMusicItemKebabC1");
+        const headerMusicKebabTrackInfo = document.getElementById("headerMusicKebabTrackInfo");
+        const btnKebabMusicPlayNext = document.getElementById("btnKebabMusicPlayNext");
+        const btnKebabMusicSavePlaylist = document.getElementById("btnKebabMusicSavePlaylist");
+        const btnKebabMusicShare = document.getElementById("btnKebabMusicShare");
+        const btnKebabMusicAddToQueue = document.getElementById("btnKebabMusicAddToQueue");
+        const btnKebabMusicSaveToLib = document.getElementById("btnKebabMusicSaveToLib");
+        const btnKebabMusicGoToArtist = document.getElementById("btnKebabMusicGoToArtist");
+        const btnKebabMusicGoToAlbum = document.getElementById("btnKebabMusicGoToAlbum");
+
+        const btnMusicFabNewPlaylist = document.getElementById("btnMusicFabNewPlaylist");
+        const drawerMusicNewPlaylistChoiceD3 = document.getElementById("drawerMusicNewPlaylistChoiceD3");
+        const btnChoiceNewNormalPlaylist = document.getElementById("btnChoiceNewNormalPlaylist");
+        const btnChoiceNewCollaborativePlaylist = document.getElementById("btnChoiceNewCollaborativePlaylist");
+        const btnChoiceNewSameSyncPlaylist = document.getElementById("btnChoiceNewSameSyncPlaylist");
+        const btnChoiceNewMixPlaylist = document.getElementById("btnChoiceNewMixPlaylist");
+
+        const modalMusicDuplicateSongWarning = document.getElementById("modalMusicDuplicateSongWarning");
+        const btnConfirmAddDuplicateSongAnyway = document.getElementById("btnConfirmAddDuplicateSongAnyway");
+        const btnCancelAddDuplicateSong = document.getElementById("btnCancelAddDuplicateSong");
+
+        const drawerMusicChangeCoverSourceD42 = document.getElementById("drawerMusicChangeCoverSourceD42");
+        const btnEditMusicPlaylistCover = document.getElementById("btnEditMusicPlaylistCover");
+        const btnMusicCoverFromLib = document.getElementById("btnMusicCoverFromLib");
+        const btnMusicCoverTakePhoto = document.getElementById("btnMusicCoverTakePhoto");
+        const btnMusicCoverGenerateAI = document.getElementById("btnMusicCoverGenerateAI");
+
+        const btnEditMusicPlaylistMetaTrigger = document.getElementById("btnEditMusicPlaylistMetaTrigger");
+        const drawerMusicEditPlaylistMetaD44 = document.getElementById("drawerMusicEditPlaylistMetaD44");
+        const btnCancelEditMusicPlaylistMeta = document.getElementById("btnCancelEditMusicPlaylistMeta");
+        const btnConfirmEditMusicPlaylistMeta = document.getElementById("btnConfirmEditMusicPlaylistMeta");
+        const inputEditMusicPlaylistMetaTitle = document.getElementById("inputEditMusicPlaylistMetaTitle");
+        const txtAreaEditMusicPlaylistMetaDesc = document.getElementById("txtAreaEditMusicPlaylistMetaDesc");
+        const btnOpenMusicPlaylistMetaVisChoice = document.getElementById("btnOpenMusicPlaylistMetaVisChoice");
+        const txtMusicPlaylistMetaVisVal = document.getElementById("txtMusicPlaylistMetaVisVal");
+        const drawerMusicPlaylistVisOptionsD45 = document.getElementById("drawerMusicPlaylistVisOptionsD45");
+        const inputMusicPlaylistTagsSystem = document.getElementById("inputMusicPlaylistTagsSystem");
+
+        const btnTriggerAddMusicToPlaylistScreen = document.getElementById("btnTriggerAddMusicToPlaylistScreen");
+        const btnBackFromMusicSearchAdd = document.getElementById("btnBackFromMusicSearchAdd");
+        const inputMusicInstantSearchQuery = document.getElementById("inputMusicInstantSearchQuery");
+        const btnClearMusicInstantSearch = document.getElementById("btnClearMusicInstantSearch");
+        const containerMusicInstantSearchResults = document.getElementById("containerMusicInstantSearchResults");
+
+        let currentPlayingMusicTrack = null;
+        let isMusicPlayingActive = false;
+        let currentMusicActiveQueue = [];
+        let currentMusicQueueIndex = 0;
+        let musicPendingTrackToAdd = null;
+        let activeOpenMusicPlaylistDoc = null;
+        let userMusicSavedPlaylists = [];
+
+        // 1. Abertura do YouTube Music ao Clicar na Gaveta Lateral
         if (sidebarItemMusic) {
             sidebarItemMusic.addEventListener("click", () => {
                 drawerSidebarExplore.classList.remove("active");
-                showToast("FruitSenpai Music conectado.");
+                openYouTubeMusicApp();
+            });
+        }
+
+        function openYouTubeMusicApp() {
+            viewYouTubeMusic.classList.add("active");
+            switchMusicSubTab("home");
+            loadAllMusicHomeSections();
+        }
+
+        // 2. Botão "FruitSenpai" no Canto Inferior Direito: Fecha a tela Music e Retorna ao App Principal
+        if (navMusicFruitSenpaiExit) {
+            navMusicFruitSenpaiExit.addEventListener("click", () => {
+                viewYouTubeMusic.classList.remove("active");
+                ytmusicFullPlayerView.classList.remove("active");
+                showToast("Retornando ao FruitSenpai");
+            });
+        }
+
+        // Alternância de Abas da Barra Inferior
+        function switchMusicSubTab(targetTab) {
+            [navMusicHome, navMusicExplore, navMusicLibrary].forEach(b => b.classList.remove("active"));
+            [tabContentMusicHome, tabContentMusicLibrary, tabContentMusicDetail, tabContentMusicPlaylistDetail, tabContentMusicSearchAdd].forEach(p => p.style.display = "none");
+
+            if (targetTab === "home") {
+                navMusicHome.classList.add("active");
+                tabContentMusicHome.style.display = "flex";
+            } else if (targetTab === "library") {
+                navMusicLibrary.classList.add("active");
+                tabContentMusicLibrary.style.display = "flex";
+                loadMusicLibraryView();
+            } else if (targetTab === "explore") {
+                navMusicExplore.classList.add("active");
+                tabContentMusicHome.style.display = "flex";
+                // Rola suavemente até o bloco Explorar
+                const exploreEl = document.getElementById("btnExploreLancamentos");
+                if (exploreEl) exploreEl.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+
+        navMusicHome.addEventListener("click", () => switchMusicSubTab("home"));
+        navMusicExplore.addEventListener("click", () => switchMusicSubTab("explore"));
+        navMusicLibrary.addEventListener("click", () => switchMusicSubTab("library"));
+
+        // Encolhe o botão "+ Nova playlist" ao rolar a biblioteca (Prints D e D1)
+        if (tabContentMusicLibrary && btnMusicFabNewPlaylist) {
+            tabContentMusicLibrary.addEventListener("scroll", () => {
+                const scrolled = tabContentMusicLibrary.scrollTop;
+                btnMusicFabNewPlaylist.classList.toggle("collapsed", scrolled > 50);
+            }, { passive: true });
+        }
+
+        // 3. Montagem do Mosaico 2x2 para Capas de Playlists (Prints A1.4, A1.10)
+        function createMosaic4GridHtml(imagesArray, defaultCover) {
+            const safeCovers = Array.isArray(imagesArray) && imagesArray.length > 0 ? imagesArray.filter(Boolean) : [];
+            const finalImg = defaultCover || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=300";
+
+            if (safeCovers.length >= 4) {
+                return `
+                    <div class="ytmusic-mosaic-4grid">
+                        <img src="${escapeHtml(safeCovers[0])}" alt="Mosaico 1">
+                        <img src="${escapeHtml(safeCovers[1])}" alt="Mosaico 2">
+                        <img src="${escapeHtml(safeCovers[2])}" alt="Mosaico 3">
+                        <img src="${escapeHtml(safeCovers[3])}" alt="Mosaico 4">
+                    </div>
+                `;
+            } else if (safeCovers.length === 3) {
+                return `
+                    <div class="ytmusic-mosaic-4grid">
+                        <img src="${escapeHtml(safeCovers[0])}" alt="Mosaico 1">
+                        <img src="${escapeHtml(safeCovers[1])}" alt="Mosaico 2">
+                        <img src="${escapeHtml(safeCovers[2])}" alt="Mosaico 3">
+                        <img src="${escapeHtml(safeCovers[0])}" alt="Mosaico 4">
+                    </div>
+                `;
+            } else if (safeCovers.length === 2) {
+                return `
+                    <div class="ytmusic-mosaic-4grid">
+                        <img src="${escapeHtml(safeCovers[0])}" alt="Mosaico 1">
+                        <img src="${escapeHtml(safeCovers[1])}" alt="Mosaico 2">
+                        <img src="${escapeHtml(safeCovers[1])}" alt="Mosaico 3">
+                        <img src="${escapeHtml(safeCovers[0])}" alt="Mosaico 4">
+                    </div>
+                `;
+            } else {
+                return `<img src="${escapeHtml(safeCovers[0] || finalImg)}" alt="Capa">`;
+            }
+        }
+
+        // 4. Carrega Todas as Seções da Tela Principal do Music (A1 a A1.21)
+        function loadAllMusicHomeSections() {
+            // Filtra exclusivamente vídeos postados com o tipo "Música"
+            const musicTracks = loadedEpisodesCache.filter(ep => ep.contentType === "Música" || (ep.tags && ep.tags.includes("música")));
+
+            // 4.1 Escolha a dedo (Print A1)
+            const shelfHandpicked = document.getElementById("shelfHandpickedTracks");
+            if (shelfHandpicked) {
+                shelfHandpicked.innerHTML = "";
+                const list = musicTracks.length > 0 ? musicTracks.slice(0, 16) : loadedEpisodesCache.slice(0, 16);
+                list.forEach(item => {
+                    shelfHandpicked.appendChild(createMusicRowCardElement(item));
+                });
+            }
+
+            // 4.2 Top Músicas (Print A1.9 e A1.11)
+            const shelfTopMusics = document.getElementById("shelfTopMusicsGrid");
+            if (shelfTopMusics) {
+                shelfTopMusics.innerHTML = "";
+                const sorted = [...(musicTracks.length > 0 ? musicTracks : loadedEpisodesCache)].sort((a, b) => Number(b.viewsCount || 0) - Number(a.viewsCount || 0)).slice(0, 16);
+                sorted.forEach(item => {
+                    shelfTopMusics.appendChild(createMusicRowCardElement(item));
+                });
+            }
+
+            // 4.3 Mixes Longos (Print A1.6)
+            const shelfLongMixes = document.getElementById("shelfLongMixesTracks");
+            if (shelfLongMixes) {
+                shelfLongMixes.innerHTML = "";
+                const longList = [...loadedEpisodesCache].filter(ep => ep.duration && (ep.duration.includes(":") && parseInt(ep.duration) >= 4)).slice(0, 16);
+                (longList.length > 0 ? longList : loadedEpisodesCache.slice(0, 16)).forEach(item => {
+                    shelfLongMixes.appendChild(createMusicRowCardElement(item));
+                });
+            }
+
+            // 4.4 Da sua biblioteca (Prints A1.4 e A1.5 com mosaico de 4 capas)
+            const shelfLibraryMosaics = document.getElementById("shelfLibraryMosaicsCarousel");
+            if (shelfLibraryMosaics) {
+                shelfLibraryMosaics.innerHTML = "";
+                onSnapshot(collection(db, "playlists"), (snap) => {
+                    shelfLibraryMosaics.innerHTML = "";
+                    snap.forEach(d => {
+                        const pl = { id: d.id, ...d.data() };
+                        if (!currentUserEmail || pl.user === currentUserEmail) {
+                            shelfLibraryMosaics.appendChild(createMusicAlbumMosaicCard(pl));
+                        }
+                    });
+                });
+            }
+
+            // 4.5 Seção Dinâmica "Bons sonhos" / Função da Playlist Alternável (Print A1.14)
+            const shelfDynamic = document.getElementById("shelfDynamicPlaylistFunctionCarousel");
+            if (shelfDynamic) {
+                shelfDynamic.innerHTML = "";
+                onSnapshot(collection(db, "series_playlists"), (snap) => {
+                    shelfDynamic.innerHTML = "";
+                    snap.forEach(d => {
+                        const sPl = { id: d.id, ...d.data() };
+                        shelfDynamic.appendChild(createMusicAlbumMosaicCard(sPl));
+                    });
+                });
+            }
+        }
+
+        // Cria elemento de linha de música com Foto, Título, Artista e Kebab (Print A1)
+        function createMusicRowCardElement(songData) {
+            const row = document.createElement("div");
+            row.className = "ytmusic-track-item-row";
+
+            const cover = songData.thumbUrl || songData.seriesCover || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100";
+            const title = songData.name || "Música";
+            const artist = songData.channel || "Artista";
+            const plays = formatNumber(songData.viewsCount || 0);
+
+            row.innerHTML = `
+                <div class="ytmusic-track-thumb-box">
+                    <img src="${escapeHtml(cover)}" alt="Capa">
+                </div>
+                <div class="ytmusic-track-details-col">
+                    <div class="ytmusic-track-name-title">${escapeHtml(title)}</div>
+                    <div class="ytmusic-track-meta-desc">Música • ${escapeHtml(artist)} • Tocou ${plays} vezes</div>
+                </div>
+                <button class="yt-icon-btn btnMusicTrackKebabTrigger" type="button" aria-label="Mais opções">
+                    <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:#aaa;"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                </button>
+            `;
+
+            row.onclick = (e) => {
+                if (e.target.closest(".btnMusicTrackKebabTrigger")) return;
+                startMusicPlayback(songData);
+            };
+
+            const kebabBtn = row.querySelector(".btnMusicTrackKebabTrigger");
+            if (kebabBtn) {
+                kebabBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    openMusicKebabDrawer(songData);
+                };
+            }
+
+            return row;
+        }
+
+        // Cria cartão de Álbum / Playlist com Mosaico Dinâmico
+        function createMusicAlbumMosaicCard(playlistObj) {
+            const card = document.createElement("div");
+            card.className = "ytmusic-album-card";
+
+            const vids = Array.isArray(playlistObj.videos) ? playlistObj.videos : (Array.isArray(playlistObj.series) ? playlistObj.series : []);
+            const sampleCovers = vids.map(id => {
+                const ep = loadedEpisodesCache.find(v => v.id === id);
+                return ep ? (ep.thumbUrl || ep.seriesCover) : "";
+            }).filter(Boolean);
+
+            const mosaicHtml = createMosaic4GridHtml(sampleCovers, playlistObj.coverUrl);
+            const author = playlistObj.originalAuthor || (playlistObj.user ? getNameFromEmail(playlistObj.user) : "Mouton");
+
+            card.innerHTML = `
+                <div class="ytmusic-album-cover-box">
+                    ${mosaicHtml}
+                </div>
+                <div class="ytmusic-album-title" title="${escapeHtml(playlistObj.title || 'Playlist')}">${escapeHtml(playlistObj.title || 'Playlist')}</div>
+                <div class="ytmusic-album-subtitle">${escapeHtml(author)} • ${vids.length} itens</div>
+            `;
+
+            card.onclick = () => {
+                openMusicPlaylistDetailPage(playlistObj);
+            };
+
+            return card;
+        }
+
+        // 5. Iniciar Reprodução de Música e Abrir o Player (Prints B, B1, C)
+        function startMusicPlayback(song) {
+            currentPlayingMusicTrack = song;
+            isMusicPlayingActive = true;
+
+            // Mini-player inferior
+            imgMusicMiniArtwork.src = song.thumbUrl || song.seriesCover || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100";
+            txtMusicMiniSongTitle.textContent = song.name || "Música";
+            txtMusicMiniSongArtist.textContent = song.channel || "Artista";
+            svgMiniPlayIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+
+            // Player de tela cheia
+            imgFullPlayerArtwork.src = song.thumbUrl || song.seriesCover || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600";
+            txtFullPlayerSongTitle.textContent = song.name || "Música";
+            txtFullPlayerArtistName.textContent = song.channel || "Artista";
+            txtFullPlayerTotalDuration.textContent = formatDurationBadge(song.duration);
+            svgFullPlayerPlayIcon.innerHTML = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+
+            // Monta a fila com as músicas da mesma categoria/série
+            currentMusicActiveQueue = loadedEpisodesCache.filter(ep => ep.contentType === "Música" || ep.channel === song.channel);
+            if (currentMusicActiveQueue.length === 0) currentMusicActiveQueue = [song];
+            currentMusicQueueIndex = currentMusicActiveQueue.findIndex(item => item.id === song.id);
+
+            // Abre o player do YouTube em segundo plano
+            if (watchIframe && song.videoUrl) {
+                let embed = song.videoUrl.trim();
+                const ytMatch = embed.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+                if (ytMatch && ytMatch[1]) embed = `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1`;
+                watchIframe.src = embed;
+            }
+
+            // Exibe o player de tela cheia
+            ytmusicFullPlayerView.classList.add("active");
+        }
+
+        // Toque no Mini-Player abre a Tela Cheia (Prints A1 -> Print B)
+        document.getElementById("btnOpenFullMusicPlayerFromMini").addEventListener("click", () => {
+            if (currentPlayingMusicTrack) {
+                ytmusicFullPlayerView.classList.add("active");
+            }
+        });
+
+        btnCloseFullMusicPlayer.addEventListener("click", () => {
+            ytmusicFullPlayerView.classList.remove("active");
+        });
+
+        // Alternância de Play/Pause
+        function toggleMusicPlayPauseState() {
+            isMusicPlayingActive = !isMusicPlayingActive;
+            const playSvg = `<path d="M8 5v14l11-7z"/>`;
+            const pauseSvg = `<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>`;
+            svgMiniPlayIcon.innerHTML = isMusicPlayingActive ? pauseSvg : playSvg;
+            svgFullPlayerPlayIcon.innerHTML = isMusicPlayingActive ? pauseSvg : playSvg;
+
+            if (watchNativeVideo && watchNativeVideo.src) {
+                if (isMusicPlayingActive) watchNativeVideo.play();
+                else watchNativeVideo.pause();
+            }
+        }
+
+        btnToggleMusicPlayPauseMini.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleMusicPlayPauseState();
+        });
+
+        btnFullPlayerPlayPause.addEventListener("click", toggleMusicPlayPauseState);
+
+        // Avançar e Retroceder Música
+        btnFullPlayerNextTrack.addEventListener("click", () => {
+            if (currentMusicActiveQueue.length > 0) {
+                currentMusicQueueIndex = (currentMusicQueueIndex + 1) % currentMusicActiveQueue.length;
+                startMusicPlayback(currentMusicActiveQueue[currentMusicQueueIndex]);
+            }
+        });
+
+        btnFullPlayerPrevTrack.addEventListener("click", () => {
+            if (currentMusicActiveQueue.length > 0) {
+                currentMusicQueueIndex = (currentMusicQueueIndex - 1 + currentMusicActiveQueue.length) % currentMusicActiveQueue.length;
+                startMusicPlayback(currentMusicActiveQueue[currentMusicQueueIndex]);
+            }
+        });
+
+        // 6. Gaveta da Fila "A SEGUIR" com Reordenação "=" (Print B2)
+        btnTabUnderPlayerQueue.addEventListener("click", () => {
+            renderMusicQueueB2();
+            drawerMusicQueueB2.classList.add("active");
+        });
+
+        function renderMusicQueueB2() {
+            containerMusicQueueItemsListB2.innerHTML = "";
+            currentMusicActiveQueue.forEach((track, index) => {
+                const row = document.createElement("div");
+                row.className = "ytmusic-track-item-row";
+                row.setAttribute("data-queue-idx", index);
+                row.style.padding = "0 16px";
+
+                const isCurrent = (index === currentMusicQueueIndex);
+
+                row.innerHTML = `
+                    <div class="ytmusic-track-thumb-box" style="position:relative;">
+                        <img src="${escapeHtml(track.thumbUrl || track.seriesCover || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100')}">
+                        ${isCurrent ? `<div style="position:absolute; inset:0; background:rgba(0,0,0,0.65); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700;">▶</div>` : ''}
+                    </div>
+                    <div class="ytmusic-track-details-col">
+                        <div class="ytmusic-track-name-title" style="color:${isCurrent ? '#3ea6ff' : '#ffffff'};">${escapeHtml(track.name)}</div>
+                        <div class="ytmusic-track-meta-desc">${escapeHtml(track.channel || 'Artista')} • ${escapeHtml(formatDurationBadge(track.duration))}</div>
+                    </div>
+                    <button class="playlist-drag-handle-btn btnHoldReorderQueueB2" type="button" aria-label="Reordenar">
+                        <svg viewBox="0 0 24 24"><path d="M4 9h16v2H4zm0 4h16v2H4z"/></svg>
+                    </button>
+                `;
+
+                row.onclick = (e) => {
+                    if (e.target.closest(".btnHoldReorderQueueB2")) return;
+                    drawerMusicQueueB2.classList.remove("active");
+                    startMusicPlayback(track);
+                };
+
+                const handle = row.querySelector(".btnHoldReorderQueueB2");
+                if (handle) {
+                    setupPlaylistRowHoldToDrag(handle, row, containerMusicQueueItemsListB2);
+                }
+
+                containerMusicQueueItemsListB2.appendChild(row);
+            });
+        }
+
+        // 7. Gaveta "RELACIONADOS" (Prints B4, B4.1, B4.2)
+        btnTabUnderPlayerRelated.addEventListener("click", () => {
+            renderMusicRelatedB4();
+            drawerMusicRelatedB4.classList.add("active");
+        });
+
+        function renderMusicRelatedB4() {
+            if (!currentPlayingMusicTrack) return;
+            const artistName = currentPlayingMusicTrack.channel || "Artista";
+
+            // Artistas Parecidos com Avatares Redondos e Contagem de Amigos (Print B4.1)
+            const shelfArtists = document.getElementById("shelfSimilarArtistsCarousel");
+            shelfArtists.innerHTML = "";
+            const sampleArtists = [
+                { name: "your warm arms", friends: "2,86 mil amigos", photo: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=150" },
+                { name: "i talk about you", friends: "5,07 mil amigos", photo: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150" },
+                { name: "Mouton Classics", friends: "142 amigos", photo: "https://images.unsplash.com/photo-1563089145-599997674d42?w=150" }
+            ];
+
+            sampleArtists.forEach(art => {
+                const el = document.createElement("div");
+                el.style.cssText = "display:flex; flex-direction:column; align-items:center; width:90px; min-width:90px; text-align:center; cursor:pointer;";
+                el.innerHTML = `
+                    <div style="width:72px; height:72px; border-radius:50%; overflow:hidden; background:#222; margin-bottom:6px;">
+                        <img src="${art.photo}" style="width:100%; height:100%; object-fit:cover;">
+                    </div>
+                    <div style="font-size:12px; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; width:100%;">${art.name}</div>
+                    <div style="font-size:10.5px; color:#aaa;">${art.friends}</div>
+                `;
+                shelfArtists.appendChild(el);
+            });
+
+            // Mais de [Artista] (Print B4)
+            document.getElementById("txtMoreFromArtistHeaderTitle").textContent = `Mais de ${artistName}`;
+            const shelfMore = document.getElementById("shelfMoreFromArtistCarousel");
+            shelfMore.innerHTML = "";
+            const artistTracks = loadedEpisodesCache.filter(ep => ep.channel === artistName && ep.id !== currentPlayingMusicTrack.id);
+            (artistTracks.length > 0 ? artistTracks : loadedEpisodesCache.slice(0, 6)).forEach(t => {
+                const c = document.createElement("div");
+                c.className = "ytmusic-album-card";
+                c.innerHTML = `
+                    <div class="ytmusic-album-cover-box" style="width:120px;height:120px;">
+                        <img src="${t.thumbUrl || t.seriesCover}">
+                    </div>
+                    <div class="ytmusic-album-title">${escapeHtml(t.name)}</div>
+                    <div class="ytmusic-album-subtitle">Álbum • 2026</div>
+                `;
+                c.onclick = () => {
+                    drawerMusicRelatedB4.classList.remove("active");
+                    startMusicPlayback(t);
+                };
+                shelfMore.appendChild(c);
+            });
+
+            // Metadados (Print B4)
+            const metaBox = document.getElementById("boxSongMetadataInfoDetails");
+            metaBox.innerHTML = `
+                <img src="${currentPlayingMusicTrack.thumbUrl || currentPlayingMusicTrack.seriesCover}" style="width:52px;height:52px;border-radius:6px;object-fit:cover;">
+                <div>
+                    <div style="font-size:14px; font-weight:700; color:#fff;">${escapeHtml(currentPlayingMusicTrack.name)}</div>
+                    <div style="font-size:12px; color:#aaa;">${escapeHtml(artistName)}</div>
+                    <div style="font-size:11px; color:#888; margin-top:2px;">Tocou ${formatNumber(currentPlayingMusicTrack.viewsCount || 0)} vezes • ${formatNumber(currentPlayingMusicTrack.likesCount || 0)} marcações "Gostei"</div>
+                </div>
+            `;
+        }
+
+        // 8. Gaveta Salvar 1 Música na Playlist (Prints B1.1 e B1.2)
+        btnFullPlayerSavePlaylist.addEventListener("click", () => {
+            if (!currentUserEmail) return openAuthModal();
+            openMusicSavePlaylistDrawer(currentPlayingMusicTrack);
+        });
+
+        function openMusicSavePlaylistDrawer(song) {
+            musicPendingTrackToAdd = song;
+            drawerMusicSavePlaylistB11.classList.add("active");
+            renderMusicSavePlaylistItems();
+        }
+
+        btnCloseMusicSavePlaylistDrawer.addEventListener("click", () => {
+            drawerMusicSavePlaylistB11.classList.remove("active");
+        });
+
+        function renderMusicSavePlaylistItems() {
+            shelfRecentPlaylistsSaveModal.innerHTML = "";
+            containerAllPlaylistsListSaveModal.innerHTML = "";
+
+            onSnapshot(collection(db, "playlists"), (snap) => {
+                const userLists = [];
+                snap.forEach(d => {
+                    const pl = { id: d.id, ...d.data() };
+                    if (!currentUserEmail || pl.user === currentUserEmail) {
+                        userLists.push(pl);
+                    }
+                });
+
+                // Carrossel Recentes (Print B1.1)
+                userLists.slice(0, 5).forEach(pl => {
+                    const card = document.createElement("div");
+                    card.className = "ytmusic-album-card";
+                    card.style.width = "110px";
+                    card.style.minWidth = "110px";
+
+                    const vids = Array.isArray(pl.videos) ? pl.videos : [];
+                    card.innerHTML = `
+                        <div class="ytmusic-album-cover-box" style="width:110px;height:110px;">
+                            ${createMosaic4GridHtml([], pl.coverUrl)}
+                        </div>
+                        <div class="ytmusic-album-title">${escapeHtml(pl.title)}</div>
+                        <div class="ytmusic-album-subtitle">${vids.length} itens</div>
+                    `;
+                    card.onclick = () => processSaveSongToSpecificPlaylist(pl);
+                    shelfRecentPlaylistsSaveModal.appendChild(card);
+                });
+
+                // Lista Vertical Todas as Playlists (Prints B1.1 e B1.2)
+                userLists.forEach(pl => {
+                    const row = document.createElement("div");
+                    row.className = "account-item-row";
+                    row.style.padding = "8px 0";
+
+                    const vids = Array.isArray(pl.videos) ? pl.videos : [];
+                    row.innerHTML = `
+                        <div class="account-item-left">
+                            <div style="width:48px;height:48px;border-radius:6px;overflow:hidden;background:#222;">
+                                <img src="${pl.coverUrl || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100'}" style="width:100%;height:100%;object-fit:cover;">
+                            </div>
+                            <div>
+                                <div style="font-weight:700; color:#fff; font-size:14px;">${escapeHtml(pl.title)}</div>
+                                <div style="font-size:11.5px; color:#aaa;">${vids.length} itens</div>
+                            </div>
+                        </div>
+                    `;
+                    row.onclick = () => processSaveSongToSpecificPlaylist(pl);
+                    containerAllPlaylistsListSaveModal.appendChild(row);
+                });
+            });
+        }
+
+        // Salva na playlist e exibe a barra "Salvo em [Playlist] - Alterar" (Prints B1.2-1 e D4.8)
+        async function processSaveSongToSpecificPlaylist(playlistObj, forceDuplicate = false) {
+            if (!musicPendingTrackToAdd) return;
+            const songId = musicPendingTrackToAdd.id;
+            const vids = Array.isArray(playlistObj.videos) ? [...playlistObj.videos] : [];
+
+            // Trava de duplicação: se já existe, abre o modal "Tem certeza?" (Print D4.9)
+            if (vids.includes(songId) && !forceDuplicate) {
+                modalMusicDuplicateSongWarning.classList.add("active");
+                return;
+            }
+
+            vids.push(songId);
+            try {
+                await setDoc(doc(db, "playlists", playlistObj.id), {
+                    videos: vids,
+                    coverUrl: playlistObj.coverUrl || musicPendingTrackToAdd.thumbUrl || musicPendingTrackToAdd.seriesCover || "",
+                    updatedAt: serverTimestamp()
+                }, { merge: true });
+
+                drawerMusicSavePlaylistB11.classList.remove("active");
+                showCoverSnackbar(`Salvo em ${playlistObj.title}`, musicPendingTrackToAdd.thumbUrl || playlistObj.coverUrl);
+            } catch(e) {
+                console.error("Erro ao salvar música na playlist:", e);
+            }
+        }
+
+        // Confirmação de duplicata "Adicionar mesmo assim" (Print D4.9)
+        btnConfirmAddDuplicateSongAnyway.addEventListener("click", () => {
+            modalMusicDuplicateSongWarning.classList.remove("active");
+            if (activeOpenMusicPlaylistDoc) {
+                processSaveSongToSpecificPlaylist(activeOpenMusicPlaylistDoc, true);
+            }
+        });
+
+        btnCancelAddDuplicateSong.addEventListener("click", () => {
+            modalMusicDuplicateSongWarning.classList.remove("active");
+        });
+
+        // 9. Menu Kebab de Músicas (Prints C1 e F)
+        function openMusicKebabDrawer(song) {
+            musicPendingTrackToAdd = song;
+            headerMusicKebabTrackInfo.innerHTML = `
+                <img src="${song.thumbUrl || song.seriesCover}" style="width:44px;height:44px;border-radius:4px;object-fit:cover;">
+                <div>
+                    <div style="font-size:14px;font-weight:700;color:#fff;">${escapeHtml(song.name)}</div>
+                    <div style="font-size:12px;color:#aaa;">${escapeHtml(song.channel || 'Artista')} • ${escapeHtml(formatDurationBadge(song.duration))}</div>
+                </div>
+            `;
+            drawerMusicItemKebabC1.classList.add("active");
+        }
+
+        btnKebabMusicSavePlaylist.addEventListener("click", () => {
+            drawerMusicItemKebabC1.classList.remove("active");
+            openMusicSavePlaylistDrawer(musicPendingTrackToAdd);
+        });
+
+        btnKebabMusicPlayNext.addEventListener("click", () => {
+            drawerMusicItemKebabC1.classList.remove("active");
+            if (musicPendingTrackToAdd) {
+                currentMusicActiveQueue.splice(currentMusicQueueIndex + 1, 0, musicPendingTrackToAdd);
+                showToast(`"${musicPendingTrackToAdd.name}" será a próxima a tocar.`);
+            }
+        });
+
+        btnKebabMusicAddToQueue.addEventListener("click", () => {
+            drawerMusicItemKebabC1.classList.remove("active");
+            if (musicPendingTrackToAdd) {
+                currentMusicActiveQueue.push(musicPendingTrackToAdd);
+                showToast(`"${musicPendingTrackToAdd.name}" adicionada ao final da fila.`);
+            }
+        });
+
+        btnKebabMusicShare.addEventListener("click", () => {
+            drawerMusicItemKebabC1.classList.remove("active");
+            navigator.clipboard.writeText(window.location.href);
+            showToast("Link da música copiado!");
+        });
+
+        // 10. Criação de Playlists no Music (Print D3)
+        btnMusicFabNewPlaylist.addEventListener("click", () => {
+            drawerMusicNewPlaylistChoiceD3.classList.add("active");
+        });
+
+        btnChoiceNewNormalPlaylist.addEventListener("click", () => {
+            drawerMusicNewPlaylistChoiceD3.classList.remove("active");
+            inputEditMusicPlaylistMetaTitle.value = "";
+            txtAreaEditMusicPlaylistMetaDesc.value = "";
+            txtMusicPlaylistMetaVisVal.textContent = "Particular";
+            drawerMusicEditPlaylistMetaD44.classList.add("active");
+        });
+
+        // Visibilidade na edição da playlist (Print D4.5)
+        btnOpenMusicPlaylistMetaVisChoice.addEventListener("click", () => {
+            drawerMusicPlaylistVisOptionsD45.classList.add("active");
+        });
+
+        document.querySelectorAll(".optMusicMetaVis").forEach(row => {
+            row.addEventListener("click", () => {
+                const vis = row.getAttribute("data-vis");
+                txtMusicPlaylistMetaVisVal.textContent = vis;
+                drawerMusicPlaylistVisOptionsD45.classList.remove("active");
+            });
+        });
+
+        // Salvar Metadados da Playlist com Tags e Função (Prints D4.4 e D4.5)
+        btnConfirmEditMusicPlaylistMeta.addEventListener("click", async () => {
+            const title = inputEditMusicPlaylistMetaTitle.value.trim();
+            const desc = txtAreaEditMusicPlaylistMetaDesc.value.trim();
+            const vis = txtMusicPlaylistMetaVisVal.textContent.trim();
+            const tags = inputMusicPlaylistTagsSystem.value.split(",").map(t => t.trim()).filter(Boolean);
+
+            if (!title) return alert("Digite o título da playlist.");
+
+            try {
+                await addDoc(collection(db, "playlists"), {
+                    title: title,
+                    description: desc,
+                    visibility: vis,
+                    tags: tags,
+                    user: currentUserEmail,
+                    videos: [],
+                    coverUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400",
+                    createdAt: serverTimestamp()
+                });
+
+                drawerMusicEditPlaylistMetaD44.classList.remove("active");
+                showToast(`Playlist "${title}" criada com sucesso!`);
+                switchMusicSubTab("library");
+            } catch(e) {
+                console.error("Erro ao criar playlist:", e);
+            }
+        });
+
+        btnCancelEditMusicPlaylistMeta.addEventListener("click", () => {
+            drawerMusicEditPlaylistMetaD44.classList.remove("active");
+        });
+
+        // 11. Detalhes da Playlist Editável e Adição de Músicas (Prints D4, D4.1, D4.6, D4.7)
+        function openMusicPlaylistDetailPage(pl) {
+            activeOpenMusicPlaylistDoc = pl;
+            tabContentMusicHome.style.display = "none";
+            tabContentMusicLibrary.style.display = "none";
+            tabContentMusicPlaylistDetail.style.display = "flex";
+
+            document.getElementById("imgMusicPlaylistHeaderCover").src = pl.coverUrl || "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400";
+            document.getElementById("txtMusicPlaylistHeaderTitle").textContent = pl.title || "Playlist";
+            document.getElementById("txtMusicPlaylistAuthorName").textContent = pl.originalAuthor || (pl.user ? getNameFromEmail(pl.user) : "Mouton");
+
+            renderMusicPlaylistTracksRows(pl);
+        }
+
+        function renderMusicPlaylistTracksRows(pl) {
+            const container = document.getElementById("containerMusicPlaylistTracksList");
+            container.innerHTML = "";
+            const vids = Array.isArray(pl.videos) ? pl.videos : [];
+            document.getElementById("txtMusicPlaylistItemsCount").textContent = `${vids.length} músicas`;
+
+            vids.forEach(vId => {
+                const ep = loadedEpisodesCache.find(v => v.id === vId);
+                if (ep) {
+                    container.appendChild(createMusicRowCardElement(ep));
+                }
+            });
+        }
+
+        btnBackFromMusicPlaylistDetail.addEventListener("click", () => {
+            tabContentMusicPlaylistDetail.style.display = "none";
+            tabContentMusicLibrary.style.display = "flex";
+        });
+
+        // Botão + Adicionar uma música abre o campo de busca em tempo real (Print D4.6 -> D4.7)
+        btnTriggerAddMusicToPlaylistScreen.addEventListener("click", () => {
+            tabContentMusicPlaylistDetail.style.display = "none";
+            tabContentMusicSearchAdd.style.display = "flex";
+            inputMusicInstantSearchQuery.value = "";
+            containerMusicInstantSearchResults.innerHTML = "";
+            inputMusicInstantSearchQuery.focus();
+        });
+
+        btnBackFromMusicSearchAdd.addEventListener("click", () => {
+            tabContentMusicSearchAdd.style.display = "none";
+            tabContentMusicPlaylistDetail.style.display = "flex";
+        });
+
+        btnClearMusicInstantSearch.addEventListener("click", () => {
+            inputMusicInstantSearchQuery.value = "";
+            containerMusicInstantSearchResults.innerHTML = "";
+            inputMusicInstantSearchQuery.focus();
+        });
+
+        // 12. Pesquisa em Tempo Real Sem Precisar Apertar Enter (Print D4.7)
+        inputMusicInstantSearchQuery.addEventListener("input", () => {
+            const query = inputMusicInstantSearchQuery.value.trim().toLowerCase();
+            containerMusicInstantSearchResults.innerHTML = "";
+            if (!query) return;
+
+            const matches = loadedEpisodesCache.filter(ep => {
+                const name = (ep.name || "").toLowerCase();
+                const chan = (ep.channel || "").toLowerCase();
+                return name.includes(query) || chan.includes(query);
+            });
+
+            matches.slice(0, 20).forEach(song => {
+                const row = document.createElement("div");
+                row.className = "ytmusic-track-item-row";
+                row.innerHTML = `
+                    <div class="ytmusic-track-thumb-box">
+                        <img src="${song.thumbUrl || song.seriesCover || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100'}">
+                    </div>
+                    <div class="ytmusic-track-details-col">
+                        <div class="ytmusic-track-name-title">${escapeHtml(song.name)}</div>
+                        <div class="ytmusic-track-meta-desc">Música • ${escapeHtml(song.channel || 'Artista')}</div>
+                    </div>
+                    <!-- Seta Vermelha do Print D4.7: Botão + para Adicionar Imediatamente -->
+                    <button class="yt-icon-btn btnAddSongInstantToPl" type="button" aria-label="Adicionar">
+                        <svg viewBox="0 0 24 24" style="width:22px;height:22px;fill:#fff;"><path d="M14 10H2v2h12v-2zm0-4H2v2h12V6zm4 8v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM2 16h8v-2H2v2z"/></svg>
+                    </button>
+                `;
+
+                const btnAdd = row.querySelector(".btnAddSongInstantToPl");
+                btnAdd.onclick = (e) => {
+                    e.stopPropagation();
+                    musicPendingTrackToAdd = song;
+                    processSaveSongToSpecificPlaylist(activeOpenMusicPlaylistDoc);
+                };
+
+                row.onclick = () => {
+                    startMusicPlayback(song);
+                };
+
+                containerMusicInstantSearchResults.appendChild(row);
+            });
+        });
+
+        // 13. Carregamento da Aba Biblioteca (Print D)
+        function loadMusicLibraryView() {
+            const container = document.getElementById("containerMusicLibraryList");
+            container.innerHTML = "";
+
+            onSnapshot(collection(db, "playlists"), (snap) => {
+                container.innerHTML = "";
+                snap.forEach(d => {
+                    const pl = { id: d.id, ...d.data() };
+                    if (!currentUserEmail || pl.user === currentUserEmail) {
+                        const row = document.createElement("div");
+                        row.className = "ytmusic-track-item-row";
+                        row.style.height = "64px";
+
+                        const vids = Array.isArray(pl.videos) ? pl.videos : [];
+                        row.innerHTML = `
+                            <div class="ytmusic-track-thumb-box" style="width:54px; height:54px;">
+                                <img src="${pl.coverUrl || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100'}">
+                            </div>
+                            <div class="ytmusic-track-details-col">
+                                <div class="ytmusic-track-name-title" style="font-size:15px;">${escapeHtml(pl.title)}</div>
+                                <div class="ytmusic-track-meta-desc">${escapeHtml(pl.visibility || 'Playlist')} • ${vids.length} itens</div>
+                            </div>
+                        `;
+                        row.onclick = () => openMusicPlaylistDetailPage(pl);
+                        container.appendChild(row);
+                    }
+                });
             });
         }
 
