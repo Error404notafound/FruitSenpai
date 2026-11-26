@@ -14450,11 +14450,18 @@
                 <!-- Bloco de Upload Direto (Telegram, Filemoon, Streamtape, DoodStream) Mantido -->
                 <div class="upload-direct-file-box">
                     <input type="file" id="fileDirectVideoMode1" accept="video/mp4,video/*" style="display: none;">
+                    <input type="file" id="fileDirectAudioMode1" accept="audio/mp3,audio/mpeg,audio/*,.mp3,.m4a,.wav" style="display: none;">
                     <input type="file" id="fileExternalServerMode1" accept="video/mp4,video/x-matroska,video/*,.mkv,.mp4" style="display: none;">
 
                     <button type="button" class="btn-direct-video-upload" id="btnTriggerDirectUploadMode1">
                         <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
                         <span>Telegram Direto (.mp4 até 20MB)</span>
+                    </button>
+
+                    <!-- Botão de Upload Direto Telegram para MP3 / Música -->
+                    <button type="button" class="btn-direct-video-upload" id="btnTriggerDirectUploadAudioMode1" style="border-color: #f59e0b; color: #f59e0b;">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        <span>Telegram MP3 (Áudio até 20MB)</span>
                     </button>
 
                     <div class="upload-servers-btn-grid">
@@ -14504,11 +14511,18 @@
                 <!-- Bloco de Upload no Modo 2 com as 4 Opções -->
                 <div class="upload-direct-file-box">
                     <input type="file" id="fileDirectVideoMode2" accept="video/mp4,video/*" style="display: none;">
+                    <input type="file" id="fileDirectAudioMode2" accept="audio/mp3,audio/mpeg,audio/*,.mp3,.m4a,.wav" style="display: none;">
                     <input type="file" id="fileExternalServerMode2" accept="video/mp4,video/x-matroska,video/*,.mkv,.mp4" style="display: none;">
 
                     <button type="button" class="btn-direct-video-upload" id="btnTriggerDirectUploadMode2">
                         <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/></svg>
                         <span>Telegram Direto (.mp4 até 20MB)</span>
+                    </button>
+
+                    <!-- Botão de Upload Direto Telegram para MP3 / Música -->
+                    <button type="button" class="btn-direct-video-upload" id="btnTriggerDirectUploadAudioMode2" style="border-color: #f59e0b; color: #f59e0b;">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                        <span>Telegram MP3 (Áudio até 20MB)</span>
                     </button>
 
                     <!-- Os 3 Novos Botões dos Servidores Externos no Modo 2 -->
@@ -17358,13 +17372,17 @@
         const CLOUDFLARE_WORKER_UPLOAD_ENDPOINT = `${CLOUDFLARE_WORKER_BASE_URL}/upload`;
 
         const fileDirectVideoMode1 = document.getElementById("fileDirectVideoMode1");
+        const fileDirectAudioMode1 = document.getElementById("fileDirectAudioMode1");
         const btnTriggerDirectUploadMode1 = document.getElementById("btnTriggerDirectUploadMode1");
+        const btnTriggerDirectUploadAudioMode1 = document.getElementById("btnTriggerDirectUploadAudioMode1");
         const statusDirectUploadMode1 = document.getElementById("statusDirectUploadMode1");
         const progressContainerMode1 = document.getElementById("progressContainerMode1");
         const progressBarFillMode1 = document.getElementById("progressBarFillMode1");
 
         const fileDirectVideoMode2 = document.getElementById("fileDirectVideoMode2");
+        const fileDirectAudioMode2 = document.getElementById("fileDirectAudioMode2");
         const btnTriggerDirectUploadMode2 = document.getElementById("btnTriggerDirectUploadMode2");
+        const btnTriggerDirectUploadAudioMode2 = document.getElementById("btnTriggerDirectUploadAudioMode2");
         const statusDirectUploadMode2 = document.getElementById("statusDirectUploadMode2");
         const progressContainerMode2 = document.getElementById("progressContainerMode2");
         const progressBarFillMode2 = document.getElementById("progressBarFillMode2");
@@ -17383,13 +17401,23 @@
         let currentSelectedProviderMode1 = "filemoon";
         let currentSelectedProviderMode2 = "filemoon";
 
-        // 1. Ouvintes do Modo 1 (Criar Série)
+        // 1. Ouvintes do Modo 1 (Criar Série / Álbum)
         if (btnTriggerDirectUploadMode1 && fileDirectVideoMode1) {
             btnTriggerDirectUploadMode1.addEventListener("click", () => fileDirectVideoMode1.click());
             fileDirectVideoMode1.addEventListener("change", (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     processDirectVideoUpload(file, "uploadFirstEpisodeUrl", statusDirectUploadMode1, btnTriggerDirectUploadMode1);
+                }
+            });
+        }
+
+        if (btnTriggerDirectUploadAudioMode1 && fileDirectAudioMode1) {
+            btnTriggerDirectUploadAudioMode1.addEventListener("click", () => fileDirectAudioMode1.click());
+            fileDirectAudioMode1.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    processDirectAudioUpload(file, "uploadFirstEpisodeUrl", statusDirectUploadMode1, btnTriggerDirectUploadAudioMode1);
                 }
             });
         }
@@ -17424,13 +17452,23 @@
             });
         }
 
-        // 2. Ouvintes do Modo 2 (Postar Episódio)
+        // 2. Ouvintes do Modo 2 (Postar Episódio / Faixa)
         if (btnTriggerDirectUploadMode2 && fileDirectVideoMode2) {
             btnTriggerDirectUploadMode2.addEventListener("click", () => fileDirectVideoMode2.click());
             fileDirectVideoMode2.addEventListener("change", (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     processDirectVideoUpload(file, "uploadEpisodeVideoUrl", statusDirectUploadMode2, btnTriggerDirectUploadMode2);
+                }
+            });
+        }
+
+        if (btnTriggerDirectUploadAudioMode2 && fileDirectAudioMode2) {
+            btnTriggerDirectUploadAudioMode2.addEventListener("click", () => fileDirectAudioMode2.click());
+            fileDirectAudioMode2.addEventListener("change", (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    processDirectAudioUpload(file, "uploadEpisodeVideoUrl", statusDirectUploadMode2, btnTriggerDirectUploadAudioMode2);
                 }
             });
         }
@@ -17741,6 +17779,97 @@
                 console.error("Erro no fetch do upload:", err);
                 statusElement.className = "upload-direct-status-text error";
                 statusElement.textContent = "❌ Falha de conexão com a Cloudflare. Verifique se o Worker está online.";
+                showToast("Falha de conexão com o servidor.");
+            } finally {
+                if (triggerButton) {
+                    triggerButton.disabled = false;
+                    triggerButton.style.opacity = "1";
+                }
+            }
+        }
+
+        // Processa o upload de Áudio MP3 para o Telegram e define a categoria automaticamente como Música
+        async function processDirectAudioUpload(file, targetInputId, statusElement, triggerButton) {
+            if (!file) return;
+
+            const targetInput = document.getElementById(targetInputId);
+            const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024; // 20 MB
+
+            // 1. Validação estrita de tamanho no front-end
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                const sizeInMb = (file.size / (1024 * 1024)).toFixed(1);
+                statusElement.className = "upload-direct-status-text error";
+                statusElement.textContent = `❌ O arquivo de áudio tem ${sizeInMb}MB! O limite máximo para envio direto via Telegram é de 20MB.`;
+                showToast("Áudio maior que 20MB! Escolha um menor.");
+                return;
+            }
+
+            // 2. Indicador visual de envio
+            statusElement.className = "upload-direct-status-text loading";
+            statusElement.textContent = `🎵 Enviando música "${file.name}" para o Telegram... aguarde...`;
+            if (triggerButton) {
+                triggerButton.disabled = true;
+                triggerButton.style.opacity = "0.6";
+            }
+
+            const formData = new FormData();
+            formData.append("audio", file, file.name || "musica.mp3");
+
+            try {
+                const response = await fetch(CLOUDFLARE_WORKER_UPLOAD_ENDPOINT, {
+                    method: "POST",
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.ok && data.url) {
+                    statusElement.className = "upload-direct-status-text success";
+                    statusElement.textContent = `✅ Música enviada com sucesso! Link pronto.`;
+
+                    // Preenche o campo de URL com o link gerado
+                    if (targetInput) {
+                        targetInput.value = data.url;
+                        targetInput.dispatchEvent(new Event("input", { bubbles: true }));
+                        targetInput.dispatchEvent(new Event("change", { bubbles: true }));
+                    }
+
+                    // Define automaticamente o tipo de conteúdo como "Música" para ir para o FruitSenpai Music
+                    selectedContentType = "Música";
+                    const valUploadContentType = document.getElementById("valUploadContentType");
+                    if (valUploadContentType) {
+                        valUploadContentType.textContent = "Música";
+                    }
+
+                    // Se o título estiver vazio, preenche automaticamente com o nome do arquivo (sem o .mp3)
+                    const cleanFileName = file.name.replace(/\.[^/.]+$/, "");
+                    const inputTitle = document.getElementById("uploadEpisodeTitle") || document.getElementById("uploadSeriesName");
+                    if (inputTitle && !inputTitle.value.trim()) {
+                        inputTitle.value = cleanFileName;
+                        inputTitle.dispatchEvent(new Event("input", { bubbles: true }));
+                    }
+
+                    // Atualiza o episódio ativo em memória
+                    if (typeof addedEpisodesList !== "undefined" && addedEpisodesList[currentActiveEpisodeIndex]) {
+                        addedEpisodesList[currentActiveEpisodeIndex].videoUrl = data.url;
+                        if (!addedEpisodesList[currentActiveEpisodeIndex].title || addedEpisodesList[currentActiveEpisodeIndex].title.includes("Episódio 1")) {
+                            addedEpisodesList[currentActiveEpisodeIndex].title = cleanFileName;
+                        }
+                        if (typeof renderUploadEpisodesScroll === "function") {
+                            renderUploadEpisodesScroll();
+                        }
+                    }
+
+                    showToast("Áudio enviado! Tipo definido automaticamente como Música.");
+                } else {
+                    statusElement.className = "upload-direct-status-text error";
+                    statusElement.textContent = `❌ Erro no envio: ${data.erro || "Falha no servidor"}`;
+                    showToast("Erro no upload do áudio.");
+                }
+            } catch (err) {
+                console.error("Erro no upload do áudio:", err);
+                statusElement.className = "upload-direct-status-text error";
+                statusElement.textContent = "❌ Falha de conexão com a Cloudflare.";
                 showToast("Falha de conexão com o servidor.");
             } finally {
                 if (triggerButton) {
