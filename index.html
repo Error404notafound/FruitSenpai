@@ -33078,7 +33078,7 @@ if (btnWatchPrevEpisode) {
         const txtSettingDownloadVideoStatus = document.getElementById("txtSettingDownloadVideoStatus");
         const txtSettingDownloadAudioStatus = document.getElementById("txtSettingDownloadAudioStatus");
 
-        // Retorna o link de vídeo real ativo que está tocando no player
+        // Extrai a URL do vídeo do player/Firebase e converte embeds em link limpo /watch?v=ID
         function getCurrentActiveWatchMediaUrl() {
             let mediaUrl = "";
             const currentEp = loadedEpisodesCache.find(v => v.id === currentWatchVideoId);
@@ -33091,20 +33091,24 @@ if (btnWatchPrevEpisode) {
                 mediaUrl = watchNativeVideo.src;
             }
 
-            // Normaliza formatos de embed do YouTube (ex.: /embed/ID) para formato de link direto
-            const ytMatch = mediaUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+            const cleanUrl = mediaUrl.trim();
+
+            // Regex rigorosa para extrair exatamente os 11 caracteres do ID do YouTube
+            const ytRegex = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([a-zA-Z0-9_-]{11})/i;
+            const ytMatch = cleanUrl.match(ytRegex);
+
             if (ytMatch && ytMatch[1]) {
                 return `https://www.youtube.com/watch?v=${ytMatch[1]}`;
             }
 
-            return mediaUrl.trim();
+            return cleanUrl;
         }
 
         async function processActiveVideoDownload(downloadMode) {
-            const rawUrl = getCurrentActiveWatchMediaUrl();
+            const cleanUrl = getCurrentActiveWatchMediaUrl();
 
-            if (!rawUrl) {
-                showToast("Nenhum link de vídeo detectado para download.");
+            if (!cleanUrl) {
+                alert("Nenhum link de vídeo foi detectado no player.");
                 return;
             }
 
@@ -33113,18 +33117,18 @@ if (btnWatchPrevEpisode) {
             const originalStatusText = isAudioMode ? "Áudio" : "720p";
 
             drawerPlayerSettingsA7.classList.remove("active");
-            showToast(isAudioMode ? "Solicitando áudio MP3 ao servidor..." : "Solicitando vídeo MP4 ao servidor...");
+            showToast(isAudioMode ? "Convertendo para MP3..." : "Gerando download do vídeo...");
 
             if (statusLabel) {
                 statusLabel.textContent = "Baixando...";
             }
 
-            // 1. Se for um arquivo direto (como stream do Telegram, .mp4 ou .mp3), baixa imediatamente
-            const isDirectFileStream = rawUrl.includes("/stream/") || rawUrl.endsWith(".mp4") || rawUrl.endsWith(".mp3") || rawUrl.endsWith(".m4a");
+            // 1. Arquivos diretos do Telegram (/stream/), .mp4 ou .mp3 não precisam de conversão externa
+            const isDirectFileStream = cleanUrl.includes("/stream/") || cleanUrl.endsWith(".mp4") || cleanUrl.endsWith(".mp3") || cleanUrl.endsWith(".m4a");
             if (isDirectFileStream) {
                 const downloadAnchor = document.createElement("a");
-                downloadAnchor.href = rawUrl;
-                downloadAnchor.download = isAudioMode ? "audio.mp3" : "video.mp4";
+                downloadAnchor.href = cleanUrl;
+                downloadAnchor.download = isAudioMode ? "musica.mp3" : "video.mp4";
                 downloadAnchor.target = "_blank";
                 document.body.appendChild(downloadAnchor);
                 downloadAnchor.click();
@@ -33135,24 +33139,24 @@ if (btnWatchPrevEpisode) {
                 return;
             }
 
-            // 2. Se for link do YouTube ou serviços externos, repassa via Cloudflare Worker para a API do Cobalt no Render
+            // 2. Envio da URL padronizada /watch?v=ID para o Worker e API do Cobalt
             try {
-                const workerDownloadEndpoint = `${CLOUDFLARE_WORKER_BASE_URL}/download`;
+                const workerDownloadEndpoint = "https://fruitsenpai-bot.error404notafound.workers.dev/download";
                 const response = await fetch(workerDownloadEndpoint, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        url: rawUrl,
+                        url: cleanUrl,
                         quality: "720",
-                        mode: downloadMode
+                        mode: isAudioMode ? "audio" : "auto"
                     })
                 });
 
                 const data = await response.json();
 
-                // Identifica o link de download retornado pelo Cobalt
+                // Identifica a URL do arquivo pronta retornada pelo Cobalt
                 const finalDownloadUrl = data.url || data.downloadUrl || data.stream || (data.picker && data.picker[0] ? data.picker[0].url : "");
 
                 if (finalDownloadUrl) {
@@ -33164,13 +33168,16 @@ if (btnWatchPrevEpisode) {
                     downloadLink.click();
                     downloadLink.remove();
 
-                    showToast(isAudioMode ? "Download do áudio MP3 iniciado!" : "Download do vídeo MP4 iniciado!");
+                    showToast(isAudioMode ? "Download do MP3 iniciado!" : "Download do vídeo iniciado!");
                 } else {
-                    showToast(`Falha no download: ${data.text || data.erro || "Link não gerado"}`);
+                    const motivoErro = data.text || data.erro || data.error?.code || data.message || JSON.stringify(data);
+                    alert("Aviso retornado pela API do Cobalt:\n" + motivoErro);
+                    showToast("Não foi possível gerar o download.");
                 }
             } catch (errDownload) {
                 console.error("Erro ao solicitar download:", errDownload);
-                showToast("Falha de conexão com a API de download.");
+                alert("Falha de conexão com o Worker/Render:\n" + errDownload.message);
+                showToast("Falha de conexão com a API.");
             } finally {
                 if (statusLabel) {
                     statusLabel.textContent = originalStatusText;
