@@ -33154,7 +33154,15 @@ if (btnWatchPrevEpisode) {
                     })
                 });
 
-                const data = await response.json();
+                const rawResponseText = await response.text();
+                let data = null;
+
+                try {
+                    data = JSON.parse(rawResponseText);
+                } catch (parseErr) {
+                    alert("O servidor no Render está acordando da hibernação. Aguarde cerca de 30 segundos e clique em baixar novamente!");
+                    return;
+                }
 
                 // Identifica a URL do arquivo pronta retornada pelo Cobalt
                 const finalDownloadUrl = data.url || data.downloadUrl || data.stream || (data.picker && data.picker[0] ? data.picker[0].url : "");
@@ -33171,7 +33179,7 @@ if (btnWatchPrevEpisode) {
                     showToast(isAudioMode ? "Download do MP3 iniciado!" : "Download do vídeo iniciado!");
                 } else {
                     const motivoErro = data.text || data.erro || data.error?.code || data.message || JSON.stringify(data);
-                    alert("Aviso retornado pela API do Cobalt:\n" + motivoErro);
+                    alert("Aviso retornado pelo Cobalt/Render:\n" + motivoErro);
                     showToast("Não foi possível gerar o download.");
                 }
             } catch (errDownload) {
