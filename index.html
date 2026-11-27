@@ -12019,6 +12019,30 @@
                 </div>
             </div>
 
+            <!-- OPÇÃO: BAIXAR VÍDEO (MP4) -->
+            <div class="player-settings-item-row" id="rowSettingDownloadVideo">
+                <div class="player-settings-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>
+                    <span>Baixar vídeo (MP4)</span>
+                </div>
+                <div class="player-settings-item-right">
+                    <span id="txtSettingDownloadVideoStatus">720p</span>
+                    <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#aaa;"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                </div>
+            </div>
+
+            <!-- OPÇÃO: BAIXAR MÚSICA (MP3) -->
+            <div class="player-settings-item-row" id="rowSettingDownloadAudio">
+                <div class="player-settings-item-left">
+                    <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                    <span>Baixar música (MP3)</span>
+                </div>
+                <div class="player-settings-item-right">
+                    <span id="txtSettingDownloadAudioStatus">Áudio</span>
+                    <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#aaa;"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+                </div>
+            </div>
+
             <!-- 3. Modo cinema -->
             <div class="player-settings-item-row" id="rowSettingCinemaMode">
                 <div class="player-settings-item-left">
@@ -19321,6 +19345,15 @@
         });
                     
 
+        // Função auxiliar que identifica qualquer conteúdo marcado como música
+        function isMusicItem(item) {
+            if (!item) return false;
+            const type = (item.contentType || "").toLowerCase();
+            const tags = Array.isArray(item.tags) ? item.tags.map(t => String(t).toLowerCase()) : [];
+            const genres = Array.isArray(item.genres) ? item.genres.map(g => String(g).toLowerCase()) : [];
+            return type === "música" || type === "musica" || type === "music" || tags.includes("música") || tags.includes("musica") || genres.includes("música") || genres.includes("musica");
+        }
+
         // 3. ONSNAPSHOT EM TEMPO REAL: EXIBE O "PARA VOCÊ" E ATUALIZA O SININHO NA HORA
         onSnapshot(frutasColecao, (snapshot) => {
             if (!dynamicFirebaseFeed) return;
@@ -19333,8 +19366,8 @@
                 const item = { id: docSnap.id, ...docSnap.data() };
                 allDatabaseEpisodes.push(item);
 
-                // Reels e Músicas não entram no feed "Para você" do feed principal
-                if (item.contentType === "Reels" || item.contentType === "Música") return;
+                // Reels e Músicas são bloqueados de aparecer no feed "Para você" do feed principal
+                if (item.contentType === "Reels" || isMusicItem(item)) return;
 
                 if (item.videoUrl || item.contentType === "episode") {
                     episodeList.push(item);
@@ -20247,22 +20280,46 @@
         function toggleMusicPlayPauseState() {
             if (!currentPlayingMusicTrack) return;
 
-            if (globalMusicAudioPlayer && globalMusicAudioPlayer.src) {
+            if (globalMusicAudioPlayer && globalMusicAudioPlayer.src && globalMusicAudioPlayer.src !== window.location.href) {
                 if (globalMusicAudioPlayer.paused) {
-                    globalMusicAudioPlayer.play().catch(() => {});
-                    isMusicPlayingActive = true;
+                    globalMusicAudioPlayer.play().then(() => {
+                        isMusicPlayingActive = true;
+                        updateMusicPlayPauseIcons(true);
+                    }).catch(() => {});
                 } else {
                     globalMusicAudioPlayer.pause();
                     isMusicPlayingActive = false;
+                    updateMusicPlayPauseIcons(false);
                 }
+            } else if (watchNativeVideo && watchNativeVideo.src) {
+                if (watchNativeVideo.paused) {
+                    watchNativeVideo.play().catch(() => {});
+                    isMusicPlayingActive = true;
+                } else {
+                    watchNativeVideo.pause();
+                    isMusicPlayingActive = false;
+                }
+                updateMusicPlayPauseIcons(isMusicPlayingActive);
             } else if (watchIframe && watchIframe.src) {
                 isMusicPlayingActive = !isMusicPlayingActive;
                 const cmd = isMusicPlayingActive ? '{"event":"command","func":"playVideo","args":""}' : '{"event":"command","func":"pauseVideo","args":""}';
-                watchIframe.contentWindow?.postMessage(cmd, '*');
+                try {
+                    watchIframe.contentWindow?.postMessage(cmd, '*');
+                } catch(eCmd) {}
+                updateMusicPlayPauseIcons(isMusicPlayingActive);
             }
-
-            updateMusicPlayPauseIcons(isMusicPlayingActive);
         }
+
+        // Ouvintes nativos que garantem atualização do ícone ao pausar ou dar play
+        globalMusicAudioPlayer.onplay = () => {
+            isMusicPlayingActive = true;
+            updateMusicPlayPauseIcons(true);
+        };
+
+        globalMusicAudioPlayer.onpause = () => {
+            isMusicPlayingActive = false;
+            updateMusicPlayPauseIcons(false);
+        };
 
         // Atualiza a barra de progresso e o tempo em segundos em tempo real
         globalMusicAudioPlayer.ontimeupdate = () => {
@@ -28026,6 +28083,10 @@ function renderChannelPlaylists(episodesList, defaultThumb, seriesName) {
 
                 snapshot.forEach((docSnap) => {
                     const data = { id: docSnap.id, ...docSnap.data() };
+                    // Álbuns e postagens de Música ficam restritos exclusivamente ao FruitSenpai Music
+                    if (isMusicItem(data) || data.contentType === "Música") {
+                        return;
+                    }
                     if (data.contentType === "Filme") {
                         moviesSeriesList.push(data);
                     } else if (data.isAdult === true) {
@@ -29626,7 +29687,7 @@ function renderChannelPlaylists(episodesList, defaultThumb, seriesName) {
                     const data = { id: docSnap.id, ...docSnap.data() };
 
                     // Reels e Músicas não entram na lista de "Novos episódios"
-                    if (data.contentType === "Reels" || data.contentType === "Música") return;
+                    if (data.contentType === "Reels" || isMusicItem(data)) return;
 
                     if (data.videoUrl || data.contentType === "episode") {
                         epList.push(data);
@@ -32986,22 +33047,142 @@ if (btnWatchPrevEpisode) {
 }
 
 // 7. Modal de Configurações da Engrenagem (Print A7)
-if (btnWatchSettingsGear) {
-    btnWatchSettingsGear.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (drawerPlayerSettingsA7) {
-            drawerPlayerSettingsA7.classList.add("active");
+        if (btnWatchSettingsGear) {
+            btnWatchSettingsGear.addEventListener("click", (e) => {
+                e.stopPropagation();
+                if (drawerPlayerSettingsA7) {
+                    drawerPlayerSettingsA7.classList.add("active");
+                }
+            });
         }
-    });
-}
 
-if (drawerPlayerSettingsA7) {
-    drawerPlayerSettingsA7.addEventListener("click", (e) => {
-        if (e.target === drawerPlayerSettingsA7) {
-            drawerPlayerSettingsA7.classList.remove("active");
+        if (drawerPlayerSettingsA7) {
+            drawerPlayerSettingsA7.addEventListener("click", (e) => {
+                if (e.target === drawerPlayerSettingsA7) {
+                    drawerPlayerSettingsA7.classList.remove("active");
+                }
+            });
         }
-    });
-}
+
+        // ==========================================================================
+        // DOWNLOAD DO VÍDEO (MP4) OU MÚSICA (MP3) VIA COBALT / CLOUDFLARE WORKER
+        // ==========================================================================
+        const rowSettingDownloadVideo = document.getElementById("rowSettingDownloadVideo");
+        const rowSettingDownloadAudio = document.getElementById("rowSettingDownloadAudio");
+        const txtSettingDownloadVideoStatus = document.getElementById("txtSettingDownloadVideoStatus");
+        const txtSettingDownloadAudioStatus = document.getElementById("txtSettingDownloadAudioStatus");
+
+        // Retorna o link de vídeo real ativo que está tocando no player
+        function getCurrentActiveWatchMediaUrl() {
+            let mediaUrl = "";
+            const currentEp = loadedEpisodesCache.find(v => v.id === currentWatchVideoId);
+
+            if (currentEp && currentEp.videoUrl) {
+                mediaUrl = currentEp.videoUrl;
+            } else if (watchIframe && watchIframe.src) {
+                mediaUrl = watchIframe.src;
+            } else if (watchNativeVideo && watchNativeVideo.src) {
+                mediaUrl = watchNativeVideo.src;
+            }
+
+            // Normaliza formatos de embed do YouTube (ex.: /embed/ID) para formato de link direto
+            const ytMatch = mediaUrl.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+            if (ytMatch && ytMatch[1]) {
+                return `https://www.youtube.com/watch?v=${ytMatch[1]}`;
+            }
+
+            return mediaUrl.trim();
+        }
+
+        async function processActiveVideoDownload(downloadMode) {
+            const rawUrl = getCurrentActiveWatchMediaUrl();
+
+            if (!rawUrl) {
+                showToast("Nenhum link de vídeo detectado para download.");
+                return;
+            }
+
+            const isAudioMode = (downloadMode === "audio");
+            const statusLabel = isAudioMode ? txtSettingDownloadAudioStatus : txtSettingDownloadVideoStatus;
+            const originalStatusText = isAudioMode ? "Áudio" : "720p";
+
+            drawerPlayerSettingsA7.classList.remove("active");
+            showToast(isAudioMode ? "Solicitando áudio MP3 ao servidor..." : "Solicitando vídeo MP4 ao servidor...");
+
+            if (statusLabel) {
+                statusLabel.textContent = "Baixando...";
+            }
+
+            // 1. Se for um arquivo direto (como stream do Telegram, .mp4 ou .mp3), baixa imediatamente
+            const isDirectFileStream = rawUrl.includes("/stream/") || rawUrl.endsWith(".mp4") || rawUrl.endsWith(".mp3") || rawUrl.endsWith(".m4a");
+            if (isDirectFileStream) {
+                const downloadAnchor = document.createElement("a");
+                downloadAnchor.href = rawUrl;
+                downloadAnchor.download = isAudioMode ? "audio.mp3" : "video.mp4";
+                downloadAnchor.target = "_blank";
+                document.body.appendChild(downloadAnchor);
+                downloadAnchor.click();
+                downloadAnchor.remove();
+
+                if (statusLabel) statusLabel.textContent = originalStatusText;
+                showToast("Download direto iniciado!");
+                return;
+            }
+
+            // 2. Se for link do YouTube ou serviços externos, repassa via Cloudflare Worker para a API do Cobalt no Render
+            try {
+                const workerDownloadEndpoint = `${CLOUDFLARE_WORKER_BASE_URL}/download`;
+                const response = await fetch(workerDownloadEndpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        url: rawUrl,
+                        quality: "720",
+                        mode: downloadMode
+                    })
+                });
+
+                const data = await response.json();
+
+                // Identifica o link de download retornado pelo Cobalt
+                const finalDownloadUrl = data.url || data.downloadUrl || data.stream || (data.picker && data.picker[0] ? data.picker[0].url : "");
+
+                if (finalDownloadUrl) {
+                    const downloadLink = document.createElement("a");
+                    downloadLink.href = finalDownloadUrl;
+                    downloadLink.target = "_blank";
+                    downloadLink.download = isAudioMode ? "musica.mp3" : "video.mp4";
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    downloadLink.remove();
+
+                    showToast(isAudioMode ? "Download do áudio MP3 iniciado!" : "Download do vídeo MP4 iniciado!");
+                } else {
+                    showToast(`Falha no download: ${data.text || data.erro || "Link não gerado"}`);
+                }
+            } catch (errDownload) {
+                console.error("Erro ao solicitar download:", errDownload);
+                showToast("Falha de conexão com a API de download.");
+            } finally {
+                if (statusLabel) {
+                    statusLabel.textContent = originalStatusText;
+                }
+            }
+        }
+
+        if (rowSettingDownloadVideo) {
+            rowSettingDownloadVideo.addEventListener("click", () => {
+                processActiveVideoDownload("auto");
+            });
+        }
+
+        if (rowSettingDownloadAudio) {
+            rowSettingDownloadAudio.addEventListener("click", () => {
+                processActiveVideoDownload("audio");
+            });
+        }
 
 // Alternância Exclusiva: Ou apenas Legendados ou apenas Dublados
 if (switchSettingFilterSubbed) {
